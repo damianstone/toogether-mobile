@@ -1,7 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import * as Font from 'expo-font';
+import { useFonts } from 'expo-font';
 import AppLoading from 'expo-app-loading';
 
 import Navigation from './navigation/Navigation';
@@ -17,19 +17,18 @@ const fetchFonts = () => {
 const App = () => {
   const [fontLoaded, setFontLoaded] = useState(false);
 
-  if (!fontLoaded) {
+  const [loaded] = useFonts({
+    'poppins-regular': require('./assets/fonts/Poppins-Regular.ttf'),
+    'poppins-bold': require('./assets/fonts/Poppins-Bold.ttf'),
+  });
+
+  if (!loaded) {
     return (
-      <AppLoading
-        startAsync={fetchFonts}
-        onFinish={() => {
-          setFontLoaded(true)
-        }}
-        onError={() => console.warn}
-      />
+      <AppLoading />
     );
   }
 
-  return <Navigation />;
+  return <Navigation theme='dark' />;
 };
 
 export default App;

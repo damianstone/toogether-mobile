@@ -1,14 +1,14 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
-const Matchs = () => {
+const Group = () => {
   return (
     <View>
-      <Text>MATCH SCREEN</Text>
+      <Text>CREATE A GROUP</Text>
     </View>
   );
 };
 
-export default Matchs;
+export default Group;
 
 const styles = StyleSheet.create({});

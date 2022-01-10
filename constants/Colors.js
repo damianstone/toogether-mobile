@@ -4,4 +4,5 @@ export default {
   black: '#000',
   green: '#50CB93',
   orange: '#FF5A54',
+  calypso: '#70EDCC'
 };
