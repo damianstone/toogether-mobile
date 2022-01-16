@@ -1,5 +1,7 @@
 import React, { useReducer, useEffect } from 'react';
 import { StyleSheet, Text, View, TextInput } from 'react-native';
+import { Colors } from 'react-native-paper';
+import { TextInputMask } from 'react-native-masked-text';
 
 const CHANGE = 'CHANGE';
 const BLUR = 'BLUR';
@@ -78,9 +80,9 @@ const Input = (props) => {
     });
   };
 
-  return (
-    <View style={styles.formControl}>
-      <Text style={styles.label}>{props.label}</Text>
+  let InputType;
+  if (props.inputType === 'textInput') {
+    InputType = (
       <TextInput
         {...props}
         style={styles.input}
@@ -88,6 +90,30 @@ const Input = (props) => {
         onChangeText={textChangeHandler}
         onBlur={lostFocusHandler}
       />
+    );
+  } else if (props.inputType === 'inputMask') {
+    InputType = (
+      <TextInputMask
+        {...props}
+        style={styles.input}
+        type={'datetime'}
+        options={{
+          format: 'DD-MM-YYYY',
+        }}
+        onChangeText={textChangeHandler}
+        value={inputState.value}
+      />
+    );
+  }
+
+  return (
+    <View style={styles.formControl}>
+      <Text style={{ ...styles.label, ...props.labelStyle }}>
+        {props.label}
+      </Text>
+      <View style={{ ...styles.inputContainer, ...props.inputStyle }}>
+        {InputType}
+      </View>
       {!inputState.isValid && inputState.touched && (
         <View style={styles.errorContainer}>
           <Text style={styles.errorText}>{props.errorText}</Text>
@@ -104,18 +130,26 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   label: {
-    fontFamily: 'open-sans-bold',
     marginVertical: 8,
+  },
+  inputContainer: {
+    width: '90%',
+    height: 30,
+    backgroundColor: '#e2e2e2',
+    borderRadius: 10,
+    justifyContent: 'center',
+    paddingHorizontal: 10,
   },
   input: {
     paddingHorizontal: 2,
-    paddingVertical: 5,
+    paddingVertical: 2,
+    color: Colors.black,
+    width: '100%',
   },
   errorContainer: {
     marginVertical: 5,
   },
   errorText: {
-    fontFamily: 'open-sans',
     color: 'red',
     fontSize: 13,
   },

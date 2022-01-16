@@ -4,30 +4,38 @@ import Colors from '../../constants/Colors';
 export default StyleSheet.create({
   screen: {
     flex: 1,
-    backgroundColor: Colors.bg,
-    flexDirection: 'column',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+  },
+  card: {
+    position: 'absolute',
+    width: 380,
+    height: '80%',
+    borderRadius: 30,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: Colors.orange,
+  },
+  groupName: {
+    borderRadius: 30,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginVertical: 2,
+    backgroundColor: Colors.orange
+  },
+  image: {
+    flex: 1,
     width: '100%',
     height: '100%',
+    justifyContent: 'flex-end',
   },
-  swipeContainer: {
-    flex: 1,
-    bottom: 35,
-    width: '80%'
-
+  imageStyle: {
+    borderRadius: 30,
+    height: '100%',
   },
-  buttonsContainer: {
-    marginVertical: 0,
-    top: 5,
-  },
-  cardShadow: {
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 1,
-    },
-    shadowOpacity: 0.2,
-    shadowRadius: 1.41,
-    elevation: 2,
+  text: {
+    fontSize: 13,
+    fontWeight: 'bold',
+    color: Colors.white,
   },
 });

@@ -7,10 +7,17 @@ import {
   ImageBackground,
   TouchableOpacity,
   SafeAreaView,
+  Platform,
 } from 'react-native';
+import { HeaderButtons, Item } from 'react-navigation-header-buttons';
+import { StatusBar } from 'expo-status-bar';
+import Swiper from 'react-native-deck-swiper';
+import tw from 'tailwind-rn';
+
 import styles from './styles';
-import Card from '../../components/Card/Card';
 import SwipeButtons from '../../components/SwipeButtons/SwipeButtons';
+import HeaderButtom from '../../components/UI/HeaderButton';
+import Card from '../../components/Card/Card';
 
 const burned_data = [
   {
@@ -40,14 +47,100 @@ const burned_data = [
 ];
 
 const Swipe = (props) => {
+  const swipeRef = useRef(null);
   return (
     // CARD SECTION
     <SafeAreaView style={styles.safe}>
+      <StatusBar style="light" />
       <View style={styles.screen}>
-        <Card data={burned_data} />
+        <View style={styles.swipeContainer}>
+          <Swiper
+            containerStyle={tw('bg-transparent')}
+            cards={burned_data}
+            ref={swipeRef}
+            stackSize={5}
+            cardIndex={0}
+            animateCardOpacity
+            verticalSwipe={false}
+            overlayLabels={{
+              left: {
+                title: 'NOPE',
+                style: {
+                  label: {
+                    textAlign: 'right',
+                    color: 'red',
+                  },
+                },
+              },
+              right: {
+                title: 'MATCH',
+                style: {
+                  label: {
+                    textAlign: 'left',
+                    color: 'green',
+                  },
+                },
+              },
+            }}
+            onSwipedLeft={() => {
+              console.log('left');
+            }}
+            onSwipedRight={() => {
+              console.log('right');
+            }}
+            renderCard={(card) => (
+              <Card
+                photoURL={card.photoURL}
+                firstName={card.firstName}
+                lastName={card.lastName}
+                occupation={card.occupation}
+                age={card.age}
+              />
+            )}
+          />
+        </View>
+        <View style={styles.buttonsContainer}>
+          <SwipeButtons
+            onLeft={() => {
+              swipeRef.current.swipeLeft();
+            }}
+            onRight={() => {
+              swipeRef.current.swipeRight();
+            }}
+          />
+        </View>
       </View>
     </SafeAreaView>
   );
+};
+
+Swipe.navigationOptions = (navData) => {
+  return {
+    headerTitle: 'Swipe',
+    headerLeft: () => (
+      <HeaderButtons HeaderButtonComponent={HeaderButtom}>
+        <Item
+          title="Cart"
+          iconName={Platform.OS === 'android' ? 'md-cart' : 'ios-cart'}
+          onPress={() => {
+            // go to chat screen
+          }}
+        />
+      </HeaderButtons>
+    ),
+    headerRight: () => (
+      <HeaderButtons HeaderButtonComponent={HeaderButtom}>
+        <Item
+          title="Cart"
+          iconName={Platform.OS === 'android' ? 'md-cart' : 'ios-cart'}
+          onPress={() => {
+            // go to chat screen
+            navData.navigation.navigate('Chat');
+          }}
+        />
+      </HeaderButtons>
+    ),
+  };
 };
 
 export default Swipe;

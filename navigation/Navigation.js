@@ -13,6 +13,8 @@ import Profile from '../screens/Profile';
 import Chat from '../screens/Chat';
 import Likes from '../screens/Likes';
 import Group from '../screens/Group';
+import AuthSucess from '../screens/AuthSuccess';
+import CreateProfile from '../screens/createProfile/CreateProfile';
 import Colors from '../constants/Colors';
 
 const defaultNavOptions = {
@@ -37,6 +39,15 @@ const AuthNavigator = createStackNavigator(
     defaultNavigationOptions: {
       headerShown: false,
     },
+  }
+);
+
+const ChatNavigator = createStackNavigator(
+  {
+    Chat: Chat,
+  },
+  {
+    defaultNavigationOptions: defaultNavOptions,
   }
 );
 
@@ -66,6 +77,18 @@ const GroupNavigator = createStackNavigator(
   },
   {
     defaultNavigationOptions: defaultNavOptions,
+  }
+);
+
+const SignUpNavigator = createStackNavigator(
+  {
+    AuthSucess: AuthSucess,
+    Create: CreateProfile,
+  },
+  {
+    defaultNavigationOptions: {
+      headerShown: false,
+    },
   }
 );
 
@@ -133,6 +156,8 @@ const ToogetherTab =
 
 const MainNavigator = createSwitchNavigator({
   Auth: AuthNavigator,
+  Success: AuthSucess,
+  Create: CreateProfile,
   Swipe: ToogetherTab,
 });
 

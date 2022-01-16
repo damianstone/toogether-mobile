@@ -3,6 +3,7 @@ import { Image, View, Button, Text, ScrollView } from 'react-native';
 import { Item } from 'react-navigation-header-buttons';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import AntDesign from '@expo/vector-icons/AntDesign';
+import { StatusBar } from 'expo-status-bar';
 //import { LinearGradient } from 'expo-linear-gradient';
 
 import styles from './styles';
@@ -13,11 +14,12 @@ const Login = (props) => {
 
   return (
     <View style={styles.screen}>
+      <StatusBar style="light" />
       <ScrollView>
         <View>
           <View style={styles.logoContainer}>
             <Image
-              source={require('../../assets/images/toogether-6.png')}
+              source={require('../../assets/images/logo-2.png')}
               style={styles.logo}
             />
           </View>
@@ -34,16 +36,22 @@ const Login = (props) => {
             <Button
               onPress={() => {
                 props.navigation.navigate('Swipe');
+                if (isSignup) {
+                  props.navigation.navigate('Success');
+                }
               }}
               color={Colors.black}
               title={isSignup ? 'Sign Up with Google' : 'Login with Google'}
             />
           </View>
           <View style={styles.buttonContainer}>
-          <AntDesign name="facebook-square" size={22} color="white" />
+            <AntDesign name="facebook-square" size={22} color="white" />
             <Button
               onPress={() => {
                 props.navigation.navigate('Swipe');
+                if (isSignup) {
+                  props.navigation.navigate('Success');
+                }
               }}
               color={Colors.white}
               title={isSignup ? 'Sign Up with Facebook' : 'Login with Facebook'}

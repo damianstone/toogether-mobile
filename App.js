@@ -17,18 +17,19 @@ const fetchFonts = () => {
 const App = () => {
   const [fontLoaded, setFontLoaded] = useState(false);
 
-  const [loaded] = useFonts({
-    'poppins-regular': require('./assets/fonts/Poppins-Regular.ttf'),
-    'poppins-bold': require('./assets/fonts/Poppins-Bold.ttf'),
-  });
-
-  if (!loaded) {
+  if (!fontLoaded) {
     return (
-      <AppLoading />
+      <AppLoading
+        startAsync={fetchFonts}
+        onFinish={() => {
+          setFontLoaded(true);
+        }}
+        onError={() => console.log(err)}
+      />
     );
   }
 
-  return <Navigation theme='dark' />;
+  return <Navigation theme="dark" />;
 };
 
 export default App;
