@@ -25,9 +25,7 @@ const defaultNavOptions = {
   headerBackTitleStyle: {
     fontFamily: 'poppins-regular',
   },
-  statusBarStyle: {
-    Enumerator: 'light-content',
-  },
+  statusBarStyle: Colors.bg,
   headerTintColor: Colors.white,
 };
 
@@ -142,6 +140,7 @@ const ToogetherTab =
         shifting: true, // la navbar cambia de color al seleccion alguna opcion
         barStyle: {
           backgroundColor: Colors.bg,
+          statusBarStyle: Colors.bg,
         },
       })
     : createBottomTabNavigator(tabScreenCnfig, {
@@ -150,6 +149,7 @@ const ToogetherTab =
           labelStyle: {},
           tabStyle: {
             backgroundColor: Colors.bg,
+            statusBarStyle: Colors.bg,
           },
         },
       });

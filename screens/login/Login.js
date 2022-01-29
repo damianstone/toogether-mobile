@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import { Image, View, Button, Text, ScrollView } from 'react-native';
-import { Item } from 'react-navigation-header-buttons';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import AntDesign from '@expo/vector-icons/AntDesign';
+import { AntDesign } from '@expo/vector-icons';
 import { StatusBar } from 'expo-status-bar';
 //import { LinearGradient } from 'expo-linear-gradient';
 

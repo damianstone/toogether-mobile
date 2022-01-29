@@ -18,6 +18,7 @@ import styles from './styles';
 import SwipeButtons from '../../components/SwipeButtons/SwipeButtons';
 import HeaderButtom from '../../components/UI/HeaderButton';
 import Card from '../../components/Card/Card';
+import Colors from '../../constants/Colors';
 
 const burned_data = [
   {
@@ -51,7 +52,7 @@ const Swipe = (props) => {
   return (
     // CARD SECTION
     <SafeAreaView style={styles.safe}>
-      <StatusBar style="light" />
+      <StatusBar style={{backgroundColor: Colors.bg}} />
       <View style={styles.screen}>
         <View style={styles.swipeContainer}>
           <Swiper

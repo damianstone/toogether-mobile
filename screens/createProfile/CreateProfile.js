@@ -8,6 +8,9 @@ import {
   Image,
   ScrollView,
   ImageBackground,
+  ActivityIndicator,
+  Alert,
+  TouchableOpacity,
 } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 
@@ -15,6 +18,7 @@ import Colors from '../../constants/Colors';
 import styles from './styles';
 import Input from '../../components/UI/Input';
 import Header from '../../components/UI/Header';
+import ImageSelector from '../../components/UI/ImageSelector';
 
 const FORM_UPDATE = 'FORM_UPDATE';
 
@@ -43,43 +47,96 @@ const formReducer = (state, action) => {
   return state;
 };
 
+const show = [
+  {
+    label: 'Hombres',
+    value: 'hombres',
+  },
+  {
+    label: 'Mujeres',
+    value: 'mujeres',
+  },
+  {
+    label: 'Mixto',
+    value: 'Mixto',
+  },
+];
+
+const gender = [
+  {
+    label: 'Masculino',
+    value: 'Masculino',
+  },
+  {
+    label: 'Femenino',
+    value: 'Femenino',
+  },
+  {
+    label: 'otro',
+    value: 'otro',
+  },
+];
+
 const CreateProfile = (props) => {
   // CREAR UN SISTEMA PARA QUE SOLO SE PUEDA CONTINUAR SI ES QUE SE LLENA TODO EL FORMULARIO
-  const [completed, setCompleted] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [image, setImage] = useState('')
+  const [error, setError] = useState();
 
   // START DECLARING STATE
   // useReducer from react native is used to manage a lot states
   const [formState, dispatchFormState] = useReducer(formReducer, {
     inputValues: {
+      img: '',
       name: '',
       lastname: '',
       university: '',
       birthday: '',
       gender: '',
-      showMe: '',
+      showme: '',
       about: '',
     },
     inputValidities: {
+      img: true,
       name: false,
       lastname: false,
-      university: false,
+      university: true,
       birthday: false,
       gender: false,
-      showMe: false,
-      about: false,
+      showme: false,
+      about: true,
     },
     formIsValid: false,
   });
   // FINISH DECLARING STATE
 
+  useEffect(() => {
+    if (error) {
+      Alert.alert('An error occurred!', error, [{ text: 'Okay' }]);
+    }
+  }, [error]);
+
+  // SAVE USER DATA
   const createUsarHandler = () => {
     // dispatch the user info to redux then to database
+    if (!formState.formIsValid) {
+      Alert.alert('Fill the form aweonao', error, [{ text: 'Okay' }]);
+      console.log(formState);
+      return;
+    }
+
+    Alert.alert('Formulario completado correctamente', error, [
+      { text: 'Okay' },
+    ]);
+    console.log(formState);
+
+    props.navigation.navigate('Swipe');
   };
 
+  // ON CHANGE INPUTS
   const inputChangeHandler = useCallback(
     (inputIdentifier, inputValue, inputValidity) => {
       dispatchFormState({
-        // this gonna go directly to the form reducer
         type: FORM_UPDATE,
         value: inputValue,
         isValid: inputValidity,
@@ -88,6 +145,31 @@ const CreateProfile = (props) => {
     },
     [dispatchFormState]
   );
+
+  imageTakenHandler = (imagePath) => {
+    // ADD REMOVE PHOTO HANDLER!
+    formState.inputValues.img = imagePath;
+    formState.inputValidities.img = true;
+    setImage(imagePath);
+  }
+
+  // DISABLE BUTTON IF THE USER DONT FILL ALL THE FIELDS
+  let styleButton;
+  if (!formState.formIsValid) {
+    styleButton = styles.buttonContainerNoValid;
+  }
+  if (formState.formIsValid) {
+    styleButton = styles.buttonContainer;
+  }
+
+  // LOADING SPINNER
+  if (isLoading) {
+    return (
+      <View style={styles.centered}>
+        <ActivityIndicator size="large" color={Colors.icons} />
+      </View>
+    );
+  }
 
   return (
     <KeyboardAvoidingView
@@ -99,126 +181,136 @@ const CreateProfile = (props) => {
       <View styles={styles.titleContainer}>
         <Text style={styles.title}>Complete your profile</Text>
       </View>
-      <ScrollView>
-        <View style={styles.wrapper}>
-          <View style={styles.photoContainer}>
-            <Image
-              source={require('../../assets/images/Profiles/profile-5.jpeg')}
-              style={styles.photo}
-            />
-            <Image
-              source={require('../../assets/images/Profiles/profile-5.jpeg')}
-              style={styles.photo}
-            />
-          </View>
-          <View style={styles.inputContainer}>
-            <Input
-              labelStyle={styles.label}
-              inputType='textInput'
-              id="email"
-              label="Name"
-              keyboardType="email-address"
-              required
-              autoCapitalize="sentences"
-              errorText="Please enter your real name"
-              onInputChange={inputChangeHandler}
-              initialValue=""
-            />
-          </View>
-          <View style={styles.inputContainer}>
-            <Input
-              labelStyle={styles.label}
-              inputType='textInput'
-              id="email"
-              label="Lastname"
-              keyboardType="email-address"
-              required
-              autoCapitalize="none"
-              errorText="Please enter you real lastname"
-              onInputChange={inputChangeHandler}
-              initialValue=""
-            />
-          </View>
-          <View style={styles.inputContainer}>
-            <Input
-              labelStyle={styles.label}
-              inputType='textInput'
-              id="email"
-              label="University"
-              keyboardType="email-address"
-              autoCapitalize="none"
-              errorText="Please enter a valid university"
-              onInputChange={inputChangeHandler}
-              initialValue=""
-            />
-          </View>
-          <View style={styles.inputContainer}>
-            <Input
-              labelStyle={styles.label}
-              inputType='inputMask'
-              id="birthday"
-              label="Birthday"
-              required
-              autoComplete="birthdate-day"
-              dataDetectorTypes="calendarEvent"
-              errorText="Please enter you birthday"
-              onInputChange={inputChangeHandler}
-              initialValue="DD-MM-YYYY"
-            />
-          </View>
-          <View style={styles.inputContainer}>
-            <Input
-              labelStyle={styles.label}
-              inputType='textInput'
-              id="email"
-              label="Gender"
-              keyboardType="email-address"
-              required
-              autoCapitalize="none"
-              errorText="Please enter a valid email address"
-              onInputChange={inputChangeHandler}
-              initialValue=""
-            />
-          </View>
-          <View style={styles.inputContainer}>
-            <Input
-              labelStyle={styles.label}
-              inputType='textInput'
-              id="email"
-              label="Show me"
-              keyboardType="email-address"
-              required
-              autoCapitalize="none"
-              errorText="Please enter a valid email address"
-              onInputChange={inputChangeHandler}
-              initialValue=""
-            />
-          </View>
-          <View style={styles.inputContainer}>
-            <Input
-              labelStyle={styles.label}
-              inputType='textInput'
-              inputStyle={styles.inputStyle}
-              id="email"
-              label="About"
-              keyboardType="email-address"
-              required
-              autoCapitalize="none"
-              errorText="Please enter a valid email address"
-              onInputChange={inputChangeHandler}
-              initialValue=""
-            />
-          </View>
+      <ScrollView style={styles.scroll}>
+        <View style={{width: '60%', alignSelf:'center'}}>
+          <ImageSelector onImageTaken={imageTakenHandler} />
         </View>
+        <View style={styles.inputContainer}>
+          <Input
+            labelStyle={styles.label} // style for the label
+            inputType="textInput"
+            id="name"
+            label="Name"
+            keyboardType="default" // normal keyboard
+            required
+            autoCapitalize="sentences"
+            errorText="Please enter your real name"
+            onInputChange={inputChangeHandler}
+            initialValue=""
+            autoCorrect={false} // disable auto correction
+            returnKeyType="next" // next button on keyboard instead of done
+          />
+        </View>
+        <View style={styles.inputContainer}>
+          <Input
+            labelStyle={styles.label}
+            inputType="textInput"
+            id="lastname"
+            label="Lastname"
+            keyboardType="default"
+            required
+            autoCapitalize="sentences"
+            errorText="Please enter you real lastname"
+            onInputChange={inputChangeHandler}
+            initialValue=""
+            autoCorrect={false} // disable auto correction
+            returnKeyType="next" // next button on keyboard instead of done
+          />
+        </View>
+        <View style={styles.inputContainer}>
+          <Input
+            labelStyle={styles.label}
+            inputType="textInput"
+            id="university"
+            label="University (optional)"
+            keyboardType="default"
+            autoCapitalize="none"
+            required={false}
+            initialIsValid={true}
+            onInputChange={inputChangeHandler}
+            initialValue=""
+            autoCorrect={false} // disable auto correction
+            returnKeyType="next" // next button on keyboard instead of done
+          />
+        </View>
+        <View style={styles.inputContainer}>
+          <Input
+            labelStyle={styles.label}
+            inputType="inputMask"
+            id="birthday"
+            label="Birthday"
+            required
+            autoComplete="birthdate-day"
+            dataDetectorTypes="calendarEvent"
+            errorText="Please enter your birthday"
+            onInputChange={inputChangeHandler}
+            initialValue="DD-MM-YYYY"
+          />
+        </View>
+        <View style={styles.inputContainer}>
+          <Input
+            pickerRequired
+            inputType="picker"
+            labelStyle={styles.label}
+            items={gender}
+            itemKey={show.value}
+            label="Gender"
+            initialValue=""
+            id="gender"
+            placeholder={{ label: 'Select an item', value: 'Select an item' }}
+            errorText="Please select your gender"
+            onInputChange={inputChangeHandler}
+          />
+        </View>
+        <View style={styles.inputContainer}>
+          <Input
+            pickerRequired
+            inputType="picker"
+            labelStyle={styles.label}
+            items={show}
+            itemKey={show.value}
+            label="Show me"
+            initialValue=""
+            id="showme"
+            placeholder={{ label: 'Select an item', value: 'Select an item' }}
+            errorText="Please select an option"
+            onInputChange={inputChangeHandler}
+          />
+        </View>
+        <View style={styles.inputContainer}>
+          <Input
+            labelStyle={styles.label}
+            style={styles.textArea} // style for the
+            underlineColorAndroid="transparent"
+            placeholder="Type something"
+            placeholderTextColor="grey"
+            multiline={true}
+            numberOfLines={5}
+            maxLength={500}
+            inputType="textInput"
+            inputStyle={styles.inputStyle}
+            id="about"
+            label="About (optional)"
+            autoCapitalize="none"
+            required={false}
+            initialIsValid={true}
+            onInputChange={inputChangeHandler}
+            autoCorrect={false} // disable auto correction
+            initialValue=""
+          />
+        </View>
+
         <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-          <View style={styles.buttonContainer}>
-            <Button
-              onPress={() => {
-                props.navigation.navigate('Swipe');
-              }}
-              color={Colors.white}
-              title="Continuar"
-            />
+          <View style={styleButton}>
+            <TouchableOpacity
+              style={styles.touchable}
+              onPress={createUsarHandler}>
+              <Button
+                onPress={createUsarHandler}
+                color={Colors.white}
+                title="Continuar"
+              />
+            </TouchableOpacity>
           </View>
         </View>
       </ScrollView>

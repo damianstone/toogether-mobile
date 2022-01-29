@@ -5,7 +5,8 @@ export default StyleSheet.create({
   screen: {
     flex: 1,
     backgroundColor: Colors.bg,
-  },
+    alignItems: 'center',
+  }, 
   titleContainer: {
     width: '100%',
     justifyContent: 'center',
@@ -16,8 +17,9 @@ export default StyleSheet.create({
     color: Colors.white,
     textAlign: 'center',
   },
-  wrapper: {
-    padding: 20,
+  scroll: {
+    padding: 10,  
+    width: '95%',
   },
   photoContainer: {
     flexDirection: 'row',
@@ -25,23 +27,46 @@ export default StyleSheet.create({
     marginVertical: 20,
   },
   photo: {
-    width: 150,
-    height: 150,
+    width: 170,
+    height: 170,
     borderRadius: 30,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  imageText: {
+    color: Colors.white,
+    fontSize: 15,
+    fontWeight: 'bold',
+    textAlign: 'center',
   },
   inputContainer: {
     marginVertical: 10,
   },
   label: {
     color: Colors.white,
-    fontSize: 15,
+    fontSize: 18,
   },
   inputStyle: {
-    height: 100,
+    height: 150,
     justifyContent: 'flex-start',
     padding: 3,
   },
+  textArea: {
+    height: 150,
+    textAlignVertical: 'top'
+  },
   buttonContainer: {
+    alignItems: 'center',
+    padding: 3,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginVertical: 20,
+    width: '65%',
+    height: 44,
+    backgroundColor: Colors.green,
+    borderRadius: 22,
+  },
+  buttonContainerNoValid: {
     alignItems: 'center',
     padding: 3,
     flexDirection: 'row',
@@ -52,4 +77,8 @@ export default StyleSheet.create({
     backgroundColor: Colors.orange,
     borderRadius: 22,
   },
+  touchable: {
+    width: '100%',
+    height: '100%',
+  }
 });

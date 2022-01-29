@@ -1,7 +1,10 @@
 import React, { useReducer, useEffect } from 'react';
 import { StyleSheet, Text, View, TextInput } from 'react-native';
-import { Colors } from 'react-native-paper';
 import { TextInputMask } from 'react-native-masked-text';
+import RNPickerSelect from 'react-native-picker-select';
+
+
+import Colors from '../../constants/Colors';
 
 const CHANGE = 'CHANGE';
 const BLUR = 'BLUR';
@@ -66,6 +69,10 @@ const Input = (props) => {
       isValid = false;
     }
 
+    if (props.pickerRequired && text === props.placeholder.value) {
+      isValid = false;
+    }
+
     // dispatch to the input state
     dispatch({
       type: CHANGE,
@@ -78,20 +85,24 @@ const Input = (props) => {
     dispatch({
       type: BLUR,
     });
-  };
+  }; 
 
   let InputType;
+  // NORMAL TEXT INPUT
   if (props.inputType === 'textInput') {
     InputType = (
       <TextInput
         {...props}
-        style={styles.input}
+        style={{...styles.input, ...props.style}}
         value={inputState.value}
         onChangeText={textChangeHandler}
         onBlur={lostFocusHandler}
       />
     );
-  } else if (props.inputType === 'inputMask') {
+  } 
+
+  // TEXT INPUT MASK
+  if (props.inputType === 'inputMask') {
     InputType = (
       <TextInputMask
         {...props}
@@ -102,8 +113,26 @@ const Input = (props) => {
         }}
         onChangeText={textChangeHandler}
         value={inputState.value}
+        onBlur={lostFocusHandler}
       />
     );
+  }
+
+  // TOGGLE PICKER  
+  if (props.inputType === 'picker') {
+      InputType = (
+        <RNPickerSelect 
+        {...props}
+        placeholder={props.placeholder}
+        value={inputState.value}
+        items={props.items}
+        itemKey={props.itemKey}
+        onUpArrow={() => { console.log('up'); }}
+        onDownArrow={() => { console.log('down'); }}
+        onBlur={lostFocusHandler}
+        onValueChange={textChangeHandler}
+        />
+      )
   }
 
   return (
@@ -114,11 +143,11 @@ const Input = (props) => {
       <View style={{ ...styles.inputContainer, ...props.inputStyle }}>
         {InputType}
       </View>
-      {!inputState.isValid && inputState.touched && (
+      {(!inputState.isValid && inputState.touched) ? (
         <View style={styles.errorContainer}>
           <Text style={styles.errorText}>{props.errorText}</Text>
         </View>
-      )}
+      ): null}
     </View>
   );
 };
@@ -133,10 +162,10 @@ const styles = StyleSheet.create({
     marginVertical: 8,
   },
   inputContainer: {
-    width: '90%',
-    height: 30,
+    width: '100%',
+    height: 33,
     backgroundColor: '#e2e2e2',
-    borderRadius: 10,
+    borderRadius: 7,
     justifyContent: 'center',
     paddingHorizontal: 10,
   },
@@ -144,13 +173,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 2,
     paddingVertical: 2,
     color: Colors.black,
+    fontSize: 16,
     width: '100%',
   },
   errorContainer: {
     marginVertical: 5,
   },
   errorText: {
-    color: 'red',
+    color: Colors.orange,
     fontSize: 13,
   },
 });

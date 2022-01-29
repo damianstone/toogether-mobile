@@ -1,8 +1,8 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { useFonts } from 'expo-font';
 import AppLoading from 'expo-app-loading';
+import * as Font from 'expo-font';
 
 import Navigation from './navigation/Navigation';
 import Colors from './constants/Colors';
@@ -24,7 +24,7 @@ const App = () => {
         onFinish={() => {
           setFontLoaded(true);
         }}
-        onError={() => console.log(err)}
+        onError={(err) => console.log(err)}
       />
     );
   }
