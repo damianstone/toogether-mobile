@@ -7,9 +7,9 @@ const GROUPS = [
       'p1',
       'Vitacura',
       [
-        require('../../assets/images/profile-1.jpg'),
-        require('../../assets/images/profile-2.jpg'),
-        require('../../assets/images/profile-3.jpg'),
+        require('../assets/images/Profiles/profile-6.jpeg'),
+        require('../assets/images/Profiles/profile-2.jpeg'),
+        require('../assets/images/Profiles/profile-3.jpeg'),
       ],
       'Fernanda',
       'Vuskasic',
@@ -21,12 +21,12 @@ const GROUPS = [
         'p1',
         'Vitacura',
         [
-          require('../../assets/images/profile-1.jpg'),
-          require('../../assets/images/profile-2.jpg'),
-          require('../../assets/images/profile-3.jpg'),
+          require('../assets/images/Profiles/profile-7.jpeg'),
+          require('../assets/images/Profiles/profile-2.jpeg'),
+          require('../assets/images/Profiles/profile-3.jpeg'),
         ],
-        'Fernanda',
-        'Vuskasic',
+        'Francisca', 
+        'Silva',
         '22',
         'Universidad de Chile',
         'lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
@@ -35,12 +35,56 @@ const GROUPS = [
         'p1',
         'Vitacura',
         [
-          require('../../assets/images/profile-1.jpg'),
-          require('../../assets/images/profile-2.jpg'),
-          require('../../assets/images/profile-3.jpg'),
+          require('../assets/images/Profiles/profile-8.jpeg'),
+          require('../assets/images/Profiles/profile-2.jpeg'),
+          require('../assets/images/Profiles/profile-3.jpeg'),
         ],
-        'Fernanda',
-        'Vuskasic',
+        'Emilia',
+        'Sanchez',
+        '22',
+        'Universidad de Chile',
+        'lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
+      ),
+  ]),
+  new Group('g2', 3, [
+    new Profile(
+      'p1',
+      'Vitacura',
+      [
+        require('../assets/images/Profiles/profile-3.jpeg'),
+        require('../assets/images/Profiles/profile-2.jpeg'),
+        require('../assets/images/Profiles/profile-6.jpeg'),
+      ],
+      'Fernanda',
+      'Vuskasic',
+      '22',
+      'Universidad de Chile',
+      'lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
+    ),
+    new Profile(
+        'p1',
+        'Vitacura',
+        [
+          require('../assets/images/Profiles/profile-2.jpeg'),
+          require('../assets/images/Profiles/profile-7.jpeg'),
+          require('../assets/images/Profiles/profile-3.jpeg'),
+        ],
+        'Francisca', 
+        'Silva',
+        '22',
+        'Universidad de Chile',
+        'lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
+      ),
+      new Profile(
+        'p1',
+        'Vitacura',
+        [
+          require('../assets/images/Profiles/profile-9.jpg'),
+          require('../assets/images/Profiles/profile-2.jpeg'),
+          require('../assets/images/Profiles/profile-3.jpeg'),
+        ],
+        'Emilia',
+        'Sanchez',
         '22',
         'Universidad de Chile',
         'lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'

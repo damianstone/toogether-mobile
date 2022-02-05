@@ -77,7 +77,7 @@ const gender = [
   },
 ];
 
-const CreateProfile = (props) => {
+const CreateUser = (props) => {
   // CREAR UN SISTEMA PARA QUE SOLO SE PUEDA CONTINUAR SI ES QUE SE LLENA TODO EL FORMULARIO
   const [isLoading, setIsLoading] = useState(false);
   const [image, setImage] = useState('')
@@ -118,6 +118,16 @@ const CreateProfile = (props) => {
 
   // SAVE USER DATA
   const createUsarHandler = () => {
+
+    // SEND BIRTHDAY AS AGE
+    //const age = [] 
+    //age.push(text.split(" "))
+    //age.filter((elem) => elem != "-");
+    //console.log(age)
+    //for(let i = 0; i < age.length; i++) {
+    //  // slice
+    //}
+
     // dispatch the user info to redux then to database
     if (!formState.formIsValid) {
       Alert.alert('Fill the form aweonao', error, [{ text: 'Okay' }]);
@@ -125,9 +135,7 @@ const CreateProfile = (props) => {
       return;
     }
 
-    Alert.alert('Formulario completado correctamente', error, [
-      { text: 'Okay' },
-    ]);
+
     console.log(formState);
 
     props.navigation.navigate('Swipe');
@@ -224,7 +232,7 @@ const CreateProfile = (props) => {
             id="university"
             label="University (optional)"
             keyboardType="default"
-            autoCapitalize="none"
+            autoCapitalize="sentences"
             required={false}
             initialIsValid={true}
             onInputChange={inputChangeHandler}
@@ -318,4 +326,4 @@ const CreateProfile = (props) => {
   );
 };
 
-export default CreateProfile;
+export default CreateUser;

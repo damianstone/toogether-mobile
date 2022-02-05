@@ -5,16 +5,16 @@ import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 import { createDrawerNavigator } from 'react-navigation-drawer';
 import { createMaterialBottomTabNavigator } from 'react-navigation-material-bottom-tabs';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
-import { Ionicons } from '@expo/vector-icons';
+import { AntDesign } from '@expo/vector-icons';
 
 import Login from '../screens/login/Login';
 import Swipe from '../screens/swipe/Swipe';
-import Profile from '../screens/Profile';
+import Profile from '../screens/profile/Profile';
 import Chat from '../screens/Chat';
 import Likes from '../screens/Likes';
 import Group from '../screens/Group';
 import AuthSucess from '../screens/AuthSuccess';
-import CreateProfile from '../screens/createProfile/CreateProfile';
+import CreateUser from '../screens/user/CreateUser';
 import Colors from '../constants/Colors';
 
 const defaultNavOptions = {
@@ -23,7 +23,7 @@ const defaultNavOptions = {
   },
   headerTitleStyle: {},
   headerBackTitleStyle: {
-    fontFamily: 'poppins-regular',
+    fontFamily: '',
   },
   statusBarStyle: Colors.bg,
   headerTintColor: Colors.white,
@@ -81,7 +81,7 @@ const GroupNavigator = createStackNavigator(
 const SignUpNavigator = createStackNavigator(
   {
     AuthSucess: AuthSucess,
-    Create: CreateProfile,
+    Create: CreateUser,
   },
   {
     defaultNavigationOptions: {
@@ -98,9 +98,7 @@ const tabScreenCnfig = {
     navigationOptions: {
       // poner un icono en la navbar
       tabBarIcon: (tabInfo) => {
-        return (
-          <Ionicons name="ios-restaurant" size={25} color={tabInfo.tintColor} />
-        );
+        return <AntDesign name="home" size={25} color={tabInfo.tintColor} />;
       },
       tabBarColor: Colors.orange,
       tabBarLabel: Platform.OS === 'android' ? <Text>Swipe</Text> : 'Swipe',
@@ -111,7 +109,7 @@ const tabScreenCnfig = {
     navigationOptions: {
       tabBarLabel: 'Likes', // cambiar el nombre
       tabBarIcon: (tabInfo) => {
-        return <Ionicons name="ios-star" size={25} color={tabInfo.tintColor} />;
+        return <AntDesign name="hearto" size={25} color={tabInfo.tintColor} />;
       },
       tabBarColor: Colors.orange,
       tabBarLabel: Platform.OS === 'android' ? <Text>Likes</Text> : 'Likes',
@@ -120,13 +118,12 @@ const tabScreenCnfig = {
   Group: {
     screen: GroupNavigator, // STACK NAVIGATOR
     navigationOptions: {
-      tabBarLabel: 'Grouppp', // cambiar el nombre
+      tabBarLabel: 'Groupppp', // cambiar el nombre
       tabBarIcon: (tabInfo) => {
-        return <Ionicons name="ios-star" size={25} color={tabInfo.tintColor} />;
+        return <AntDesign name="addusergroup" size={25} color={tabInfo.tintColor} />
       },
       tabBarColor: Colors.orange,
-      tabBarLabel:
-        Platform.OS === 'android' ? <Text>Create group</Text> : 'Create group',
+      tabBarLabel: Platform.OS === 'android' ? <Text>Create group</Text> : null,
     },
   },
 };
@@ -137,6 +134,7 @@ const ToogetherTab =
   Platform.OS === 'android'
     ? createMaterialBottomTabNavigator(tabScreenCnfig, {
         activeTintColor: Colors.orange,
+        showLabel: false,
         shifting: true, // la navbar cambia de color al seleccion alguna opcion
         barStyle: {
           backgroundColor: Colors.bg,
@@ -145,6 +143,7 @@ const ToogetherTab =
       })
     : createBottomTabNavigator(tabScreenCnfig, {
         tabBarOptions: {
+          showLabel: false,
           activeTintColor: Colors.orange,
           labelStyle: {},
           tabStyle: {
@@ -157,7 +156,7 @@ const ToogetherTab =
 const MainNavigator = createSwitchNavigator({
   Auth: AuthNavigator,
   Success: AuthSucess,
-  Create: CreateProfile,
+  Create: CreateUser,
   Swipe: ToogetherTab,
 });
 

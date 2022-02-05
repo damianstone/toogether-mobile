@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { StatusBar } from 'expo-status-bar';
+import { useSelector } from 'react-redux';
 import Swiper from 'react-native-deck-swiper';
 import tw from 'tailwind-rn';
 
@@ -20,44 +21,18 @@ import HeaderButtom from '../../components/UI/HeaderButton';
 import Card from '../../components/Card/Card';
 import Colors from '../../constants/Colors';
 
-const burned_data = [
-  {
-    firstName: 'Elizabeth',
-    lastName: 'Olsen',
-    occupation: 'Actress',
-    photoURL:
-      'https://www.biography.com/.image/ar_1:1%2Cc_fill%2Ccs_srgb%2Cg_face%2Cq_auto:good%2Cw_300/MTE5NTU2MzE2NTE5MzAyNjY3/elizabeth-olsen-20631899-1-402.jpg',
-    age: 32,
-  },
-  {
-    firstName: 'Elon',
-    lastName: 'Musk',
-    occupation: 'Software Developer',
-    photoURL:
-      'https://www.biography.com/.image/ar_1:1%2Cc_fill%2Ccs_srgb%2Cg_face%2Cq_auto:good%2Cw_300/MTc5OTk2ODUyMTMxNzM0ODcy/gettyimages-1229892983-square.jpg',
-    age: 40,
-  },
-  {
-    firstName: 'Rafael',
-    lastName: 'Nadal',
-    occupation: 'Tennis player',
-    photoURL:
-      'https://www.biography.com/.image/ar_1:1%2Cc_fill%2Ccs_srgb%2Cg_face%2Cq_auto:good%2Cw_300/MTc5ODc2ODQzNzY2MTYzMDU1/gettyimages-982701222.jpg',
-    age: 35,
-  },
-];
-
 const Swipe = (props) => {
+  const groups = useSelector((state) => state.groups.groups);
   const swipeRef = useRef(null);
   return (
     // CARD SECTION
     <SafeAreaView style={styles.safe}>
-      <StatusBar style={{backgroundColor: Colors.bg}} />
+      <StatusBar style="light" />
       <View style={styles.screen}>
         <View style={styles.swipeContainer}>
           <Swiper
             containerStyle={tw('bg-transparent')}
-            cards={burned_data}
+            cards={groups}
             ref={swipeRef}
             stackSize={5}
             cardIndex={0}
@@ -89,13 +64,11 @@ const Swipe = (props) => {
             onSwipedRight={() => {
               console.log('right');
             }}
-            renderCard={(card) => (
+            renderCard={(group) => (
               <Card
-                photoURL={card.photoURL}
-                firstName={card.firstName}
-                lastName={card.lastName}
-                occupation={card.occupation}
-                age={card.age}
+                key={group.id}
+                firstName={group.members[0].firstName}
+                profiles={group.members}
               />
             )}
           />
@@ -117,14 +90,19 @@ const Swipe = (props) => {
 
 Swipe.navigationOptions = (navData) => {
   return {
-    headerTitle: 'Swipe',
+    headerTitle: () => (
+      <Image
+        source={require('../../assets/images/logo-1.png')}
+        style={styles.logo}
+      />
+    ),
     headerLeft: () => (
       <HeaderButtons HeaderButtonComponent={HeaderButtom}>
         <Item
           title="Cart"
           iconName={Platform.OS === 'android' ? 'md-cart' : 'ios-cart'}
           onPress={() => {
-            // go to chat screen
+            // go to user profile
           }}
         />
       </HeaderButtons>

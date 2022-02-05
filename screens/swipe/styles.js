@@ -24,4 +24,8 @@ export default StyleSheet.create({
     marginVertical: 0,
     top: '2.5%',
   },
+  logo: {
+    width: 57,
+    height: 35,
+  }
 });

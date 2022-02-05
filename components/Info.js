@@ -12,15 +12,15 @@ const Info = (props) => {
         <Text
           style={
             styles.name
-          }>{`${props.firstName}${props.lastName}, ${props.age}`}</Text>
+          }>{`${props.firstName} ${props.lastName}, ${props.age}`}</Text>
+      </View>
+      <View style={styles.infoContainer}>
+        <Ionicons name="ios-location-outline" size={24} color="black" />
+        <Text style={styles.text}>{`${props.location}`}</Text>
       </View>
       <View style={styles.infoContainer}>
         <Ionicons name="location" size={19} color="black" />
-        <Text style={styles.text}>{`Location / ${props.occupation}`}</Text>
-      </View>
-      <View style={styles.infoContainer}>
-        <Ionicons name="location" size={19} color="black" />
-        <Text style={styles.text}>{`Group number / ${props.occupation}`}</Text>
+        <Text style={styles.text}>{`${props.university}`}</Text>
       </View>
     </View>
   );
@@ -38,15 +38,16 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 1.41,
     elevation: 2,
-
     backgroundColor: Colors.white,
-    //position: 'absolute',
-    width: 224,
+    width: '60%',
+    height: 100,
     borderRadius: 30,
-    margin: 10,
     paddingHorizontal: 15,
     paddingVertical: 10,
+    marginVertical: 15,
+    marginHorizontal: 3,
     flexDirection: 'column',
+    justifyContent: 'center',
   },
   textContainer: {
     marginVertical: 1,

@@ -30,7 +30,7 @@ const Login = (props) => {
         </View>
         <View style={styles.buttonsContainer}>
           <View style={styles.buttonContainer2}>
-            <AntDesign name="facebook-square" size={22} color="black" />
+            <AntDesign name="google" size={22} color="black" />
             <Button
               onPress={() => {
                 props.navigation.navigate('Swipe');

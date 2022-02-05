@@ -27,7 +27,9 @@ export default StyleSheet.create({
     flex: 1,
     width: '100%',
     height: '100%',
-    justifyContent: 'flex-end',
+    justifyContent: 'space-between',
+    alignItems: 'flex-end',
+    flexDirection: 'row'
   },
   imageStyle: {
     borderRadius: 30,
@@ -38,4 +40,16 @@ export default StyleSheet.create({
     fontWeight: 'bold',
     color: Colors.white,
   },
+  arrowContainer: {
+    width: 50,
+    height: 50,
+    borderRadius: 100,
+    backgroundColor: Colors.orange,
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignSelf: 'flex-end',
+    marginVertical: 15,
+    marginHorizontal: 15,
+    padding: 10,
+  }
 });

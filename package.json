@@ -49,6 +49,7 @@
     "react-navigation-material-bottom-tabs": "^2.3.4",
     "react-navigation-stack": "^2.10.4",
     "react-navigation-tabs": "^2.11.1",
+    "react-redux": "^7.2.6",
     "redux-thunk": "^2.4.1",
     "tailwind-rn": "^3.0.1"
   },

@@ -3,9 +3,18 @@ import React, { useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import AppLoading from 'expo-app-loading';
 import * as Font from 'expo-font';
+import { createStore, combineReducers, applyMiddleware } from 'redux';
+import { Provider } from 'react-redux';
+import ReduxThunk from 'redux-thunk';
 
+import groupReducer from './store/reducers/group';
 import Navigation from './navigation/Navigation';
-import Colors from './constants/Colors';
+
+const rootReducer = combineReducers({
+  groups: groupReducer,
+});
+
+const store = createStore(rootReducer, applyMiddleware(ReduxThunk)); 
 
 const fetchFonts = () => {
   return Font.loadAsync({
@@ -17,28 +26,23 @@ const fetchFonts = () => {
 const App = () => {
   const [fontLoaded, setFontLoaded] = useState(false);
 
-  if (!fontLoaded) {
-    return (
-      <AppLoading
-        startAsync={fetchFonts}
-        onFinish={() => {
-          setFontLoaded(true);
-        }}
-        onError={(err) => console.log(err)}
-      />
-    );
-  }
+  //if (!fontLoaded) {
+  //  return (
+  //    <AppLoading
+  //      startAsync={fetchFonts}
+  //      onFinish={() => {
+  //        setFontLoaded(true);
+  //      }}
+  //      onError={(err) => console.log(err)}
+  //    />
+  //  );
+  //}
 
-  return <Navigation theme="dark" />;
+  return (
+    <Provider store={store}>
+      <Navigation theme="dark" />
+    </Provider>
+  );
 };
 
 export default App;
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: Colors.bg,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});

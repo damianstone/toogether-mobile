@@ -1,5 +1,5 @@
 class Profile {
-    constructor(id, location, photos, name, lastname, age, university, about) {
+    constructor(id, location, photos, name, lastname, age, university, description) {
         this.id = id;
         this.location = location;
         this.photos = photos;
@@ -7,9 +7,10 @@ class Profile {
         this.lastname = lastname;
         this.age = age;
         this.university = university;
-        this.about = about;
+        this.description = description;
     }
 }
 
 export default Profile;
 
+ 
