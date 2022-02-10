@@ -18,7 +18,7 @@ const GROUPS = [
       'lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
     ),
     new Profile(
-        'p1',
+        'p2',
         'Vitacura',
         [
           require('../assets/images/Profiles/profile-7.jpeg'),
@@ -32,7 +32,7 @@ const GROUPS = [
         'lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
       ),
       new Profile(
-        'p1',
+        'p3',
         'Vitacura',
         [
           require('../assets/images/Profiles/profile-8.jpeg'),
@@ -48,7 +48,7 @@ const GROUPS = [
   ]),
   new Group('g2', 3, [
     new Profile(
-      'p1',
+      'p4',
       'Vitacura',
       [
         require('../assets/images/Profiles/profile-3.jpeg'),
@@ -62,7 +62,7 @@ const GROUPS = [
       'lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
     ),
     new Profile(
-        'p1',
+        'p5',
         'Vitacura',
         [
           require('../assets/images/Profiles/profile-2.jpeg'),
@@ -76,7 +76,7 @@ const GROUPS = [
         'lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
       ),
       new Profile(
-        'p1',
+        'p6',
         'Vitacura',
         [
           require('../assets/images/Profiles/profile-9.jpg'),

@@ -16,15 +16,15 @@ import Group from '../screens/Group';
 import AuthSucess from '../screens/AuthSuccess';
 import CreateUser from '../screens/user/CreateUser';
 import Colors from '../constants/Colors';
+import User from '../screens/user/User';
 
 const defaultNavOptions = {
+  headerMode: 'none',
   headerStyle: {
     backgroundColor: Colors.bg,
   },
   headerTitleStyle: {},
-  headerBackTitleStyle: {
-    fontFamily: '',
-  },
+  headerBackTitleStyle: {},
   statusBarStyle: Colors.bg,
   headerTintColor: Colors.white,
 };
@@ -52,11 +52,22 @@ const ChatNavigator = createStackNavigator(
 const SwipeNavigator = createStackNavigator(
   {
     Swipe: Swipe,
-    Profile: Profile,
     Chat: Chat,
+    User: User,
   },
   {
     defaultNavigationOptions: defaultNavOptions,
+  }
+);
+
+const ProfileNavigator = createStackNavigator(
+  {
+    Profile: Profile,
+  },
+  {
+    defaultNavigationOptions: {
+      headerShown: false,
+    },
   }
 );
 
@@ -120,7 +131,9 @@ const tabScreenCnfig = {
     navigationOptions: {
       tabBarLabel: 'Groupppp', // cambiar el nombre
       tabBarIcon: (tabInfo) => {
-        return <AntDesign name="addusergroup" size={25} color={tabInfo.tintColor} />
+        return (
+          <AntDesign name="addusergroup" size={25} color={tabInfo.tintColor} />
+        );
       },
       tabBarColor: Colors.orange,
       tabBarLabel: Platform.OS === 'android' ? <Text>Create group</Text> : null,
@@ -158,6 +171,7 @@ const MainNavigator = createSwitchNavigator({
   Success: AuthSucess,
   Create: CreateUser,
   Swipe: ToogetherTab,
+  //Profile: ProfileNavigator,
 });
 
 export default createAppContainer(MainNavigator);

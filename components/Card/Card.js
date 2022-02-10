@@ -1,8 +1,11 @@
 import React from 'react';
-import { Text, View, Image, ImageBackground, TouchableOpacity } from 'react-native';
+import {
+  Text,
+  View,
+  ImageBackground,
+  TouchableOpacity,
+} from 'react-native';
 import Swiper from 'react-native-swiper';
-import { Ionicons, Entypo } from '@expo/vector-icons';
-import tw from 'tailwind-rn';
 
 import styles from './styles';
 import FastImage from 'react-native-fast-image';
@@ -12,9 +15,10 @@ import Colors from '../../constants/Colors';
 // ADD SWIPER TO SLIDE BETWEEN INTEGRANTS
 const Card = (props) => {
   const { profiles } = props;
-
-  const showProfileHandler = () => {
-    console.log('show Profile');
+  
+  // send the id to the swipe component
+  const showProfile = (id) => {
+    props.onProfile(id);
   }
 
   return (
@@ -51,13 +55,13 @@ const Card = (props) => {
               }}
             />
           }>
-          {profiles.map((profile) => {
+          {profiles.map((profile, i) => {
             return (
               <ImageBackground
                 key={profile.id}
                 style={styles.image}
                 imageStyle={styles.imageStyle}
-                source={profile.photos[0]}
+                source={profile.photos[0]} // just get the first photo of every profile
                 resizeMode="cover">
                 <Info
                   firstName={profile.name}
@@ -66,7 +70,9 @@ const Card = (props) => {
                   location={profile.location}
                   age={profile.age}
                 />
-                <TouchableOpacity style={styles.arrowContainer} onPress={showProfileHandler}>
+                <TouchableOpacity
+                  style={styles.arrowContainer}
+                  onPress={() => showProfile(profile.id)}>
                   <Text>A</Text>
                 </TouchableOpacity>
               </ImageBackground>
@@ -80,20 +86,3 @@ const Card = (props) => {
 
 export default Card;
 
-/* 
-
-        {profiles.map((profile) => (
-          <ImageBackground
-            style={styles.image}
-            imageStyle={styles.imageStyle}
-            source={profile.photos[0]}
-            resizeMode="cover">
-            <Info
-              firstName={profile.firstName}
-              lastName={profile.lastName}
-              occupation={profile.location}
-              age={props.age}
-            />
-          </ImageBackground>
-        ))}
-*/

@@ -6,10 +6,11 @@ export default StyleSheet.create({
     flex: 1,
     justifyContent: 'flex-start',
     alignItems: 'center',
+    width: '100%',
   },
   card: {
     position: 'absolute',
-    width: 380,
+    width: '107%',
     height: '80%',
     borderRadius: 30,
     justifyContent: 'center',

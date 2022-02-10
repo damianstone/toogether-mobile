@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import tw from 'tailwind-rn';
-import { Ionicons } from 'expo-vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 
 import Colors from '../constants/Colors';
 
@@ -15,7 +15,7 @@ const Info = (props) => {
           }>{`${props.firstName} ${props.lastName}, ${props.age}`}</Text>
       </View>
       <View style={styles.infoContainer}>
-        <Ionicons name="ios-location-outline" size={24} color="black" />
+        <Ionicons name="location" size={19} color="black" />
         <Text style={styles.text}>{`${props.location}`}</Text>
       </View>
       <View style={styles.infoContainer}>
@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
     elevation: 2,
     backgroundColor: Colors.white,
     width: '60%',
-    height: 100,
+    height: 90,
     borderRadius: 30,
     paddingHorizontal: 15,
     paddingVertical: 10,
@@ -53,7 +53,6 @@ const styles = StyleSheet.create({
     marginVertical: 1,
   },
   name: {
-    fontFamily: 'Poppins',
     fontStyle: 'normal',
     fontSize: 17,
     color: Colors.black,
@@ -66,7 +65,6 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
   },
   text: {
-    fontFamily: 'Poppins',
     fontStyle: 'normal',
     fontSize: 15,
     marginLeft: 10,
