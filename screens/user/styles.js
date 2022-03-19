@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+import { borderRightColor, borderTopColor } from 'react-native/Libraries/Components/View/ReactNativeStyleAttributes';
 import Colors from '../../constants/Colors';
 
 export default StyleSheet.create({
@@ -6,6 +7,7 @@ export default StyleSheet.create({
     flex: 1,
     backgroundColor: Colors.bg,
     alignItems: 'center',
+    alignContent: 'center',
   }, 
   titleContainer: {
     width: '100%',
@@ -20,11 +22,18 @@ export default StyleSheet.create({
   scroll: {
     padding: 10,  
     width: '95%',
+    overflow: 'hidden'
+  },
+  contentContainer: {
+    width: '100%',
+    justifyContent: 'center',
+    overflow: 'hidden'
   },
   photoContainer: {
     flexDirection: 'row',
     justifyContent: 'space-around',
     marginVertical: 20,
+    overflow: 'hidden'
   },
   photo: {
     width: 170,
@@ -47,13 +56,21 @@ export default StyleSheet.create({
     fontSize: 18,
   },
   inputStyle: {
+    justifyContent: 'center',
+    padding: 3,
+    backgroundColor: '#494863',
+    borderRadius: 20,
+  },
+  textTareaStyle: {
     height: 150,
     justifyContent: 'flex-start',
     padding: 3,
+    backgroundColor: '#494863',
+    borderRadius: 20,
   },
   textArea: {
     height: 150,
-    textAlignVertical: 'top'
+    textAlignVertical: 'top',
   },
   buttonContainer: {
     alignItems: 'center',

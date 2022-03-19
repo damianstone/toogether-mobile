@@ -27,5 +27,16 @@ export default StyleSheet.create({
   logo: {
     width: 57,
     height: 35,
+  },
+  imgContainer: {
+    width: 40,
+    height: 40,
+    overflow: 'hidden',
+    marginLeft: 10,
+    borderRadius: 100,
+  },
+  img: {
+    width: '100%',
+    height: '100%',
   }
 });

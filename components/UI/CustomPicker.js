@@ -7,7 +7,6 @@ import Colors from '../../constants/Colors';
 
 
 const CustomPicker = (props) => {
-  const [selectedValue, setSelectedValue] = useState('');
 
   return (
     <View style={styles.formControl}>

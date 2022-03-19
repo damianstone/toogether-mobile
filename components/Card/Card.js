@@ -1,32 +1,58 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Text,
   View,
   ImageBackground,
   TouchableOpacity,
+  StyleSheet,
 } from 'react-native';
 import Swiper from 'react-native-swiper';
 
-import styles from './styles';
-import FastImage from 'react-native-fast-image';
 import Info from '../Info';
 import Colors from '../../constants/Colors';
 
-// ADD SWIPER TO SLIDE BETWEEN INTEGRANTS
 const Card = (props) => {
+  // swipe pass as a props the profiles array of each group of the single profile
   const { profiles } = props;
-  
+
   // send the id to the swipe component
   const showProfile = (id) => {
     props.onProfile(id);
+  };
+
+  console.log(profiles);
+
+  let cardType;
+  // if the profiles array > 1
+  if (profiles.length === 1) {
+    cardType = {
+      position: 'absolute',
+      width: '107%',
+      height: '80%',
+      borderRadius: 30,
+      justifyContent: 'center',
+      alignItems: 'center',
+    };
+  } else {
+    cardType = {
+      position: 'absolute',
+      width: '107%',
+      height: '80%',
+      borderRadius: 30,
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: Colors.orange,
+    };
   }
 
   return (
     <View style={styles.screen}>
-      <View style={styles.card}>
-        <View style={styles.groupName}>
-          <Text style={styles.text}>Grupo de {profiles[0].name}</Text>
-        </View>
+      <View style={{ ...cardType }}>
+        {profiles.length > 1 && (
+          <View style={styles.groupName}>
+            <Text style={styles.text}>Grupo de {profiles[0].name}</Text>
+          </View>
+        )}
         <Swiper
           style={styles.wrapper}
           removeClippedSubviews={false}
@@ -86,3 +112,47 @@ const Card = (props) => {
 
 export default Card;
 
+const styles = StyleSheet.create({
+  screen: {
+    flex: 1,
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    width: '100%',
+  },
+  groupName: {
+    borderRadius: 30,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginVertical: 2,
+    backgroundColor: Colors.orange,
+  },
+  image: {
+    flex: 1,
+    width: '100%',
+    height: '100%',
+    justifyContent: 'space-between',
+    alignItems: 'flex-end',
+    flexDirection: 'row',
+  },
+  imageStyle: {
+    borderRadius: 30,
+    height: '100%',
+  },
+  text: {
+    fontSize: 13,
+    fontWeight: 'bold',
+    color: Colors.white,
+  },
+  arrowContainer: {
+    width: 50,
+    height: 50,
+    borderRadius: 100,
+    backgroundColor: Colors.orange,
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignSelf: 'flex-end',
+    marginVertical: 15,
+    marginHorizontal: 15,
+    padding: 10,
+  },
+});

@@ -16,12 +16,14 @@ import Group from '../screens/Group';
 import AuthSucess from '../screens/AuthSuccess';
 import CreateUser from '../screens/user/CreateUser';
 import Colors from '../constants/Colors';
-import User from '../screens/user/User';
+import MyProfile from '../screens/myProfile/MyProfile';
+import SettingScreen from '../screens/myProfile/SettingScreen';
 
 const defaultNavOptions = {
   headerMode: 'none',
   headerStyle: {
     backgroundColor: Colors.bg,
+    shadowColor: 'transparent',
   },
   headerTitleStyle: {},
   headerBackTitleStyle: {},
@@ -52,22 +54,9 @@ const ChatNavigator = createStackNavigator(
 const SwipeNavigator = createStackNavigator(
   {
     Swipe: Swipe,
-    Chat: Chat,
-    User: User,
   },
   {
     defaultNavigationOptions: defaultNavOptions,
-  }
-);
-
-const ProfileNavigator = createStackNavigator(
-  {
-    Profile: Profile,
-  },
-  {
-    defaultNavigationOptions: {
-      headerShown: false,
-    },
   }
 );
 
@@ -89,15 +78,20 @@ const GroupNavigator = createStackNavigator(
   }
 );
 
-const SignUpNavigator = createStackNavigator(
+const MyProfileNavigator = createStackNavigator(
   {
-    AuthSucess: AuthSucess,
-    Create: CreateUser,
+    MyProfile: {
+      screen: MyProfile,
+      navigationOptions: {
+        gestureDirection: 'horizontal-inverted',
+      },
+    },
+    Setting: {
+      screen: SettingScreen,
+    },
   },
   {
-    defaultNavigationOptions: {
-      headerShown: false,
-    },
+    defaultNavigationOptions: defaultNavOptions,
   }
 );
 
@@ -153,6 +147,10 @@ const ToogetherTab =
           backgroundColor: Colors.bg,
           statusBarStyle: Colors.bg,
         },
+        style: {
+          backgroundColor: Colors.bg,
+          borderTopWidth: 0,
+        },
       })
     : createBottomTabNavigator(tabScreenCnfig, {
         tabBarOptions: {
@@ -163,15 +161,40 @@ const ToogetherTab =
             backgroundColor: Colors.bg,
             statusBarStyle: Colors.bg,
           },
+          style: {
+            backgroundColor: Colors.bg,
+            borderTopWidth: 0,
+          },
         },
       });
+
+const HomeNavigator = createStackNavigator(
+  {
+    Main: ToogetherTab,
+    Profile: Profile,
+  },
+  {
+    mode: 'modal',
+    headerMode: 'none',
+  }
+);
+
+const AppNavigator = createStackNavigator(
+  {
+    Swipe: HomeNavigator,
+    Chat: ChatNavigator,
+    MyProfile: MyProfileNavigator,
+  },
+  {
+    headerMode: 'none',
+  }
+);
 
 const MainNavigator = createSwitchNavigator({
   Auth: AuthNavigator,
   Success: AuthSucess,
   Create: CreateUser,
-  Swipe: ToogetherTab,
-  //Profile: ProfileNavigator,
+  Swipe: AppNavigator,
 });
 
 export default createAppContainer(MainNavigator);

@@ -1,14 +1,10 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 import {
-  StyleSheet,
   View,
-  Text,
   Image,
-  ImageBackground,
-  TouchableOpacity,
   Platform,
   SafeAreaView,
-  Modal,
+  TouchableOpacity,
 } from 'react-native';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { StatusBar } from 'expo-status-bar';
@@ -17,111 +13,80 @@ import Swiper from 'react-native-deck-swiper';
 import tw from 'tailwind-rn';
 
 import styles from './styles';
-import Profile from '../profile/Profile';
 import SwipeButtons from '../../components/SwipeButtons/SwipeButtons';
 import HeaderButtom from '../../components/UI/HeaderButton';
 import Card from '../../components/Card/Card';
-import Colors from '../../constants/Colors';
 
 const Swipe = (props) => {
-  const [showProfile, setShowProfile] = useState({});
-  const [showModal, setShowModal] = useState(false);
-
   // get the groups from the reducer
   const groups = useSelector((state) => state.groups.groups);
   const swipeRef = useRef(null);
 
-  const profiles = [];
-  for (let i = 0; i < groups.length; i++) {
-    for (let j = 0; j < groups[i].members.length; j++) {
-      profiles.push(groups[i].members[j]);
-    }
-  }
-
-  // THIS FUNCTION SHOULD OPEN A MODAL SCREEN (PROFILE) AND PASS THE PROFILE DATA
   const showProfileHandler = (id) => {
-    const profile = profiles.find((profile) => profile.id === id);
-    console.log('SWIPE COMPONENT 1 --------> ', profile);
-    setShowProfile({ ...profile });
-    setShowModal(true);
-
-    //props.navigation.push('Profile', { profileId: id });
+    props.navigation.navigate('Profile', { profileId: id });
   };
 
   return (
     <SafeAreaView style={styles.safe}>
       <StatusBar style="light" />
-      {showModal ? (
-        <Profile
-          visible={showModal}
-          id={showProfile.id}
-          photos={showProfile.photos}
-          name={showProfile.name}
-          lastname={showProfile.lastname}
-          age={showProfile.age}
-          location={showProfile.location}
-          university={showProfile.university}
-          description={showProfile.description}
-        />
-      ) : (
-        <View style={styles.screen}>
-          <View style={styles.swipeContainer}>
-            <Swiper
-              containerStyle={tw('bg-transparent')}
-              cards={groups}
-              ref={swipeRef}
-              stackSize={5}
-              cardIndex={0}
-              animateCardOpacity
-              verticalSwipe={false}
-              overlayLabels={{
-                left: {
-                  title: 'NOPE',
-                  style: {
-                    label: {
-                      textAlign: 'right',
-                      color: 'red',
-                    },
+      <View style={styles.screen}>
+        <View style={styles.swipeContainer}>
+          <Swiper
+            containerStyle={tw('bg-transparent')}
+            cards={groups}
+            ref={swipeRef}
+            stackSize={5}
+            cardIndex={0}
+            animateCardOpacity
+            verticalSwipe={false}
+            overlayLabels={{
+              left: {
+                title: 'NOPE',
+                style: {
+                  label: {
+                    textAlign: 'right',
+                    color: 'red',
                   },
                 },
-                right: {
-                  title: 'MATCH',
-                  style: {
-                    label: {
-                      textAlign: 'left',
-                      color: 'green',
-                    },
+              },
+              right: {
+                title: 'MATCH',
+                style: {
+                  label: {
+                    textAlign: 'left',
+                    color: 'green',
                   },
                 },
-              }}
-              onSwipedLeft={() => {
-                console.log('left');
-              }}
-              onSwipedRight={() => {
-                console.log('right');
-              }}
-              renderCard={(group) => (
-                <Card
-                  key={group.id}
-                  firstName={group.members[0].firstName}
-                  profiles={group.members}
-                  onProfile={showProfileHandler}
-                />
-              )}
-            />
-          </View>
-          <View style={styles.buttonsContainer}>
-            <SwipeButtons
-              onLeft={() => {
-                swipeRef.current.swipeLeft();
-              }}
-              onRight={() => {
-                swipeRef.current.swipeRight();
-              }}
-            />
-          </View>
+              },
+            }}
+            onSwipedLeft={() => {
+              console.log('left');
+            }}
+            onSwipedRight={() => {
+              console.log('right');
+            }}
+            renderCard={(elem) => (
+              <Card
+                key={elem.id}
+                firstName={elem.length > 1 ? elem.members[0].firstName : null}
+                profiles={elem.members}
+                onProfile={showProfileHandler}
+              />
+            )}
+          />
         </View>
-      )}
+        <View style={styles.buttonsContainer}>
+          <SwipeButtons
+            rewind={true}
+            onLeft={() => {
+              swipeRef.current.swipeLeft();
+            }}
+            onRight={() => {
+              swipeRef.current.swipeRight();
+            }}
+          />
+        </View>
+      </View>
     </SafeAreaView>
   );
 };
@@ -135,16 +100,16 @@ Swipe.navigationOptions = (navData) => {
       />
     ),
     headerLeft: () => (
-      <HeaderButtons HeaderButtonComponent={HeaderButtom}>
-        <Item
-          title="Cart"
-          iconName={Platform.OS === 'android' ? 'md-cart' : 'ios-cart'}
-          onPress={() => {
-            // go to user profile
-            navData.navigation.navigate('User');
-          }}
+      <TouchableOpacity
+        style={styles.imgContainer}
+        onPress={() => {
+          navData.navigation.navigate('MyProfile');
+        }}>
+        <Image
+          source={require('../../assets/images/Profiles/user.jpeg')}
+          style={styles.img}
         />
-      </HeaderButtons>
+      </TouchableOpacity>
     ),
     headerRight: () => (
       <HeaderButtons HeaderButtonComponent={HeaderButtom}>

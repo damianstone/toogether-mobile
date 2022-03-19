@@ -137,8 +137,9 @@ const CreateUser = (props) => {
 
 
     console.log(formState);
-
-    props.navigation.navigate('Swipe');
+    
+    // go to the home section but pass the user data to header button left and user profile 
+    props.navigation.navigate('Swipe'); 
   };
 
   // ON CHANGE INPUTS
@@ -189,13 +190,14 @@ const CreateUser = (props) => {
       <View styles={styles.titleContainer}>
         <Text style={styles.title}>Complete your profile</Text>
       </View>
-      <ScrollView style={styles.scroll}>
+      <ScrollView style={styles.scroll} contentContainerStyle={styles.contentContainer}>
         <View style={{width: '60%', alignSelf:'center'}}>
           <ImageSelector onImageTaken={imageTakenHandler} />
         </View>
         <View style={styles.inputContainer}>
           <Input
             labelStyle={styles.label} // style for the label
+            inputStyle={styles.inputStyle}
             inputType="textInput"
             id="name"
             label="Name"
@@ -212,6 +214,7 @@ const CreateUser = (props) => {
         <View style={styles.inputContainer}>
           <Input
             labelStyle={styles.label}
+            inputStyle={styles.inputStyle}
             inputType="textInput"
             id="lastname"
             label="Lastname"
@@ -228,6 +231,7 @@ const CreateUser = (props) => {
         <View style={styles.inputContainer}>
           <Input
             labelStyle={styles.label}
+            inputStyle={styles.inputStyle}
             inputType="textInput"
             id="university"
             label="University (optional)"
@@ -244,6 +248,7 @@ const CreateUser = (props) => {
         <View style={styles.inputContainer}>
           <Input
             labelStyle={styles.label}
+            inputStyle={styles.inputStyle}
             inputType="inputMask"
             id="birthday"
             label="Birthday"
@@ -260,6 +265,7 @@ const CreateUser = (props) => {
             pickerRequired
             inputType="picker"
             labelStyle={styles.label}
+            inputStyle={styles.inputStyle}
             items={gender}
             itemKey={show.value}
             label="Gender"
@@ -275,12 +281,13 @@ const CreateUser = (props) => {
             pickerRequired
             inputType="picker"
             labelStyle={styles.label}
+            inputStyle={styles.inputStyle}
             items={show}
             itemKey={show.value}
             label="Show me"
             initialValue=""
             id="showme"
-            placeholder={{ label: 'Select an item', value: 'Select an item' }}
+            placeholder={{ label: 'Select an item', value: 'Select an item'}}
             errorText="Please select an option"
             onInputChange={inputChangeHandler}
           />
@@ -289,6 +296,7 @@ const CreateUser = (props) => {
           <Input
             labelStyle={styles.label}
             style={styles.textArea} // style for the
+            inputStyle={styles.textTareaStyle}
             underlineColorAndroid="transparent"
             placeholder="Type something"
             placeholderTextColor="grey"
@@ -296,7 +304,6 @@ const CreateUser = (props) => {
             numberOfLines={5}
             maxLength={500}
             inputType="textInput"
-            inputStyle={styles.inputStyle}
             id="about"
             label="About (optional)"
             autoCapitalize="none"

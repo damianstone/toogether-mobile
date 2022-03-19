@@ -6,6 +6,7 @@ import * as Font from 'expo-font';
 import { createStore, combineReducers, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
 import ReduxThunk from 'redux-thunk';
+import { ActionSheetProvider, connectActionSheet } from '@expo/react-native-action-sheet';
 
 import groupReducer from './store/reducers/group';
 import Navigation from './navigation/Navigation';
@@ -14,7 +15,7 @@ const rootReducer = combineReducers({
   groups: groupReducer,
 });
 
-const store = createStore(rootReducer, applyMiddleware(ReduxThunk)); 
+const store = createStore(rootReducer, applyMiddleware(ReduxThunk));
 
 const fetchFonts = () => {
   return Font.loadAsync({
@@ -40,9 +41,13 @@ const App = () => {
 
   return (
     <Provider store={store}>
-      <Navigation theme="dark" />
+      <ActionSheetProvider>
+        <Navigation theme="dark" />
+      </ActionSheetProvider>
     </Provider>
   );
 };
 
-export default App;
+const ConnectedApp = connectActionSheet(App);
+
+export default ConnectedApp;

@@ -3,6 +3,7 @@ import { View, Button, Text, StyleSheet, Image, Alert } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 
 import Colors from '../../constants/Colors';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 const ImageSelector = (props) => {
   const [imageUri, setImageUri] = useState('');
@@ -39,6 +40,10 @@ const ImageSelector = (props) => {
     props.onImageTaken(image.uri);
   };
 
+  const deleteImageHandler = () => {
+    setImageUri(null);
+  };
+
   let colorBorder;
   if (imageUri) colorBorder = Colors.green;
   else colorBorder = Colors.orange;
@@ -63,6 +68,21 @@ const ImageSelector = (props) => {
           </Fragment>
         )}
       </View>
+      {imageUri ? (
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-around',
+            width: '100%',
+          }}>
+          <TouchableOpacity onPress={deleteImageHandler}>
+            <Text style={styles.redColor}>Remove</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={takeImageHandler}>
+            <Text style={styles.greenColor}>Change</Text>
+          </TouchableOpacity>
+        </View>
+      ) : null}
     </View>
   );
 };
@@ -77,14 +97,18 @@ const styles = StyleSheet.create({
     height: 200,
     justifyContent: 'center',
     alignItems: 'center',
-    borderColor: Colors.orange,
-    borderWidth: 1,
     borderRadius: 10,
     overflow: 'hidden',
   },
   image: {
     width: '100%',
     height: '100%',
+  },
+  redColor: {
+    color: Colors.orange,
+  },
+  greenColor: {
+    color: Colors.green,
   },
 });
 

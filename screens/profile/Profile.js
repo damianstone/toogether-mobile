@@ -7,8 +7,23 @@ import Colors from '../../constants/Colors';
 import DetailCard from '../../components/DetailCard';
 
 const Profile = (props) => {
+  const groups = useSelector((state) => state.groups.groups);
+
+  const profiles = [];
+  for (let i = 0; i < groups.length; i++) {
+    for (let j = 0; j < groups[i].members.length; j++) {
+      profiles.push(groups[i].members[j]);
+    }
+  }
+
+  const profileId = props.navigation.getParam('profileId');
+  console.log(profileId);
+
+  const profile = profiles.find((profile) => profile.id === profileId);
+  console.log(profile);
+
   return (
-    <Modal visible={props.visible}>
+    <View style={{flex: 1,}}>
       <Swiper
         style={styles.wrapper}
         removeClippedSubviews={false}
@@ -37,27 +52,27 @@ const Profile = (props) => {
             }}
           />
         }>
-        {props.photos.map((ph) => {
+        {profile.photos.map((ph) => {
           return (
             <ImageBackground
-              key={props.id}
+              key={profile.id}
               style={styles.image}
               imageStyle={styles.imageStyle}
               source={ph}
-              resizeMode="cover">
-              <DetailCard
-                name={props.name}
-                lastname={props.lastname}
-                age={props.age}
-                location={props.location}
-                university={props.university}
-                description={props.description}
-              />
-            </ImageBackground>
-          )
+              resizeMode="cover"></ImageBackground>
+          );
         })}
       </Swiper>
-    </Modal>
+      <DetailCard
+        onClose={() => props.navigation.goBack(null)}
+        name={profile.name}
+        lastname={profile.lastname}
+        age={profile.age}
+        location={profile.location}
+        university={profile.university}
+        description={profile.description}
+      />
+    </View>
   );
 };
 
@@ -73,27 +88,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   imageStyle: {
-    borderRadius: 30,
     height: '100%',
   },
 });
-
-/* 
-
-  //const groups = useSelector((state) => state.groups.groups);
-  //const profiles = [];
-  //for (let i = 0; i < groups.length; i++) {
-  //  for (let j = 0; j < groups[i].members.length; j++) {
-  //    profiles.push(groups[i].members[j]);
-  //  }
-  //}
-  //
-  //const profileId = props.navigation.getParam('profileId');
-  //console.log('PROFILE COMPONENT -------->', profileId);
-  //
-  //const profile = profiles.find((profile) => profile.id === profileId);
-  //console.log('PROFILE COMPONENT -------->', profile.name);
-
-
-
-*/
