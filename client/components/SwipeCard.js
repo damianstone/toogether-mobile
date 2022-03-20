@@ -8,10 +8,10 @@ import {
 } from 'react-native';
 import Swiper from 'react-native-swiper';
 
-import Info from '../Info';
-import Colors from '../../constants/Colors';
+import Info from './Info';
+import Colors from '../constants/Colors';
 
-const Card = (props) => {
+const SwipeCard = (props) => {
   // swipe pass as a props the profiles array of each group of the single profile
   const { profiles } = props;
 
@@ -110,7 +110,7 @@ const Card = (props) => {
   );
 };
 
-export default Card;
+export default SwipeCard;
 
 const styles = StyleSheet.create({
   screen: {

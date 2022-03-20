@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 
 import Colors from '../constants/Colors';
-import LikesCard from '../components/LikesCard/LikesCard';
+import LikesCard from '../components/LikesCard';
 
 const Likes = (props) => {
   const groups = useSelector((state) => state.groups.groups);

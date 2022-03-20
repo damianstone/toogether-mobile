@@ -4,7 +4,12 @@ import { StyleSheet, Text, View, SafeAreaView } from 'react-native';
 const Chat = () => {
   return (
     <View>
-      <Text>CHAT SCREEN</Text>
+      <View>
+        <Text>New Matchs</Text>
+      </View>
+      <View>
+
+      </View>
     </View>
   );
 };

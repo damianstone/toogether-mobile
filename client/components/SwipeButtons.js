@@ -1,9 +1,10 @@
 import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { Ionicons, Entypo } from '@expo/vector-icons';
-import tw from 'tailwind-rn';
 
-import styles from './styles';
+import tw from 'tailwind-rn';
+import Colors from '../constants/Colors';
+
 
 const SwipeButtons = (props) => {
   return (
@@ -24,3 +25,33 @@ const SwipeButtons = (props) => {
 };
 
 export default SwipeButtons;
+
+const styles = StyleSheet.create({
+  screen: {
+    marginVertical: 2,
+  },
+  button1: {
+    width: 60,
+    height: 60,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 100,
+    backgroundColor: Colors.orange,
+  },
+  button2: {
+    width: 60,
+    height: 60,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 100,
+    backgroundColor: Colors.calypso,
+  },
+  button3: {
+    width: 50,
+    height: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 100,
+    backgroundColor: Colors.white,
+  },
+});

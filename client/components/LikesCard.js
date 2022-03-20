@@ -7,8 +7,8 @@ import {
 } from 'react-native';
 import React from 'react';
 
-import Colors from '../../constants/Colors';
-import Info from '../Info';
+import Colors from '../constants/Colors';
+import Info from './Info';
 
 const LikesCard = (props) => {
   // swipe pass as a props the profiles array of each group of the single profile
@@ -71,8 +71,7 @@ const styles = StyleSheet.create({
     flex: 0.5,
     justifyContent: 'flex-start',
     alignItems: 'center',
-    width: '50%',
-    height: 250,
+    height: 200,
     margin: 15,
   },
   groupName: {
@@ -99,7 +98,7 @@ const styles = StyleSheet.create({
     color: Colors.white,
   },
   touch: {
-    height: 250,
+    height: 200,
   },
 });
 

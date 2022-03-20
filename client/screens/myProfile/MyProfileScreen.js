@@ -18,9 +18,8 @@ import HeaderButtom from '../../components/UI/HeaderButton';
 import ActivityModal from '../../components/UI/ActivityModal';
 import styles from './styles';
 import Colors from '../../constants/Colors';
-import Input from '../../components/UI/Input';
 
-const MyProfile = (props) => {
+const MyProfileScreen = (props) => {
   const [loading, setLoading] = useState(false);
   const { showActionSheetWithOptions } = useActionSheet();
   const groups = useSelector((state) => state.groups.groups);
@@ -149,7 +148,7 @@ const MyProfile = (props) => {
   );
 };
 
-MyProfile.navigationOptions = (navData) => {
+MyProfileScreen.navigationOptions = (navData) => {
   return {
     headerTitle: 'My Profile',
     headerRight: () => (
@@ -179,7 +178,7 @@ MyProfile.navigationOptions = (navData) => {
   };
 };
 
-export default MyProfile;
+export default MyProfileScreen;
 
 /*
 

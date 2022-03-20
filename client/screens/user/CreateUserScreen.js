@@ -77,7 +77,7 @@ const gender = [
   },
 ];
 
-const CreateUser = (props) => {
+const CreateUserScreen = (props) => {
   // CREAR UN SISTEMA PARA QUE SOLO SE PUEDA CONTINUAR SI ES QUE SE LLENA TODO EL FORMULARIO
   const [isLoading, setIsLoading] = useState(false);
   const [image, setImage] = useState('')
@@ -333,4 +333,4 @@ const CreateUser = (props) => {
   );
 };
 
-export default CreateUser;
+export default CreateUserScreen;

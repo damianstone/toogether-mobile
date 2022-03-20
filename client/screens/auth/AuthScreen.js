@@ -7,7 +7,7 @@ import { StatusBar } from 'expo-status-bar';
 import styles from './styles';
 import Colors from '../../constants/Colors';
 
-const Login = (props) => {
+const AuthScreen = (props) => {
   const [isSignup, setIsSignup] = useState(false); // to switch between signup and signin
 
   return (
@@ -68,4 +68,4 @@ const Login = (props) => {
   );
 };
 
-export default Login;
+export default AuthScreen;

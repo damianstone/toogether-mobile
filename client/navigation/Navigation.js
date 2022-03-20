@@ -7,16 +7,16 @@ import { createMaterialBottomTabNavigator } from 'react-navigation-material-bott
 import { createBottomTabNavigator } from 'react-navigation-tabs';
 import { AntDesign } from '@expo/vector-icons';
 
-import Login from '../screens/login/Login';
-import Swipe from '../screens/swipe/Swipe';
-import Profile from '../screens/profile/Profile';
-import Chat from '../screens/Chat';
-import Likes from '../screens/Likes';
-import Group from '../screens/Group';
-import AuthSucess from '../screens/AuthSuccess';
-import CreateUser from '../screens/user/CreateUser';
+import AuthScreen from '../screens/auth/AuthScreen';
+import AuthSucess from '../screens/auth/AuthSuccess';
+import SwipeScreen from '../screens/swipe/SwipeScreen';
+import ProfileModalScreen from '../screens/profile/ProfileModalScreen';
+import ChatScreen from '../screens/ChatScreen';
+import LikesScreen from '../screens/LikesScreen';
+import GroupScreen from '../screens/GroupScreen';
+import CreateUserScreen from '../screens/user/CreateUserScreen';
 import Colors from '../constants/Colors';
-import MyProfile from '../screens/myProfile/MyProfile';
+import MyProfileScreen from '../screens/myProfile/MyProfileScreen';
 import SettingScreen from '../screens/myProfile/SettingScreen';
 
 const defaultNavOptions = {
@@ -33,7 +33,7 @@ const defaultNavOptions = {
 
 const AuthNavigator = createStackNavigator(
   {
-    Auth: Login,
+    Auth: AuthScreen,
   },
   {
     defaultNavigationOptions: {
@@ -44,7 +44,7 @@ const AuthNavigator = createStackNavigator(
 
 const ChatNavigator = createStackNavigator(
   {
-    Chat: Chat,
+    Chat: ChatScreen,
   },
   {
     defaultNavigationOptions: defaultNavOptions,
@@ -53,7 +53,7 @@ const ChatNavigator = createStackNavigator(
 
 const SwipeNavigator = createStackNavigator(
   {
-    Swipe: Swipe,
+    Swipe: SwipeScreen,
   },
   {
     defaultNavigationOptions: defaultNavOptions,
@@ -62,7 +62,7 @@ const SwipeNavigator = createStackNavigator(
 
 const LikeNavigator = createStackNavigator(
   {
-    Likes: Likes,
+    Likes: LikesScreen,
   },
   {
     defaultNavigationOptions: defaultNavOptions,
@@ -71,7 +71,7 @@ const LikeNavigator = createStackNavigator(
 
 const GroupNavigator = createStackNavigator(
   {
-    Group: Group,
+    Group: GroupScreen,
   },
   {
     defaultNavigationOptions: defaultNavOptions,
@@ -81,7 +81,7 @@ const GroupNavigator = createStackNavigator(
 const MyProfileNavigator = createStackNavigator(
   {
     MyProfile: {
-      screen: MyProfile,
+      screen: MyProfileScreen,
       navigationOptions: {
         gestureDirection: 'horizontal-inverted',
       },
@@ -171,7 +171,7 @@ const ToogetherTab =
 const HomeNavigator = createStackNavigator(
   {
     Main: ToogetherTab,
-    Profile: Profile,
+    Profile: ProfileModalScreen,
   },
   {
     mode: 'modal',
@@ -193,7 +193,7 @@ const AppNavigator = createStackNavigator(
 const MainNavigator = createSwitchNavigator({
   Auth: AuthNavigator,
   Success: AuthSucess,
-  Create: CreateUser,
+  Create: CreateUserScreen,
   Swipe: AppNavigator,
 });
 

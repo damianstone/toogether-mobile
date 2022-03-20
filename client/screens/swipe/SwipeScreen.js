@@ -13,11 +13,11 @@ import Swiper from 'react-native-deck-swiper';
 import tw from 'tailwind-rn';
 
 import styles from './styles';
-import SwipeButtons from '../../components/SwipeButtons/SwipeButtons';
+import SwipeButtons from '../../components/SwipeButtons';
 import HeaderButtom from '../../components/UI/HeaderButton';
-import Card from '../../components/Card/Card';
+import SwipeCard from '../../components/SwipeCard';
 
-const Swipe = (props) => {
+const SwipeScreen = (props) => {
   // get the groups from the reducer
   const groups = useSelector((state) => state.groups.groups);
   const swipeRef = useRef(null);
@@ -66,7 +66,7 @@ const Swipe = (props) => {
               console.log('right');
             }}
             renderCard={(elem) => (
-              <Card
+              <SwipeCard
                 key={elem.id}
                 firstName={elem.length > 1 ? elem.members[0].firstName : null}
                 profiles={elem.members}
@@ -91,7 +91,7 @@ const Swipe = (props) => {
   );
 };
 
-Swipe.navigationOptions = (navData) => {
+SwipeScreen.navigationOptions = (navData) => {
   return {
     headerTitle: () => (
       <Image
@@ -126,4 +126,4 @@ Swipe.navigationOptions = (navData) => {
   };
 };
 
-export default Swipe;
+export default SwipeScreen;

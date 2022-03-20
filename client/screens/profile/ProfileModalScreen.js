@@ -6,7 +6,7 @@ import Swiper from 'react-native-swiper';
 import Colors from '../../constants/Colors';
 import DetailCard from '../../components/DetailCard';
 
-const Profile = (props) => {
+const ProfileModalScreen = (props) => {
   const groups = useSelector((state) => state.groups.groups);
 
   const profiles = [];
@@ -76,7 +76,7 @@ const Profile = (props) => {
   );
 };
 
-export default Profile;
+export default ProfileModalScreen;
 
 const styles = StyleSheet.create({
   image: {

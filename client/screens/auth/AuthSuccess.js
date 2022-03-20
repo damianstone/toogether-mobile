@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, View, Image, Button, TouchableOpacity } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 
-import Colors from '../constants/Colors';
+import Colors from '../../constants/Colors';
 
 const AuthSucess = (props) => {
   return (
@@ -16,7 +16,7 @@ const AuthSucess = (props) => {
       </View>
       <View style={styles.imageContainer}>
         <Image
-          source={require('../assets/images/authSucess.png')}
+          source={require('../../assets/images/authSucess.png')}
           style={styles.image}
         />
       </View>

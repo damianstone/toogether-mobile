@@ -2,7 +2,7 @@ import { StyleSheet, Text, View, ScrollView } from 'react-native';
 import React from 'react';
 import Colors from '../constants/Colors';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import SwipeButtons from './SwipeButtons/SwipeButtons';
+import SwipeButtons from './SwipeButtons';
 
 const DetailCard = (props) => {
   return (
