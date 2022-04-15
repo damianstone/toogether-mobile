@@ -1,0 +1,44 @@
+{
+  "expo": {
+    "name": "toogether",
+    "slug": "toogether",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "",
+    "splash": {
+      "image": "",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "",
+        "backgroundColor": "#FFFFFF"
+      }
+    },
+    "web": {
+      "favicon": ""
+    },
+    "extra": {
+      "IOS_KEY": "17321266316-ogt2q8acjpv6vvfg4kh9joi7oipk3lo4.apps.googleusercontent.com",
+      "ANDROID_KEY": "17321266316-nr9bnkbl9s45ckco4vjff9340tss7j97.apps.googleusercontent.com",
+      "API_KEY": "AIzaSyATwjBaC2AwIlzXaAzFws2E8O26lrUhtkE",
+      "AUTH_DOMAIN": "toogether-c4d4f.firebaseapp.com",
+      "DATABASE_URL": "",
+      "PROJECT_ID": "toogether-c4d4f",
+      "STORAGE_BUCKET": "toogether-c4d4f.appspot.com",
+      "MESSAGE_SENDER_ID": "17321266316",
+      "APP_ID": "1:17321266316:web:e3dac382e8fb4714307fa9",
+      "MEASUREMENT_ID": "G-9SQ0M3WKQW"
+    }
+  }
+}
