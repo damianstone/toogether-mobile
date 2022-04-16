@@ -12,9 +12,9 @@ export const GOOGLE_LOGIN = 'GOOGLE_LOGIN';
 let timer;
 
 // RESUSABLE AUNTENTICATE DISPATCH
-export const authenticate = (userId, token) => {
+export const authenticate = (accessToken, idToken) => {
   return (dispatch) => {
-    dispatch({ type: AUTHENTICATE, userId: userId, token: token });
+    dispatch({ type: AUTHENTICATE, accessToken: accessToken, idToken: idToken });
   };
 };
 
@@ -103,6 +103,7 @@ export const login = (email, password) => {
     });
   };
 };
+
 
 // LOGIN WITH GOOGLE
 export const googleLogIn = () => {

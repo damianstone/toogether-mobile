@@ -13,6 +13,8 @@ google login
 
 depending of the device u need a different approach
 
+Check if the user has already loged in before -> show create user screen 
+
 */
 
 const AuthScreen = (props) => {
@@ -30,7 +32,9 @@ const AuthScreen = (props) => {
 
   const authHandler = async () => {
     try {
+      // activate loading indicator
       await dispatch(actions.googleLogIn());
+      // desactivate loading 
       props.navigation.navigate('Swipe');
     } catch (err) {
       setError(err.message);
