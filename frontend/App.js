@@ -13,6 +13,7 @@ import {
 import groupReducer from './store/reducers/group';
 import auth from './store/reducers/auth';
 import AppNavigation from './navigation/AppNavigation';
+import Navigator from './navigation/Navigation';
 
 // REDUCERS
 const rootReducer = combineReducers({
@@ -49,7 +50,7 @@ const App = (props) => {
   return (
       <Provider store={store}>
         <ActionSheetProvider>
-          <AppNavigation theme="dark" />
+          <Navigator theme="dark" />
         </ActionSheetProvider>
       </Provider>
   );

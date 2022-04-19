@@ -6,9 +6,8 @@ user = {
     'id',
     'date',
     'block_users',
-    'likes',
-    'matchs',
-    
+    'likes', # array with profiles?
+    'matchs', # array with profiles?
     
     #personal info
     'name',
@@ -38,13 +37,11 @@ match = {
 
 # Group swipe
 group = {
-
-}
-
-
-# Chats
-chat = {
-
+    "id",
+    "date",
+    "total_members",
+    "members", #array with users 
+    "link",
 }
 
 # Group chat

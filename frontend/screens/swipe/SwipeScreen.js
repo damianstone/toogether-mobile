@@ -29,6 +29,10 @@ distribuye los datos al deck para el swipe
 
 renderiza newMatchprofile y noMoreProfiles si es que el deck llama estas funciones
 
+ERRORS
+render no cards screen 
+Loading while fetching data from the state
+
 
 */
 
@@ -46,6 +50,8 @@ const SwipeScreen = (props) => {
   const [userSettingsDidChange, setUserSettingsDidChange] = useState(false);
   const [hasValidatedCurrentProfile, setHasValidatedCurrentProfile] =
     useState(false);
+  const [loading, setLoading] = useState(false);
+  const [noCards, setNoCards] = useState(false);
 
   // REF
   const swipeRef = useRef(null);
@@ -54,7 +60,9 @@ const SwipeScreen = (props) => {
 
   // USE EFFECTS
   useEffect(() => {
+    setLoading(true);
     setSwipes(groups);
+    setLoading(false);
   }, []);
 
   const handleNewMatchButtonTap = (nextScreen) => {
@@ -94,6 +102,7 @@ const SwipeScreen = (props) => {
   };
 
   const renderEmptyState = () => {
+    setNoCards(true);
     return <NoMoreCards />;
   };
 
@@ -124,8 +133,7 @@ const SwipeScreen = (props) => {
             showProfileHandler={showProfileHandler}
           />
         )}
-        {swipes.length === 0 && renderEmptyState()}
-        {swipes.length === 3478957349 && (
+        {swipes.length === 0 && loading && (
           <ActivityModal
             loading={swipes.length === 0}
             title={'Please wait'}
@@ -137,6 +145,7 @@ const SwipeScreen = (props) => {
             }}
           />
         )}
+        {noCards === true && renderEmptyState()}
       </View>
     </SafeAreaView>
   );

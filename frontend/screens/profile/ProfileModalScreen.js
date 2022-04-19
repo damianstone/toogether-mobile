@@ -17,10 +17,8 @@ const ProfileModalScreen = (props) => {
   }
 
   const profileId = props.navigation.getParam('profileId');
-  console.log(profileId);
 
   const profile = profiles.find((profile) => profile.id === profileId);
-  console.log(profile);
 
   return (
     <View style={{flex: 1,}}>

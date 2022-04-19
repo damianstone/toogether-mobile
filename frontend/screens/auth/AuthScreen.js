@@ -1,5 +1,13 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { Image, View, Button, Text, ScrollView, Alert } from 'react-native';
+import {
+  Image,
+  View,
+  Button,
+  Text,
+  ScrollView,
+  Alert,
+  ActivityIndicator,
+} from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import { StatusBar } from 'expo-status-bar';
 import { useDispatch } from 'react-redux';
@@ -27,20 +35,24 @@ const AuthScreen = (props) => {
     if (error) {
       // if there is an error when user can login or signup
       Alert.alert('An Error Occurred!', error, [{ text: 'Okay' }]);
+      setError()
     }
   }, [error]);
 
   const authHandler = async () => {
     try {
-      // activate loading indicator
       await dispatch(actions.googleLogIn());
-      // desactivate loading 
       props.navigation.navigate('Swipe');
     } catch (err) {
       setError(err.message);
-      setIsLoading(false);
     }
   };
+
+  if (isLoading === true) {
+    <View style={styles.screen}>
+      <ActivityIndicator size="large" color={Colors.orange} />
+    </View>;
+  }
 
   return (
     <View style={styles.screen}>

@@ -30,8 +30,6 @@ const SwipeCard = (props) => {
     props.onProfile(id);
   };
 
-  console.log('PROFILES ------> SWIPECARD', profiles);
-
   const showProfilee = (profile) => {
     props.onRenderProfile(profile);
     setShowMode(1);
