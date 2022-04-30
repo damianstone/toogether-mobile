@@ -4,25 +4,21 @@ import { NavigationActions } from 'react-navigation';
 
 import Navigation from './Navigation';
 import mainContext from '../context/mainContext';
-import firebase from "firebase/auth";
+import firebase from "firebase";
 import Firebase from '../Firebase/config';
 
 
 const AppNavigator = (props) => {
-  const navRef = useRef();
-  const isAuth = useSelector((state) => !!state.auth.token);
-  const auth = Firebase.auth();
-  const user = auth.currentUser;
 
   useEffect(() => {
-    if(!isAuth) {
-      console.log('NO USER LOGGED')
+    firebase.auth().onAuthStateChanged((user) => {
+      if (!user) { // if the user is not logged in
+        NavigationActions.navigate({
+            routeName: 'Auth'
+        }) // go to the auth screen
     }
+    });
   })
-
-  if(user) {
-    console.log('USER------>', user);
-  }
 
   return <Navigation />;
 };

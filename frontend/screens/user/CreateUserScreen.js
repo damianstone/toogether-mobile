@@ -13,14 +13,24 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
+import { useDispatch } from 'react-redux';
 
 import Colors from '../../constants/Colors';
 import styles from './styles';
 import Input from '../../components/UI/Input';
 import Header from '../../components/UI/Header';
 import ImageSelector from '../../components/UI/ImageSelector';
+import * as actions from '../../store/actions/auth';
 
 const FORM_UPDATE = 'FORM_UPDATE';
+
+/*
+
+ALERTS
+- display an alert for the age 
+- check if the data is good 
+
+*/
 
 // to manage onChange with state
 const formReducer = (state, action) => {
@@ -80,8 +90,9 @@ const gender = [
 const CreateUserScreen = (props) => {
   // CREAR UN SISTEMA PARA QUE SOLO SE PUEDA CONTINUAR SI ES QUE SE LLENA TODO EL FORMULARIO
   const [isLoading, setIsLoading] = useState(false);
-  const [image, setImage] = useState('')
+  const [image, setImage] = useState('');
   const [error, setError] = useState();
+  const dispatch = useDispatch();
 
   // START DECLARING STATE
   // useReducer from react native is used to manage a lot states
@@ -117,10 +128,9 @@ const CreateUserScreen = (props) => {
   }, [error]);
 
   // SAVE USER DATA
-  const createUsarHandler = () => {
-
+  const createUsarHandler = async () => {
     // SEND BIRTHDAY AS AGE
-    //const age = [] 
+    //const age = []
     //age.push(text.split(" "))
     //age.filter((elem) => elem != "-");
     //console.log(age)
@@ -129,17 +139,25 @@ const CreateUserScreen = (props) => {
     //}
 
     // dispatch the user info to redux then to database
-    if (!formState.formIsValid) {
+     /*     if (!formState.formIsValid) {
       Alert.alert('Fill the form aweonao', error, [{ text: 'Okay' }]);
       console.log(formState);
       return;
+    }  */
+
+    try {
+      // if the user completed successfully the fold wuth all the requeriments,
+      // so dispatch the action telling to redux that the user if finallt full authenticated 
+      await dispatch(actions.logins(true));
+      props.navigation.navigate('Swipe');
+
+    } catch(err) {
+      console.log(err)
     }
-
-
-    console.log(formState);
-    
-    // go to the home section but pass the user data to header button left and user profile 
-    props.navigation.navigate('Swipe'); 
+      // turn the isNewUser to false so then when reload it takes the user directly to the swipe
+      console.log(formState);
+      // go to the home section but pass the user data to header button left and user profile
+  
   };
 
   // ON CHANGE INPUTS
@@ -160,7 +178,7 @@ const CreateUserScreen = (props) => {
     formState.inputValues.img = imagePath;
     formState.inputValidities.img = true;
     setImage(imagePath);
-  }
+  };
 
   // DISABLE BUTTON IF THE USER DONT FILL ALL THE FIELDS
   let styleButton;
@@ -190,8 +208,10 @@ const CreateUserScreen = (props) => {
       <View styles={styles.titleContainer}>
         <Text style={styles.title}>Complete your profile</Text>
       </View>
-      <ScrollView style={styles.scroll} contentContainerStyle={styles.contentContainer}>
-        <View style={{width: '60%', alignSelf:'center'}}>
+      <ScrollView
+        style={styles.scroll}
+        contentContainerStyle={styles.contentContainer}>
+        <View style={{ width: '60%', alignSelf: 'center' }}>
           <ImageSelector onImageTaken={imageTakenHandler} />
         </View>
         <View style={styles.inputContainer}>
@@ -287,7 +307,7 @@ const CreateUserScreen = (props) => {
             label="Show me"
             initialValue=""
             id="showme"
-            placeholder={{ label: 'Select an item', value: 'Select an item'}}
+            placeholder={{ label: 'Select an item', value: 'Select an item' }}
             errorText="Please select an option"
             onInputChange={inputChangeHandler}
           />

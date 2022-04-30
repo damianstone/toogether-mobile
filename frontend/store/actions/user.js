@@ -1,4 +1,4 @@
-const NEW_USER = 'NEW_USER';
+const CREATE_USER = 'NEW_USER';
 const UPDATE_USER = 'UPDATE_USER';
 const DELETE_USER = 'DELETE_USER';
 

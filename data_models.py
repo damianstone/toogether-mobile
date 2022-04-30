@@ -5,20 +5,23 @@ user = {
     # swipe
     'id',
     'date',
-    'block_users',
-    'likes', # array with profiles?
-    'matchs', # array with profiles?
+    'block_users', # array with ids
+    'likes', # array with ids
+    'matchs', # array with ids
     
     #personal info
     'name',
-    'email',
+    'email', # from google auth
     'lastname',
     'age',
-    'gender',
-    'show_swipe',
+    'gender', 
     'photos',
     'description',
     'university',
+    
+    #configurations
+    'show_gender', #mostrar mujeres, hombres, etc
+    'distance', # by default 5km around 
     
     # permissions
     'coordinates',
@@ -31,20 +34,22 @@ user = {
 match = {
     'id',
     'date',
-    'user 1',
-    'user 2',
+    'user 1', # object with the user id and personal info
+    'user 2', # object with the user id and personal info
 }
 
 # Group swipe
 group = {
     "id",
     "date",
-    "total_members",
+    "total_members", # number
     "members", #array with users 
-    "link",
+    "share_link", # generate a link to enter to the group
+    ""
 }
 
-# Group chat
-group_chat = {
+# FIREBASE
+# everything on chat system 
+# authnetication tokens 
 
-}
+

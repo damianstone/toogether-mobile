@@ -4,14 +4,18 @@ import {
   View,
   TouchableOpacity,
   ScrollView,
+  ActivityIndicator,
 } from 'react-native';
-import React from 'react';
+import React, { useState } from 'react';
+import firebase from 'firebase';
+import { useDispatch } from 'react-redux';
 
 import styles from './styles';
 import Colors from '../../constants/Colors';
 import Input from '../../components/UI/Input';
+import * as authActions from '../../store/actions/auth';
 
-// data to select from the form 
+// data to select from the form
 const show = [
   {
     label: 'Hombres',
@@ -43,7 +47,6 @@ const gender = [
 ];
 
 /* 
-
 SettingScreen
 
  receive the data from the MyProfileScreen
@@ -53,12 +56,48 @@ SettingScreen
 - lastname
 
 -- cambiar los botones dependiendo del sistema op.
-
-
 */
+
 const SettingScreen = (props) => {
+  const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch();
+
+  /*
+  the user can logout but the internal memory will continue saving that he is already logged
+  so next time he will se the auth screen, but it will not show the form to create a new user
+  instead of, it will redirects back to the main screen (swipe)
+   */
+  const onSingUp = () => {
+    firebase.auth().signOut();
+    props.navigation.navigate('Auth');
+  };
+
+  /*
+  if the user delete theit account, so it will delete the data from firebase and also 
+  dispatch an action to clean the state maken authenticated null again
+  next if he train to enter it will show again the screens to create another profile 
+   */
+  const onDelete = () => {
+    setLoading(true);
+    // delete from firebase
+    firebase.auth().currentUser.delete();
+    dispatch(authActions.logout());
+
+    setLoading(false);
+    props.navigation.navigate('Auth');
+    // need to create a dispatch to delete from the db on postgres
+  };
+
+  if (loading) {
+    return (
+      <View style={{ flex: 1, backgroundColor: Colors.bg }}>
+        <ActivityIndicator size="large" color={Colors.white} />
+      </View>
+    );
+  }
+
   return (
-    <View style={{flex: 1, backgroundColor: Colors.bg}}>
+    <View style={{ flex: 1, backgroundColor: Colors.bg }}>
       <ScrollView contentContainerStyle={{ backgroundColor: Colors.bg }}>
         <View style={styles.settingContainer}>
           <View style={styles.inputContainer}>
@@ -192,12 +231,12 @@ const SettingScreen = (props) => {
             <Text style={styles.textLabel}>Update account</Text>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.optionView} onPress={() => {}}>
+        <TouchableOpacity style={styles.optionView} onPress={onDelete}>
           <View style={styles.iconView}>
             <Text>ICON</Text>
           </View>
           <View style={styles.textView}>
-            <Text style={styles.textLabel}>Settings</Text>
+            <Text style={styles.textLabel}>DELETE ACCOUNT</Text>
           </View>
         </TouchableOpacity>
         <TouchableOpacity style={styles.optionView} onPress={() => {}}>
@@ -216,11 +255,7 @@ const SettingScreen = (props) => {
             <Text style={styles.textLabel}>Blocked users</Text>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.logoutView}
-          onPress={() => {
-            props.navigation.navigate('Auth');
-          }}>
+        <TouchableOpacity style={styles.logoutView} onPress={onSingUp}>
           <Text style={styles.textLabel}>Logout</Text>
         </TouchableOpacity>
       </ScrollView>

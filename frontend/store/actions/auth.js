@@ -2,13 +2,14 @@ import AsyncStorage from '@react-native-async-storage/async-storage'; // automat
 import Constants from 'expo-constants'; // to read app.json extra
 import * as Google from 'expo-google-app-auth'; // google auth libraries
 import firebase from 'firebase'; // basic firebase
+import { getAdditionalUserInfo } from "firebase/auth"
 import Firebase from '../../Firebase/config'; // This is the initialized Firebase,
-
 
 export const AUTHENTICATE = 'AUTHENTICATE';
 export const SIGNUP = 'SIGNUP';
 export const LOGOUT = 'LOGOUT';
 export const GOOGLE_LOGIN = 'GOOGLE_LOGIN';
+export const LOGINS = 'LOGINS';
 
 let timer;
 
@@ -22,6 +23,27 @@ export const authenticate = (accessToken, idToken, expirationTime) => {
       idToken: idToken,
     });
   };
+};
+
+// redux anction to check if the user has already be registered (completed the form)
+// the user can be auth from google but if nof complete the form so is not full authenticared yet
+// if the user auth with google but not complete the form, the. show again the auth screen 
+// if the user completed the form, so he can logout and then enter again to the without showing the form again
+// if the user delete the their account, the state change to authenticated false 
+export const logins = (authenticated) => {
+  saveData(authenticated);
+  return {
+    type: LOGINS,
+    authenticated: authenticated,
+  }
+}
+
+// LOGOUT
+export const logout = () => {
+  clearLogoutTimer();
+  // clear the asyncStorage (local storage) using the same identifier to store the data
+  AsyncStorage.removeItem('userData');
+  return { type: LOGOUT };
 };
 
 // SIGN UP WITH FIREBASE
@@ -112,9 +134,6 @@ export const login = (email, password) => {
 
 // LOGIN WITH GOOGLE
 export const googleLogIn = () => {
-  const auth = Firebase.auth();
-  const user = auth.currentUser;
-
   return async (dispatch) => {
     const response = await Google.logInAsync({
       //return an object with result token and user
@@ -130,8 +149,11 @@ export const googleLogIn = () => {
         response.accessToken
       );
 
+
       Firebase.auth()
         .signInWithCredential(credential) // Login to Firebase
+        .then(res => {
+        })
         .catch((error) => {
           console.log(error);
         });
@@ -139,35 +161,18 @@ export const googleLogIn = () => {
 
     // if the user couldnt login
     if (response.type != 'success') {
-      throw new Error('ERROR');
+      throw new Error('An error has occurred, check your connection and try again');
     }
-    
-
-    // DISPATCH
-    dispatch(
-      authenticate(
-        response.accessToken,
-        response.idToken,
-        parseInt(1650147028000)
-      )
-    );
-
-    const expirationTime = new Date(
-      new Date().getTime() + parseInt(1650147028000) * 1000
-    ); // get the expiration date
-    saveData(response.accessToken, response.idToken, expirationTime);
   };
 };
 
 // ERROR NO DATA GET SAVE SO THEN AFTER RELOAD USER HAVE TO LOGIN AGAIN
-const saveData = async (token, userId, expirationTime) => {
+const saveData = async (authenticated) => {
   try {
     await AsyncStorage.setItem(
       'userData',
       JSON.stringify({
-        token: token,
-        userId: userId,
-        expirationTime: expirationTime,
+        authenticated: authenticated
       })
     );
   } catch (err) {
@@ -193,10 +198,3 @@ const setLogoutTimer = (expirationTime) => {
   };
 };
 
-// LOGOUT
-export const logout = () => {
-  clearLogoutTimer();
-  // clear the asyncStorage (local storage) using the same identifier to store the data
-  AsyncStorage.removeItem('userData');
-  return { type: LOGOUT };
-};

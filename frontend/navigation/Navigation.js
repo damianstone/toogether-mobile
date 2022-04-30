@@ -195,11 +195,13 @@ const AppNavigator = createStackNavigator(
 
 const MainNavigator = createSwitchNavigator(
   {
-    Startup: StartupScreen,
     Auth: AuthNavigator,
+    Startup: StartupScreen,
     Swipe: AppNavigator,
   },
-
+  {
+    initialRouteName: 'Startup',
+  }
 );
 
 export default createAppContainer(MainNavigator);

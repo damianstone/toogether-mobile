@@ -1,5 +1,12 @@
 import React from 'react';
-import { StyleSheet, Text, View, Image, Button, TouchableOpacity } from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  Button,
+  TouchableOpacity,
+} from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 
 import Colors from '../../constants/Colors';
@@ -21,7 +28,11 @@ const AuthSucess = (props) => {
         />
       </View>
       <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.touchable} onPress={() => {props.navigation.navigate('Create');}}>
+        <TouchableOpacity
+          style={styles.touchable}
+          onPress={() => {
+            props.navigation.navigate('Create');
+          }}>
           <Button
             onPress={() => {
               props.navigation.navigate('Create');
@@ -80,5 +91,5 @@ const styles = StyleSheet.create({
   touchable: {
     width: '100%',
     height: '100%',
-  }
+  },
 });

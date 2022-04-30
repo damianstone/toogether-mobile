@@ -10,11 +10,16 @@ import {
 } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import { StatusBar } from 'expo-status-bar';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import styles from './styles';
 import Colors from '../../constants/Colors';
 import * as actions from '../../store/actions/auth';
+
+import Constants from 'expo-constants'; // to read app.json extra
+import * as Google from 'expo-google-app-auth'; // google auth libraries
+import firebase from 'firebase'; // basic firebase
+import Firebase from '../../Firebase/config'; // This is the initialized Firebase,
 
 /* 
 google login
@@ -29,23 +34,47 @@ const AuthScreen = (props) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState();
   const [isSignup, setIsSignup] = useState(false); // to switch between signup and signin
-  const dispatch = useDispatch();
+
+  // from redux check is authenticated
+  const isAuthenticated = useSelector((state) => state.auth.authenticated);
 
   useEffect(() => {
     if (error) {
       // if there is an error when user can login or signup
       Alert.alert('An Error Occurred!', error, [{ text: 'Okay' }]);
-      setError()
+      setError();
     }
   }, [error]);
 
   const authHandler = async () => {
-    try {
-      await dispatch(actions.googleLogIn());
-      props.navigation.navigate('Swipe');
-    } catch (err) {
-      setError(err.message);
+    const response = await Google.logInAsync({
+      //return an object with result token and user
+      iosClientId: Constants.manifest.extra.IOS_KEY, //From app.json
+      androidClientId: Constants.manifest.extra.ANDROIUD_KEY, //From app.json
+    });
+
+    // if the user couldnt login
+    if (response.type != 'success') {
+      setError('An error has occurred, check your connection and try again');
     }
+
+    console.log(response);
+    const credential = firebase.auth.GoogleAuthProvider.credential(
+      //Set the tokens to Firebase
+      response.idToken,
+      response.accessToken
+    );
+
+    const fireRes = await Firebase.auth().signInWithCredential(credential); // Login to Firebase
+    const isNewUser = fireRes.additionalUserInfo.isNewUser;
+
+    if (!isNewUser && isAuthenticated) {
+      props.navigation.navigate('Swipe');
+      return;
+    }
+
+    console.log('TO SUCCESS SCREEN');
+    props.navigation.navigate('Success');
   };
 
   if (isLoading === true) {
@@ -95,3 +124,22 @@ const AuthScreen = (props) => {
 };
 
 export default AuthScreen;
+
+/*         .then((res) => {
+          if (res.additionalUserInfo.isNewUser) {
+            props.navigation.navigate('Success');
+            console.log('GO TO SUCCESS SCREEN')
+            newUser = true
+          } else {
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        }); */
+
+/*     try {
+      await dispatch(actions.googleLogIn());
+      props.navigation.navigate('Success');
+    } catch (err) {
+      setError(err.message);
+    } */
