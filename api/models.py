@@ -1,61 +1,84 @@
 from enum import auto
+import datetime
 from django.db import models
 from django.contrib.auth.models import User
 
+# all of the models of the db 
+# the connections 
+# add to the admin file 
+# migrations and check the user panel with the tables
+# for images -> pip install pillow 
+
 
 # USER MODEL
-class UserModel(models.Model):
+class Profile(models.Model):
 
-    MALE = 'Male'
-    FEMALE = 'Female'
-
-    MEN = 'Men' 
-    WOMEN = 'Women'
-    BOTH = 'Both'
-
-    GENDER_CHOICES = [(MALE, 'Male'), (FEMALE, 'Female'), ('Tree'), ('Chair')]
-    SHOW_GENDER_CHOICES = [(MEN, 'Men'), (WOMEN, 'Women'), (BOTH, 'Both'), ]
-
-    # id is by default with django
-    date = models.DateTimeField(auto_now_add=True, blank=True)
-
-    # Profile info
+    GENDER = (
+        ("MALE", "Male"),
+        ("FEMALE", "Female")
+    )
+    SHOW_GENDER = (
+        ('MALE', 'Men'),
+        ('FEMALE', 'Women'),
+        ('BOTH', 'Both'),
+    )
+    
+    _id = models.AutoField(primary_key=True, editable=False)
+    createdAt = models.DateTimeField(auto_now_add=True)
+    is_group = models.BooleanField(default=False, null=True, blank=True)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     email = models.EmailField(max_length=200)
-    name = models.CharField(max_length=200)
-    lastname = models.CharField(max_length=200)
-    age = models.DateField(null=True, blank=True)
-    gender = models.Choices(
-        max_length=10,
-        choices=GENDER_CHOICES,
-        default='Whats',
-    )
-    photos = models.ImageField(upload_to="user/photos/", null=True, blank=True)
-    description = models.CharField(max_length=500)
-    university = models.CharField(max_length=20)
-
-    # settings
-    show_gender = models.Choices(
-        max_length=10,
-        choices=SHOW_GENDER_CHOICES,
-        default='Both',
-    )
-    distance = models.PositiveIntegerField()
-
-    # permissions
-    
-    
-    # WHAT MORE SHOULD WE RETURN
+    name = models.CharField(max_length=200, null=True, blank=True)
+    lastname = models.CharField(max_length=200, null=True, blank=True)
+    photo = models.ImageField(null=True, blank=True)
+    age = models.IntegerField(null=True, blank=True, default=0)
+    birthday = models.DateField(null=True, blank=True)
+    gender = models.CharField(max_length=10, choices=GENDER, default='BOTH', null=True, blank=True)
+    description = models.TextField(max_length=500, null=True, blank=True)
+    university = models.CharField(max_length=20, null=True, blank=True)
+    show_gender = models.CharField(max_length=10, choices=SHOW_GENDER, default='FEMALE', null=True, blank=True)
+    location = models.CharField(max_length=100, default='', null=True, blank=True)
+    citylat = models.DecimalField(max_digits=9, decimal_places=6, default='-2.319', null=True, blank=True)
+    citylong = models.DecimalField(max_digits=9, decimal_places=6, default='52.555', null=True, blank=True)
 
     def __str__(self):
-        return self.name
-
-
+        return str(self.name)
+    
     def age(self):
-        import datetime
-        return int((datetime.date.today() - self.birthday).days / 365.25  )
+        return int((datetime.date.today() - self.birth_date).days / 365.25  )
 
 
-class MatchModel(models.Model): 
-    #id by default django
-    date = models.DateTimeField(auto_now_add=True, blank=True)
-
+class Group(models.Model):
+    _id = models.AutoField(primary_key=True, editable=False)
+    createdAt = models.DateTimeField(auto_now_add=True)
+    is_group = models.BooleanField(default=True)
+    total_members = models.IntegerField(null=False, blank=True, default=1)
+    members = models.ManyToManyField(User, blank=True)
+    share_link = models.SlugField()
+    
+    def __str__(self):
+        return str(self.name)
+    
+class Match(models.Model):
+    _id = models.AutoField(primary_key=True, editable=False)
+    createdAt = models.DateTimeField(auto_now_add=True)
+    members = models.ManyToManyField(User, blank=True)
+    
+    def __str__(self):
+        return str(self.name)
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    

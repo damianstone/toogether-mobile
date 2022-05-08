@@ -20,6 +20,8 @@ import NoMoreCards from './NoMoreCards';
 import ActivityModal from '../../components/UI/ActivityModal';
 import NewMatch from './NewMatch';
 
+import axios from 'axios';
+
 /* 
 Toda la logica del swipe 
 
@@ -61,7 +63,12 @@ const SwipeScreen = (props) => {
   // USE EFFECTS
   useEffect(() => {
     setLoading(true);
-    setSwipes(groups);
+    const fetchProd = async () => {
+      // no write the entire url because the other part of the url is in proxy packajge.json
+      const { data } = await axios.get('http://127.0.0.1:8000/api/profiles/');
+      setSwipes(data);
+    };
+    fetchProd();
     setLoading(false);
   }, []);
 

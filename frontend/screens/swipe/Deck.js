@@ -88,7 +88,7 @@ const Deck = (props) => {
   };
 
   // in swipe card the user want to open a specific profile in the group
-  // el id 
+  // el id
   // NO WORK
   const renderProfile = (item, isDone) => {
     return (
@@ -113,11 +113,13 @@ const Deck = (props) => {
 
   // render a card containing all of the profile members of the group
   const renderCard = (elem) => {
+    // TRANFORM THE OBJECT INTO AN ARRAY WHEN IS NOT A GROUP?
+    const name = 'NAME GROUP'
     return (
       <SwipeCard
-        key={elem.id}
-        firstName={elem.length > 1 ? elem.members[0].firstName : null}
-        profiles={elem.members}
+        key={elem._id}
+        firstName={name}
+        profile={elem}
         onProfile={showProfileHandler}
         setShowMode={setShowMode}
         onSwipeRight={onLikePressed}
@@ -134,7 +136,7 @@ const Deck = (props) => {
   // dependiendo del showMode deberia retornar
   // 0 swipe
   // 1 mostrar el perfil especfico de la persona
-  // 2 new match screen 
+  // 2 new match screen
   return (
     <View style={{ flex: 1 }}>
       <View style={styles.swipeContainer}>

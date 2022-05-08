@@ -18,12 +18,20 @@ Muestra cada perfil individual del grupo y si es que es solo un perfil muestra u
 
 Aqui es donde llama al showProfile modal para ver en detalle cada perfil
 
+checkear si el objecto es de un grupo o no
+
 */
 
 const SwipeCard = (props) => {
   // swipe pass as a props the profiles array of each group of the single profile
+  const { profile, setShowMode, showMode } = props;
 
-  const { profiles, setShowMode, showMode } = props;
+  let isGroup;
+  if (profile.total_members) {
+    isGroup = true;
+  } else {
+    isGroup = false;
+  }
 
   // send the id to the swipe component
   const showProfile = (id) => {
@@ -35,10 +43,9 @@ const SwipeCard = (props) => {
     setShowMode(1);
   };
 
-
   let cardType;
   // if the profiles array > 1
-  if (profiles.length === 1) {
+  if (!isGroup) {
     cardType = {
       position: 'absolute',
       width: '107%',
@@ -59,13 +66,12 @@ const SwipeCard = (props) => {
     };
   }
 
-
   return (
     <View style={styles.screen}>
       <View style={{ ...cardType }}>
-        {profiles.length > 1 && (
+        {profile.length > 1 && (
           <View style={styles.groupName}>
-            <Text style={styles.text}>Grupo de {profiles[0].name}</Text>
+            <Text style={styles.text}>Grupo de {profile[0].name}</Text>
           </View>
         )}
         <Swiper
@@ -96,29 +102,51 @@ const SwipeCard = (props) => {
               }}
             />
           }>
-          {profiles.map((profile, i) => {
-            return (
-              <ImageBackground
-                key={profile.id}
-                style={styles.image}
-                imageStyle={styles.imageStyle}
-                source={profile.photos[0]} // just get the first photo of every profile
-                resizeMode="cover">
-                <Info
-                  firstName={profile.name}
-                  lastName={profile.lastname}
-                  university={profile.university}
-                  location={profile.location}
-                  age={profile.age}
-                />
-                <TouchableOpacity
-                  style={styles.arrowContainer}
-                  onPress={() => props.onProfile(profile.id)}>
-                  <Text>A</Text>
-                </TouchableOpacity>
-              </ImageBackground>
-            );
-          })}
+          {isGroup ? (
+            profile.members.map((profile, i) => {
+              return (
+                <ImageBackground
+                  key={profile.id}
+                  style={styles.image}
+                  imageStyle={styles.imageStyle}
+                  source={require('../assets/images/Profiles/profile-1.jpeg')} 
+                  resizeMode="cover">
+                  <Info
+                    firstName={profile.name}
+                    lastName={profile.lastname}
+                    university={profile.university}
+                    location={profile.location}
+                    age={profile.age}
+                  />
+                  <TouchableOpacity
+                    style={styles.arrowContainer}
+                    onPress={() => props.onProfile(profile.id)}>
+                    <Text>A</Text>
+                  </TouchableOpacity>
+                </ImageBackground>
+              );
+            })
+          ) : (
+            <ImageBackground
+              key={profile.id}
+              style={styles.image}
+              imageStyle={styles.imageStyle}
+              source={require('../assets/images/Profiles/profile-1.jpeg')} // just get the first photo of every profile
+              resizeMode="cover">
+              <Info
+                firstName={profile.name}
+                lastName={profile.lastname}
+                university={profile.university}
+                location={profile.live}
+                age={profile.age}
+              />
+              <TouchableOpacity
+                style={styles.arrowContainer}
+                onPress={() => props.onProfile(profile.id)}>
+                <Text>A</Text>
+              </TouchableOpacity>
+            </ImageBackground>
+          )}
         </Swiper>
       </View>
     </View>
