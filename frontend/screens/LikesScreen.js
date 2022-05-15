@@ -12,7 +12,7 @@ import Colors from '../constants/Colors';
 import LikesCard from '../components/LikesCard';
 
 const Likes = (props) => {
-  const groups = useSelector((state) => state.groups.groups);
+  const likes = useSelector((state) => state.swipeList.swipes);
 
   const showProfileHandler = (id) => {
     props.navigation.navigate('Swipe', { profileId: id });
@@ -21,15 +21,15 @@ const Likes = (props) => {
   return (
     <View style={styles.screen}>
       <FlatList
-        data={groups}
+        data={likes}
         numColumns={2}
         horizontal={false}
-        keyExtractor={(group) => group.id}
+        keyExtractor={(group) => group._id}
         renderItem={(group, index, separator) => (
           <LikesCard
-            key={group.id}
+            key={group._id}
             firstName={
-              group.totalMembers > 1 ? elem.members[0].firstName : null
+              'name'
             }
             group={group.item}
             onProfile={showProfileHandler}

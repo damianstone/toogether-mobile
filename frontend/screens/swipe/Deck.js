@@ -13,7 +13,6 @@ const SCREEN_HEIGHT = Dimensions.get('window').height;
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
 /* 
-
 Deck - muestra los grupos o perfiles individuales
 
 componente del swipeScreen 
@@ -25,13 +24,12 @@ muestra los perfiles, grupos y llama a la funcion newmatch si es que hay un matc
 en pantalla completa newmatchscren
 
 llama a la funcion renderEmpy, que muestra cuando no hay mas perfiles que mostrar
-
 */
 
 const Deck = (props) => {
   // PROPS
   const {
-    data, // total groups or profiles to swipe
+    swipeProfiles, // total groups or profiles to swipe
     setShowMode, // set show mode
     onUndoSwipe, //
     onSwipe, //
@@ -48,7 +46,7 @@ const Deck = (props) => {
 
   // HANDLE SWIPE
   const handleSwipe = (type, index) => {
-    const currentDeckItem = data[index];
+    const currentDeckItem = swipeProfiles[index];
 
     currentDeckIndex.current = index;
   };
@@ -56,7 +54,7 @@ const Deck = (props) => {
   // REWIND SWIPE
   const undoSwipe = () => {
     useSwiper.current.swipeBack((index) => {
-      const prevDeckItem = data[index - 1];
+      const prevDeckItem = swipeProfiles[index - 1];
 
       currentDeckIndex.current = index;
       onUndoSwipe(prevDeckItem);
@@ -129,7 +127,7 @@ const Deck = (props) => {
     );
   };
 
-  if (data.length === 0) {
+  if (swipeProfiles.length === 0) {
     return <View>{renderEmptyState()}</View>;
   }
 
@@ -143,7 +141,7 @@ const Deck = (props) => {
         <Swiper
           containerStyle={tw('bg-transparent')}
           showSecondCard={true}
-          cards={data}
+          cards={swipeProfiles}
           ref={swipeRef}
           stackSize={3}
           cardIndex={0}
@@ -187,7 +185,7 @@ const Deck = (props) => {
         />
       </View>
       {/* PROBLE RENDERIZAR SHOW PRPFILE  */}
-      {showMode == 1 && data[currentDeckIndex.current] && (
+      {showMode == 1 && swipeProfiles[currentDeckIndex.current] && (
         <Modal animationType={'slide'}>{renderProfile}</Modal>
       )}
       {showMode == 2 && (

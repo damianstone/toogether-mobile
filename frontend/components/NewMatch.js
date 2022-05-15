@@ -4,7 +4,7 @@ import React from 'react';
 const NewMatch = () => {
   return (
     <View>
-      <Text>MATCH</Text>
+      <Text>MATCH SCREEN</Text>
     </View>
   );
 };

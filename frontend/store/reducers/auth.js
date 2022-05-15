@@ -1,24 +1,17 @@
-import { AUTHENTICATE, LOGOUT, LOGINS } from '../actions/auth';
+import { AUTHENTICATE, DELETE, LOGIN } from '../actions/auth';
 
 const initialState = {
-  //token: null,
-  //userId: null,
   authenticated: null,
 };
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case AUTHENTICATE:
-      return {
-        token: action.accessToken, // store the token
-        userId: action.idToken, // store the userId
-      };
-    case LOGINS:
+    case LOGIN:
       return {
         authenticated: action.authenticated,
       };
-    case LOGOUT:
-      return { authenticated: null }; // reset the state
+    case DELETE:
+      return { authenticated: null }; 
     default:
       return state;
   }

@@ -18,6 +18,7 @@ import HeaderButtom from '../../components/UI/HeaderButton';
 import ActivityModal from '../../components/UI/ActivityModal';
 import styles from './styles';
 import Colors from '../../constants/Colors';
+import axios from 'axios';
 
 /* 
 MyProfileScreen
@@ -37,17 +38,22 @@ redirects to
 
 const MyProfileScreen = (props) => {
   const [loading, setLoading] = useState(false);
+  const [user, setUser] = useState();
+  const [photos, setPhotos] = useState([])
   const { showActionSheetWithOptions } = useActionSheet();
-  const groups = useSelector((state) => state.groups.groups);
 
-  const profiles = [];
-  for (let i = 0; i < groups.length; i++) {
-    for (let j = 0; j < groups[i].members.length; j++) {
-      profiles.push(groups[i].members[j]);
-    }
-  }
-  const profile = profiles.find((profile) => profile.id === 'p1');
-  const myphotos = profile.photos;
+    // USE EFFECTS
+    useEffect(() => {
+      setLoading(true);
+      const fetchProd = async () => {
+        // no write the entire url because the other part of the url is in proxy packajge.json
+        const { data } = await axios.get('http://127.0.0.1:8000/api/profiles/1');
+        setUser(data);
+        setPhotos(`http://127.0.0.1:8000${user.photo}`)
+      };
+      fetchProd();
+      setLoading(false);
+    }, []);
 
   const onOpenUploadPhotoActionSheet = () => {
     // Same interface as https://facebook.github.io/react-native/docs/actionsheetios.html
@@ -126,7 +132,7 @@ const MyProfileScreen = (props) => {
                 scrollEnabled={false}
                 horizontal={false}
                 numColumns={3}
-                data={myphotos}
+                data={photos}
                 keyExtractor={(item) => item}
                 renderItem={(photo, index) => (
                   <TouchableOpacity

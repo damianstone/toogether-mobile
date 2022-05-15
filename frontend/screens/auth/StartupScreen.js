@@ -12,8 +12,6 @@ const StartupScreen = (props) => {
   // check the AsyncStorage for a valid token
   // if there is a token, then we can go to the main screen
 
-  //const isNewUser = useSelector((state) => state.auth.isNewUser);
-
   useEffect(() => {
     const tryLogin = async () => {
       // get the user data as a promise
@@ -49,21 +47,3 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 });
-
-/* 
-
-    firebase.auth().onAuthStateChanged((user) => {
-      if (!user) {
-        props.navigation.navigate('Auth');
-        console.log('GO TO AUTH');
-        return;
-      }
-
-      if (user) {
-        props.navigation.navigate('Auth');
-        console.log('GO TO SWIPE ----->');
-      }
-    });
-
-
-*/

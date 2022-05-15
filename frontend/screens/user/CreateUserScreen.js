@@ -129,14 +129,8 @@ const CreateUserScreen = (props) => {
 
   // SAVE USER DATA
   const createUsarHandler = async () => {
-    // SEND BIRTHDAY AS AGE
-    //const age = []
-    //age.push(text.split(" "))
-    //age.filter((elem) => elem != "-");
-    //console.log(age)
-    //for(let i = 0; i < age.length; i++) {
-    //  // slice
-    //}
+    // Calculate the age using the birthday
+    // show an error is the age is less than 18 yo
 
     // dispatch the user info to redux then to database
      /*     if (!formState.formIsValid) {
@@ -147,16 +141,13 @@ const CreateUserScreen = (props) => {
 
     try {
       // if the user completed successfully the fold wuth all the requeriments,
-      // so dispatch the action telling to redux that the user if finallt full authenticated 
-      await dispatch(actions.logins(true));
+      // so dispatch the action telling to redux that the user if finally full authenticated 
+      await dispatch(actions.login(true));
       props.navigation.navigate('Swipe');
 
     } catch(err) {
       console.log(err)
     }
-      // turn the isNewUser to false so then when reload it takes the user directly to the swipe
-      console.log(formState);
-      // go to the home section but pass the user data to header button left and user profile
   
   };
 

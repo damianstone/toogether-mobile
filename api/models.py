@@ -1,14 +1,14 @@
-from enum import auto
 import datetime
 from django.db import models
+from django.contrib.postgres.fields import ArrayField
 from django.contrib.auth.models import User
+from django.contrib.auth.models import Group
 
 # all of the models of the db 
 # the connections 
 # add to the admin file 
 # migrations and check the user panel with the tables
 # for images -> pip install pillow 
-
 
 # USER MODEL
 class Profile(models.Model):
@@ -31,7 +31,7 @@ class Profile(models.Model):
     name = models.CharField(max_length=200, null=True, blank=True)
     lastname = models.CharField(max_length=200, null=True, blank=True)
     photo = models.ImageField(null=True, blank=True)
-    age = models.IntegerField(null=True, blank=True, default=0)
+    age = models.IntegerField(null=True, blank=True)
     birthday = models.DateField(null=True, blank=True)
     gender = models.CharField(max_length=10, choices=GENDER, default='BOTH', null=True, blank=True)
     description = models.TextField(max_length=500, null=True, blank=True)
@@ -43,9 +43,6 @@ class Profile(models.Model):
 
     def __str__(self):
         return str(self.name)
-    
-    def age(self):
-        return int((datetime.date.today() - self.birth_date).days / 365.25  )
 
 
 class Group(models.Model):
@@ -58,6 +55,7 @@ class Group(models.Model):
     
     def __str__(self):
         return str(self.name)
+    
     
 class Match(models.Model):
     _id = models.AutoField(primary_key=True, editable=False)

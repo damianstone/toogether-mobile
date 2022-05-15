@@ -2,7 +2,10 @@ from django.shortcuts import render
 from django.http import JsonResponse
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+
 from .profiles_data import swipe_profiles
+from .models import Profile, Group
+from .serializers import ProfileSerializer
 
 # Create your views here.
 
@@ -15,19 +18,67 @@ from .profiles_data import swipe_profiles
 def getRoutes(request):
     return Response('Hello')
 
+######################## SWIPE ##################################################
 
+# get all of the groups and single profiles 
 @api_view(['GET'])
-def getProducts(request):
-    return Response(swipe_profiles)
+def getProfiles(request):
+    #.all return all of the profiles from our database
+    # before to push data to the frontend we have to serialize the data
+    profiles = Profile.objects.all() #query
+    serializer = ProfileSerializer(profiles, many=True) # many = multiple objetcs 
+    return Response(serializer.data)
 
-# pk = id
+######################## USER and USER PROFILE ####################################
+
+# get user by id
 @api_view(['GET'])
-def getProduct(request, pk):
-    # exact product that we wat to get
-    profile = None
-    for i in swipe_profiles:
-        # we pass the id as an argument (in the url) and if the id exist so return it
-        if i['_id'] == pk:
-            profile = i
-            break
-    return Response(profile)
+def getProfile(request, pk):
+    profile = Profile.objects.get(_id=pk)
+    serializer = ProfileSerializer(profile, many=False)
+    return Response(serializer.data)
+
+# get all blocked user
+@api_view(['GET'])
+def getBlockedUsers(request, pk):
+    return
+
+# get all the likes
+@api_view(['GET'])
+def getLikes(request, pk):
+    return
+
+# create profile
+@api_view(['POST'])
+def createProfile(request):
+    return 
+    
+# update user with the location, push notification token, 
+@api_view(['PUT'])
+def updateUser(request):
+    return 
+    
+# update profile with any new information
+@api_view(['PUT'])
+def updateUser(request):
+    return 
+
+# update profile with any new information
+@api_view(['DELET'])
+def deleteUser(request):
+    return 
+
+
+######################## GROUP ##################################################
+
+
+
+
+
+
+
+
+
+
+
+

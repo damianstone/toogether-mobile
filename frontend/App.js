@@ -10,15 +10,15 @@ import {
   connectActionSheet,
 } from '@expo/react-native-action-sheet';
 
-import groupReducer from './store/reducers/group';
 import auth from './store/reducers/auth';
 import AppNavigation from './navigation/AppNavigation';
 import Navigator from './navigation/Navigation';
+import { swipeListReducer } from './store/reducers/swipeReducers';
 
 // REDUCERS
 const rootReducer = combineReducers({
-  groups: groupReducer,
-  auth: auth
+  swipeList: swipeListReducer,
+  auth: auth,
 });
 
 // REDUX STORE
@@ -48,11 +48,11 @@ const App = (props) => {
   }
 
   return (
-      <Provider store={store}>
-        <ActionSheetProvider>
-          <Navigator theme="dark" />
-        </ActionSheetProvider>
-      </Provider>
+    <Provider store={store}>
+      <ActionSheetProvider>
+        <Navigator theme="dark" />
+      </ActionSheetProvider>
+    </Provider>
   );
 };
 

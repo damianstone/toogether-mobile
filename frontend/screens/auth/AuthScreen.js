@@ -11,6 +11,7 @@ import {
 import { AntDesign } from '@expo/vector-icons';
 import { StatusBar } from 'expo-status-bar';
 import { useDispatch, useSelector } from 'react-redux';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import styles from './styles';
 import Colors from '../../constants/Colors';
@@ -26,7 +27,7 @@ google login
 
 depending of the device u need a different approach
 
-Check if the user has already loged in before -> show create user screen 
+Check if the user has already logged in before -> show create user screen 
 
 */
 
@@ -37,6 +38,7 @@ const AuthScreen = (props) => {
 
   // from redux check is authenticated
   const isAuthenticated = useSelector((state) => state.auth.authenticated);
+  console.log('AUTH??? ------>', isAuthenticated);
 
   useEffect(() => {
     if (error) {
@@ -45,6 +47,7 @@ const AuthScreen = (props) => {
       setError();
     }
   }, [error]);
+
 
   const authHandler = async () => {
     const response = await Google.logInAsync({
@@ -71,10 +74,10 @@ const AuthScreen = (props) => {
     if (!isNewUser && isAuthenticated) {
       props.navigation.navigate('Swipe');
       return;
+    } else {
+      console.log('TO SUCCESS SCREEN');
+      props.navigation.navigate('Success');
     }
-
-    console.log('TO SUCCESS SCREEN');
-    props.navigation.navigate('Success');
   };
 
   if (isLoading === true) {

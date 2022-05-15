@@ -54,7 +54,7 @@ const LikesCard = (props) => {
             key={group.id}
             style={styles.image}
             imageStyle={styles.imageStyle}
-            source={group.members[0].photos[0]}
+            source={{uri: `http://127.0.0.1:8000${group.photo}`}}
             resizeMode="cover">
           </ImageBackground>
         </TouchableOpacity>

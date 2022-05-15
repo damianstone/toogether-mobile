@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, useCallback } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Image,
@@ -6,19 +6,18 @@ import {
   SafeAreaView,
   TouchableOpacity,
   Text,
-  AppState,
 } from 'react-native';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { StatusBar } from 'expo-status-bar';
 import { useSelector, useDispatch, ReactReduxContext } from 'react-redux';
 
 import styles from './styles';
-import SwipeButtons from '../../components/SwipeButtons';
 import Deck from './Deck';
 import HeaderButtom from '../../components/UI/HeaderButton';
-import NoMoreCards from './NoMoreCards';
+import NoMoreCards from '../../components/NoMoreCards';
 import ActivityModal from '../../components/UI/ActivityModal';
-import NewMatch from './NewMatch';
+import NewMatch from '../../components/NewMatch';
+import { listSwipes } from '../../store/actions/swipeActions';
 
 import axios from 'axios';
 
@@ -35,28 +34,18 @@ ERRORS
 render no cards screen 
 Loading while fetching data from the state
 
-
 */
 
 const SwipeScreen = (props) => {
-  // GET DATA FROM REDUCERS
-  const groups = useSelector((state) => state.groups.groups);
-  const user = useSelector((state) => state.groups.groups);
-
   // STATE
   const [swipes, setSwipes] = useState([]);
   const [showMode, setShowMode] = useState(0);
   const [currentMatchData, setCurrentMatchData] = useState(null);
-  const [appState, setAppState] = useState(AppState.currentState);
-  const [positionWatchID, setPositionWatchID] = useState(null);
-  const [userSettingsDidChange, setUserSettingsDidChange] = useState(false);
-  const [hasValidatedCurrentProfile, setHasValidatedCurrentProfile] =
-    useState(false);
+
   const [loading, setLoading] = useState(false);
   const [noCards, setNoCards] = useState(false);
 
-  // REF
-  const swipeRef = useRef(null);
+  // GET DATA FROM REDUCERS
 
   const dispatch = useDispatch();
 
@@ -72,20 +61,10 @@ const SwipeScreen = (props) => {
     setLoading(false);
   }, []);
 
-  const handleNewMatchButtonTap = (nextScreen) => {
-    setShowMode(0);
-    setCurrentMatchData(null);
-
-    if (nextScreen) {
-      props.navigation.navigate(nextScreen);
-    }
-  };
-
   const undoSwipe = (swipeToUndo) => {
     if (!swipeToUndo) {
       return;
     }
-
     const swipeToUndoId = swipeToUndo.id || swipeToUndo.userID;
     const userID = user.id || user.userID;
 
@@ -99,8 +78,8 @@ const SwipeScreen = (props) => {
   };
 
   const onAllCardsSwiped = () => {
-    // empty swipes
-    setSwipes([]);
+    setNoCards(true);
+    return <NoMoreCards />;
   };
 
   // pasa como props al deck y del deck al swipecard
@@ -114,13 +93,7 @@ const SwipeScreen = (props) => {
   };
 
   const renderNewMatch = () => {
-    return (
-      <NewMatch
-        url={currentMatchData.profilePictureURL}
-        onSendMessage={() => handleNewMatchButtonTap('Conversations')}
-        onKeepSwiping={() => handleNewMatchButtonTap(null)}
-      />
-    );
+    return <NewMatch url={currentMatchData.profilePictureURL} />;
   };
 
   return (
@@ -129,7 +102,7 @@ const SwipeScreen = (props) => {
       <View style={styles.screen}>
         {swipes.length > 0 && (
           <Deck
-            data={swipes}
+            swipeProfiles={swipes}
             setShowMode={setShowMode}
             onUndoSwipe={undoSwipe}
             onSwipe={onSwipe}

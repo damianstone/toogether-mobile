@@ -7,7 +7,7 @@ const NoMoreCards = () => {
       <Text style={styles.text}>NoMoreSwipesScreen</Text>
       <View style={styles.imageContainer}>
         <Image
-          source={require('../../assets/images/noProfilesFound.png')}
+          source={require('../assets/images/noProfilesFound.png')}
           style={styles.image}
         />
       </View>

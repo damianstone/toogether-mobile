@@ -67,7 +67,7 @@ const SettingScreen = (props) => {
   so next time he will se the auth screen, but it will not show the form to create a new user
   instead of, it will redirects back to the main screen (swipe)
    */
-  const onSingUp = () => {
+  const onLogOut = () => {
     firebase.auth().signOut();
     props.navigation.navigate('Auth');
   };
@@ -81,7 +81,7 @@ const SettingScreen = (props) => {
     setLoading(true);
     // delete from firebase
     firebase.auth().currentUser.delete();
-    dispatch(authActions.logout());
+    dispatch(authActions.deleteUser());
 
     setLoading(false);
     props.navigation.navigate('Auth');
@@ -255,7 +255,7 @@ const SettingScreen = (props) => {
             <Text style={styles.textLabel}>Blocked users</Text>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.logoutView} onPress={onSingUp}>
+        <TouchableOpacity style={styles.logoutView} onPress={onLogOut}>
           <Text style={styles.textLabel}>Logout</Text>
         </TouchableOpacity>
       </ScrollView>
