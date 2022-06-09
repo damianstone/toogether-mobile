@@ -6,17 +6,18 @@ from rest_framework.response import Response
 from .profiles_data import swipe_profiles
 from .models import Profile, Group
 from .serializers import ProfileSerializer
+from django.contrib.auth.models import User
 
-# Create your views here.
 
-# use functions instead of classes for the views
-# is the same thing but with function you have more control of what u are doing
+# user va ser igual a profile? 
+# likes seran otro objecto aparte? 
 
 
 # write the mtohods we gonna allow
 @api_view(['GET'])
 def getRoutes(request):
     return Response('Hello')
+
 
 ######################## SWIPE ##################################################
 
@@ -29,7 +30,21 @@ def getProfiles(request):
     serializer = ProfileSerializer(profiles, many=True) # many = multiple objetcs 
     return Response(serializer.data)
 
+
 ######################## USER and USER PROFILE ####################################
+
+# return users
+@api_view(['GET'])
+def getUsers(request):
+    users = User.objects.all() #query
+    serializer = ProfileSerializer(users, many=True) # many = multiple objetcs 
+    return Response(serializer.data)
+
+
+# create profile
+@api_view(['POST'])
+def createProfile(request): 
+    return Response()
 
 # get user by id
 @api_view(['GET'])
@@ -71,7 +86,11 @@ def deleteUser(request):
 
 ######################## GROUP ##################################################
 
-
+@api_view(['GET'])
+def getGroups(request):
+    groups = Group.objects.all()
+    serializer = ProfileSerializer(groups, many=True)
+    return Response(serializer.data)
 
 
 
