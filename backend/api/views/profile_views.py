@@ -9,7 +9,10 @@ from django.contrib.auth.models import User
 # create profile
 @api_view(['POST'])
 def createProfile(request): 
-    return Response()
+    name = request.data.get('name')
+    return Response({'name': name})
+
+
 
 # get all of the groups and single profiles 
 @api_view(['GET'])
@@ -36,23 +39,3 @@ def getBlockedUsers(request, pk):
 @api_view(['GET'])
 def getLikes(request, pk):
     return
-
-# create profile
-@api_view(['POST'])
-def createProfile(request):
-    return 
-    
-# update user with the location, push notification token, 
-@api_view(['PUT'])
-def updateUser(request):
-    return 
-    
-# update profile with any new information
-@api_view(['PUT'])
-def updateUser(request):
-    return 
-
-# update profile with any new information
-@api_view(['DELET'])
-def deleteUser(request):
-    return 

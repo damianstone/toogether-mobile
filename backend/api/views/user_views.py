@@ -12,3 +12,17 @@ def getUsers(request):
     serializer = UserSerializer(users, many=True) # many = multiple objetcs 
     return Response(serializer.data)
 
+# update user with the location, push notification token, 
+@api_view(['PUT'])
+def updateUser(request):
+    return 
+    
+# update profile with any new information
+@api_view(['PUT'])
+def updateUser(request):
+    return 
+
+# update profile with any new information
+@api_view(['DELET'])
+def deleteUser(request):
+    return 

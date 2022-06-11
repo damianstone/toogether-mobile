@@ -1,7 +1,7 @@
 import datetime
 from django.db import models
 from django.contrib.postgres.fields import ArrayField
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, AbstractUser
 from django.contrib.auth.models import Group
 
 # all of the models of the db 
@@ -23,10 +23,10 @@ class Profile(models.Model):
         ('BOTH', 'Both'),
     )
     
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     _id = models.AutoField(primary_key=True, editable=False)
     createdAt = models.DateTimeField(auto_now_add=True)
     is_group = models.BooleanField(default=False, null=True, blank=True)
-    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     email = models.EmailField(max_length=200)
     name = models.CharField(max_length=200, null=True, blank=True)
     lastname = models.CharField(max_length=200, null=True, blank=True)
@@ -44,6 +44,8 @@ class Profile(models.Model):
     def __str__(self):
         return str(self.name)
 
+    
+    
 
 class Group(models.Model):
     _id = models.AutoField(primary_key=True, editable=False)

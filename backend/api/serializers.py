@@ -13,7 +13,7 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User 
         # fields we want to return when we make a request of the user profiles
-        fields = ['_id', 'username', 'email', 'name', 'isAdmin']
+        fields = '__all__' # return all the fields of the default data user model
     
     def get__id(self, obj):
         return obj.id
