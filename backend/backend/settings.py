@@ -42,7 +42,6 @@ INSTALLED_APPS = [
     'corsheaders',
     
     'api.apps.ApiConfig',
-    
 ]
 
 MIDDLEWARE = [
