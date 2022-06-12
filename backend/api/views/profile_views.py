@@ -13,7 +13,6 @@ def createProfile(request):
     return Response({'name': name})
 
 
-
 # get all of the groups and single profiles 
 @api_view(['GET'])
 def getProfiles(request):

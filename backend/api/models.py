@@ -1,71 +1,61 @@
 import datetime
 from django.db import models
 from django.contrib.postgres.fields import ArrayField
-from django.contrib.auth.models import User, AbstractUser
-from django.contrib.auth.models import Group
+from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
+from django.contrib.auth.base_user import BaseUserManager
+from django.utils.translation import ugettext_lazy as _
 
-# all of the models of the db 
-# the connections 
-# add to the admin file 
-# migrations and check the user panel with the tables
-# for images -> pip install pillow 
+
+class CustomUserManager(BaseUserManager):
+    """
+    Custom user model manager where email is the unique identifiers
+    for authentication instead of usernames.
+    """
+    def create_user(self, email, password, **extra_fields):
+        """
+        Create and save a User with the given email and password.
+        """
+        if not email:
+            raise ValueError(_('The Email must be set'))
+        email = self.normalize_email(email)
+        user = self.model(email=email, **extra_fields)
+        user.set_password(password)
+        user.save()
+        return user
+
+    def create_superuser(self, email, password, **extra_fields):
+        """
+        Create and save a SuperUser with the given email and password.
+        """
+        extra_fields.setdefault('is_staff', True)
+        extra_fields.setdefault('is_superuser', True)
+        extra_fields.setdefault('is_active', True)
+
+        if extra_fields.get('is_staff') is not True:
+            raise ValueError(_('Superuser must have is_staff=True.'))
+        if extra_fields.get('is_superuser') is not True:
+            raise ValueError(_('Superuser must have is_superuser=True.'))
+        return self.create_user(email, password, **extra_fields)
+
 
 # USER MODEL
-class Profile(models.Model):
+class Profile(AbstractBaseUser, PermissionsMixin):
+    name = models.CharField(max_length=200, null=True)
+    lastname = models.CharField(max_length=200,blank=True, null=True)
+    email = models.CharField(max_length=200, unique=True)
+    googleToken = models.CharField(max_length=200, null=True, default='token')
+   
 
-    GENDER = (
-        ("MALE", "Male"),
-        ("FEMALE", "Female")
-    )
-    SHOW_GENDER = (
-        ('MALE', 'Men'),
-        ('FEMALE', 'Women'),
-        ('BOTH', 'Both'),
-    )
-    
-    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
-    _id = models.AutoField(primary_key=True, editable=False)
-    createdAt = models.DateTimeField(auto_now_add=True)
-    is_group = models.BooleanField(default=False, null=True, blank=True)
-    email = models.EmailField(max_length=200)
-    name = models.CharField(max_length=200, null=True, blank=True)
-    lastname = models.CharField(max_length=200, null=True, blank=True)
-    photo = models.ImageField(null=True, blank=True)
-    age = models.IntegerField(null=True, blank=True)
-    birthday = models.DateField(null=True, blank=True)
-    gender = models.CharField(max_length=10, choices=GENDER, default='BOTH', null=True, blank=True)
-    description = models.TextField(max_length=500, null=True, blank=True)
-    university = models.CharField(max_length=20, null=True, blank=True)
-    show_gender = models.CharField(max_length=10, choices=SHOW_GENDER, default='FEMALE', null=True, blank=True)
-    location = models.CharField(max_length=100, default='', null=True, blank=True)
-    citylat = models.DecimalField(max_digits=9, decimal_places=6, default='-2.319', null=True, blank=True)
-    citylong = models.DecimalField(max_digits=9, decimal_places=6, default='52.555', null=True, blank=True)
+    USERNAME_FIELD = 'name'
+    #requred for creating user
+    REQUIRED_FIELDS = ['name']
 
     def __str__(self):
-        return str(self.name)
-
-    
+        return self.name
     
 
-class Group(models.Model):
-    _id = models.AutoField(primary_key=True, editable=False)
-    createdAt = models.DateTimeField(auto_now_add=True)
-    is_group = models.BooleanField(default=True)
-    total_members = models.IntegerField(null=False, blank=True, default=1)
-    members = models.ManyToManyField(User, blank=True)
-    share_link = models.SlugField()
     
-    def __str__(self):
-        return str(self.name)
-    
-    
-class Match(models.Model):
-    _id = models.AutoField(primary_key=True, editable=False)
-    createdAt = models.DateTimeField(auto_now_add=True)
-    members = models.ManyToManyField(User, blank=True)
-    
-    def __str__(self):
-        return str(self.name)
+
     
     
     
