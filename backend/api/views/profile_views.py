@@ -1,38 +1,106 @@
 from django.shortcuts import render
-from rest_framework.decorators import api_view
+from rest_framework import status
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
 
 from api.models import Profile
-from api.serializers import ProfileSerializer
-from django.contrib.auth.models import User
+from api.serializers import ProfileSerializer, ProfileSerializerWithToken
+from django.contrib.auth.hashers import make_password
 
-# create profile
+# simple json token
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from rest_framework_simplejwt.views import TokenObtainPairView
+
+
+# TOKEN SERIALIZER
+class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
+    def validate(self, attrs):
+        data = super().validate(attrs)
+
+        """
+        se puede hacer de la siguinte manera (de forma manual) 
+            data['username'] = self.user.username
+            data['email'] = self.user.email
+            
+            O se puede hacer mediante un for loop usando el serializer cn el token
+        """
+
+        serializer = ProfileSerializerWithToken(self.user).data
+        for key, value in serializer.items():
+            data[key] = value
+
+        return data
+
+
+# TOKEN VIEW
+class MyTokenObtainPairView(TokenObtainPairView):
+    serializer_class = MyTokenObtainPairSerializer
+
+
 @api_view(['POST'])
-def createProfile(request): 
-    name = request.data.get('name')
-    return Response({'name': name})
+def registerUser(request):
+    # get the data sent from frontend
+    data = request.data
+    # dont allow users creations with the same data
+    try:
+        # create a new user data model
+        user = Profile.objects.create(
+            email=data['email'],
+            password=make_password(data['password'])
+        )
+        # serialize with the token one to then automatically create the auth and refresh token for the new user
+        serializer = ProfileSerializerWithToken(user, many=False)
+        return Response(serializer.data)
+    except:
+        message = {'detail': 'User with this email already exist'}
+        return Response(message, status=status.HTTP_400_BAD_REQUEST)
 
 
-# get all of the groups and single profiles 
+# Get all the profile users
 @api_view(['GET'])
+@permission_classes([IsAdminUser])
 def getProfiles(request):
-    #.all return all of the profiles from our database
-    # before to push data to the frontend we have to serialize the data
-    profiles = Profile.objects.all() #query
-    serializer = ProfileSerializer(profiles, many=True) # many = multiple objetcs 
+    profiles = Profile.objects.all()
+    serializer = ProfileSerializerWithToken(profiles, many=True)
     return Response(serializer.data)
 
-# get user by id
+
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def getProfile(request, pk):
-    profile = Profile.objects.get(_id=pk)
-    serializer = ProfileSerializer(profile, many=False)
+    # user = request.user  # need to receive the token in the headers to return the profile info
+    profile = Profile.objects.get(id=pk)
+    serializer = ProfileSerializerWithToken(profile, many=False)
+    # return the user object including info like the personal token, email, username, etc
     return Response(serializer.data)
+
+
+@api_view(['PUT'])
+@permission_classes([IsAuthenticated])
+# need to receive the token in the headers to return the profile info
+def updateProfile(request, pk):
+    #user = request.user
+    user = Profile.objects.get(id=pk)
+    serializer = ProfileSerializerWithToken(user, many=False)
+    data = request.data
+
+    user.name = data['name']
+
+    # just if the password is not blank (so its optional)
+    if data['password'] != '':
+        user.password = make_password(data['password'])
+
+    user.save()
+
+    return Response(serializer.data)
+
 
 # get all blocked user
 @api_view(['GET'])
-def getBlockedUsers(request, pk):
+def getBlockedProfiles(request, pk):
     return
+
 
 # get all the likes
 @api_view(['GET'])

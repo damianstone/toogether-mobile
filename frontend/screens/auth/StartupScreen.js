@@ -3,9 +3,6 @@ import { StyleSheet, View, ActivityIndicator, Text } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import Colors from '../../constants/Colors';
-import firebase from 'firebase';
-
-import { useSelector } from 'react-redux';
 
 const StartupScreen = (props) => {
   // Startup Screen to check if the user is logged in

@@ -42,16 +42,15 @@ const MyProfileScreen = (props) => {
   const [photos, setPhotos] = useState([])
   const { showActionSheetWithOptions } = useActionSheet();
 
-    // USE EFFECTS
     useEffect(() => {
       setLoading(true);
-      const fetchProd = async () => {
+      const fetchUser = async () => {
         // no write the entire url because the other part of the url is in proxy packajge.json
         const { data } = await axios.get('http://127.0.0.1:8000/api/profiles/1');
         setUser(data);
         setPhotos(`http://127.0.0.1:8000${user.photo}`)
       };
-      fetchProd();
+      fetchUser();
       setLoading(false);
     }, []);
 

@@ -11,6 +11,7 @@ import {
 import { AntDesign } from '@expo/vector-icons';
 import { StatusBar } from 'expo-status-bar';
 import { useDispatch, useSelector } from 'react-redux';
+import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import styles from './styles';
@@ -35,6 +36,7 @@ const AuthScreen = (props) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState();
   const [isSignup, setIsSignup] = useState(false); // to switch between signup and signin
+  const [authenticated, setAuthenticated] = useState(false);
 
   // from redux check is authenticated
   const isAuthenticated = useSelector((state) => state.auth.authenticated);
@@ -48,7 +50,6 @@ const AuthScreen = (props) => {
     }
   }, [error]);
 
-
   const authHandler = async () => {
     const response = await Google.logInAsync({
       //return an object with result token and user
@@ -61,7 +62,6 @@ const AuthScreen = (props) => {
       setError('An error has occurred, check your connection and try again');
     }
 
-    console.log(response);
     const credential = firebase.auth.GoogleAuthProvider.credential(
       //Set the tokens to Firebase
       response.idToken,
@@ -69,6 +69,7 @@ const AuthScreen = (props) => {
     );
 
     const fireRes = await Firebase.auth().signInWithCredential(credential); // Login to Firebase
+
     const isNewUser = fireRes.additionalUserInfo.isNewUser;
 
     if (!isNewUser && isAuthenticated) {
@@ -78,6 +79,46 @@ const AuthScreen = (props) => {
       console.log('TO SUCCESS SCREEN');
       props.navigation.navigate('Success');
     }
+  };
+
+  const authentication = async () => {
+    const response = await Google.logInAsync({
+      //return an object with result token and user
+      iosClientId: Constants.manifest.extra.IOS_KEY, //From app.json
+      androidClientId: Constants.manifest.extra.ANDROIUD_KEY, //From app.json
+    });
+
+    // if the user couldnt login
+    if (response.type != 'success') {
+      setError('An error has occurred, check your connection and try again');
+    }
+
+    const credential = firebase.auth.GoogleAuthProvider.credential(
+      //Set the tokens to Firebase
+      response.idToken,
+      response.accessToken
+    );
+
+    const fireRes = await Firebase.auth().signInWithCredential(credential); // Login to Firebase
+
+    const token = fireRes.user.getIdToken();
+    const userEmail = fireRes.user.email;
+
+    if(fireRes.user) {
+      console.log(token);
+      fetch('http://127.0.0.1:8000/api/profiles/create/', {
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + token,
+        },
+        method: 'POST',
+        body: JSON.stringify({ email: userEmail, token: token }),
+      })
+        .then((response) => response.json())
+        .then((jsonResponse) => console.log(jsonResponse));
+    }
+
   };
 
   if (isLoading === true) {
@@ -108,7 +149,7 @@ const AuthScreen = (props) => {
           <View style={styles.buttonContainer2}>
             <AntDesign name="google" size={22} color="black" />
             <Button
-              onPress={authHandler}
+              onPress={authentication}
               color={Colors.black}
               title={isSignup ? 'Sign Up with Google' : 'Login with Google'}
             />
