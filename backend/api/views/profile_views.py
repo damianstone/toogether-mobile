@@ -5,8 +5,8 @@ from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from api.models import Profile
-from api.serializers import ProfileSerializer, UserSerializer
+from api.models import Profile, Photo
+from api.serializers import ProfileSerializer, UserSerializer, PhotoSerializer
 from django.contrib.auth.hashers import make_password
 
 # simple json token
@@ -102,17 +102,6 @@ def createUserProfile(request):
     return Response(serializer.data)
 
 
-@api_view(['POST'])
-def uploadPhoto(request):
-    data = request.data
-    profile_id = data['profile_id']
-    product = Profile.objects.get(id=profile_id) # get the profile first by id to then added the image
-    product.photos = request.FILES.get('image') # add the image
-    product.save()
-    return Response('Image was uploaded')
-
-
-
 # Get all the profile users
 @api_view(['GET'])
 @permission_classes([IsAdminUser])
@@ -132,18 +121,55 @@ def getProfile(request, pk):
     return Response(serializer.data)
 
 
-@api_view(['GET'])
+# ----------------------- PHOTOS VIEWS --------------------------------
+
+@api_view(['POST'])
+def uploadPhoto(request):
+    data = request.data
+    profile_id = data['profile_id']
+    profile = Profile.objects.get(id=profile_id) # get the profile first by id to then added the image
+    profile.photos = request.FILES.get('image') # add the image
+    profile.save()
+    return Response('Image was uploaded')
+
+@api_view(['POST'])
 @permission_classes([IsAuthenticated])
-def addPhoto(request, pk):
-    return
+def addPhoto(request):
+    profile = request.user # authentication
+    
+    # CHECK IF THE USER HAS ALREADY 5 PHOTOS UPLOADED
+    # if len(profile.photos) > 5:
+    #     message = {'detail': 'Already 5 photos'}
+    #     return Response(message, status=status.HTTP_400_BAD_REQUEST)
+        
+    file = request.FILES.get('image') # add the image
+    print(file) # works
+    photo = Photo.objects.create(
+        profile=profile,
+        image=file
+    )
+    print(photo)
+    serializer = PhotoSerializer(photo, many=False)
+    return Response(serializer.data)
     
 
+
+@api_view(['GET'])
+@permission_classes([IsAdminUser])
+def getPhotos(request):
+    photos = Photo.objects.all()
+    serializer = PhotoSerializer(photos, many=True)
+    return Response(serializer.data);
+    
+
+# ----------------------- BLOCKED USERS --------------------------------
 
 # get all blocked user
 @api_view(['GET'])
 def getBlockedProfiles(request, pk):
     return
 
+# ----------------------- LIKES VIEWS --------------------------------
 
 # get all the likes
 @api_view(['GET'])

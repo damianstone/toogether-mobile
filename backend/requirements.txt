@@ -9,3 +9,4 @@ psycopg2-binary==2.9.3
 pytz==2022.1
 sqlparse==0.4.2
 whitenoise==6.0.0
+django-dotenv

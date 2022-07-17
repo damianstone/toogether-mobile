@@ -20,8 +20,6 @@ class Profile(AbstractBaseUser, PermissionsMixin):
     age = models.PositiveIntegerField(null=True)
     university = models.TextField(max_length=40, null=True)
     description = models.TextField(max_length=500, null=True)
-    
-    images = ArrayField(models.ImageField(null=True, blank=True),size=5, null=True)
 
     USERNAME_FIELD = 'email'
     # requred for creating user
@@ -34,11 +32,11 @@ class Profile(AbstractBaseUser, PermissionsMixin):
 
 
 class Photo(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     profile=models.ForeignKey(Profile, default=None, on_delete=models.CASCADE)
     image=models.ImageField(null=True, blank=True)
     
     
-
 class Like(models.Model):
     profile = models.ForeignKey(Profile, on_delete=models.SET_NULL, null=True)
     created_at = models.DateTimeField(default=timezone.now)

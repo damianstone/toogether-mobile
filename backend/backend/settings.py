@@ -129,6 +129,11 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
+print("DB NAME -->", str(os.environ.get('LOCAL_DB_NAME')))
+print("DB NAME -->", os.environ.get('LOCAL_DB_USER'))
+print("DB NAME -->", os.environ.get('LOCAL_DB_HOST'))
+print("DB NAME -->", os.environ.get('LOCAL_DB_PORT'))
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',

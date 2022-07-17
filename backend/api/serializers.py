@@ -1,21 +1,32 @@
 from rest_framework import serializers
-from .models import Profile
+from .models import Profile, Photo
 from rest_framework_simplejwt.tokens import RefreshToken
 
+
+class PhotoSerializer(serializers.ModelSerializer):
+    image = serializers.ImageField(
+        max_length=None, use_url=True,
+    )
+    class Meta:
+        model = Photo
+        fields = ['id', 'image', 'profile']
+    
 
 # transform data into json
 # return las propiedades especificadas en fields cuando se llama
 class ProfileSerializer(serializers.ModelSerializer):
     token = serializers.SerializerMethodField(read_only=True)
+    photos = PhotoSerializer(many=True, read_only=True)
 
     class Meta:
         model = Profile
         fields = ['id', 'email', 'firstname', 'lastname', 'token',
-                  'birthday', 'age', 'university', 'description', 'created_at']
+                  'birthday', 'age', 'university', 'description', 'photos', 'created_at']
 
     def get_token(self, obj):
         token = RefreshToken.for_user(obj)
         return str(token.access_token)
+
 
 
 
@@ -52,3 +63,4 @@ class UserSerializer(ProfileSerializer):
 
     def get_created_at(self, obj):
         return obj.created_at
+
