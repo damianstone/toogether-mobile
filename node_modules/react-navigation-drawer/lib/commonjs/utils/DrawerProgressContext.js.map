@@ -1,0 +1,1 @@
+{"version":3,"sources":["DrawerProgressContext.tsx"],"names":["React","createContext"],"mappings":";;;;;;;AAAA;;;;;;4BAGeA,KAAK,CAACC,aAAN,CAAkD,IAAlD,C","sourcesContent":["import * as React from 'react';\nimport Animated from 'react-native-reanimated';\n\nexport default React.createContext<Animated.Node<number> | null>(null);\n"]}

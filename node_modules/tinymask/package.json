@@ -1,0 +1,28 @@
+{
+  "name": "tinymask",
+  "version": "1.0.2",
+  "description": "A js mask simple like killing zombies =).",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/benhurott/tinymask.git"
+  },
+  "keywords": [
+    "mask",
+    "js",
+    "simple",
+    "vanilla"
+  ],
+  "author": "Ben-hur Santos Ott",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/benhurott/tinymask/issues"
+  },
+  "homepage": "https://github.com/benhurott/tinymask#readme",
+  "devDependencies": {
+    "jest": "^20.0.3"
+  }
+}

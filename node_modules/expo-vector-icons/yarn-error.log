@@ -1,0 +1,84 @@
+Arguments: 
+  /nix/store/pb2dgi890fwk5nb7n913afx1d1lqhmph-nodejs-8.12.0/bin/node /Users/brentvatne/.nix-profile/bin/yarn
+
+PATH: 
+  /Users/brentvatne/flutter/bin:/Users/brentvatne/.local/bin:/Users/brentvatne/.nvm/versions/node/v9.2.0/bin/:/Users/brentvatne/.nvm/versions/node/v10.9.0/bin:/Users/brentvatne/.cargo/bin:/Users/brentvatne/.rvm/gems/ruby-2.3.1/bin:/Users/brentvatne/.rvm/gems/ruby-2.3.1@global/bin:/Users/brentvatne/.rvm/rubies/ruby-2.3.1/bin:/Users/brentvatne/.nix-profile/bin:/nix/var/nix/profiles/default/bin:/Library/Frameworks/Python.framework/Versions/3.6/bin:/Users/brentvatne/.cargo/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Users/brentvatne/Library/Android/sdk/tools/emulator:/Users/brentvatne/Library/Android/sdk/tools:/Users/brentvatne/Library/Android/sdk/platform-tools:/Users/brentvatne/.cargo/bin:/Users/brentvatne/.rvm/bin:/opt/yarn-1.3.2/bin:/opt/yarn-1.6.0/bin:/usr/local/bin:/Users/brentvatne/go/bin
+
+Yarn version: 
+  1.10.1
+
+Node version: 
+  8.12.0
+
+Platform: 
+  darwin x64
+
+Trace: 
+  Error: https://registry.yarnpkg.com/expo-module-scripts: Not found
+      at Request.params.callback [as _callback] (/nix/store/0ajpvy42xfmdl5spsdnp8zhwc7xyryq6-yarn-1.10.1/libexec/yarn/lib/cli.js:61073:18)
+      at Request.self.callback (/nix/store/0ajpvy42xfmdl5spsdnp8zhwc7xyryq6-yarn-1.10.1/libexec/yarn/lib/cli.js:120166:22)
+      at emitTwo (events.js:126:13)
+      at Request.emit (events.js:214:7)
+      at Request.<anonymous> (/nix/store/0ajpvy42xfmdl5spsdnp8zhwc7xyryq6-yarn-1.10.1/libexec/yarn/lib/cli.js:121138:10)
+      at emitOne (events.js:116:13)
+      at Request.emit (events.js:211:7)
+      at IncomingMessage.<anonymous> (/nix/store/0ajpvy42xfmdl5spsdnp8zhwc7xyryq6-yarn-1.10.1/libexec/yarn/lib/cli.js:121060:12)
+      at Object.onceWrapper (events.js:313:30)
+      at emitNone (events.js:111:20)
+
+npm manifest: 
+  {
+    "name": "@expo/vector-icons",
+    "sideEffects": false,
+    "version": "9.0.0",
+    "description": "Built-in support for popular icon fonts and the tooling to create your own Icon components from your font and glyph map. This is a wrapper around react-native-vector-icons to make it compatible with Expo.",
+    "main": "build/IconsLazy.js",
+    "module": "build/Icons.js",
+    "types": "build/Icons.d.ts",
+    "scripts": {
+      "copy-vendor": "cp -R src/vendor/ build/vendor/",
+      "generate-lazy": "expo-module babel --config-file ./babel.config.build.js --source-maps --out-file build/IconsLazy.js build/Icons.js",
+      "build": "EXPO_NONINTERACTIVE=1 expo-module build && npm run generate-lazy && npm run copy-vendor",
+      "build:dev": "expo-module build",
+      "clean": "expo-module clean",
+      "lint": "eslint tools",
+      "test": "expo-module test",
+      "prepare": "expo-module prepare && npm run generate-lazy && npm run copy-vendor",
+      "prepublishOnly": "expo-module prepublishOnly",
+      "expo-module": "expo-module || true"
+    },
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/expo/vector-icons.git"
+    },
+    "keywords": [
+      "expo"
+    ],
+    "author": "Brent Vatne",
+    "contributors": [
+      "Evan Bacon <bacon@expo.io> (https://github.com/evanbacon)"
+    ],
+    "license": "MIT",
+    "bugs": {
+      "url": "https://github.com/expo/vector-icons/issues"
+    },
+    "jest": {
+      "preset": "expo-module-scripts"
+    },
+    "homepage": "https://expo.github.io/vector-icons",
+    "unimodulePeerDependencies": {
+      "expo-font": "*"
+    },
+    "dependencies": {
+      "lodash": "^4.17.4"
+    },
+    "devDependencies": {
+      "expo-module-scripts": "^1.0.0"
+    }
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile

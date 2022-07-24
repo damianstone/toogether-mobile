@@ -1,0 +1,82 @@
+{
+    "name": "react-native-fast-image",
+    "version": "8.5.11",
+    "description": "🚩 FastImage, performant React Native image component.",
+    "keywords": [
+        "cache",
+        "cached",
+        "fastimage",
+        "image",
+        "priority"
+    ],
+    "homepage": "https://github.com/DylanVann/react-native-fast-image#readme",
+    "bugs": {
+        "url": "https://github.com/DylanVann/react-native-fast-image/issues"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/DylanVann/react-native-fast-image.git"
+    },
+    "license": "(MIT AND Apache-2.0)",
+    "author": "Dylan Vann <dylan@dylanvann.com> (https://dylanvann.com)",
+    "main": "dist/index.cjs.js",
+    "module": "dist/index.js",
+    "typings": "dist/index.d.ts",
+    "files": [
+        "android",
+        "!android/build",
+        "ios",
+        "!ios/build",
+        "dist",
+        "RNFastImage.podspec"
+    ],
+    "scripts": {
+        "build": "dv-scripts build && cp src/index.js.flow dist/index.js.flow && cp src/index.js.flow dist/index.cjs.js.flow",
+        "lint": "dv-scripts lint",
+        "release": "dv-scripts release",
+        "test": "dv-scripts test"
+    },
+    "prettier": {
+        "semi": false,
+        "singleQuote": true,
+        "tabWidth": 4,
+        "trailingComma": "all"
+    },
+    "eslintConfig": {
+        "extends": "dv-scripts"
+    },
+    "jest": {
+        "coveragePathIgnorePatterns": [
+            "ReactNativeFastImageExample*",
+            "ReactNativeFastImageExampleServer*"
+        ],
+        "modulePathIgnorePatterns": [
+            "ReactNativeFastImageExample*",
+            "ReactNativeFastImageExampleServer*"
+        ],
+        "preset": "react-native"
+    },
+    "resolutions": {
+        "@jest/create-cache-key-function": "^27"
+    },
+    "devDependencies": {
+        "@babel/core": "^7.14.6",
+        "@babel/runtime": "^7.14.6",
+        "@types/jest": "^26.0.24",
+        "@types/react": "^17.0.14",
+        "@types/react-native": "^0.64.12",
+        "@types/react-test-renderer": "^17.0.1",
+        "dv-scripts": "^1.6.0",
+        "eslint-config-dv-scripts": "^1.1.1",
+        "metro-react-native-babel-preset": "^0.66.1",
+        "prettier": "^2.3.2",
+        "react": "17.0.2",
+        "react-native": "0.64.2",
+        "react-test-renderer": "17.0.2",
+        "typescript": "^4.3.5"
+    },
+    "peerDependencies": {
+        "react": "^16.8.6 || ^17.0.0",
+        "react-native": ">=0.60.0"
+    }
+}

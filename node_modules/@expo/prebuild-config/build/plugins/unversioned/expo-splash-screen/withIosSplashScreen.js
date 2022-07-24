@@ -1,0 +1,87 @@
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.withIosSplashScreen = void 0;
+
+function _configPlugins() {
+  const data = require("@expo/config-plugins");
+
+  _configPlugins = function () {
+    return data;
+  };
+
+  return data;
+}
+
+function _debug() {
+  const data = _interopRequireDefault(require("debug"));
+
+  _debug = function () {
+    return data;
+  };
+
+  return data;
+}
+
+function _getIosSplashConfig() {
+  const data = require("./getIosSplashConfig");
+
+  _getIosSplashConfig = function () {
+    return data;
+  };
+
+  return data;
+}
+
+function _withIosSplashAssets() {
+  const data = require("./withIosSplashAssets");
+
+  _withIosSplashAssets = function () {
+    return data;
+  };
+
+  return data;
+}
+
+function _withIosSplashInfoPlist() {
+  const data = require("./withIosSplashInfoPlist");
+
+  _withIosSplashInfoPlist = function () {
+    return data;
+  };
+
+  return data;
+}
+
+function _withIosSplashXcodeProject() {
+  const data = require("./withIosSplashXcodeProject");
+
+  _withIosSplashXcodeProject = function () {
+    return data;
+  };
+
+  return data;
+}
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+const debug = (0, _debug().default)('expo:prebuild-config:expo-splash-screen:ios');
+
+const withIosSplashScreen = (config, splash) => {
+  // only warn once
+  (0, _getIosSplashConfig().warnUnsupportedSplashProperties)(config); // If the user didn't specify a splash object, infer the splash object from the Expo config.
+
+  if (!splash) {
+    splash = (0, _getIosSplashConfig().getIosSplashConfig)(config);
+  } else {
+    debug(`custom splash config provided`);
+  }
+
+  debug(`config:`, splash);
+  return (0, _configPlugins().withPlugins)(config, [[_withIosSplashInfoPlist().withIosSplashInfoPlist, splash], [_withIosSplashAssets().withIosSplashAssets, splash], [_withIosSplashXcodeProject().withIosSplashXcodeProject, splash]]);
+};
+
+exports.withIosSplashScreen = withIosSplashScreen;
+//# sourceMappingURL=withIosSplashScreen.js.map

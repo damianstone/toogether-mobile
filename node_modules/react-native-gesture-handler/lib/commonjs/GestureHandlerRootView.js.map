@@ -1,0 +1,1 @@
+{"version":3,"sources":["GestureHandlerRootView.tsx"],"names":["View"],"mappings":";;;;;;;AAAA;;eAEeA,iB","sourcesContent":["import { View } from 'react-native';\n\nexport default View;\n"]}
