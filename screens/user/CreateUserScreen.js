@@ -133,7 +133,7 @@ const CreateUserScreen = (props) => {
     // show an error is the age is less than 18 yo
 
     // dispatch the user info to redux then to database
-     /*     if (!formState.formIsValid) {
+    /*     if (!formState.formIsValid) {
       Alert.alert('Fill the form aweonao', error, [{ text: 'Okay' }]);
       console.log(formState);
       return;
@@ -141,14 +141,12 @@ const CreateUserScreen = (props) => {
 
     try {
       // if the user completed successfully the fold wuth all the requeriments,
-      // so dispatch the action telling to redux that the user if finally full authenticated 
+      // so dispatch the action telling to redux that the user if finally full authenticated
       await dispatch(actions.login(true));
       props.navigation.navigate('Swipe');
-
-    } catch(err) {
-      console.log(err)
+    } catch (err) {
+      console.log(err);
     }
-  
   };
 
   // ON CHANGE INPUTS

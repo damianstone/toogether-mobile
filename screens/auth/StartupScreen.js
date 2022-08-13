@@ -13,7 +13,6 @@ const StartupScreen = (props) => {
     const tryLogin = async () => {
       // get the user data as a promise
       const userData = await AsyncStorage.getItem('userData');
-      console.log('USER DATA -------------> ', userData);
 
       // if there is no user data
       if (!userData) {
@@ -25,7 +24,6 @@ const StartupScreen = (props) => {
     };
     tryLogin();
   }, []);
-
 
   return (
     <View style={styles.screen}>

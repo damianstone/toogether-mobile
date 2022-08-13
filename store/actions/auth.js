@@ -25,11 +25,9 @@ export const googleLogIn = () => {
         response.accessToken
       );
 
-
       Firebase.auth()
         .signInWithCredential(credential) // Login to Firebase
-        .then(res => {
-        })
+        .then((res) => {})
         .catch((error) => {
           console.log(error);
         });
@@ -37,23 +35,25 @@ export const googleLogIn = () => {
 
     // if the user couldnt login
     if (response.type != 'success') {
-      throw new Error('An error has occurred, check your connection and try again');
+      throw new Error(
+        'An error has occurred, check your connection and try again'
+      );
     }
   };
 };
 
 // redux anction to check if the user has already be registered (completed the form)
 // the user can be auth from google but if nof complete the form so is not full authenticared yet
-// if the user auth with google but not complete the form, the. show again the auth screen 
+// if the user auth with google but not complete the form, the. show again the auth screen
 // if the user completed the form, so he can logout and then enter again to the without showing the form again
-// if the user delete the their account, the state change to authenticated false 
+// if the user delete the their account, the state change to authenticated false
 export const login = (authenticated) => {
   saveData(authenticated);
   return {
     type: LOGIN,
     authenticated: authenticated,
-  }
-}
+  };
+};
 
 // LOGOUT
 export const deleteUser = () => {
@@ -69,11 +69,10 @@ const saveData = async (authenticated) => {
     await AsyncStorage.setItem(
       'userData',
       JSON.stringify({
-        authenticated: authenticated
+        authenticated: authenticated,
       })
     );
   } catch (err) {
     console.log(err);
   }
 };
-

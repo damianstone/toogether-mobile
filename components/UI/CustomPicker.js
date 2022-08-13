@@ -1,27 +1,35 @@
-import { StyleSheet, Text, View, ScrollView, TouchableOpacity, Button } from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  ScrollView,
+  TouchableOpacity,
+  Button,
+} from 'react-native';
 import React, { useEffect, useState, useRef } from 'react';
 import RNPickerSelect from 'react-native-picker-select';
 
-
 import Colors from '../../constants/Colors';
 
-
 const CustomPicker = (props) => {
-
   return (
     <View style={styles.formControl}>
       <Text style={{ ...styles.label, ...props.labelStyle }}>
         {props.label}
       </Text>
       <View style={styles.scroll}>
-      <RNPickerSelect
-        {...props}
-        placeholder={props.initialValue}
-        onValueChange={props.onInputChange}
-        items={props.items}
-        itemKey={props.itemKey}
-        onUpArrow={() => { console.log('up'); }}
-        onDownArrow={() => { console.log('down'); }}
+        <RNPickerSelect
+          {...props}
+          placeholder={props.initialValue}
+          onValueChange={props.onInputChange}
+          items={props.items}
+          itemKey={props.itemKey}
+          onUpArrow={() => {
+            console.log('up');
+          }}
+          onDownArrow={() => {
+            console.log('down');
+          }}
         />
       </View>
     </View>
@@ -71,5 +79,3 @@ const styles = StyleSheet.create({
     fontSize: 13,
   },
 });
-
-

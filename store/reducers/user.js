@@ -1,9 +1,5 @@
 import axios from 'axios';
-import {
-  USER_LIST_REQUEST,
-  USER_LIST_SUCCESS,
-  USER_LIST_FAIL,
-} from '../../constants/userConstants';
+import * as c from '../../constants/user';
 
 // REGISTER REDUCER
 export const registerReducer = (state = {}, action) => {

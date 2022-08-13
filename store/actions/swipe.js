@@ -2,7 +2,7 @@ import {
   SWIPE_LIST_REQUEST,
   SWIPE_LIST_SUCCESS,
   SWIPE_LIST_FAIL,
-} from '../../constants/swipeConstants';
+} from '../../constants/swipe';
 import axios from 'axios';
 
 // GET THE PRODUCTS

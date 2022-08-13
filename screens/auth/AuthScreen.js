@@ -1,4 +1,10 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, {
+  useState,
+  useContext,
+  useEffect,
+  useReducer,
+  useCallback,
+} from 'react';
 import {
   Image,
   View,
@@ -11,36 +17,58 @@ import {
 import { AntDesign } from '@expo/vector-icons';
 import { StatusBar } from 'expo-status-bar';
 import { useDispatch, useSelector } from 'react-redux';
-import axios from 'axios';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import styles from './styles';
 import Colors from '../../constants/Colors';
+import AuthInput from '../../components/UI/AuthInput';
 import * as actions from '../../store/actions/auth';
 
-import Constants from 'expo-constants'; // to read app.json extra
-import * as Google from 'expo-google-app-auth'; // google auth libraries
-import firebase from 'firebase'; // basic firebase
-import Firebase from '../../Firebase/config'; // This is the initialized Firebase,
+const FORM_UPDATE = 'FORM_UPDATE';
 
-/* 
-google login
+const formReducer = (state, action) => {
+  if (action.type === FORM_UPDATE) {
+    const updatedValued = {
+      ...state.inputValues, // old input value
+      [action.input]: action.value,
+    };
+    const updatedValidities = {
+      ...state.inputValidities, // old input validity
+      [action.input]: action.isValid,
+    };
+    let updatedFormIsValid = true;
+    for (const key in updatedValidities) {
+      // if there are all true so the form is valid
+      updatedFormIsValid = updatedValidities[key] && updatedFormIsValid;
+    }
+    return {
+      formIsValid: updatedFormIsValid,
+      inputValidities: updatedValidities,
+      inputValues: updatedValued,
+    };
+  }
+  return state;
+};
 
-depending of the device u need a different approach
-
-Check if the user has already logged in before -> show create user screen 
-
-*/
-
-const AuthScreen = (props) => {
+const AuthStartScreen = (props) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState();
-  const [isSignup, setIsSignup] = useState(false); // to switch between signup and signin
-  const [authenticated, setAuthenticated] = useState(false);
+  const [register, setRegister] = useState(false);
 
-  // from redux check is authenticated
-  const isAuthenticated = useSelector((state) => state.auth.authenticated);
-  console.log('AUTH??? ------>', isAuthenticated);
+  const dispatch = useDispatch();
+
+  const [formState, dispatchFormState] = useReducer(formReducer, {
+    inputValues: {
+      email: '',
+      password: '',
+      repeated_password: '',
+    },
+    inputValidities: {
+      email: false,
+      password: true,
+      repeated_password: true,
+    },
+    formIsValid: false,
+  });
 
   useEffect(() => {
     if (error) {
@@ -50,76 +78,19 @@ const AuthScreen = (props) => {
     }
   }, [error]);
 
-  const authHandler = async () => {
-    const response = await Google.logInAsync({
-      //return an object with result token and user
-      iosClientId: Constants.manifest.extra.IOS_KEY, //From app.json
-      androidClientId: Constants.manifest.extra.ANDROIUD_KEY, //From app.json
-    });
+  const inputChangeHandler = useCallback(
+    (inputIdentifier, inputValue, inputValidity) => {
+      dispatchFormState({
+        type: FORM_UPDATE,
+        value: inputValue,
+        isValid: inputValidity,
+        input: inputIdentifier,
+      });
+    },
+    [dispatchFormState]
+  );
 
-    // if the user couldnt login
-    if (response.type != 'success') {
-      setError('An error has occurred, check your connection and try again');
-    }
-
-    const credential = firebase.auth.GoogleAuthProvider.credential(
-      //Set the tokens to Firebase
-      response.idToken,
-      response.accessToken
-    );
-
-    const fireRes = await Firebase.auth().signInWithCredential(credential); // Login to Firebase
-
-    const isNewUser = fireRes.additionalUserInfo.isNewUser;
-
-    if (!isNewUser && isAuthenticated) {
-      props.navigation.navigate('Swipe');
-      return;
-    } else {
-      console.log('TO SUCCESS SCREEN');
-      props.navigation.navigate('Success');
-    }
-  };
-
-  const authentication = async () => {
-    const response = await Google.logInAsync({
-      //return an object with result token and user
-      iosClientId: Constants.manifest.extra.IOS_KEY, //From app.json
-      androidClientId: Constants.manifest.extra.ANDROIUD_KEY, //From app.json
-    });
-
-    // if the user couldnt login
-    if (response.type != 'success') {
-      setError('An error has occurred, check your connection and try again');
-    }
-
-    const credential = firebase.auth.GoogleAuthProvider.credential(
-      //Set the tokens to Firebase
-      response.idToken,
-      response.accessToken
-    );
-
-    const fireRes = await Firebase.auth().signInWithCredential(credential); // Login to Firebase
-
-    const token = fireRes.user.getIdToken();
-    const userEmail = fireRes.user.email;
-
-    if(fireRes.user) {
-      console.log(token);
-      fetch('http://127.0.0.1:8000/api/profiles/create/', {
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-          Authorization: 'Bearer ' + token,
-        },
-        method: 'POST',
-        body: JSON.stringify({ email: userEmail, token: token }),
-      })
-        .then((response) => response.json())
-        .then((jsonResponse) => console.log(jsonResponse));
-    }
-
-  };
+  console.log(formState);
 
   if (isLoading === true) {
     <View style={styles.screen}>
@@ -130,60 +101,73 @@ const AuthScreen = (props) => {
   return (
     <View style={styles.screen}>
       <StatusBar style="light" />
-      <ScrollView>
-        <View>
-          <View style={styles.logoContainer}>
-            <Image
-              source={require('../../assets/images/logo-2.png')}
-              style={styles.logo}
-            />
+      <ScrollView
+        contentContainerStyle={styles.scrollview_auth}
+        automaticallyAdjustKeyboardInsets={true}>
+        <View style={styles.auth_text_view}>
+          <View style={styles.auth_text_container}>
+            <Text style={styles.auth_text_big}>Lets sign you in</Text>
           </View>
-          <View style={styles.imageContainer}>
-            <Image
-              source={require('../../assets/images/login.png')}
-              style={styles.image}
-            />
+          <View style={styles.auth_text_container}>
+            <Text style={styles.auth_text_small}>Welcome back</Text>
           </View>
         </View>
-        <View style={styles.buttonsContainer}>
-          <View style={styles.buttonContainer2}>
-            <AntDesign name="google" size={22} color="black" />
+        <View style={styles.auth_input_container}>
+          <AuthInput
+            labelStyle={styles.label}
+            inputStyle={styles.inputStyle}
+            id="email"
+            label="Email"
+            keyboardType="default"
+            required
+            autoComplete="email"
+            autoCapitalize="sentences"
+            errorText="Enter your email"
+            placeholder="hello@example@gmail.com"
+            autoCorrect={false}
+            onInputChange={inputChangeHandler}
+          />
+          <AuthInput
+            labelStyle={styles.label}
+            inputStyle={styles.inputStyle}
+            password={true}
+            secureTextEntry={true}
+            id="password"
+            label="Password"
+            keyboardType="default"
+            required
+            errorText="Enter your password"
+            autoCorrect={false}
+            returnKeyType="next"
+            onInputChange={inputChangeHandler}
+          />
+          <AuthInput
+            labelStyle={styles.label}
+            inputStyle={styles.inputStyle}
+            password={true}
+            secureTextEntry={true}
+            id="repeated_password"
+            label="Repeat your password"
+            keyboardType="default"
+            required
+            errorText="Enter your password"
+            autoCorrect={false}
+            returnKeyType="next"
+            onInputChange={inputChangeHandler}
+          />
+          <View style={styles.auth_button_container}>
             <Button
-              onPress={authentication}
-              color={Colors.black}
-              title={isSignup ? 'Sign Up with Google' : 'Login with Google'}
+              color={Colors.white}
+              title="Create account"
+              onPress={() => {
+                setRegister(true);
+              }}
             />
           </View>
-          <Button
-            title={`Switch to ${isSignup ? 'Login?' : 'Sign Up?'}`}
-            color={Colors.white}
-            onPress={() => {
-              setIsSignup((prevState) => !prevState);
-            }}
-          />
         </View>
       </ScrollView>
     </View>
   );
 };
 
-export default AuthScreen;
-
-/*         .then((res) => {
-          if (res.additionalUserInfo.isNewUser) {
-            props.navigation.navigate('Success');
-            console.log('GO TO SUCCESS SCREEN')
-            newUser = true
-          } else {
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-        }); */
-
-/*     try {
-      await dispatch(actions.googleLogIn());
-      props.navigation.navigate('Success');
-    } catch (err) {
-      setError(err.message);
-    } */
+export default AuthStartScreen;

@@ -202,4 +202,4 @@ const pickerStyles = StyleSheet.create({
     fontSize: 16,
     color: Colors.white,
   },
-})
+});

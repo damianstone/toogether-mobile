@@ -7,6 +7,7 @@ import { createMaterialBottomTabNavigator } from 'react-navigation-material-bott
 import { createBottomTabNavigator } from 'react-navigation-tabs';
 import { AntDesign } from '@expo/vector-icons';
 
+import AuthStartScreen from '../screens/auth/AuthStartScreen';
 import AuthScreen from '../screens/auth/AuthScreen';
 import AuthSucess from '../screens/auth/AuthSuccess';
 import SwipeScreen from '../screens/swipe/SwipeScreen';
@@ -34,6 +35,7 @@ const defaultNavOptions = {
 
 const AuthNavigator = createStackNavigator(
   {
+    AuthStart: AuthStartScreen,
     Auth: AuthScreen,
     Success: AuthSucess,
     Create: CreateUserScreen,

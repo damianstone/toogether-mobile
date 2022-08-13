@@ -17,7 +17,7 @@ import HeaderButtom from '../../components/UI/HeaderButton';
 import NoMoreCards from '../../components/NoMoreCards';
 import ActivityModal from '../../components/UI/ActivityModal';
 import NewMatch from '../../components/NewMatch';
-import { listSwipes } from '../../store/actions/swipeActions';
+import { listSwipes } from '../../store/actions/swipe';
 
 import axios from 'axios';
 

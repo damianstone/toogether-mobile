@@ -6,6 +6,7 @@ export default StyleSheet.create({
     backgroundColor: Colors.bg,
     flex: 1,
     justifyContent: 'space-around',
+    height: '100%',
   },
   gradient: {
     flex: 1,
@@ -14,6 +15,9 @@ export default StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+
+  // ---------------------- AUTH START SCREEN -----------------------
+
   logoContainer: {
     marginTop: 80,
     alignItems: 'center',
@@ -34,6 +38,7 @@ export default StyleSheet.create({
     width: '100%',
     height: 400,
   },
+
   buttonsContainer: {
     alignItems: 'center',
     marginVertical: 40,
@@ -49,17 +54,7 @@ export default StyleSheet.create({
     borderRadius: 22,
     alignItems: 'center',
   },
-  buttonContainer2: {
-    padding: 3,
-    flexDirection: 'row',
-    marginVertical: 10,
-    width: '65%',
-    height: 44,
-    backgroundColor: Colors.white,
-    borderRadius: 22,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
+
   button: {
     fontSize: 60,
     color: Colors.white,
@@ -69,17 +64,81 @@ export default StyleSheet.create({
     padding: 3,
     width: '80%',
     marginVertical: 0,
-    alignSelf: 'center'
+    alignSelf: 'center',
+  },
+
+  buttonContainer2: {
+    marginVertical: 30,
+    padding: 3,
+    flexDirection: 'row',
+    width: '80%',
+    height: 44,
+    backgroundColor: Colors.orange,
+    borderRadius: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
+  // ---------------------- AUTH SCREEN -----------------------
+
+  scrollview_auth: {
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    height: '100%',
+  },
+
+  auth_text_view: {
+    marginTop: 80,
+    padding: 15,
+  },
+
+  auth_text_container: {
+    width: '100%',
+  },
+
+  auth_text_big: {
+    color: Colors.white,
+    fontSize: 40,
+    fontWeight: 'bold',
+  },
+
+  auth_text_small: {
+    color: Colors.white,
+    fontSize: 28,
+  },
+
+  auth_input_container: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+
+    width: '100%',
+    height: '100%',
+    padding: 20,
+  },
+
+  inputStyle: {
+    padding: 5,
+    backgroundColor: '#494863',
+    borderRadius: 10,
+    justifyContent: 'center',
   },
 
   label: {
     color: Colors.white,
-    fontSize: 18,
+    fontSize: 20,
+    marginTop: 10,
   },
-  inputStyle: {
-    justifyContent: 'center',
+
+  auth_button_container: {
+    marginVertical: 30,
     padding: 3,
-    backgroundColor: '#494863',
-    borderRadius: 20,
+    flexDirection: 'row',
+    width: '100%',
+    height: 44,
+    backgroundColor: Colors.orange,
+    borderRadius: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
