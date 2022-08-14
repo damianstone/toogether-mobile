@@ -118,11 +118,19 @@ const styles = StyleSheet.create({
   },
 
   label: {
-    marginVertical: 8,
+    color: Colors.black,
+    fontSize: 20,
+    marginVertical: 10,
     alignSelf: 'flex-start',
   },
 
   inputContainer: {
+    padding: 5,
+    backgroundColor: Colors.white,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: '#D8D8D8',
+    justifyContent: 'center',
     width: '100%',
     height: 45,
     paddingHorizontal: 10,
@@ -131,7 +139,7 @@ const styles = StyleSheet.create({
   input: {
     paddingHorizontal: 2,
     paddingVertical: 2,
-    color: Colors.white,
+    color: Colors.blackwqs,
     fontSize: 16,
     width: '100%',
   },

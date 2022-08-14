@@ -19,7 +19,7 @@ import CreateUserScreen from '../screens/user/CreateUserScreen';
 import Colors from '../constants/Colors';
 import MyProfileScreen from '../screens/myProfile/MyProfileScreen';
 import SettingScreen from '../screens/myProfile/SettingScreen';
-import StartupScreen from '../screens/auth/StartupScreen';
+import StartupScreen from '../screens/StartupScreen';
 
 const defaultNavOptions = {
   headerMode: 'none',

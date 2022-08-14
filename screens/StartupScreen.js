@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, ActivityIndicator, Text } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import Colors from '../../constants/Colors';
+import Colors from '../constants/Colors';
 
 const StartupScreen = (props) => {
   // Startup Screen to check if the user is logged in
@@ -12,15 +12,16 @@ const StartupScreen = (props) => {
   useEffect(() => {
     const tryLogin = async () => {
       // get the user data as a promise
-      const userData = await AsyncStorage.getItem('userData');
+      // const userData = await AsyncStorage.getItem('userData');
 
       // if there is no user data
-      if (!userData) {
-        props.navigation.navigate('Auth');
-        return;
-      }
+      // if (!userData) {
+      //   props.navigation.navigate('Auth');
+      //   return;
+      // }
 
-      props.navigation.navigate('Swipe');
+      // props.navigation.navigate('Swipe');
+      props.navigation.navigate('Auth');
     };
     tryLogin();
   }, []);

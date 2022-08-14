@@ -11,7 +11,7 @@ export default (state = initialState, action) => {
         authenticated: action.authenticated,
       };
     case DELETE:
-      return { authenticated: null }; 
+      return { authenticated: null };
     default:
       return state;
   }
