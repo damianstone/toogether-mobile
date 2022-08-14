@@ -4,6 +4,7 @@ import { userRegisterReducer, userLoginReducer } from '../store/reducers/user';
 
 const reducer = combineReducers({
   userRegister: userRegisterReducer,
+  userLogin: userLoginReducer,
 });
 
 const initialState = {};

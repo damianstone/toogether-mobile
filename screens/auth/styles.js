@@ -20,10 +20,11 @@ export default StyleSheet.create({
   },
 
   scrollview_style: {
-    flexGrow: 0,
+    flexGrow: 1,
     backgroundColor: Colors.white,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
+    paddingBottom: 0,
   },
 
   scrollview_content_container: {
@@ -83,7 +84,7 @@ export default StyleSheet.create({
     justifyContent: 'center',
   },
 
-  auth_goback_text: {
+  auth_text_button: {
     color: '#4A4A4A',
     fontSize: 15,
   },

@@ -24,14 +24,6 @@ import * as actions from '../../store/actions/auth';
 
 const FORM_UPDATE = 'FORM_UPDATE';
 
-/*
-
-ALERTS
-- display an alert for the age 
-- check if the data is good 
-
-*/
-
 // to manage onChange with state
 const formReducer = (state, action) => {
   if (action.type === FORM_UPDATE) {
@@ -88,7 +80,6 @@ const gender = [
 ];
 
 const CreateUserScreen = (props) => {
-  // CREAR UN SISTEMA PARA QUE SOLO SE PUEDA CONTINUAR SI ES QUE SE LLENA TODO EL FORMULARIO
   const [isLoading, setIsLoading] = useState(false);
   const [image, setImage] = useState('');
   const [error, setError] = useState();
@@ -99,7 +90,7 @@ const CreateUserScreen = (props) => {
   const [formState, dispatchFormState] = useReducer(formReducer, {
     inputValues: {
       img: '',
-      name: '',
+      firstname: '',
       lastname: '',
       university: '',
       birthday: '',
@@ -128,7 +119,7 @@ const CreateUserScreen = (props) => {
   }, [error]);
 
   // SAVE USER DATA
-  const createUsarHandler = async () => {
+  const createUsarHandler = () => {
     // Calculate the age using the birthday
     // show an error is the age is less than 18 yo
 
@@ -139,14 +130,7 @@ const CreateUserScreen = (props) => {
       return;
     }  */
 
-    try {
-      // if the user completed successfully the fold wuth all the requeriments,
-      // so dispatch the action telling to redux that the user if finally full authenticated
-      await dispatch(actions.login(true));
-      props.navigation.navigate('Swipe');
-    } catch (err) {
-      console.log(err);
-    }
+    console.log('create');
   };
 
   // ON CHANGE INPUTS

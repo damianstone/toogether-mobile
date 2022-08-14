@@ -14,6 +14,7 @@ import {
   Alert,
   ActivityIndicator,
   KeyboardAvoidingView,
+  TouchableOpacity,
 } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { useDispatch, useSelector } from 'react-redux';
@@ -21,7 +22,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import styles from './styles';
 import Colors from '../../constants/Colors';
 import AuthInput from '../../components/UI/AuthInput';
-import { userRegister } from '../../store/actions/user';
+import AuthButton from '../../components/UI/AuthButton';
+import * as c from '../../constants/user';
+import { userRegister, userLogin } from '../../store/actions/user';
 
 const FORM_UPDATE = 'FORM_UPDATE';
 
@@ -51,6 +54,7 @@ const formReducer = (state, action) => {
 
 const AuthStartScreen = (props) => {
   const register = props.navigation.getParam('register');
+  const dispatch = useDispatch();
 
   const [formState, dispatchFormState] = useReducer(formReducer, {
     inputValues: {
@@ -68,25 +72,58 @@ const AuthStartScreen = (props) => {
 
   const { formIsValid, inputValues } = formState;
 
-  const dispatch = useDispatch();
+  // REGISTER REDUCER
   const userRegisterReducer = useSelector((state) => state.userRegister);
-  const { loading, data, success, error } = userRegisterReducer;
+  const {
+    loading: registerLoading,
+    data: registerData,
+    success: registerSuccess,
+    error: registerError,
+  } = userRegisterReducer;
 
+  // LOGIN REDUCER
+  const userLoginReducer = useSelector((state) => state.userLogin);
+  const {
+    loading: loginLoading,
+    data: loginData,
+    success: loginSuccess,
+    error: loginError,
+  } = userLoginReducer;
+
+  console.log('LOGIN DATA ----> ', loginData);
+
+  // REGISTER
   useEffect(() => {
-    if (error) {
-      Alert.alert('An Error Occurred!', error.response.data.detail, [
+    if (registerError) {
+      Alert.alert('An Error Occurred!', registerError.response.data.detail, [
         { text: 'Okay' },
       ]);
-      dispatch({ type: 'USER_REGISTER_RESET' });
-      console.log('ERROR AXIOS ', { ...error });
     }
-    if (success) {
-      Alert.alert('CHUPA CHUPA!', "you've created an account mamawebo", [
+    if (register && registerSuccess) {
+      props.navigation.navigate('Success', { register: register });
+    }
+    dispatch({ type: c.USER_REGISTER_RESET });
+  }, [register, registerError, registerSuccess]);
+
+  // LOGIN
+  useEffect(() => {
+    if (loginError) {
+      Alert.alert('An Error Occurred!', loginError.response.data.detail, [
         { text: 'Okay' },
       ]);
-      dispatch({ type: 'USER_REGISTER_RESET' });
+      dispatch({ type: c.USER_LOGIN_RESET });
     }
-  }, [error, success]);
+
+    if (loginSuccess && loginData.has_account) {
+      props.navigation.navigate('Swipe');
+      // TODO: no reset and save the data again in the local storage
+    }
+
+    if (loginSuccess && !loginData.has_account) {
+      props.navigation.navigate('Success', { register: register });
+      dispatch({ type: c.USER_LOGIN_RESET });
+    }
+  }, [loginError, loginSuccess]);
 
   const inputChangeHandler = useCallback(
     (inputIdentifier, inputValue, inputValidity) => {
@@ -112,7 +149,11 @@ const AuthStartScreen = (props) => {
     }
   };
 
-  const handleLogin = () => {};
+  const handleLogin = () => {
+    if (formIsValid) {
+      dispatch(userLogin(inputValues.email, inputValues.password));
+    }
+  };
 
   return (
     <View style={styles.screen}>
@@ -138,7 +179,7 @@ const AuthStartScreen = (props) => {
             <AuthInput
               id="email"
               label="Email"
-              keyboardType="default"
+              keyboardType="email-address"
               required
               autoComplete="email"
               autoCapitalize="none"
@@ -150,10 +191,12 @@ const AuthStartScreen = (props) => {
             />
             <AuthInput
               secureTextEntry={true}
+              textContentType={'password'}
               id="password"
               label="Password"
               keyboardType="default"
               required
+              autoCapitalize="none"
               errorText="Enter your password"
               autoCorrect={false}
               onInputChange={inputChangeHandler}
@@ -161,7 +204,9 @@ const AuthStartScreen = (props) => {
             {register && (
               <AuthInput
                 secureTextEntry={true}
+                textContentType={'password'}
                 required
+                autoCapitalize="none"
                 id="repeated_password"
                 label="Repeat your password"
                 keyboardType="default"
@@ -170,22 +215,26 @@ const AuthStartScreen = (props) => {
                 onInputChange={inputChangeHandler}
               />
             )}
-            {loading ? (
+            {registerLoading || loginLoading ? (
               <View style={styles.auth_loader_container}>
                 <ActivityIndicator size="large" />
               </View>
             ) : (
-              <View style={styles.auth_button_container}>
-                <Button
-                  color={Colors.white}
-                  title={register ? 'Create account' : 'Login'}
-                  onPress={register ? handleRegister : handleLogin}
-                />
-              </View>
+              <AuthButton
+                text={register ? 'Create account' : 'Login'}
+                onPress={register ? handleRegister : handleLogin}
+              />
             )}
-            <Text style={styles.auth_goback_text}>
-              You already have an account?
-            </Text>
+            <Button
+              style={styles.auth_text_button}
+              color={'#4A4A4A'}
+              title={
+                register
+                  ? 'You already have an account?'
+                  : 'You dont have an account?'
+              }
+              onPress={() => {}}
+            />
           </View>
         </ScrollView>
       </KeyboardAvoidingView>

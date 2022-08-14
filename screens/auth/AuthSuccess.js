@@ -12,11 +12,15 @@ import { StatusBar } from 'expo-status-bar';
 import Colors from '../../constants/Colors';
 
 const AuthSucess = (props) => {
+  const register = props.navigation.getParam('register');
+
   return (
     <View style={styles.screen}>
       <StatusBar style="light" />
       <View style={styles.container}>
-        <Text style={styles.mainText}>Sign Up Success</Text>
+        <Text style={styles.mainText}>
+          {register ? 'Register Success' : 'Login Success'}
+        </Text>
         <View style={styles.container}>
           <Text style={styles.text}>Lets start with your profile</Text>
         </View>
