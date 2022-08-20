@@ -77,8 +77,48 @@ export const userLogin = (email, password) => {
 export const logout = (name, email) => {};
 
 // CREATE USER PROFILE
-export const createUserProfile = (name, email) => {
-  // TODO: save the user in the local storage an
+export const createUserProfile = (
+  token,
+  firstname,
+  lastname,
+  university,
+  description
+) => {
+  return async (dispatch) => {
+    try {
+      dispatch({ type: c.USER_CREATE_REQUEST });
+
+      const config = {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+        Authorization: 'Bearer ' + token,
+      };
+
+      const { data } = await axios({
+        method: 'POST',
+        url: 'http://127.0.0.1:8000/api/users/profiles/create/',
+        headers: config,
+        data: {
+          firstname: firstname,
+          lastname: lastname,
+          university: null,
+          description: null,
+        },
+      });
+
+      // TODO: if data.has_account is true entonces guardar de nuevo los datos en el localstorage
+
+      dispatch({
+        type: c.USER_CREATE_SUCCESS,
+        payload: data,
+      });
+    } catch (error) {
+      dispatch({
+        type: c.USER_CREATE_FAIL,
+        payload: error,
+      });
+    }
+  };
 };
 
 // UPDATE USER PROFILE

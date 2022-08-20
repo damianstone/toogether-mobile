@@ -46,7 +46,29 @@ export const userLoginReducer = (state = { data: {} }, action) => {
         error: action.payload,
       };
     case c.USER_LOGIN_RESET:
-      return {};
+      return {  };
+    default:
+      return state;
+  }
+};
+
+export const userCreateProfileReducer = (state = { data: {} }, action) => {
+  switch (action.type) {
+    case c.USER_CREATE_REQUEST:
+      return {
+        loading: true,
+        success: false,
+      };
+    case c.USER_CREATE_SUCCESS:
+      return {
+        data: { ...action.payload },
+        success: true,
+      };
+    case c.USER_CREATE_FAIL:
+      return {
+        loading: false,
+        error: action.payload,
+      };
     default:
       return state;
   }

@@ -90,11 +90,10 @@ const AuthStartScreen = (props) => {
     error: loginError,
   } = userLoginReducer;
 
-  console.log('LOGIN DATA ----> ', loginData);
-
   // REGISTER
   useEffect(() => {
     if (registerError) {
+      //TODO: whats up with network error ?
       Alert.alert('An Error Occurred!', registerError.response.data.detail, [
         { text: 'Okay' },
       ]);
@@ -119,9 +118,9 @@ const AuthStartScreen = (props) => {
       // TODO: no reset and save the data again in the local storage
     }
 
+    //TODO: fix dont go to the screen is there is no loginData
     if (loginSuccess && !loginData.has_account) {
       props.navigation.navigate('Success', { register: register });
-      dispatch({ type: c.USER_LOGIN_RESET });
     }
   }, [loginError, loginSuccess]);
 

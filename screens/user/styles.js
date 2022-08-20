@@ -38,7 +38,7 @@ export default StyleSheet.create({
   photo: {
     width: 170,
     height: 170,
-    borderRadius: 30,
+    borderRadius: 10,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -59,7 +59,7 @@ export default StyleSheet.create({
     justifyContent: 'center',
     padding: 3,
     backgroundColor: '#494863',
-    borderRadius: 20,
+    borderRadius: 10,
   },
   textTareaStyle: {
     height: 150,
@@ -69,7 +69,7 @@ export default StyleSheet.create({
     borderRadius: 20,
   },
   textArea: {
-    height: 150,
+    height: 200,
     textAlignVertical: 'top',
   },
   buttonContainer: {
@@ -92,7 +92,7 @@ export default StyleSheet.create({
     width: '65%',
     height: 44,
     backgroundColor: Colors.orange,
-    borderRadius: 22,
+    borderRadius: 10,
   },
   touchable: {
     width: '100%',

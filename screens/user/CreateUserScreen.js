@@ -13,14 +13,15 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { createUserProfile } from '../../store/actions/user';
 
 import Colors from '../../constants/Colors';
 import styles from './styles';
 import Input from '../../components/UI/Input';
 import Header from '../../components/UI/Header';
 import ImageSelector from '../../components/UI/ImageSelector';
-import * as actions from '../../store/actions/auth';
+import AuthButton from '../../components/UI/AuthButton';
 
 const FORM_UPDATE = 'FORM_UPDATE';
 
@@ -85,53 +86,51 @@ const CreateUserScreen = (props) => {
   const [error, setError] = useState();
   const dispatch = useDispatch();
 
-  // START DECLARING STATE
-  // useReducer from react native is used to manage a lot states
   const [formState, dispatchFormState] = useReducer(formReducer, {
     inputValues: {
       img: '',
       firstname: '',
       lastname: '',
       university: '',
-      birthday: '',
-      gender: '',
-      showme: '',
-      about: '',
+      description: '',
     },
     inputValidities: {
       img: true,
-      name: false,
+      firstname: false,
       lastname: false,
       university: true,
-      birthday: false,
-      gender: false,
-      showme: false,
-      about: true,
+      description: true,
     },
     formIsValid: false,
   });
-  // FINISH DECLARING STATE
+
+  const { formIsValid, inputValues } = formState;
+
+  // LOGIN REDUCER
+  const userLoginReducer = useSelector((state) => state.userLogin);
+  const { data: loginData } = userLoginReducer;
+
+  const userCreateProfile = useSelector((state) => state.userCreateProfile);
+  const {
+    error: createError,
+    data: createData,
+    success: createSuccess,
+    loading: createLoading,
+  } = userCreateProfile;
+
+  console.log('CREATE SUCCESS ---> ', createSuccess);
 
   useEffect(() => {
+    if (!loginData || Object.keys(loginData).length === 0) {
+      props.navigation.navigate('AuthStart');
+    }
     if (error) {
       Alert.alert('An error occurred!', error, [{ text: 'Okay' }]);
     }
-  }, [error]);
-
-  // SAVE USER DATA
-  const createUsarHandler = () => {
-    // Calculate the age using the birthday
-    // show an error is the age is less than 18 yo
-
-    // dispatch the user info to redux then to database
-    /*     if (!formState.formIsValid) {
-      Alert.alert('Fill the form aweonao', error, [{ text: 'Okay' }]);
-      console.log(formState);
-      return;
-    }  */
-
-    console.log('create');
-  };
+    if (createSuccess) {
+      Alert.alert('Success', error, [{ text: 'Okay' }]);
+    }
+  }, [error, createSuccess]);
 
   // ON CHANGE INPUTS
   const inputChangeHandler = useCallback(
@@ -146,7 +145,29 @@ const CreateUserScreen = (props) => {
     [dispatchFormState]
   );
 
-  imageTakenHandler = (imagePath) => {
+  // SAVE USER DATA
+  const createUserProfileHandler = () => {
+    // TODO: Calculate the age using the birthday
+    if (!formIsValid) {
+      console.log({...inputValues})
+      Alert.alert('Create your profile to continue ;)', error, [
+        { text: 'Okay' },
+      ]);
+    } else {
+      dispatch(
+        createUserProfile(
+          loginData.token,
+          inputValues.firstname,
+          inputValues.lastname,
+          inputValues.university,
+          inputValues.description,
+        )
+      );
+      console.log('CREATED');
+    }
+  };
+
+  const imageTakenHandler = (imagePath) => {
     // ADD REMOVE PHOTO HANDLER!
     formState.inputValues.img = imagePath;
     formState.inputValidities.img = true;
@@ -160,15 +181,6 @@ const CreateUserScreen = (props) => {
   }
   if (formState.formIsValid) {
     styleButton = styles.buttonContainer;
-  }
-
-  // LOADING SPINNER
-  if (isLoading) {
-    return (
-      <View style={styles.centered}>
-        <ActivityIndicator size="large" color={Colors.icons} />
-      </View>
-    );
   }
 
   return (
@@ -192,7 +204,7 @@ const CreateUserScreen = (props) => {
             labelStyle={styles.label} // style for the label
             inputStyle={styles.inputStyle}
             inputType="textInput"
-            id="name"
+            id="firstname"
             label="Name"
             keyboardType="default" // normal keyboard
             required
@@ -307,20 +319,23 @@ const CreateUserScreen = (props) => {
             initialValue=""
           />
         </View>
-
-        <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-          <View style={styleButton}>
-            <TouchableOpacity
-              style={styles.touchable}
-              onPress={createUsarHandler}>
-              <Button
-                onPress={createUsarHandler}
-                color={Colors.white}
-                title="Continuar"
-              />
-            </TouchableOpacity>
+        {createLoading  ? (
+          <View style={styles.centered}>
+            <ActivityIndicator size="large" color={Colors.icons} />
           </View>
-        </View>
+        ) : (
+          <View
+            style={{
+              marginBottom: '10%',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              alignSelf: 'center',
+              alignItems: 'center',
+              width: '70%',
+            }}>
+            <AuthButton text={'continue'} onPress={createUserProfileHandler} />
+          </View>
+        )}
       </ScrollView>
     </KeyboardAvoidingView>
   );

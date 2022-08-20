@@ -89,7 +89,7 @@ const styles = StyleSheet.create({
     width: '65%',
     height: 44,
     backgroundColor: Colors.green,
-    borderRadius: 22,
+    borderRadius: 10,
     alignItems: 'center',
   },
   touchable: {
