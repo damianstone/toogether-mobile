@@ -93,6 +93,9 @@ export const createUserProfile = (
   firstname,
   lastname,
   university,
+  birthdate,
+  gender,
+  show_me,
   description
 ) => {
   return async (dispatch) => {
@@ -109,11 +112,14 @@ export const createUserProfile = (
 
       const { data } = await axios({
         method: 'POST',
-        url: 'http://127.0.0.1:8000/api/users/profiles/create/',
+        url: `http://127.0.0.1:8000/api/users/profiles/profile/${userData.id}/create-profile/`,
         headers: config,
         data: {
           firstname: firstname,
           lastname: lastname,
+          birthdate: birthdate,
+          gender: gender,
+          show_me: show_me,
           university: university ? university : null,
           description: description ? description : null,
         },

@@ -45,33 +45,33 @@ const formReducer = (state, action) => {
   return state;
 };
 
-const show = [
+const gender = [
   {
-    label: 'Hombres',
-    value: 'hombres',
+    label: 'Male',
+    value: 'male',
   },
   {
-    label: 'Mujeres',
-    value: 'mujeres',
+    label: 'Female',
+    value: 'female',
   },
   {
-    label: 'Mixto',
-    value: 'Mixto',
+    label: 'Chair',
+    value: 'chair',
   },
 ];
 
-const gender = [
+const show = [
   {
-    label: 'Masculino',
-    value: 'Masculino',
+    label: 'Men',
+    value: 'men',
   },
   {
-    label: 'Femenino',
-    value: 'Femenino',
+    label: 'Women',
+    value: 'women',
   },
   {
-    label: 'otro',
-    value: 'otro',
+    label: 'Both',
+    value: 'both',
   },
 ];
 
@@ -85,6 +85,9 @@ const CreateUserScreen = (props) => {
       img: '',
       firstname: '',
       lastname: '',
+      birthdate: '',
+      gender: '',
+      show_me: '',
       university: '',
       description: '',
     },
@@ -92,6 +95,9 @@ const CreateUserScreen = (props) => {
       img: true,
       firstname: false,
       lastname: false,
+      birthdate: false,
+      gender: false,
+      show_me: false,
       university: true,
       description: true,
     },
@@ -118,13 +124,27 @@ const CreateUserScreen = (props) => {
 
   useEffect(() => {
     if (createError || addPhotoError) {
-      setError(true);
-      Alert.alert('An error occurred!', 'check your data', [{ text: 'Okay' }]);
+      if (createError.response.data !== undefined) {
+        setError(true);
+      }
+      if (createError.response.data.detail !== undefined) {
+        Alert.alert('Error', createError.response.data.detail, [
+          { text: 'OK' },
+        ]);
+      }
     }
 
     if (createSuccess && addPhotoSuccess) {
       //TODO: go to swipe
       Alert.alert('Success', 'profile created', [{ text: 'Okay' }]);
+    }
+
+    if (createSuccess && createData) {
+      Alert.alert(
+        `Your age is ${createData.age} ?`,
+        'Please confirm your age',
+        [{ text: 'Yes' }]
+      );
     }
   }, [createError, createSuccess, addPhotoError, addPhotoSuccess]);
 
@@ -143,17 +163,26 @@ const CreateUserScreen = (props) => {
 
   // SAVE USER DATA
   const createUserProfileHandler = () => {
-    if (formIsValid) {
-      dispatch(
-        createUserProfile(
-          inputValues.firstname,
-          inputValues.lastname,
-          inputValues.university,
-          inputValues.description
-        )
+    console.log({ ...inputValues });
+    if (!formIsValid) {
+      Alert.alert(
+        `Required fields in blank;)`,
+        'Please fill the required fields',
+        [{ text: 'Yes' }]
       );
-      dispatch(addPhoto(image));
+      // dispatch(addPhoto(image));
     }
+    dispatch(
+      createUserProfile(
+        inputValues.firstname,
+        inputValues.lastname,
+        inputValues.birthdate,
+        inputValues.gender,
+        inputValues.show_me,
+        inputValues.university,
+        inputValues.description
+      )
+    );
   };
 
   const imageTakenHandler = (imagePath) => {
@@ -161,6 +190,19 @@ const CreateUserScreen = (props) => {
     formState.inputValues.img = imagePath;
     formState.inputValidities.img = true;
     setImage(imagePath);
+  };
+
+  const checkIsErrorFromServer = (field, text) => {
+    if (
+      createError &&
+      createError.response !== undefined &&
+      createError.response.data !== undefined &&
+      createError.response.data[field] !== undefined
+    ) {
+      // console.log('ERROR BIRTHDATE', createError.response.data['birthdate']);
+      return createError.response.data[field][0];
+    }
+    return;
   };
 
   return (
@@ -183,17 +225,21 @@ const CreateUserScreen = (props) => {
           <Input
             labelStyle={styles.label}
             inputStyle={styles.inputStyle}
-            inputType="textInput"
             id="firstname"
             label="Name *"
+            inputType="textInput"
             keyboardType="default"
             required
             autoCapitalize="sentences"
-            errorText={error ? 'Please enter a valid name' : null}
             onInputChange={inputChangeHandler}
             initialValue=""
             autoCorrect={false}
             returnKeyType="next"
+            serverError={error}
+            errorText={checkIsErrorFromServer(
+              'firstname',
+              'Please enter a name'
+            )}
           />
         </View>
         <View style={styles.inputContainer}>
@@ -206,11 +252,15 @@ const CreateUserScreen = (props) => {
             keyboardType="default"
             required
             autoCapitalize="sentences"
-            errorText="Please enter you real lastname"
             onInputChange={inputChangeHandler}
             initialValue=""
             autoCorrect={false}
             returnKeyType="next"
+            serverError={error}
+            errorText={checkIsErrorFromServer(
+              'lastname',
+              'Please enter your latname'
+            )}
           />
         </View>
         <View style={styles.inputContainer}>
@@ -235,14 +285,18 @@ const CreateUserScreen = (props) => {
             labelStyle={styles.label}
             inputStyle={styles.inputStyle}
             inputType="inputMask"
-            id="birthday"
-            label="Birthday *"
+            id="birthdate"
+            label="Birthdate *"
             required
             autoComplete="birthdate-day"
             dataDetectorTypes="calendarEvent"
-            errorText="Please enter your birthday"
             onInputChange={inputChangeHandler}
-            initialValue="DD-MM-YYYY"
+            placeholder="YYYY-MM-DD"
+            serverError={error}
+            errorText={checkIsErrorFromServer(
+              'birthdate',
+              'Please enter a birthdate'
+            )}
           />
         </View>
         <View style={styles.inputContainer}>
@@ -257,8 +311,12 @@ const CreateUserScreen = (props) => {
             initialValue=""
             id="gender"
             placeholder={{ label: 'Select an item', value: 'Select an item' }}
-            errorText="Please select your gender"
             onInputChange={inputChangeHandler}
+            serverError={error}
+            errorText={checkIsErrorFromServer(
+              'gender',
+              'Please enter your gender'
+            )}
           />
         </View>
         <View style={styles.inputContainer}>
@@ -270,11 +328,14 @@ const CreateUserScreen = (props) => {
             items={show}
             itemKey={show.value}
             label="Show me *"
-            initialValue=""
-            id="showme"
+            id="show_me"
             placeholder={{ label: 'Select an item', value: 'Select an item' }}
-            errorText="Please select an option"
             onInputChange={inputChangeHandler}
+            serverError={error}
+            errorText={checkIsErrorFromServer(
+              'show_me',
+              'Please enter your show_me'
+            )}
           />
         </View>
         <View style={styles.inputContainer}>
@@ -289,14 +350,13 @@ const CreateUserScreen = (props) => {
             numberOfLines={5}
             maxLength={500}
             inputType="textInput"
-            id="about"
+            id="description"
             label="About (optional)"
             autoCapitalize="none"
             required={false}
             initialIsValid={true}
             onInputChange={inputChangeHandler}
             autoCorrect={false}
-            initialValue=""
           />
         </View>
         {createLoading ? (
