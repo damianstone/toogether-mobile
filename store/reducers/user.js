@@ -2,7 +2,7 @@ import axios from 'axios';
 import * as c from '../../constants/user';
 
 // REGISTER REDUCER
-export const userRegisterReducer = (state = { data: {} }, action) => {
+export const userRegisterReducer = (state = {}, action) => {
   switch (action.type) {
     case c.USER_REGISTER_REQUEST:
       return {
@@ -28,7 +28,7 @@ export const userRegisterReducer = (state = { data: {} }, action) => {
 
 // REGISTER REDUCER
 // TODO: que pasa si el usuario quiere hacer login de nuevo pero ya creo su cuenta, donde quedan guardados los datos?
-export const userLoginReducer = (state = { data: {} }, action) => {
+export const userLoginReducer = (state = {}, action) => {
   switch (action.type) {
     case c.USER_LOGIN_REQUEST:
       return {
@@ -46,13 +46,13 @@ export const userLoginReducer = (state = { data: {} }, action) => {
         error: action.payload,
       };
     case c.USER_LOGIN_RESET:
-      return {  };
+      return {};
     default:
       return state;
   }
 };
 
-export const userCreateProfileReducer = (state = { data: {} }, action) => {
+export const userCreateProfileReducer = (state = {}, action) => {
   switch (action.type) {
     case c.USER_CREATE_REQUEST:
       return {
@@ -65,6 +65,28 @@ export const userCreateProfileReducer = (state = { data: {} }, action) => {
         success: true,
       };
     case c.USER_CREATE_FAIL:
+      return {
+        loading: false,
+        error: action.payload,
+      };
+    default:
+      return state;
+  }
+};
+
+export const userAddPhotoReducer = (state = {}, action) => {
+  switch (action.type) {
+    case c.USER_ADD_PHOTO_REQUEST:
+      return {
+        loading: true,
+        success: false,
+      };
+    case c.USER_ADD_PHOTO_SUCCESS:
+      return {
+        data: { ...action.payload },
+        success: true,
+      };
+    case c.USER_ADD_PHOTO_FAIL:
       return {
         loading: false,
         error: action.payload,

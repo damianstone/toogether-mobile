@@ -1,7 +1,7 @@
 import axios from 'axios';
 import * as c from '../../constants/user';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-// REGISTER -> pasar el mail y token desde google auth
 export const userRegister = (email, password, repeated_password) => {
   return async (dispatch) => {
     try {
@@ -22,6 +22,15 @@ export const userRegister = (email, password, repeated_password) => {
         },
       });
 
+      await AsyncStorage.setItem(
+        '@userData',
+        JSON.stringify({
+          id: data.id,
+          token: data.token,
+          has_account: data.has_account,
+        })
+      );
+
       dispatch({
         type: c.USER_REGISTER_SUCCESS,
         payload: data,
@@ -36,8 +45,6 @@ export const userRegister = (email, password, repeated_password) => {
   };
 };
 
-// LOGIN
-// TODO: que pasa si el usuario quiere hacer login de nuevo pero ya creo su cuenta, donde quedan guardados los datos?
 export const userLogin = (email, password) => {
   return async (dispatch) => {
     try {
@@ -58,7 +65,14 @@ export const userLogin = (email, password) => {
         },
       });
 
-      // TODO: if data.has_account is true entonces guardar de nuevo los datos en el localstorage
+      await AsyncStorage.setItem(
+        '@userData',
+        JSON.stringify({
+          id: data.id,
+          token: data.token,
+          has_account: data.has_account,
+        })
+      );
 
       dispatch({
         type: c.USER_LOGIN_SUCCESS,
@@ -73,12 +87,9 @@ export const userLogin = (email, password) => {
   };
 };
 
-// LOGOUT -> pasar el mail y token desde google auth
 export const logout = (name, email) => {};
 
-// CREATE USER PROFILE
 export const createUserProfile = (
-  token,
   firstname,
   lastname,
   university,
@@ -88,10 +99,12 @@ export const createUserProfile = (
     try {
       dispatch({ type: c.USER_CREATE_REQUEST });
 
+      const userData = JSON.parse(await AsyncStorage.getItem('@userData'));
+
       const config = {
         'Content-Type': 'application/json',
         Accept: 'application/json',
-        Authorization: 'Bearer ' + token,
+        Authorization: 'Bearer ' + userData.token,
       };
 
       const { data } = await axios({
@@ -101,12 +114,10 @@ export const createUserProfile = (
         data: {
           firstname: firstname,
           lastname: lastname,
-          university: null,
-          description: null,
+          university: university ? university : null,
+          description: description ? description : null,
         },
       });
-
-      // TODO: if data.has_account is true entonces guardar de nuevo los datos en el localstorage
 
       dispatch({
         type: c.USER_CREATE_SUCCESS,
@@ -115,6 +126,41 @@ export const createUserProfile = (
     } catch (error) {
       dispatch({
         type: c.USER_CREATE_FAIL,
+        payload: error,
+      });
+    }
+  };
+};
+
+export const addPhoto = (image) => {
+  return async (dispatch) => {
+    try {
+      dispatch({ type: c.USER_ADD_PHOTO_REQUEST });
+
+      const userData = JSON.parse(await AsyncStorage.getItem('@userData'));
+
+      const config = {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+        Authorization: 'Bearer ' + userData.token,
+      };
+
+      const { data } = await axios({
+        method: 'POST',
+        url: 'http://127.0.0.1:8000/api/users/profiles/upload/',
+        headers: config,
+        data: {
+          image: image,
+        },
+      });
+
+      dispatch({
+        type: c.USER_ADD_PHOTO_SUCCESS,
+        payload: data,
+      });
+    } catch (error) {
+      dispatch({
+        type: c.USER_ADD_PHOTO_FAIL,
         payload: error,
       });
     }

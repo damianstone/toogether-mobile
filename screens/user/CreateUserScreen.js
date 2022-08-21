@@ -1,20 +1,15 @@
 import React, { useState, useReducer, useCallback, useEffect } from 'react';
 import {
-  StyleSheet,
   Text,
   View,
-  Button,
   KeyboardAvoidingView,
-  Image,
   ScrollView,
-  ImageBackground,
   ActivityIndicator,
   Alert,
-  TouchableOpacity,
 } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { useDispatch, useSelector } from 'react-redux';
-import { createUserProfile } from '../../store/actions/user';
+import { createUserProfile, addPhoto } from '../../store/actions/user';
 
 import Colors from '../../constants/Colors';
 import styles from './styles';
@@ -81,9 +76,8 @@ const gender = [
 ];
 
 const CreateUserScreen = (props) => {
-  const [isLoading, setIsLoading] = useState(false);
   const [image, setImage] = useState('');
-  const [error, setError] = useState();
+  const [error, setError] = useState(false);
   const dispatch = useDispatch();
 
   const [formState, dispatchFormState] = useReducer(formReducer, {
@@ -106,10 +100,6 @@ const CreateUserScreen = (props) => {
 
   const { formIsValid, inputValues } = formState;
 
-  // LOGIN REDUCER
-  const userLoginReducer = useSelector((state) => state.userLogin);
-  const { data: loginData } = userLoginReducer;
-
   const userCreateProfile = useSelector((state) => state.userCreateProfile);
   const {
     error: createError,
@@ -118,19 +108,25 @@ const CreateUserScreen = (props) => {
     loading: createLoading,
   } = userCreateProfile;
 
-  console.log('CREATE SUCCESS ---> ', createSuccess);
+  const userAddPhoto = useSelector((state) => state.userAddPhoto);
+  const {
+    error: addPhotoError,
+    data: addPhotoData,
+    success: addPhotoSuccess,
+    loading: addPhotoLoading,
+  } = userAddPhoto;
 
   useEffect(() => {
-    if (!loginData || Object.keys(loginData).length === 0) {
-      props.navigation.navigate('AuthStart');
+    if (createError || addPhotoError) {
+      setError(true);
+      Alert.alert('An error occurred!', 'check your data', [{ text: 'Okay' }]);
     }
-    if (error) {
-      Alert.alert('An error occurred!', error, [{ text: 'Okay' }]);
+
+    if (createSuccess && addPhotoSuccess) {
+      //TODO: go to swipe
+      Alert.alert('Success', 'profile created', [{ text: 'Okay' }]);
     }
-    if (createSuccess) {
-      Alert.alert('Success', error, [{ text: 'Okay' }]);
-    }
-  }, [error, createSuccess]);
+  }, [createError, createSuccess, addPhotoError, addPhotoSuccess]);
 
   // ON CHANGE INPUTS
   const inputChangeHandler = useCallback(
@@ -147,23 +143,16 @@ const CreateUserScreen = (props) => {
 
   // SAVE USER DATA
   const createUserProfileHandler = () => {
-    // TODO: Calculate the age using the birthday
-    if (!formIsValid) {
-      console.log({...inputValues})
-      Alert.alert('Create your profile to continue ;)', error, [
-        { text: 'Okay' },
-      ]);
-    } else {
+    if (formIsValid) {
       dispatch(
         createUserProfile(
-          loginData.token,
           inputValues.firstname,
           inputValues.lastname,
           inputValues.university,
-          inputValues.description,
+          inputValues.description
         )
       );
-      console.log('CREATED');
+      dispatch(addPhoto(image));
     }
   };
 
@@ -173,15 +162,6 @@ const CreateUserScreen = (props) => {
     formState.inputValidities.img = true;
     setImage(imagePath);
   };
-
-  // DISABLE BUTTON IF THE USER DONT FILL ALL THE FIELDS
-  let styleButton;
-  if (!formState.formIsValid) {
-    styleButton = styles.buttonContainerNoValid;
-  }
-  if (formState.formIsValid) {
-    styleButton = styles.buttonContainer;
-  }
 
   return (
     <KeyboardAvoidingView
@@ -201,19 +181,19 @@ const CreateUserScreen = (props) => {
         </View>
         <View style={styles.inputContainer}>
           <Input
-            labelStyle={styles.label} // style for the label
+            labelStyle={styles.label}
             inputStyle={styles.inputStyle}
             inputType="textInput"
             id="firstname"
-            label="Name"
-            keyboardType="default" // normal keyboard
+            label="Name *"
+            keyboardType="default"
             required
             autoCapitalize="sentences"
-            errorText="Please enter your real name"
+            errorText={error ? 'Please enter a valid name' : null}
             onInputChange={inputChangeHandler}
             initialValue=""
-            autoCorrect={false} // disable auto correction
-            returnKeyType="next" // next button on keyboard instead of done
+            autoCorrect={false}
+            returnKeyType="next"
           />
         </View>
         <View style={styles.inputContainer}>
@@ -222,15 +202,15 @@ const CreateUserScreen = (props) => {
             inputStyle={styles.inputStyle}
             inputType="textInput"
             id="lastname"
-            label="Lastname"
+            label="Lastname *"
             keyboardType="default"
             required
             autoCapitalize="sentences"
             errorText="Please enter you real lastname"
             onInputChange={inputChangeHandler}
             initialValue=""
-            autoCorrect={false} // disable auto correction
-            returnKeyType="next" // next button on keyboard instead of done
+            autoCorrect={false}
+            returnKeyType="next"
           />
         </View>
         <View style={styles.inputContainer}>
@@ -239,15 +219,15 @@ const CreateUserScreen = (props) => {
             inputStyle={styles.inputStyle}
             inputType="textInput"
             id="university"
-            label="University (optional)"
+            label="University"
             keyboardType="default"
             autoCapitalize="sentences"
             required={false}
             initialIsValid={true}
             onInputChange={inputChangeHandler}
             initialValue=""
-            autoCorrect={false} // disable auto correction
-            returnKeyType="next" // next button on keyboard instead of done
+            autoCorrect={false}
+            returnKeyType="next"
           />
         </View>
         <View style={styles.inputContainer}>
@@ -256,7 +236,7 @@ const CreateUserScreen = (props) => {
             inputStyle={styles.inputStyle}
             inputType="inputMask"
             id="birthday"
-            label="Birthday"
+            label="Birthday *"
             required
             autoComplete="birthdate-day"
             dataDetectorTypes="calendarEvent"
@@ -273,7 +253,7 @@ const CreateUserScreen = (props) => {
             inputStyle={styles.inputStyle}
             items={gender}
             itemKey={show.value}
-            label="Gender"
+            label="Gender *"
             initialValue=""
             id="gender"
             placeholder={{ label: 'Select an item', value: 'Select an item' }}
@@ -289,7 +269,7 @@ const CreateUserScreen = (props) => {
             inputStyle={styles.inputStyle}
             items={show}
             itemKey={show.value}
-            label="Show me"
+            label="Show me *"
             initialValue=""
             id="showme"
             placeholder={{ label: 'Select an item', value: 'Select an item' }}
@@ -315,11 +295,11 @@ const CreateUserScreen = (props) => {
             required={false}
             initialIsValid={true}
             onInputChange={inputChangeHandler}
-            autoCorrect={false} // disable auto correction
+            autoCorrect={false}
             initialValue=""
           />
         </View>
-        {createLoading  ? (
+        {createLoading ? (
           <View style={styles.centered}>
             <ActivityIndicator size="large" color={Colors.icons} />
           </View>

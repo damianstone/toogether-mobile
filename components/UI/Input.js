@@ -2,6 +2,7 @@ import React, { useReducer, useEffect } from 'react';
 import { StyleSheet, Text, View, TextInput } from 'react-native';
 import { TextInputMask } from 'react-native-masked-text';
 import RNPickerSelect from 'react-native-picker-select';
+import { useSelector } from 'react-redux';
 
 import Colors from '../../constants/Colors';
 
@@ -29,6 +30,9 @@ const inputReducer = (state, action) => {
 };
 
 const Input = (props) => {
+  const userCreateProfile = useSelector((state) => state.userCreateProfile);
+  const { error: createError } = userCreateProfile;
+
   // internal state of input component that is the same as editProduct state passed in as props
   const [inputState, dispatch] = useReducer(inputReducer, {
     value: props.initialValue ? props.initialValue : '',

@@ -37,8 +37,8 @@ const AuthNavigator = createStackNavigator(
   {
     AuthStart: AuthStartScreen,
     Auth: AuthScreen,
-    Success: AuthSucess,
     Create: CreateUserScreen,
+    Success: AuthSucess,
   },
   {
     defaultNavigationOptions: {
@@ -197,8 +197,8 @@ const AppNavigator = createStackNavigator(
 
 const MainNavigator = createSwitchNavigator(
   {
-    Auth: AuthNavigator,
     Startup: StartupScreen,
+    Auth: AuthNavigator,
     Swipe: AppNavigator,
   },
   {

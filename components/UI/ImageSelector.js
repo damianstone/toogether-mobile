@@ -34,8 +34,6 @@ const ImageSelector = (props) => {
       allowsEditing: true,
       quality: 0.5,
     });
-    // console.log("img", image);
-
     setImageUri(image.uri);
     props.onImageTaken(image.uri);
   };

@@ -93,10 +93,16 @@ const AuthStartScreen = (props) => {
   // REGISTER
   useEffect(() => {
     if (registerError) {
-      //TODO: whats up with network error ?
-      Alert.alert('An Error Occurred!', registerError.response.data.detail, [
+      if (registerError.response.data.detail) {
+        Alert.alert('An Error Occurred!', registerError.response.data.detail, [
+          { text: 'Okay' },
+        ]);
+      }
+
+      Alert.alert('An Error Occurred!', 'Check your connection', [
         { text: 'Okay' },
       ]);
+      dispatch({ type: c.USER_REGISTER_RESET });
     }
     if (register && registerSuccess) {
       props.navigation.navigate('Success', { register: register });
@@ -107,7 +113,13 @@ const AuthStartScreen = (props) => {
   // LOGIN
   useEffect(() => {
     if (loginError) {
-      Alert.alert('An Error Occurred!', loginError.response.data.detail, [
+      if (registerError.response.data.detail) {
+        Alert.alert('An Error Occurred!', loginError.response.data.detail, [
+          { text: 'Okay' },
+        ]);
+      }
+
+      Alert.alert('An Error Occurred!', 'Check your connection', [
         { text: 'Okay' },
       ]);
       dispatch({ type: c.USER_LOGIN_RESET });
@@ -115,10 +127,8 @@ const AuthStartScreen = (props) => {
 
     if (loginSuccess && loginData.has_account) {
       props.navigation.navigate('Swipe');
-      // TODO: no reset and save the data again in the local storage
     }
 
-    //TODO: fix dont go to the screen is there is no loginData
     if (loginSuccess && !loginData.has_account) {
       props.navigation.navigate('Success', { register: register });
     }
