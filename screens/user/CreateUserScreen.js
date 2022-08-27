@@ -10,6 +10,7 @@ import {
 import { StatusBar } from 'expo-status-bar';
 import { useDispatch, useSelector } from 'react-redux';
 import { createUserProfile, addPhoto } from '../../store/actions/user';
+import { checkServerError, getFieldErrorFromServer } from '../../utils/errors';
 
 import Colors from '../../constants/Colors';
 import styles from './styles';
@@ -126,11 +127,9 @@ const CreateUserScreen = (props) => {
     if (createError || addPhotoError) {
       if (createError.response.data !== undefined) {
         setError(true);
-      }
-      if (createError.response.data.detail !== undefined) {
-        Alert.alert('Error', createError.response.data.detail, [
-          { text: 'OK' },
-        ]);
+      } else {
+        console.log({ ...createError });
+        checkServerError(createError);
       }
     }
 
@@ -140,10 +139,23 @@ const CreateUserScreen = (props) => {
     }
 
     if (createSuccess && createData) {
+      console.log({ ...createData });
       Alert.alert(
         `Your age is ${createData.age} ?`,
         'Please confirm your age',
-        [{ text: 'Yes' }]
+        [
+          {
+            text: "No, I'm not",
+            onPress: () => {},
+            style: 'cancel',
+          },
+          {
+            text: 'OK',
+            onPress: () => {
+              props.navigation.navigate('Swipe');
+            },
+          },
+        ]
       );
     }
   }, [createError, createSuccess, addPhotoError, addPhotoSuccess]);
@@ -163,14 +175,13 @@ const CreateUserScreen = (props) => {
 
   // SAVE USER DATA
   const createUserProfileHandler = () => {
-    console.log({ ...inputValues });
+    // console.log({ ...inputValues });
     if (!formIsValid) {
-      Alert.alert(
-        `Required fields in blank;)`,
-        'Please fill the required fields',
-        [{ text: 'Yes' }]
-      );
-      // dispatch(addPhoto(image));
+      // Alert.alert(
+      //   `Required fields in blank;)`,
+      //   'Please fill the required fields',
+      //   [{ text: 'Okay' }]
+      // );
     }
     dispatch(
       createUserProfile(
@@ -180,29 +191,16 @@ const CreateUserScreen = (props) => {
         inputValues.gender,
         inputValues.show_me,
         inputValues.university,
-        inputValues.description
+        inputValues.description,
+        inputValues.image,
       )
     );
   };
 
   const imageTakenHandler = (imagePath) => {
-    // ADD REMOVE PHOTO HANDLER!
     formState.inputValues.img = imagePath;
     formState.inputValidities.img = true;
     setImage(imagePath);
-  };
-
-  const checkIsErrorFromServer = (field, text) => {
-    if (
-      createError &&
-      createError.response !== undefined &&
-      createError.response.data !== undefined &&
-      createError.response.data[field] !== undefined
-    ) {
-      // console.log('ERROR BIRTHDATE', createError.response.data['birthdate']);
-      return createError.response.data[field][0];
-    }
-    return;
   };
 
   return (
@@ -236,7 +234,8 @@ const CreateUserScreen = (props) => {
             autoCorrect={false}
             returnKeyType="next"
             serverError={error}
-            errorText={checkIsErrorFromServer(
+            errorText={getFieldErrorFromServer(
+              createError,
               'firstname',
               'Please enter a name'
             )}
@@ -257,7 +256,8 @@ const CreateUserScreen = (props) => {
             autoCorrect={false}
             returnKeyType="next"
             serverError={error}
-            errorText={checkIsErrorFromServer(
+            errorText={getFieldErrorFromServer(
+              createError,
               'lastname',
               'Please enter your latname'
             )}
@@ -293,7 +293,8 @@ const CreateUserScreen = (props) => {
             onInputChange={inputChangeHandler}
             placeholder="YYYY-MM-DD"
             serverError={error}
-            errorText={checkIsErrorFromServer(
+            errorText={getFieldErrorFromServer(
+              createError,
               'birthdate',
               'Please enter a birthdate'
             )}
@@ -313,7 +314,8 @@ const CreateUserScreen = (props) => {
             placeholder={{ label: 'Select an item', value: 'Select an item' }}
             onInputChange={inputChangeHandler}
             serverError={error}
-            errorText={checkIsErrorFromServer(
+            errorText={getFieldErrorFromServer(
+              createError,
               'gender',
               'Please enter your gender'
             )}
@@ -332,7 +334,8 @@ const CreateUserScreen = (props) => {
             placeholder={{ label: 'Select an item', value: 'Select an item' }}
             onInputChange={inputChangeHandler}
             serverError={error}
-            errorText={checkIsErrorFromServer(
+            errorText={getFieldErrorFromServer(
+              createError,
               'show_me',
               'Please enter your show_me'
             )}

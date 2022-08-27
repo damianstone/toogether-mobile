@@ -92,11 +92,12 @@ export const logout = (name, email) => {};
 export const createUserProfile = (
   firstname,
   lastname,
-  university,
   birthdate,
   gender,
   show_me,
-  description
+  university,
+  description,
+  image
 ) => {
   return async (dispatch) => {
     try {
@@ -122,6 +123,7 @@ export const createUserProfile = (
           show_me: show_me,
           university: university ? university : null,
           description: description ? description : null,
+          image: image
         },
       });
 
