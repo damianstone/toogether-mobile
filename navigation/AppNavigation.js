@@ -3,7 +3,6 @@ import { useSelector } from 'react-redux';
 import { NavigationActions } from 'react-navigation';
 
 import Navigation from './Navigation';
-import mainContext from '../context/mainContext';
 import firebase from "firebase";
 import Firebase from '../Firebase/config';
 

@@ -6,19 +6,21 @@ import { createDrawerNavigator } from 'react-navigation-drawer';
 import { createMaterialBottomTabNavigator } from 'react-navigation-material-bottom-tabs';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
 import { AntDesign } from '@expo/vector-icons';
+import Colors from '../constants/Colors';
 
-import AuthScreen from '../screens/auth/AuthScreen';
-import AuthSucess from '../screens/auth/AuthSuccess';
-import SwipeScreen from '../screens/swipe/SwipeScreen';
+import AuthStartScreen from '../screens/Auth/AuthStartScreen';
+import AuthScreen from '../screens/Auth/AuthScreen';
+import AuthSucess from '../screens/Auth/AuthSuccess';
+import SwipeScreen from '../screens/Swipe/SwipeScreen';
 import ProfileModalScreen from '../screens/profile/ProfileModalScreen';
 import ChatScreen from '../screens/ChatScreen';
 import LikesScreen from '../screens/LikesScreen';
 import GroupScreen from '../screens/GroupScreen';
-import CreateUserScreen from '../screens/user/CreateUserScreen';
-import Colors from '../constants/Colors';
-import MyProfileScreen from '../screens/myProfile/MyProfileScreen';
-import SettingScreen from '../screens/myProfile/SettingScreen';
-import StartupScreen from '../screens/auth/StartupScreen';
+import CreateProfileScreen from '../screens/CreateProfile/CreateProfileScreen';
+import AddProfilePhotoScreen from '../screens/CreateProfile/AddProfilePhotoScreen'
+import MyProfileScreen from '../screens/MyProfile/MyProfileScreen';
+import SettingScreen from '../screens/MyProfile/SettingScreen';
+import StartupScreen from '../screens/StartupScreen';
 
 const defaultNavOptions = {
   headerMode: 'none',
@@ -34,9 +36,11 @@ const defaultNavOptions = {
 
 const AuthNavigator = createStackNavigator(
   {
+    AuthStart: AuthStartScreen,
     Auth: AuthScreen,
+    Create: CreateProfileScreen,
+    AddPhoto: AddProfilePhotoScreen,
     Success: AuthSucess,
-    Create: CreateUserScreen,
   },
   {
     defaultNavigationOptions: {
@@ -195,8 +199,8 @@ const AppNavigator = createStackNavigator(
 
 const MainNavigator = createSwitchNavigator(
   {
-    Auth: AuthNavigator,
     Startup: StartupScreen,
+    Auth: AuthNavigator,
     Swipe: AppNavigator,
   },
   {

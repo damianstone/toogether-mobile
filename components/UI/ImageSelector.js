@@ -6,7 +6,7 @@ import Colors from '../../constants/Colors';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
 const ImageSelector = (props) => {
-  const [imageUri, setImageUri] = useState('');
+  const [image, setImage] = useState();
 
   const verifyPermissions = async () => {
     const result = await ImagePicker.getCameraPermissionsAsync();
@@ -31,28 +31,27 @@ const ImageSelector = (props) => {
       return;
     }
     const image = await ImagePicker.launchImageLibraryAsync({
-      allowsEditing: true,
-      quality: 0.5,
+      base64: true,
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      quality: 1,
     });
-    // console.log("img", image);
-
-    setImageUri(image.uri);
-    props.onImageTaken(image.uri);
+    setImage(image);
+    props.onImageTaken(image);
   };
 
   const deleteImageHandler = () => {
-    setImageUri(null);
+    setImage(null);
   };
-
-  let colorBorder;
-  if (imageUri) colorBorder = Colors.green;
-  else colorBorder = Colors.orange;
 
   return (
     <View style={styles.imagePicker}>
       <View style={styles.imagePreview}>
-        {imageUri ? (
-          <Image style={styles.image} source={{ uri: imageUri }} />
+        {image ? (
+          <Image
+            style={styles.image}
+            source={{ uri: image.uri }}
+            resizeMode="contain"
+          />
         ) : (
           <Fragment>
             <Text style={{ marginBottom: 10, color: Colors.white }}>
@@ -68,7 +67,7 @@ const ImageSelector = (props) => {
           </Fragment>
         )}
       </View>
-      {imageUri ? (
+      {image ? (
         <View
           style={{
             flexDirection: 'row',
@@ -89,12 +88,12 @@ const ImageSelector = (props) => {
 
 const styles = StyleSheet.create({
   imagePicker: {
+    marginTop: 20,
+    marginVertical: 10,
     alignItems: 'center',
-    marginVertical: 5,
   },
   imagePreview: {
     width: '100%',
-    height: 200,
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 10,
@@ -102,12 +101,16 @@ const styles = StyleSheet.create({
   },
   image: {
     width: '100%',
-    height: '100%',
+    height: undefined,
+    aspectRatio: 1,
+    borderRadius: 10,
   },
   redColor: {
+    marginVertical: 10,
     color: Colors.orange,
   },
   greenColor: {
+    marginVertical: 10,
     color: Colors.green,
   },
 });

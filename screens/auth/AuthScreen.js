@@ -1,189 +1,237 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, {
+  useState,
+  useContext,
+  useEffect,
+  useReducer,
+  useCallback,
+} from 'react';
 import {
-  Image,
   View,
   Button,
   Text,
   ScrollView,
   Alert,
   ActivityIndicator,
+  KeyboardAvoidingView,
 } from 'react-native';
-import { AntDesign } from '@expo/vector-icons';
 import { StatusBar } from 'expo-status-bar';
 import { useDispatch, useSelector } from 'react-redux';
-import axios from 'axios';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { checkServerError } from '../../utils/errors';
 
 import styles from './styles';
 import Colors from '../../constants/Colors';
-import * as actions from '../../store/actions/auth';
+import AuthInput from '../../components/UI/AuthInput';
+import AuthButton from '../../components/UI/AuthButton';
+import * as c from '../../constants/user';
+import { userRegister, userLogin } from '../../store/actions/user';
 
-import Constants from 'expo-constants'; // to read app.json extra
-import * as Google from 'expo-google-app-auth'; // google auth libraries
-import firebase from 'firebase'; // basic firebase
-import Firebase from '../../Firebase/config'; // This is the initialized Firebase,
+const FORM_UPDATE = 'FORM_UPDATE';
 
-/* 
-google login
-
-depending of the device u need a different approach
-
-Check if the user has already logged in before -> show create user screen 
-
-*/
-
-const AuthScreen = (props) => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState();
-  const [isSignup, setIsSignup] = useState(false); // to switch between signup and signin
-  const [authenticated, setAuthenticated] = useState(false);
-
-  // from redux check is authenticated
-  const isAuthenticated = useSelector((state) => state.auth.authenticated);
-  console.log('AUTH??? ------>', isAuthenticated);
-
-  useEffect(() => {
-    if (error) {
-      // if there is an error when user can login or signup
-      Alert.alert('An Error Occurred!', error, [{ text: 'Okay' }]);
-      setError();
+const formReducer = (state, action) => {
+  if (action.type === FORM_UPDATE) {
+    const updatedValued = {
+      ...state.inputValues, // old input value
+      [action.input]: action.value,
+    };
+    const updatedValidities = {
+      ...state.inputValidities, // old input validity
+      [action.input]: action.isValid,
+    };
+    let updatedFormIsValid = true;
+    for (const key in updatedValidities) {
+      // if there are all true so the form is valid
+      updatedFormIsValid = updatedValidities[key] && updatedFormIsValid;
     }
-  }, [error]);
-
-  const authHandler = async () => {
-    const response = await Google.logInAsync({
-      //return an object with result token and user
-      iosClientId: Constants.manifest.extra.IOS_KEY, //From app.json
-      androidClientId: Constants.manifest.extra.ANDROIUD_KEY, //From app.json
-    });
-
-    // if the user couldnt login
-    if (response.type != 'success') {
-      setError('An error has occurred, check your connection and try again');
-    }
-
-    const credential = firebase.auth.GoogleAuthProvider.credential(
-      //Set the tokens to Firebase
-      response.idToken,
-      response.accessToken
-    );
-
-    const fireRes = await Firebase.auth().signInWithCredential(credential); // Login to Firebase
-
-    const isNewUser = fireRes.additionalUserInfo.isNewUser;
-
-    if (!isNewUser && isAuthenticated) {
-      props.navigation.navigate('Swipe');
-      return;
-    } else {
-      console.log('TO SUCCESS SCREEN');
-      props.navigation.navigate('Success');
-    }
-  };
-
-  const authentication = async () => {
-    const response = await Google.logInAsync({
-      //return an object with result token and user
-      iosClientId: Constants.manifest.extra.IOS_KEY, //From app.json
-      androidClientId: Constants.manifest.extra.ANDROIUD_KEY, //From app.json
-    });
-
-    // if the user couldnt login
-    if (response.type != 'success') {
-      setError('An error has occurred, check your connection and try again');
-    }
-
-    const credential = firebase.auth.GoogleAuthProvider.credential(
-      //Set the tokens to Firebase
-      response.idToken,
-      response.accessToken
-    );
-
-    const fireRes = await Firebase.auth().signInWithCredential(credential); // Login to Firebase
-
-    const token = fireRes.user.getIdToken();
-    const userEmail = fireRes.user.email;
-
-    if(fireRes.user) {
-      console.log(token);
-      fetch('http://127.0.0.1:8000/api/profiles/create/', {
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-          Authorization: 'Bearer ' + token,
-        },
-        method: 'POST',
-        body: JSON.stringify({ email: userEmail, token: token }),
-      })
-        .then((response) => response.json())
-        .then((jsonResponse) => console.log(jsonResponse));
-    }
-
-  };
-
-  if (isLoading === true) {
-    <View style={styles.screen}>
-      <ActivityIndicator size="large" color={Colors.orange} />
-    </View>;
+    return {
+      formIsValid: updatedFormIsValid,
+      inputValidities: updatedValidities,
+      inputValues: updatedValued,
+    };
   }
+  return state;
+};
+
+const AuthStartScreen = (props) => {
+  const register = props.navigation.getParam('register');
+  const dispatch = useDispatch();
+
+  const [formState, dispatchFormState] = useReducer(formReducer, {
+    inputValues: {
+      email: '',
+      password: '',
+      repeated_password: '',
+    },
+    inputValidities: {
+      email: false,
+      password: true,
+      repeated_password: true,
+    },
+    formIsValid: false,
+  });
+
+  const { formIsValid, inputValues } = formState;
+
+  // REGISTER REDUCER
+  const userRegisterReducer = useSelector((state) => state.userRegister);
+  const {
+    loading: registerLoading,
+    data: registerData,
+    success: registerSuccess,
+    error: registerError,
+  } = userRegisterReducer;
+
+  // LOGIN REDUCER
+  const userLoginReducer = useSelector((state) => state.userLogin);
+  const {
+    loading: loginLoading,
+    data: loginData,
+    success: loginSuccess,
+    error: loginError,
+  } = userLoginReducer;
+
+  // REGISTER
+  useEffect(() => {
+    if (registerError) {
+      checkServerError(registerError);
+      dispatch({ type: c.USER_REGISTER_RESET });
+    }
+    if (register && registerSuccess) {
+      props.navigation.navigate('Success', { register: register });
+    }
+    dispatch({ type: c.USER_REGISTER_RESET });
+  }, [register, registerError, registerSuccess]);
+
+  // LOGIN
+  useEffect(() => {
+    if (loginError) {
+      checkServerError(registerError);
+      dispatch({ type: c.USER_LOGIN_RESET });
+    }
+
+    if (loginSuccess && loginData.has_account) {
+      props.navigation.navigate('Swipe');
+    }
+
+    if (loginSuccess && !loginData.has_account) {
+      props.navigation.navigate('Success', { register: register });
+    }
+  }, [loginError, loginSuccess]);
+
+  const inputChangeHandler = useCallback(
+    (inputIdentifier, inputValue, inputValidity) => {
+      dispatchFormState({
+        type: FORM_UPDATE,
+        value: inputValue,
+        isValid: inputValidity,
+        input: inputIdentifier,
+      });
+    },
+    [dispatchFormState]
+  );
+
+  const handleRegister = () => {
+    if (formIsValid) {
+      dispatch(
+        userRegister(
+          inputValues.email,
+          inputValues.password,
+          inputValues.repeated_password
+        )
+      );
+    }
+  };
+
+  const handleLogin = () => {
+    if (formIsValid) {
+      dispatch(userLogin(inputValues.email, inputValues.password));
+    }
+  };
 
   return (
     <View style={styles.screen}>
       <StatusBar style="light" />
-      <ScrollView>
-        <View>
-          <View style={styles.logoContainer}>
-            <Image
-              source={require('../../assets/images/logo-2.png')}
-              style={styles.logo}
-            />
-          </View>
-          <View style={styles.imageContainer}>
-            <Image
-              source={require('../../assets/images/login.png')}
-              style={styles.image}
-            />
-          </View>
+      <View style={styles.auth_text_view}>
+        <View style={styles.auth_text_container}>
+          <Text style={styles.auth_text_big}>
+            {register ? 'Lets create your account!' : 'Lets sign you in'}
+          </Text>
         </View>
-        <View style={styles.buttonsContainer}>
-          <View style={styles.buttonContainer2}>
-            <AntDesign name="google" size={22} color="black" />
+        <View style={styles.auth_text_container}>
+          <Text style={styles.auth_text_small}>
+            {register ? 'Welcome ;)' : 'Welcome back'}
+          </Text>
+        </View>
+      </View>
+      <KeyboardAvoidingView behavior={'position'}>
+        <ScrollView
+          style={styles.scrollview_style}
+          contentContainerStyle={styles.scrollview_content_container}
+          automaticallyAdjustKeyboardInsets={true}>
+          <View style={styles.auth_input_container}>
+            <AuthInput
+              id="email"
+              label="Email"
+              keyboardType="email-address"
+              required
+              autoComplete="email"
+              autoCapitalize="none"
+              errorText="Enter your email"
+              placeholder="hello@example@gmail.com"
+              placeholderTextColor="#D8D8D8"
+              autoCorrect={false}
+              onInputChange={inputChangeHandler}
+            />
+            <AuthInput
+              secureTextEntry={true}
+              textContentType={'password'}
+              id="password"
+              label="Password"
+              keyboardType="default"
+              required
+              autoCapitalize="none"
+              errorText="Enter your password"
+              autoCorrect={false}
+              onInputChange={inputChangeHandler}
+            />
+            {register && (
+              <AuthInput
+                secureTextEntry={true}
+                textContentType={'password'}
+                required
+                autoCapitalize="none"
+                id="repeated_password"
+                label="Repeat your password"
+                keyboardType="default"
+                errorText="Enter your password"
+                autoCorrect={false}
+                onInputChange={inputChangeHandler}
+              />
+            )}
+            {registerLoading || loginLoading ? (
+              <View style={styles.auth_loader_container}>
+                <ActivityIndicator size="large" />
+              </View>
+            ) : (
+              <AuthButton
+                text={register ? 'Create account' : 'Login'}
+                onPress={register ? handleRegister : handleLogin}
+              />
+            )}
             <Button
-              onPress={authentication}
-              color={Colors.black}
-              title={isSignup ? 'Sign Up with Google' : 'Login with Google'}
+              style={styles.auth_text_button}
+              color={'#4A4A4A'}
+              title={
+                register
+                  ? 'You already have an account?'
+                  : 'You dont have an account?'
+              }
+              onPress={() => {}}
             />
           </View>
-          <Button
-            title={`Switch to ${isSignup ? 'Login?' : 'Sign Up?'}`}
-            color={Colors.white}
-            onPress={() => {
-              setIsSignup((prevState) => !prevState);
-            }}
-          />
-        </View>
-      </ScrollView>
+        </ScrollView>
+      </KeyboardAvoidingView>
     </View>
   );
 };
 
-export default AuthScreen;
-
-/*         .then((res) => {
-          if (res.additionalUserInfo.isNewUser) {
-            props.navigation.navigate('Success');
-            console.log('GO TO SUCCESS SCREEN')
-            newUser = true
-          } else {
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-        }); */
-
-/*     try {
-      await dispatch(actions.googleLogIn());
-      props.navigation.navigate('Success');
-    } catch (err) {
-      setError(err.message);
-    } */
+export default AuthStartScreen;

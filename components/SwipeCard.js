@@ -10,7 +10,7 @@ import Swiper from 'react-native-swiper';
 
 import Info from './Info';
 import Colors from '../constants/Colors';
-import ProfileModal from '../screens/swipe/ProfileModal';
+import ProfileModal from '../screens/Swipe/ProfileModal';
 
 /*
 
@@ -109,7 +109,7 @@ const SwipeCard = (props) => {
                   key={profile.id}
                   style={styles.image}
                   imageStyle={styles.imageStyle}
-                  source={require('../assets/images/Profiles/profile-1.jpeg')} 
+                  source={require('../assets/images/Profiles/profile-1.jpeg')}
                   resizeMode="cover">
                   <Info
                     firstName={profile.name}
@@ -131,7 +131,7 @@ const SwipeCard = (props) => {
               key={profile.id}
               style={styles.image}
               imageStyle={styles.imageStyle}
-              source={{uri: `http://127.0.0.1:8000${profile.photo}`}} // just get the first photo of every profile
+              source={{ uri: `http://127.0.0.1:8000${profile.photo}` }} // just get the first photo of every profile
               resizeMode="cover">
               <Info
                 firstName={profile.name}

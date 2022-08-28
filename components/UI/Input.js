@@ -2,13 +2,13 @@ import React, { useReducer, useEffect } from 'react';
 import { StyleSheet, Text, View, TextInput } from 'react-native';
 import { TextInputMask } from 'react-native-masked-text';
 import RNPickerSelect from 'react-native-picker-select';
+import { useSelector } from 'react-redux';
 
 import Colors from '../../constants/Colors';
 
 const CHANGE = 'CHANGE';
 const BLUR = 'BLUR';
 
-// change the internal state of input that is the same as change the edit product input with props
 const inputReducer = (state, action) => {
   switch (action.type) {
     case CHANGE:
@@ -29,14 +29,15 @@ const inputReducer = (state, action) => {
 };
 
 const Input = (props) => {
-  // internal state of input component that is the same as editProduct state passed in as props
+  const userCreateProfile = useSelector((state) => state.userCreateProfile);
+  const { error: createError } = userCreateProfile;
+
   const [inputState, dispatch] = useReducer(inputReducer, {
     value: props.initialValue ? props.initialValue : '',
     isValid: props.initialIsValid,
-    touched: false, // to check if the input has been touched
+    touched: false,
   });
 
-  // there the state from editProduct is passed to the input component
   const { onInputChange, id } = props;
 
   useEffect(() => {
@@ -46,7 +47,6 @@ const Input = (props) => {
     }
   }, [inputState, onInputChange, id]);
 
-  // handle when the user change the values of inputs
   const textChangeHandler = (text) => {
     // some rules to use as a props
     const emailRegex =
@@ -105,11 +105,11 @@ const Input = (props) => {
     InputType = (
       <TextInputMask
         {...props}
-        initialValue="DD-MM-YYYY"
+        initialValue="YYYY-MM-DD"
         style={styles.input}
         type={'datetime'}
         options={{
-          format: 'DD-MM-YYYY',
+          format: 'YYYY-MM-DD',
         }}
         onChangeText={textChangeHandler}
         value={inputState.value}
@@ -154,7 +154,7 @@ const Input = (props) => {
       <View style={{ ...styles.inputContainer, ...props.inputStyle }}>
         {InputType}
       </View>
-      {!inputState.isValid && inputState.touched ? (
+      {props.serverError ? (
         <View style={styles.errorContainer}>
           <Text style={styles.errorText}>{props.errorText}</Text>
         </View>
@@ -173,8 +173,8 @@ const styles = StyleSheet.create({
     marginVertical: 8,
   },
   inputContainer: {
-    width: '90%',
-    height: 33,
+    width: '100%',
+    height: 45,
     paddingHorizontal: 10,
   },
   input: {
@@ -186,8 +186,10 @@ const styles = StyleSheet.create({
   },
   errorContainer: {
     marginVertical: 5,
+    width: '90%',
   },
   errorText: {
+    marginHorizontal: 5,
     color: Colors.orange,
     fontSize: 13,
   },
@@ -202,4 +204,4 @@ const pickerStyles = StyleSheet.create({
     fontSize: 16,
     color: Colors.white,
   },
-})
+});

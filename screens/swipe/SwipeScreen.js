@@ -17,7 +17,7 @@ import HeaderButtom from '../../components/UI/HeaderButton';
 import NoMoreCards from '../../components/NoMoreCards';
 import ActivityModal from '../../components/UI/ActivityModal';
 import NewMatch from '../../components/NewMatch';
-import { listSwipes } from '../../store/actions/swipeActions';
+import { listSwipes } from '../../store/actions/swipe';
 
 import axios from 'axios';
 
@@ -54,7 +54,7 @@ const SwipeScreen = (props) => {
     setLoading(true);
     const fetchProd = async () => {
       // no write the entire url because the other part of the url is in proxy packajge.json
-      const { data } = await axios.get('http://127.0.0.1:8000/api/profiles/');
+      const { data } = await axios.get('http://127.0.0.1:8000/api/profles/');
       setSwipes(data);
     };
     fetchProd();

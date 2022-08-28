@@ -13,7 +13,6 @@ import { useDispatch } from 'react-redux';
 import styles from './styles';
 import Colors from '../../constants/Colors';
 import Input from '../../components/UI/Input';
-import * as authActions from '../../store/actions/auth';
 
 // data to select from the form
 const show = [
@@ -68,8 +67,6 @@ const SettingScreen = (props) => {
   instead of, it will redirects back to the main screen (swipe)
    */
   const onLogOut = () => {
-    firebase.auth().signOut();
-    props.navigation.navigate('Auth');
   };
 
   /*
@@ -78,14 +75,7 @@ const SettingScreen = (props) => {
   next if he train to enter it will show again the screens to create another profile 
    */
   const onDelete = () => {
-    setLoading(true);
-    // delete from firebase
-    firebase.auth().currentUser.delete();
-    dispatch(authActions.deleteUser());
 
-    setLoading(false);
-    props.navigation.navigate('Auth');
-    // need to create a dispatch to delete from the db on postgres
   };
 
   if (loading) {

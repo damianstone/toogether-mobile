@@ -6,11 +6,10 @@ import { Ionicons } from '@expo/vector-icons';
 import Colors from '../constants/Colors';
 
 const Info = (props) => {
-
   let sizeIcon = props.small ? 9 : 10;
   let nameSize = props.small ? 12 : 17;
   let textSiZe = props.small ? 9 : 15;
-  
+
   return (
     <View style={styles.cardShadow}>
       <View style={styles.textContainer}>
