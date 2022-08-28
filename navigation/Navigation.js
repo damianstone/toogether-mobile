@@ -17,7 +17,7 @@ import ChatScreen from '../screens/ChatScreen';
 import LikesScreen from '../screens/LikesScreen';
 import GroupScreen from '../screens/GroupScreen';
 import CreateProfileScreen from '../screens/CreateProfile/CreateProfileScreen';
-import AddProfilePhotoScreen from '../screens/CreateProfile/AddProfilePhotoScreen'
+import AddProfilePhotoScreen from '../screens/CreateProfile/AddProfilePhotoScreen';
 import MyProfileScreen from '../screens/MyProfile/MyProfileScreen';
 import SettingScreen from '../screens/MyProfile/SettingScreen';
 import StartupScreen from '../screens/StartupScreen';

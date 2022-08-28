@@ -14,9 +14,8 @@ const Info = (props) => {
     <View style={styles.cardShadow}>
       <View style={styles.textContainer}>
         <Text
-          style={
-            styles.name
-          }>{`${props.firstName} ${props.lastName}, ${props.age}`}</Text>
+          style={styles.name}
+        >{`${props.firstName} ${props.lastName}, ${props.age}`}</Text>
       </View>
       <View style={styles.infoContainer}>
         <Ionicons name="location" size={19} color="black" />

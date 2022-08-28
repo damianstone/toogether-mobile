@@ -89,7 +89,6 @@ export const check400Error = (errorFromServer, nameBackendField) => {
     };
   }
 
-
   if (
     errorFromServer &&
     nameBackendField &&

@@ -7,5 +7,5 @@ export default {
   orange: '#FF5A54',
   calypso: '#70EDCC',
   red: '#D11A2A',
-  placeholder: "#B6B6B6"
+  placeholder: '#B6B6B6',
 };

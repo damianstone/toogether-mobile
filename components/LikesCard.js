@@ -17,7 +17,7 @@ const LikesCard = (props) => {
   // send the id to the swipe component
   const showProfile = (id) => {
     props.onProfile(id);
-    console.log("group id ---------->", id);
+    console.log('group id ---------->', id);
   };
 
   let cardType;
@@ -44,7 +44,8 @@ const LikesCard = (props) => {
       <View style={{ ...cardType }}>
         <TouchableOpacity
           onPress={() => showProfile(group.id)}
-          style={styles.touch}>
+          style={styles.touch}
+        >
           {group.totalMembers > 1 && (
             <View style={styles.groupName}>
               <Text style={styles.text}>Grupo de {group.members[0].name}</Text>
@@ -54,9 +55,9 @@ const LikesCard = (props) => {
             key={group.id}
             style={styles.image}
             imageStyle={styles.imageStyle}
-            source={{uri: `http://127.0.0.1:8000${group.photo}`}}
-            resizeMode="cover">
-          </ImageBackground>
+            source={{ uri: `http://127.0.0.1:8000${group.photo}` }}
+            resizeMode="cover"
+          ></ImageBackground>
         </TouchableOpacity>
       </View>
     </View>
@@ -101,10 +102,3 @@ const styles = StyleSheet.create({
   },
 });
 
-/*
-
-
-
-
-
-*/

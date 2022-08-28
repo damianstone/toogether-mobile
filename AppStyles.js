@@ -124,8 +124,7 @@ const _functions = {
 
       if (moment().diff(moment.unix(timeStamp.seconds), 'days') == 0) {
         time = moment.unix(timeStamp.seconds).format('H:mm');
-      }
- else {
+      } else {
         time = moment.unix(timeStamp.seconds).fromNow();
       }
     }

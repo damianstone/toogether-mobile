@@ -21,7 +21,7 @@ const ProfileModalScreen = (props) => {
   const profile = profiles.find((profile) => profile.id === profileId);
 
   return (
-    <View style={{flex: 1,}}>
+    <View style={{ flex: 1 }}>
       <Swiper
         style={styles.wrapper}
         removeClippedSubviews={false}
@@ -49,7 +49,8 @@ const ProfileModalScreen = (props) => {
               margin: 4,
             }}
           />
-        }>
+        }
+      >
         {profile.photos.map((ph) => {
           return (
             <ImageBackground
@@ -57,7 +58,8 @@ const ProfileModalScreen = (props) => {
               style={styles.image}
               imageStyle={styles.imageStyle}
               source={ph}
-              resizeMode="cover"></ImageBackground>
+              resizeMode="cover"
+            ></ImageBackground>
           );
         })}
       </Swiper>

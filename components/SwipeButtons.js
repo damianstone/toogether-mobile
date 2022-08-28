@@ -5,7 +5,6 @@ import { Ionicons, Entypo } from '@expo/vector-icons';
 import tw from 'tailwind-rn';
 import Colors from '../constants/Colors';
 
-
 const SwipeButtons = (props) => {
   return (
     <View style={[tw('flex flex-row justify-evenly pb-4'), styles.screen]}>

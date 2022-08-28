@@ -166,7 +166,8 @@ const AuthStartScreen = (props) => {
         <ScrollView
           style={styles.scrollview_style}
           contentContainerStyle={styles.scrollview_content_container}
-          automaticallyAdjustKeyboardInsets={true}>
+          automaticallyAdjustKeyboardInsets={true}
+        >
           <View style={styles.auth_input_container}>
             <AuthInput
               id="email"

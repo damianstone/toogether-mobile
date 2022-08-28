@@ -112,7 +112,7 @@ const Deck = (props) => {
   // render a card containing all of the profile members of the group
   const renderCard = (elem) => {
     // TRANFORM THE OBJECT INTO AN ARRAY WHEN IS NOT A GROUP?
-    const name = 'NAME GROUP'
+    const name = 'NAME GROUP';
     return (
       <SwipeCard
         key={elem._id}
@@ -192,13 +192,15 @@ const Deck = (props) => {
         <Modal
           transparent={false}
           visible={showMode == 2 ? true : false}
-          animationType={'slide'}>
+          animationType={'slide'}
+        >
           <View
             style={{
               width: SCREEN_WIDTH,
               height: SCREEN_HEIGHT,
               backgroundColor: 'white',
-            }}>
+            }}
+          >
             {renderNewMatch()}
           </View>
         </Modal>

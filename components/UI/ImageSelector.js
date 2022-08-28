@@ -73,7 +73,8 @@ const ImageSelector = (props) => {
             flexDirection: 'row',
             justifyContent: 'space-around',
             width: '100%',
-          }}>
+          }}
+        >
           <TouchableOpacity onPress={deleteImageHandler}>
             <Text style={styles.redColor}>Remove</Text>
           </TouchableOpacity>

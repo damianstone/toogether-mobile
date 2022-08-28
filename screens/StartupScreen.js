@@ -13,7 +13,7 @@ const StartupScreen = (props) => {
     const tryLogin = async () => {
       // get the user data as a promise
       const stored = await AsyncStorage.getItem('@userData');
-      const userData = JSON.parse(stored)
+      const userData = JSON.parse(stored);
 
       // if there is no user data
       if (!userData || !userData.has_account) {

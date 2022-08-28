@@ -39,20 +39,20 @@ redirects to
 const MyProfileScreen = (props) => {
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState();
-  const [photos, setPhotos] = useState([])
+  const [photos, setPhotos] = useState([]);
   const { showActionSheetWithOptions } = useActionSheet();
 
-    useEffect(() => {
-      setLoading(true);
-      const fetchUser = async () => {
-        // no write the entire url because the other part of the url is in proxy packajge.json
-        const { data } = await axios.get('http://127.0.0.1:8000/api/profiles/1');
-        setUser(data);
-        setPhotos(`http://127.0.0.1:8000${user.photo}`)
-      };
-      fetchUser();
-      setLoading(false);
-    }, []);
+  useEffect(() => {
+    setLoading(true);
+    const fetchUser = async () => {
+      // no write the entire url because the other part of the url is in proxy packajge.json
+      const { data } = await axios.get('http://127.0.0.1:8000/api/profiles/1');
+      setUser(data);
+      setPhotos(`http://127.0.0.1:8000${user.photo}`);
+    };
+    fetchUser();
+    setLoading(false);
+  }, []);
 
   const onOpenUploadPhotoActionSheet = () => {
     // Same interface as https://facebook.github.io/react-native/docs/actionsheetios.html
@@ -137,7 +137,8 @@ const MyProfileScreen = (props) => {
                   <TouchableOpacity
                     key={'item' + index}
                     style={styles.myphotosItemView}
-                    onPress={onOpenActionSheet}>
+                    onPress={onOpenActionSheet}
+                  >
                     <Image
                       style={{ width: '100%', height: '100%' }}
                       source={photo}
@@ -153,7 +154,7 @@ const MyProfileScreen = (props) => {
                 colors={['#ED665A', '#CF2A6E', '#BA007C']}
                 style={styles.linearCircle}
               />
-              <View style={{alignItems: 'center'}}>
+              <View style={{ alignItems: 'center' }}>
                 <View style={styles.logoContainer}>
                   <Image
                     style={styles.logo}
@@ -166,7 +167,8 @@ const MyProfileScreen = (props) => {
                 <View style={styles.buttonPremiumContainer}>
                   <TouchableOpacity
                     onPress={() => {}}
-                    style={styles.buttonPremiumView}>
+                    style={styles.buttonPremiumView}
+                  >
                     <LinearGradient
                       // Background Linear Gradient
                       colors={['#ED665A', '#CF2A6E', '#BA007C']}
@@ -177,7 +179,6 @@ const MyProfileScreen = (props) => {
                 </View>
               </View>
             </View>
-
           </ScrollView>
         </View>
       </SafeAreaView>

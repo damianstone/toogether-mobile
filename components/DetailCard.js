@@ -9,9 +9,8 @@ const DetailCard = (props) => {
     <ScrollView style={styles.screen}>
       <View style={styles.container1}>
         <Text
-          style={
-            styles.nameText
-          }>{`${props.name} ${props.lastname}, ${props.age}`}</Text>
+          style={styles.nameText}
+        >{`${props.name} ${props.lastname}, ${props.age}`}</Text>
         <TouchableOpacity style={styles.closeContainer} onPress={props.onClose}>
           <Text>C</Text>
         </TouchableOpacity>

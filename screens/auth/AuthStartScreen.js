@@ -36,7 +36,8 @@ const AuthStartScreen = (props) => {
       <StatusBar style="light" />
       <ScrollView
         style={styles.scrollview_style}
-        contentContainerStyle={styles.scrollview_content_container}>
+        contentContainerStyle={styles.scrollview_content_container}
+      >
         <View>
           <View style={styles.logoContainer}>
             <Image

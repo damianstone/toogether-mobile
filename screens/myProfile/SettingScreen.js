@@ -66,17 +66,14 @@ const SettingScreen = (props) => {
   so next time he will se the auth screen, but it will not show the form to create a new user
   instead of, it will redirects back to the main screen (swipe)
    */
-  const onLogOut = () => {
-  };
+  const onLogOut = () => {};
 
   /*
   if the user delete theit account, so it will delete the data from firebase and also 
   dispatch an action to clean the state maken authenticated null again
   next if he train to enter it will show again the screens to create another profile 
    */
-  const onDelete = () => {
-
-  };
+  const onDelete = () => {};
 
   if (loading) {
     return (

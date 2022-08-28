@@ -167,7 +167,7 @@ export default StyleSheet.create({
     //backgroundColor: '#494863',
     alignSelf: 'center',
     alignItems: 'center',
-    transform: [{ scaleX: 1 }]
+    transform: [{ scaleX: 1 }],
   },
   linearCircle: {
     position: 'absolute',

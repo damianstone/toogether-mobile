@@ -16,7 +16,6 @@ const Chat = () => {
         {/* PRESS THE CONVERSATION AND GO TO THE CHAT */}
         {/* ICON TO DELETE THE CHAT */}
 
-
         {/* 
         
         CHAT COMPONENT
