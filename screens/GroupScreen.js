@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity  } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 
 import Colors from '../constants/Colors';
 
@@ -52,7 +52,8 @@ const Group = () => {
         <Text style={styles.cardTitle}>Start a group</Text>
         <TouchableOpacity
           onPress={onCreateGroup}
-          style={styles.buttonContainer}>
+          style={styles.buttonContainer}
+        >
           <Text style={styles.buttonText}>Create</Text>
         </TouchableOpacity>
       </View>

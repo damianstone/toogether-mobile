@@ -28,9 +28,7 @@ const Likes = (props) => {
         renderItem={(group, index, separator) => (
           <LikesCard
             key={group._id}
-            firstName={
-              'name'
-            }
+            firstName={'name'}
             group={group.item}
             onProfile={showProfileHandler}
           />

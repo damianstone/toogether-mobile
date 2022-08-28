@@ -144,7 +144,8 @@ SwipeScreen.navigationOptions = (navData) => {
         style={styles.imgContainer}
         onPress={() => {
           navData.navigation.navigate('MyProfile');
-        }}>
+        }}
+      >
         <Image
           source={require('../../assets/images/Profiles/user.jpeg')}
           style={styles.img}

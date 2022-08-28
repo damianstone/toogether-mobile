@@ -3,28 +3,25 @@ import { useSelector } from 'react-redux';
 import { NavigationActions } from 'react-navigation';
 
 import Navigation from './Navigation';
-import firebase from "firebase";
+import firebase from 'firebase';
 import Firebase from '../Firebase/config';
 
-
 const AppNavigator = (props) => {
-
   useEffect(() => {
     firebase.auth().onAuthStateChanged((user) => {
-      if (!user) { // if the user is not logged in
+      if (!user) {
+        // if the user is not logged in
         NavigationActions.navigate({
-            routeName: 'Auth'
-        }) // go to the auth screen
-    }
+          routeName: 'Auth',
+        }); // go to the auth screen
+      }
     });
-  })
+  });
 
   return <Navigation />;
 };
 
 export default AppNavigator;
-
-
 
 /* 
 
@@ -37,4 +34,3 @@ export default AppNavigator;
   ); 
   
 */
-

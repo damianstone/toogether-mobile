@@ -7,7 +7,6 @@ import Colors from '../../constants/Colors';
 import DetailCard from '../../components/DetailCard';
 
 const ProfileModalScreen = (props) => {
-
   const [firstName] = useState(props.firstName || '');
   const [lastName] = useState(props.lastName || '');
   const [age] = useState(props.age || '');
@@ -15,9 +14,9 @@ const ProfileModalScreen = (props) => {
   const [location] = useState(props.location || '');
   const [distance] = useState(props.distance || '');
   const [description] = useState(props.description || '');
-  const [photos] = useState(props.photosArr || '')
+  const [photos] = useState(props.photosArr || '');
 
-  console.log('RENDER DETAILR CARD ----->', photos)
+  console.log('RENDER DETAILR CARD ----->', photos);
 
   // pass those functions as a props for detail card
   const onDislikePressed = () => {
@@ -34,7 +33,7 @@ const ProfileModalScreen = (props) => {
     props.setShowMode(0);
     props.onSwipeTop();
   };
-  
+
   return (
     <View style={{ flex: 1 }}>
       <Swiper
@@ -64,7 +63,8 @@ const ProfileModalScreen = (props) => {
               margin: 4,
             }}
           />
-        }>
+        }
+      >
         {photos.map((ph) => {
           return (
             <ImageBackground
@@ -72,7 +72,8 @@ const ProfileModalScreen = (props) => {
               style={styles.image}
               imageStyle={styles.imageStyle}
               source={ph}
-              resizeMode="cover"></ImageBackground>
+              resizeMode="cover"
+            ></ImageBackground>
           );
         })}
       </Swiper>

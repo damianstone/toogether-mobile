@@ -101,7 +101,8 @@ const SwipeCard = (props) => {
                 margin: 4,
               }}
             />
-          }>
+          }
+        >
           {isGroup ? (
             profile.members.map((profile, i) => {
               return (
@@ -110,7 +111,8 @@ const SwipeCard = (props) => {
                   style={styles.image}
                   imageStyle={styles.imageStyle}
                   source={require('../assets/images/Profiles/profile-1.jpeg')}
-                  resizeMode="cover">
+                  resizeMode="cover"
+                >
                   <Info
                     firstName={profile.name}
                     lastName={profile.lastname}
@@ -120,7 +122,8 @@ const SwipeCard = (props) => {
                   />
                   <TouchableOpacity
                     style={styles.arrowContainer}
-                    onPress={() => props.onProfile(profile.id)}>
+                    onPress={() => props.onProfile(profile.id)}
+                  >
                     <Text>A</Text>
                   </TouchableOpacity>
                 </ImageBackground>
@@ -132,7 +135,8 @@ const SwipeCard = (props) => {
               style={styles.image}
               imageStyle={styles.imageStyle}
               source={{ uri: `http://127.0.0.1:8000${profile.photo}` }} // just get the first photo of every profile
-              resizeMode="cover">
+              resizeMode="cover"
+            >
               <Info
                 firstName={profile.name}
                 lastName={profile.lastname}
@@ -142,7 +146,8 @@ const SwipeCard = (props) => {
               />
               <TouchableOpacity
                 style={styles.arrowContainer}
-                onPress={() => props.onProfile(profile.id)}>
+                onPress={() => props.onProfile(profile.id)}
+              >
                 <Text>A</Text>
               </TouchableOpacity>
             </ImageBackground>

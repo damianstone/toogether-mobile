@@ -7,7 +7,10 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "eject": "expo eject"
+    "eject": "expo eject",
+    "format": "prettier --write \"./**/*.{js, tsx, css, json}\"",
+    "lint": "eslint / --ext .js",
+    "lint:fix": "npm run lint -- --fix"
   },
   "prettier": {
     "jsxBracketSameLine": true,
@@ -21,6 +24,7 @@
     "@react-native-picker/picker": "^2.2.1",
     "@react-navigation/native": "^6.0.6",
     "axios": "^0.27.2",
+    "eslint-plugin-react-native": "^4.0.0",
     "expo": "~44.0.0",
     "expo-app-loading": "~1.3.0",
     "expo-constants": "~13.0.1",
@@ -65,9 +69,15 @@
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
-    "eslint-config-prettier": "^8.3.0",
-    "eslint-plugin-prettier": "^4.0.0",
-    "prettier": "^2.5.1"
+    "babel-eslint": "^10.1.0",
+    "eslint": "^8.23.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-jsx-a11y": "^6.6.1",
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-react": "^7.31.1",
+    "prettier": "^2.7.1"
   },
   "private": true
 }

@@ -6,12 +6,15 @@ import {
 import axios from 'axios';
 
 // GET THE PRODUCTS
-export const listSwipes = (keyword = '') =>
+export const listSwipes =
+  (keyword = '') =>
   async (dispatch) => {
     try {
       dispatch({ type: SWIPE_LIST_REQUEST });
 
-      const { data } = await axios.get(`http://127.0.0.1:8000/api/profiles${keyword}`);
+      const { data } = await axios.get(
+        `http://127.0.0.1:8000/api/profiles${keyword}`
+      );
 
       dispatch({
         type: SWIPE_LIST_SUCCESS,
@@ -27,4 +30,3 @@ export const listSwipes = (keyword = '') =>
       });
     }
   };
-
