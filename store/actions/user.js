@@ -1,6 +1,8 @@
 import axios from 'axios';
 import Constants from 'expo-constants';
+import { Platform } from 'react-native';
 import * as c from '../../constants/user';
+import * as FileSystem from 'expo-file-system';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const BASE_URL = Constants.manifest.extra.LOCAL_URL;
@@ -90,7 +92,12 @@ export const userLogin = (email, password) => {
   };
 };
 
-export const logout = (name, email) => {};
+export const logout = (name, email) => {
+  return async (dispatch) => {
+    // TODO: remove data from localstorage
+    // TODO: dispatch reset all the status
+  };
+};
 
 export const createUserProfile = (
   firstname,
@@ -99,8 +106,7 @@ export const createUserProfile = (
   gender,
   show_me,
   university,
-  description,
-  image
+  description
 ) => {
   return async (dispatch) => {
     try {
@@ -119,13 +125,21 @@ export const createUserProfile = (
         url: `${BASE_URL}/api/v1/profiles/${userData.id}/actions/create-profile/`,
         headers: config,
         data: {
-          firstname: firstname,
-          lastname: lastname,
-          birthdate: birthdate,
-          gender: gender,
-          show_me: show_me,
-          university: university ? university : null,
-          description: description ? description : null,
+          firstname: 'DAMIAN',
+          lastname: 'STONE',
+          birthdate: '2000-12-12',
+          gender: 'male',
+          show_me: 'women',
+          university: 'bristol',
+          description: 'x',
+
+          // firstname: firstname,
+          // lastname: lastname,
+          // birthdate: birthdate,
+          // gender: gender,
+          // show_me: show_me,
+          // university: university ? university : null,
+          // description: description ? description : null,
         },
       });
 
@@ -146,28 +160,38 @@ export const addPhoto = (image) => {
   return async (dispatch) => {
     try {
       dispatch({ type: c.USER_ADD_PHOTO_REQUEST });
-
       const userData = JSON.parse(await AsyncStorage.getItem('@userData'));
+      const imageUri = image.uri;
+      const fileName = imageUri.split('/').pop();
 
-      const config = {
-        'content-type': 'multipart/form-data',
-        Accept: 'application/json',
-        Authorization: 'Bearer ' + userData.token,
-      };
+      const dataForm = new FormData();
 
-      // TODO: fix this
-      const { data } = await axios({
-        method: 'POST',
-        url: `${BASE_URL}/api/v1/photos/`,
-        headers: config,
-        data: image
+      dataForm.append('image', {
+        name: fileName,
+        type: image.type,
+        uri:
+          Platform.OS === 'android'
+            ? image.uri
+            : image.uri.replace('file://', ''),
       });
 
+      const { data } = await axios.post(
+        `${BASE_URL}/api/v1/photos/`,
+        dataForm,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            Accept: 'application/json',
+            Authorization: 'Bearer ' + userData.token,
+          },
+        }
+      );
       dispatch({
         type: c.USER_ADD_PHOTO_SUCCESS,
         payload: data,
       });
     } catch (error) {
+      console.log({ ...error });
       dispatch({
         type: c.USER_ADD_PHOTO_FAIL,
         payload: error,
@@ -176,10 +200,18 @@ export const addPhoto = (image) => {
   };
 };
 
+export const deleteUserPhoto = () => {};
+
+export const getUserPhotos = () => {};
+
+export const blockUser = () => {};
+
+export const disblockUser = () => {};
+
 // UPDATE USER PROFILE
 export const updateUserProfile = () => {};
 
-// GET USER -> get the user for the user profile
+// GET USER -> get any profile
 export const getUserDetails = () => {};
 
 // DELETE ACCOUNT

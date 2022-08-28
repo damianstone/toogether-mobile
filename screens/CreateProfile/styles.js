@@ -1,14 +1,17 @@
 import { StyleSheet } from 'react-native';
-import { borderRightColor, borderTopColor } from 'react-native/Libraries/Components/View/ReactNativeStyleAttributes';
+import {
+  borderRightColor,
+  borderTopColor,
+} from 'react-native/Libraries/Components/View/ReactNativeStyleAttributes';
 import Colors from '../../constants/Colors';
 
 export default StyleSheet.create({
   screen: {
     flex: 1,
     backgroundColor: Colors.bg,
+    justifyContent: 'space-between',
     alignItems: 'center',
-    alignContent: 'center',
-  }, 
+  },
   titleContainer: {
     width: '100%',
     justifyContent: 'center',
@@ -20,20 +23,24 @@ export default StyleSheet.create({
     textAlign: 'center',
   },
   scroll: {
-    padding: 10,  
+    padding: 10,
     width: '95%',
-    overflow: 'hidden'
+    overflow: 'hidden',
+  },
+  auth_text_view: {
+    marginTop: 80,
+    marginBottom: 20,
   },
   contentContainer: {
     width: '100%',
     justifyContent: 'center',
-    overflow: 'hidden'
+    overflow: 'hidden',
   },
   photoContainer: {
     flexDirection: 'row',
     justifyContent: 'space-around',
     marginVertical: 20,
-    overflow: 'hidden'
+    overflow: 'hidden',
   },
   photo: {
     width: 170,
@@ -97,5 +104,5 @@ export default StyleSheet.create({
   touchable: {
     width: '100%',
     height: '100%',
-  }
+  },
 });

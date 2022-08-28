@@ -10,10 +10,15 @@ import {
 import { StatusBar } from 'expo-status-bar';
 import { useDispatch, useSelector } from 'react-redux';
 import { createUserProfile } from '../../store/actions/user';
-import { checkServerError, getFieldErrorFromServer } from '../../utils/errors';
+import {
+  checkServerError,
+  getFieldErrorFromServer,
+  check400Error,
+} from '../../utils/errors';
 
 import Colors from '../../constants/Colors';
 import styles from './styles';
+import * as authStyles from '../Auth/styles';
 import Input from '../../components/UI/Input';
 import Header from '../../components/UI/Header';
 import AuthButton from '../../components/UI/AuthButton';
@@ -116,8 +121,13 @@ const CreateProfileScreen = (props) => {
 
   useEffect(() => {
     if (createError) {
-      if (createError.response && createError.response.data !== undefined) {
-        setError(true);
+      if (createError.response && createError.response.status === 400) {
+        if (createError.response.data.hasOwnProperty('detail')) {
+          console.log('400 ERROR DETAIL ---> ', { ...createError });
+          check400Error(createError);
+        } else {
+          setError(true);
+        }
       } else {
         checkServerError(createError);
       }
@@ -184,18 +194,26 @@ const CreateProfileScreen = (props) => {
     <KeyboardAvoidingView
       behavior="padding"
       keyboardVerticalOffset={50}
-      style={styles.screen}>
+      style={styles.screen}
+      contentContainerStyle={styles.screen}>
       <StatusBar style="light" />
-      <Header />
-      <View styles={styles.titleContainer}>
-        <Text style={styles.title}>Complete your profile</Text>
-      </View>
       <ScrollView
         showsVerticalScrollIndicator={false}
         showsHorizontalScrollIndicator={false}
         style={styles.scroll}
         contentContainerStyle={styles.contentContainer}>
-
+        <View style={styles.auth_text_view}>
+          <View style={authStyles.default.auth_text_container}>
+            <Text style={authStyles.default.auth_text_big}>
+              Let's create your profile
+            </Text>
+          </View>
+          <View style={authStyles.default.auth_text_container}>
+            <Text style={authStyles.default.auth_text_small}>
+              You can change your data any time after
+            </Text>
+          </View>
+        </View>
         <View style={styles.inputContainer}>
           <Input
             labelStyle={styles.label}

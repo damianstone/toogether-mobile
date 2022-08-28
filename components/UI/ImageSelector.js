@@ -6,7 +6,7 @@ import Colors from '../../constants/Colors';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
 const ImageSelector = (props) => {
-  const [imageUri, setImageUri] = useState('');
+  const [image, setImage] = useState();
 
   const verifyPermissions = async () => {
     const result = await ImagePicker.getCameraPermissionsAsync();
@@ -31,28 +31,25 @@ const ImageSelector = (props) => {
       return;
     }
     const image = await ImagePicker.launchImageLibraryAsync({
+      base64: true,
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       quality: 1,
     });
-    setImageUri(image.uri);
-    props.onImageTaken(image.uri);
+    setImage(image);
+    props.onImageTaken(image);
   };
 
   const deleteImageHandler = () => {
-    setImageUri(null);
+    setImage(null);
   };
-
-  let colorBorder;
-  if (imageUri) colorBorder = Colors.green;
-  else colorBorder = Colors.orange;
 
   return (
     <View style={styles.imagePicker}>
       <View style={styles.imagePreview}>
-        {imageUri ? (
+        {image ? (
           <Image
             style={styles.image}
-            source={{ uri: imageUri }}
+            source={{ uri: image.uri }}
             resizeMode="contain"
           />
         ) : (
@@ -70,7 +67,7 @@ const ImageSelector = (props) => {
           </Fragment>
         )}
       </View>
-      {imageUri ? (
+      {image ? (
         <View
           style={{
             flexDirection: 'row',
