@@ -10,7 +10,7 @@ import Swiper from 'react-native-swiper';
 
 import Info from './Info';
 import Colors from '../constants/Colors';
-import ProfileModal from '../screens/swipe/ProfileModal';
+import ProfileModal from '../screens/Swipe/ProfileModal';
 
 /*
 

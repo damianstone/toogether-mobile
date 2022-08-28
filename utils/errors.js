@@ -8,24 +8,38 @@ export const checkServerError = (
 ) => {
   let message = { title: '', message: '' };
 
-  console.log({...errorFromServer});
-
-  if (errorFromServer.response.status === 500) {
+  if (
+    errorFromServer &&
+    errorFromServer.response &&
+    errorFromServer.response.status === 500
+  ) {
     message = {
       title: 'Server error',
       message: errorFromServer.response.status,
     };
   }
-  if (errorFromServer.code === 'ERR_NETWORK') {
+  if (
+    errorFromServer &&
+    errorFromServer.response &&
+    errorFromServer.code === 'ERR_NETWORK'
+  ) {
     message = {
       title: 'Internet Error',
       message: 'Please check your internet connection and try again',
     };
   }
-  if (errorFromServer.response.status === 403) {
+  if (
+    errorFromServer &&
+    errorFromServer.response &&
+    errorFromServer.response.status === 403
+  ) {
     message = { title: 'Permission Erron', message: 'Check your data' };
   }
-  if (errorFromServer.response.status === 401) {
+  if (
+    errorFromServer &&
+    errorFromServer.response &&
+    errorFromServer.response.status === 401
+  ) {
     message = {
       title: 'Permission Denied',
       message:
@@ -42,11 +56,18 @@ export const checkServerError = (
       message: errorFromServer.response.data.detail,
     };
   }
+
   if (!errorFromServer) {
-    message = { title: '', message: '' };
+    return null;
   }
 
-  return Alert.alert(message.title, message.message, [{ text: 'OK' }]);
+  if(!message.title && !message.message) {
+    return null;
+  }
+
+  return errorFromServer
+    ? Alert.alert(message.title, message.message, [{ text: 'OK' }])
+    : null;
 };
 
 // return the response of the serializer

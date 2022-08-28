@@ -31,8 +31,8 @@ const ImageSelector = (props) => {
       return;
     }
     const image = await ImagePicker.launchImageLibraryAsync({
-      allowsEditing: true,
-      quality: 0.5,
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      quality: 1,
     });
     setImageUri(image.uri);
     props.onImageTaken(image.uri);
@@ -50,7 +50,11 @@ const ImageSelector = (props) => {
     <View style={styles.imagePicker}>
       <View style={styles.imagePreview}>
         {imageUri ? (
-          <Image style={styles.image} source={{ uri: imageUri }} />
+          <Image
+            style={styles.image}
+            source={{ uri: imageUri }}
+            resizeMode="contain"
+          />
         ) : (
           <Fragment>
             <Text style={{ marginBottom: 10, color: Colors.white }}>
@@ -87,12 +91,12 @@ const ImageSelector = (props) => {
 
 const styles = StyleSheet.create({
   imagePicker: {
+    marginTop: 20,
+    marginVertical: 10,
     alignItems: 'center',
-    marginVertical: 5,
   },
   imagePreview: {
     width: '100%',
-    height: 200,
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 10,
@@ -100,12 +104,16 @@ const styles = StyleSheet.create({
   },
   image: {
     width: '100%',
-    height: '100%',
+    height: undefined,
+    aspectRatio: 1,
+    borderRadius: 10,
   },
   redColor: {
+    marginVertical: 10,
     color: Colors.orange,
   },
   greenColor: {
+    marginVertical: 10,
     color: Colors.green,
   },
 });

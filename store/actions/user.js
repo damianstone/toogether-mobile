@@ -1,6 +1,9 @@
 import axios from 'axios';
+import Constants from 'expo-constants';
 import * as c from '../../constants/user';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
+const BASE_URL = Constants.manifest.extra.LOCAL_URL;
 
 export const userRegister = (email, password, repeated_password) => {
   return async (dispatch) => {
@@ -13,7 +16,7 @@ export const userRegister = (email, password, repeated_password) => {
 
       const { data } = await axios({
         method: 'POST',
-        url: 'http://127.0.0.1:8000/api/users/register/',
+        url: `${BASE_URL}/api/v1/users/register/`,
         headers: config,
         data: {
           email: email,
@@ -57,7 +60,7 @@ export const userLogin = (email, password) => {
 
       const { data } = await axios({
         method: 'POST',
-        url: 'http://127.0.0.1:8000/api/users/login/',
+        url: `${BASE_URL}/api/v1/users/login/`,
         headers: config,
         data: {
           email: email,
@@ -113,7 +116,7 @@ export const createUserProfile = (
 
       const { data } = await axios({
         method: 'POST',
-        url: `http://127.0.0.1:8000/api/users/profiles/profile/${userData.id}/create-profile/`,
+        url: `${BASE_URL}/api/v1/profiles/${userData.id}/actions/create-profile/`,
         headers: config,
         data: {
           firstname: firstname,
@@ -123,7 +126,6 @@ export const createUserProfile = (
           show_me: show_me,
           university: university ? university : null,
           description: description ? description : null,
-          image: image
         },
       });
 
@@ -148,18 +150,17 @@ export const addPhoto = (image) => {
       const userData = JSON.parse(await AsyncStorage.getItem('@userData'));
 
       const config = {
-        'Content-Type': 'application/json',
+        'content-type': 'multipart/form-data',
         Accept: 'application/json',
         Authorization: 'Bearer ' + userData.token,
       };
 
+      // TODO: fix this
       const { data } = await axios({
         method: 'POST',
-        url: 'http://127.0.0.1:8000/api/users/profiles/upload/',
+        url: `${BASE_URL}/api/v1/photos/`,
         headers: config,
-        data: {
-          image: image,
-        },
+        data: image
       });
 
       dispatch({

@@ -9,14 +9,13 @@ import {
 } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { useDispatch, useSelector } from 'react-redux';
-import { createUserProfile, addPhoto } from '../../store/actions/user';
+import { createUserProfile } from '../../store/actions/user';
 import { checkServerError, getFieldErrorFromServer } from '../../utils/errors';
 
 import Colors from '../../constants/Colors';
 import styles from './styles';
 import Input from '../../components/UI/Input';
 import Header from '../../components/UI/Header';
-import ImageSelector from '../../components/UI/ImageSelector';
 import AuthButton from '../../components/UI/AuthButton';
 
 const FORM_UPDATE = 'FORM_UPDATE';
@@ -76,7 +75,7 @@ const show = [
   },
 ];
 
-const CreateUserScreen = (props) => {
+const CreateProfileScreen = (props) => {
   const [image, setImage] = useState('');
   const [error, setError] = useState(false);
   const dispatch = useDispatch();
@@ -115,31 +114,16 @@ const CreateUserScreen = (props) => {
     loading: createLoading,
   } = userCreateProfile;
 
-  const userAddPhoto = useSelector((state) => state.userAddPhoto);
-  const {
-    error: addPhotoError,
-    data: addPhotoData,
-    success: addPhotoSuccess,
-    loading: addPhotoLoading,
-  } = userAddPhoto;
-
   useEffect(() => {
-    if (createError || addPhotoError) {
-      if (createError.response.data !== undefined) {
+    if (createError) {
+      if (createError.response && createError.response.data !== undefined) {
         setError(true);
       } else {
-        console.log({ ...createError });
         checkServerError(createError);
       }
     }
 
-    if (createSuccess && addPhotoSuccess) {
-      //TODO: go to swipe
-      Alert.alert('Success', 'profile created', [{ text: 'Okay' }]);
-    }
-
     if (createSuccess && createData) {
-      console.log({ ...createData });
       Alert.alert(
         `Your age is ${createData.age} ?`,
         'Please confirm your age',
@@ -152,13 +136,13 @@ const CreateUserScreen = (props) => {
           {
             text: 'OK',
             onPress: () => {
-              props.navigation.navigate('Swipe');
+              props.navigation.navigate('AddPhoto');
             },
           },
         ]
       );
     }
-  }, [createError, createSuccess, addPhotoError, addPhotoSuccess]);
+  }, [createError, createSuccess]);
 
   // ON CHANGE INPUTS
   const inputChangeHandler = useCallback(
@@ -191,16 +175,9 @@ const CreateUserScreen = (props) => {
         inputValues.gender,
         inputValues.show_me,
         inputValues.university,
-        inputValues.description,
-        inputValues.image,
+        inputValues.description
       )
     );
-  };
-
-  const imageTakenHandler = (imagePath) => {
-    formState.inputValues.img = imagePath;
-    formState.inputValidities.img = true;
-    setImage(imagePath);
   };
 
   return (
@@ -214,11 +191,11 @@ const CreateUserScreen = (props) => {
         <Text style={styles.title}>Complete your profile</Text>
       </View>
       <ScrollView
+        showsVerticalScrollIndicator={false}
+        showsHorizontalScrollIndicator={false}
         style={styles.scroll}
         contentContainerStyle={styles.contentContainer}>
-        <View style={{ width: '60%', alignSelf: 'center' }}>
-          <ImageSelector onImageTaken={imageTakenHandler} />
-        </View>
+
         <View style={styles.inputContainer}>
           <Input
             labelStyle={styles.label}
@@ -292,6 +269,7 @@ const CreateUserScreen = (props) => {
             dataDetectorTypes="calendarEvent"
             onInputChange={inputChangeHandler}
             placeholder="YYYY-MM-DD"
+            placeholderTextColor={Colors.placeholder}
             serverError={error}
             errorText={getFieldErrorFromServer(
               createError,
@@ -312,6 +290,7 @@ const CreateUserScreen = (props) => {
             initialValue=""
             id="gender"
             placeholder={{ label: 'Select an item', value: 'Select an item' }}
+            placeholderTextColor={Colors.placeholder}
             onInputChange={inputChangeHandler}
             serverError={error}
             errorText={getFieldErrorFromServer(
@@ -332,6 +311,7 @@ const CreateUserScreen = (props) => {
             label="Show me *"
             id="show_me"
             placeholder={{ label: 'Select an item', value: 'Select an item' }}
+            placeholderTextColor={Colors.placeholder}
             onInputChange={inputChangeHandler}
             serverError={error}
             errorText={getFieldErrorFromServer(
@@ -348,7 +328,7 @@ const CreateUserScreen = (props) => {
             inputStyle={styles.textTareaStyle}
             underlineColorAndroid="transparent"
             placeholder="Type something"
-            placeholderTextColor="grey"
+            placeholderTextColor={Colors.placeholder}
             multiline={true}
             numberOfLines={5}
             maxLength={500}
@@ -384,4 +364,4 @@ const CreateUserScreen = (props) => {
   );
 };
 
-export default CreateUserScreen;
+export default CreateProfileScreen;

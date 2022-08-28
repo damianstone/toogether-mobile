@@ -26,8 +26,6 @@ export const userRegisterReducer = (state = {}, action) => {
   }
 };
 
-// REGISTER REDUCER
-// TODO: que pasa si el usuario quiere hacer login de nuevo pero ya creo su cuenta, donde quedan guardados los datos?
 export const userLoginReducer = (state = {}, action) => {
   switch (action.type) {
     case c.USER_LOGIN_REQUEST:
@@ -91,6 +89,8 @@ export const userAddPhotoReducer = (state = {}, action) => {
         loading: false,
         error: action.payload,
       };
+    case c.USER_ADD_PHOTO_RESET:
+      return {};
     default:
       return state;
   }

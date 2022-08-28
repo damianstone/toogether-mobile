@@ -6,7 +6,6 @@ import React, {
   useCallback,
 } from 'react';
 import {
-  Image,
   View,
   Button,
   Text,
@@ -14,10 +13,10 @@ import {
   Alert,
   ActivityIndicator,
   KeyboardAvoidingView,
-  TouchableOpacity,
 } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { useDispatch, useSelector } from 'react-redux';
+import { checkServerError } from '../../utils/errors';
 
 import styles from './styles';
 import Colors from '../../constants/Colors';
@@ -93,15 +92,7 @@ const AuthStartScreen = (props) => {
   // REGISTER
   useEffect(() => {
     if (registerError) {
-      if (registerError.response.data.detail) {
-        Alert.alert('An Error Occurred!', registerError.response.data.detail, [
-          { text: 'Okay' },
-        ]);
-      }
-
-      Alert.alert('An Error Occurred!', 'Check your connection', [
-        { text: 'Okay' },
-      ]);
+      checkServerError(registerError);
       dispatch({ type: c.USER_REGISTER_RESET });
     }
     if (register && registerSuccess) {
@@ -113,15 +104,7 @@ const AuthStartScreen = (props) => {
   // LOGIN
   useEffect(() => {
     if (loginError) {
-      if (registerError.response.data.detail) {
-        Alert.alert('An Error Occurred!', loginError.response.data.detail, [
-          { text: 'Okay' },
-        ]);
-      }
-
-      Alert.alert('An Error Occurred!', 'Check your connection', [
-        { text: 'Okay' },
-      ]);
+      checkServerError(registerError);
       dispatch({ type: c.USER_LOGIN_RESET });
     }
 
