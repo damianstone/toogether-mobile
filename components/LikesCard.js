@@ -1,11 +1,11 @@
+import React from 'react';
 import {
+  ImageBackground,
   StyleSheet,
   Text,
-  View,
-  ImageBackground,
   TouchableOpacity,
+  View,
 } from 'react-native';
-import React from 'react';
 
 import Colors from '../constants/Colors';
 import Info from './Info';
@@ -24,7 +24,7 @@ const LikesCard = (props) => {
   // if the profiles array > 1
   if (group.totalMembers === 1) {
     cardType = {
-      //position: 'absolute',
+      // position: 'absolute',
       width: '100%',
       height: '100%',
       borderRadius: 30,
@@ -52,12 +52,12 @@ const LikesCard = (props) => {
             </View>
           )}
           <ImageBackground
-            key={group.id}
-            style={styles.image}
             imageStyle={styles.imageStyle}
-            source={{ uri: `http://127.0.0.1:8000${group.photo}` }}
+            key={group.id}
             resizeMode="cover"
-          ></ImageBackground>
+            source={{ uri: `http://127.0.0.1:8000${group.photo}` }}
+            style={styles.image}
+          />
         </TouchableOpacity>
       </View>
     </View>
@@ -101,4 +101,3 @@ const styles = StyleSheet.create({
     height: 200,
   },
 });
-

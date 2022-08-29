@@ -67,7 +67,6 @@ export const check400Error = (errorFromServer, nameBackendField) => {
 
   if (
     errorFromServer.response &&
-    errorFromServer.response.status === 400 &&
     errorFromServer.response.hasOwnProperty('data') &&
     errorFromServer.response.data.hasOwnProperty('detail')
   ) {
@@ -79,7 +78,6 @@ export const check400Error = (errorFromServer, nameBackendField) => {
 
   if (
     errorFromServer.response &&
-    errorFromServer.response.status === 400 &&
     errorFromServer.response.hasOwnProperty('data') &&
     errorFromServer.response.data.hasOwnProperty('non_field_errors')
   ) {

@@ -19,26 +19,24 @@ import {
 import Colors from '../../constants/Colors';
 import styles from './styles';
 import * as authStyles from '../Auth/styles';
+import * as c from '../../constants/user';
 import Input from '../../components/UI/Input';
-import Header from '../../components/UI/Header';
 import AuthButton from '../../components/UI/AuthButton';
 
 const FORM_UPDATE = 'FORM_UPDATE';
 
-// to manage onChange with state
 const formReducer = (state, action) => {
   if (action.type === FORM_UPDATE) {
     const updatedValued = {
-      ...state.inputValues, // old input value
+      ...state.inputValues,
       [action.input]: action.value,
     };
     const updatedValidities = {
-      ...state.inputValidities, // old input validity
+      ...state.inputValidities,
       [action.input]: action.isValid,
     };
     let updatedFormIsValid = true;
     for (const key in updatedValidities) {
-      // if there are all true so the form is valid
       updatedFormIsValid = updatedValidities[key] && updatedFormIsValid;
     }
     return {
@@ -115,7 +113,6 @@ const CreateProfileScreen = (props) => {
   const {
     error: createError,
     data: createData,
-    success: createSuccess,
     loading: createLoading,
   } = userCreateProfile;
 
@@ -123,7 +120,6 @@ const CreateProfileScreen = (props) => {
     if (createError) {
       if (createError.response && createError.response.status === 400) {
         if (createError.response.data.hasOwnProperty('detail')) {
-          console.log('400 ERROR DETAIL ---> ', { ...createError });
           check400Error(createError);
         } else {
           setError(true);
@@ -133,7 +129,7 @@ const CreateProfileScreen = (props) => {
       }
     }
 
-    if (createSuccess && createData) {
+    if (createData && Object.keys(createData).length !== 0) {
       Alert.alert(
         `Your age is ${createData.age} ?`,
         'Please confirm your age',
@@ -152,7 +148,9 @@ const CreateProfileScreen = (props) => {
         ]
       );
     }
-  }, [createError, createSuccess]);
+
+    dispatch({ type: c.USER_CREATE_RESET });
+  }, [createError, createData]);
 
   // ON CHANGE INPUTS
   const inputChangeHandler = useCallback(
@@ -195,15 +193,13 @@ const CreateProfileScreen = (props) => {
       behavior="padding"
       keyboardVerticalOffset={50}
       style={styles.screen}
-      contentContainerStyle={styles.screen}
-    >
+      contentContainerStyle={styles.screen}>
       <StatusBar style="light" />
       <ScrollView
         showsVerticalScrollIndicator={false}
         showsHorizontalScrollIndicator={false}
         style={styles.scroll}
-        contentContainerStyle={styles.contentContainer}
-      >
+        contentContainerStyle={styles.contentContainer}>
         <View style={styles.auth_text_view}>
           <View style={authStyles.default.auth_text_container}>
             <Text style={authStyles.default.auth_text_big}>
@@ -375,8 +371,7 @@ const CreateProfileScreen = (props) => {
               alignSelf: 'center',
               alignItems: 'center',
               width: '70%',
-            }}
-          >
+            }}>
             <AuthButton text={'continue'} onPress={createUserProfileHandler} />
           </View>
         )}

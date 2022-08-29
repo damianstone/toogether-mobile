@@ -1,18 +1,20 @@
-import { createStore, combineReducers, applyMiddleware } from 'redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { applyMiddleware, combineReducers, createStore } from 'redux';
 import thunk from 'redux-thunk';
 import {
-  userRegisterReducer,
   userLoginReducer,
+  userRegisterReducer,
   userCreateProfileReducer,
   userAddPhotoReducer,
-} from '../store/reducers/user';
+  userListPhotosReducer,
+} from './reducers/user';
 
 const reducer = combineReducers({
   userRegister: userRegisterReducer,
   userLogin: userLoginReducer,
   userCreateProfile: userCreateProfileReducer,
   userAddPhoto: userAddPhotoReducer,
+  userListPhotos: userListPhotosReducer,
 });
 
 const getUserFromStorage = async () => {

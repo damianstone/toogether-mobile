@@ -1,19 +1,28 @@
 {
   "ignorePatterns": ["build/**"],
   "env": {
-    "react-native/react-native": true,
-    "es2021": true
+    "react-native/react-native": true
   },
   "extends": [
     "airbnb",
     "prettier",
-    "prettier/react",
     "plugin:prettier/recommended",
     "eslint-config-prettier"
   ],
-  "parser": "babel-eslint",
+  "parser": "@babel/eslint-parser",
+  "parserOptions": {
+    "ecmaVersion": 8,
+    "requireConfigFile": false,
+    "sourceType": "module"
+  },
   // IMPORT HELPERS PLUGIN
-  "plugins": ["eslint-plugin-import-helpers", "react-native"],
+  "plugins": [
+    "eslint-plugin-import-helpers",
+    "react-native",
+    "react",
+    "react-hooks",
+    "prettier"
+  ],
   "rules": {
     "comma-dangle": "off",
     "import-helpers/order-imports": [

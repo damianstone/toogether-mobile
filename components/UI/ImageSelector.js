@@ -10,7 +10,6 @@ const ImageSelector = (props) => {
 
   const verifyPermissions = async () => {
     const result = await ImagePicker.getCameraPermissionsAsync();
-    //console.log(result);
     if (!result.granted) {
       const askPermissions = await ImagePicker.requestCameraPermissionsAsync();
       if (!askPermissions.granted) {
@@ -46,7 +45,7 @@ const ImageSelector = (props) => {
   return (
     <View style={styles.imagePicker}>
       <View style={styles.imagePreview}>
-        {image ? (
+        {image && image.uri ? (
           <Image
             style={styles.image}
             source={{ uri: image.uri }}
@@ -67,14 +66,13 @@ const ImageSelector = (props) => {
           </Fragment>
         )}
       </View>
-      {image ? (
+      {image && image.uri ? (
         <View
           style={{
             flexDirection: 'row',
             justifyContent: 'space-around',
             width: '100%',
-          }}
-        >
+          }}>
           <TouchableOpacity onPress={deleteImageHandler}>
             <Text style={styles.redColor}>Remove</Text>
           </TouchableOpacity>

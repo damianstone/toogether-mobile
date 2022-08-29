@@ -1,6 +1,6 @@
 import React from 'react';
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
-import { Ionicons, Entypo } from '@expo/vector-icons';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Entypo, Ionicons } from '@expo/vector-icons';
 
 import tw from 'tailwind-rn';
 import Colors from '../constants/Colors';
@@ -8,16 +8,16 @@ import Colors from '../constants/Colors';
 const SwipeButtons = (props) => {
   return (
     <View style={[tw('flex flex-row justify-evenly pb-4'), styles.screen]}>
-      <TouchableOpacity style={styles.button1} onPress={props.onLeft}>
-        <Entypo name="cross" size={22} color="white" />
+      <TouchableOpacity onPress={props.onLeft} style={styles.button1}>
+        <Entypo color="white" name="cross" size={22} />
       </TouchableOpacity>
       {props.rewind ? (
-        <TouchableOpacity style={styles.button3} onPress={props.onRewind}>
-          <Entypo name="heart" size={22} color="black" />
+        <TouchableOpacity onPress={props.onRewind} style={styles.button3}>
+          <Entypo color="black" name="heart" size={22} />
         </TouchableOpacity>
       ) : null}
-      <TouchableOpacity style={styles.button2} onPress={props.onRight}>
-        <Entypo name="heart" size={22} color="white" />
+      <TouchableOpacity onPress={props.onRight} style={styles.button2}>
+        <Entypo color="white" name="heart" size={22} />
       </TouchableOpacity>
     </View>
   );

@@ -1,22 +1,15 @@
-import React, {
-  useState,
-  useContext,
-  useEffect,
-  useReducer,
-  useCallback,
-} from 'react';
+import React, { useEffect, useReducer, useCallback } from 'react';
 import {
   View,
   Button,
   Text,
   ScrollView,
-  Alert,
   ActivityIndicator,
   KeyboardAvoidingView,
 } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { useDispatch, useSelector } from 'react-redux';
-import { checkServerError } from '../../utils/errors';
+import { check400Error, checkServerError } from '../../utils/errors';
 
 import styles from './styles';
 import Colors from '../../constants/Colors';
@@ -92,9 +85,16 @@ const AuthStartScreen = (props) => {
   // REGISTER
   useEffect(() => {
     if (registerError) {
-      checkServerError(registerError);
-      dispatch({ type: c.USER_REGISTER_RESET });
+      if (
+        registerError.response.status >= 400 ||
+        registerError.response.status < 500
+      ) {
+        check400Error(registerError);
+      } else {
+        checkServerError(registerError);
+      }
     }
+
     if (register && registerSuccess) {
       props.navigation.navigate('Success', { register: register });
     }
@@ -103,9 +103,16 @@ const AuthStartScreen = (props) => {
 
   // LOGIN
   useEffect(() => {
+    console.log({ ...loginError });
     if (loginError) {
-      checkServerError(registerError);
-      dispatch({ type: c.USER_LOGIN_RESET });
+      if (
+        loginError.response.status >= 400 ||
+        loginError.response.status < 500
+      ) {
+        check400Error(loginError);
+      } else {
+        checkServerError(loginError);
+      }
     }
 
     if (loginSuccess && loginData.has_account) {
@@ -115,6 +122,8 @@ const AuthStartScreen = (props) => {
     if (loginSuccess && !loginData.has_account) {
       props.navigation.navigate('Success', { register: register });
     }
+
+    dispatch({ type: c.USER_LOGIN_RESET });
   }, [loginError, loginSuccess]);
 
   const inputChangeHandler = useCallback(
@@ -166,8 +175,7 @@ const AuthStartScreen = (props) => {
         <ScrollView
           style={styles.scrollview_style}
           contentContainerStyle={styles.scrollview_content_container}
-          automaticallyAdjustKeyboardInsets={true}
-        >
+          automaticallyAdjustKeyboardInsets={true}>
           <View style={styles.auth_input_container}>
             <AuthInput
               id="email"

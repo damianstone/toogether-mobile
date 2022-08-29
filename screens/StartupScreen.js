@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, ActivityIndicator, Text } from 'react-native';
+import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import Colors from '../constants/Colors';
@@ -23,7 +23,6 @@ const StartupScreen = (props) => {
 
       if (userData && userData.has_account) {
         props.navigation.navigate('Swipe');
-        return;
       }
     };
     tryLogin();
@@ -31,7 +30,7 @@ const StartupScreen = (props) => {
 
   return (
     <View style={styles.screen}>
-      <ActivityIndicator size="large" color={Colors.orange} />
+      <ActivityIndicator color={Colors.orange} size="large" />
     </View>
   );
 };

@@ -1,16 +1,14 @@
-import { StatusBar } from 'expo-status-bar';
 import React, { useState } from 'react';
-import store from './store/store';
-import AppLoading from 'expo-app-loading';
-import * as Font from 'expo-font';
 import { Provider } from 'react-redux';
 import {
   ActionSheetProvider,
   connectActionSheet,
 } from '@expo/react-native-action-sheet';
+import AppLoading from 'expo-app-loading';
+import * as Font from 'expo-font';
 
-import AppNavigation from './navigation/AppNavigation';
 import Navigator from './navigation/Navigation';
+import store from './store/store';
 
 // FETCH FONTS
 const fetchFonts = () => {
@@ -26,11 +24,11 @@ const App = (props) => {
   if (!fontLoaded) {
     return (
       <AppLoading
-        startAsync={fetchFonts}
+        onError={(err) => console.log(err)}
         onFinish={() => {
           setFontLoaded(true);
         }}
-        onError={(err) => console.log(err)}
+        startAsync={fetchFonts}
       />
     );
   }

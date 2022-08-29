@@ -94,6 +94,11 @@ export const userLogin = (email, password) => {
 
 export const logout = (name, email) => {
   return async (dispatch) => {
+    try {
+      await AsyncStorage.removeItem('@userData');
+    } catch (e) {
+      console.log(e);
+    }
     // TODO: remove data from localstorage
     // TODO: dispatch reset all the status
   };
@@ -125,23 +130,24 @@ export const createUserProfile = (
         url: `${BASE_URL}/api/v1/profiles/${userData.id}/actions/create-profile/`,
         headers: config,
         data: {
-          firstname: 'DAMIAN',
-          lastname: 'STONE',
-          birthdate: '2000-12-12',
-          gender: 'male',
-          show_me: 'women',
-          university: 'bristol',
-          description: 'x',
-
-          // firstname: firstname,
-          // lastname: lastname,
-          // birthdate: birthdate,
-          // gender: gender,
-          // show_me: show_me,
-          // university: university ? university : null,
-          // description: description ? description : null,
+          firstname: firstname,
+          lastname: lastname,
+          birthdate: birthdate,
+          gender: gender,
+          show_me: show_me,
+          university: university ? university : null,
+          description: description ? description : null,
         },
       });
+
+      await AsyncStorage.setItem(
+        '@userData',
+        JSON.stringify({
+          id: data.id,
+          token: data.token,
+          has_account: data.has_account,
+        })
+      );
 
       dispatch({
         type: c.USER_CREATE_SUCCESS,
@@ -202,7 +208,33 @@ export const addPhoto = (image) => {
 
 export const deleteUserPhoto = () => {};
 
-export const getUserPhotos = () => {};
+export const listUserPhotos = () => {
+  return async (dispatch) => {
+    try {
+      dispatch({ type: c.USER_LIST_PHOTOS_REQUEST });
+
+      const userData = JSON.parse(await AsyncStorage.getItem('@userData'));
+
+      console.log(userData.token);
+      const config = {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + userData.token,
+      };
+
+      const { data } = await axios.get(`${BASE_URL}/api/v1/photos/`, config);
+
+      dispatch({
+        type: c.USER_LIST_PHOTOS_SUCCESS,
+        payload: data,
+      });
+    } catch (error) {
+      dispatch({
+        type: c.USER_LIST_PHOTOS_FAIL,
+        payload: error,
+      });
+    }
+  };
+};
 
 export const blockUser = () => {};
 

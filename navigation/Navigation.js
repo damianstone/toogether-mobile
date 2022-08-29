@@ -1,26 +1,26 @@
 import React from 'react';
-import { View, Text, Platform } from 'react-native';
-import { createStackNavigator } from 'react-navigation-stack';
+import { Platform, Text, View } from 'react-native';
 import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 import { createDrawerNavigator } from 'react-navigation-drawer';
 import { createMaterialBottomTabNavigator } from 'react-navigation-material-bottom-tabs';
+import { createStackNavigator } from 'react-navigation-stack';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
 import { AntDesign } from '@expo/vector-icons';
 import Colors from '../constants/Colors';
 
-import AuthStartScreen from '../screens/Auth/AuthStartScreen';
 import AuthScreen from '../screens/Auth/AuthScreen';
+import AuthStartScreen from '../screens/Auth/AuthStartScreen';
 import AuthSucess from '../screens/Auth/AuthSuccess';
-import SwipeScreen from '../screens/Swipe/SwipeScreen';
-import ProfileModalScreen from '../screens/profile/ProfileModalScreen';
 import ChatScreen from '../screens/ChatScreen';
-import LikesScreen from '../screens/LikesScreen';
-import GroupScreen from '../screens/GroupScreen';
-import CreateProfileScreen from '../screens/CreateProfile/CreateProfileScreen';
 import AddProfilePhotoScreen from '../screens/CreateProfile/AddProfilePhotoScreen';
+import CreateProfileScreen from '../screens/CreateProfile/CreateProfileScreen';
+import GroupScreen from '../screens/GroupScreen';
+import LikesScreen from '../screens/LikesScreen';
 import MyProfileScreen from '../screens/MyProfile/MyProfileScreen';
 import SettingScreen from '../screens/MyProfile/SettingScreen';
+import ProfileModalScreen from '../screens/profile/ProfileModalScreen';
 import StartupScreen from '../screens/StartupScreen';
+import SwipeScreen from '../screens/Swipe/SwipeScreen';
 
 const defaultNavOptions = {
   headerMode: 'none',
@@ -104,13 +104,13 @@ const MyProfileNavigator = createStackNavigator(
 
 // CREAR NAVBAR
 const tabScreenCnfig = {
-  //CONFIG
+  // CONFIG
   Swipe: {
     screen: SwipeNavigator, // STACK NAVIGATOR
     navigationOptions: {
       // poner un icono en la navbar
       tabBarIcon: (tabInfo) => {
-        return <AntDesign name="home" size={25} color={tabInfo.tintColor} />;
+        return <AntDesign color={tabInfo.tintColor} name="home" size={25} />;
       },
       tabBarColor: Colors.orange,
       tabBarLabel: Platform.OS === 'android' ? <Text>Swipe</Text> : 'Swipe',
@@ -121,7 +121,7 @@ const tabScreenCnfig = {
     navigationOptions: {
       tabBarLabel: 'Likes', // cambiar el nombre
       tabBarIcon: (tabInfo) => {
-        return <AntDesign name="hearto" size={25} color={tabInfo.tintColor} />;
+        return <AntDesign color={tabInfo.tintColor} name="hearto" size={25} />;
       },
       tabBarColor: Colors.orange,
       tabBarLabel: Platform.OS === 'android' ? <Text>Likes</Text> : 'Likes',
@@ -133,7 +133,7 @@ const tabScreenCnfig = {
       tabBarLabel: 'Groupppp', // cambiar el nombre
       tabBarIcon: (tabInfo) => {
         return (
-          <AntDesign name="addusergroup" size={25} color={tabInfo.tintColor} />
+          <AntDesign color={tabInfo.tintColor} name="addusergroup" size={25} />
         );
       },
       tabBarColor: Colors.orange,
