@@ -16,7 +16,6 @@ const ProfileModalScreen = (props) => {
   const [description] = useState(props.description || '');
   const [photos] = useState(props.photosArr || '');
 
-
   // pass those functions as a props for detail card
   const onDislikePressed = () => {
     props.setShowMode(0);

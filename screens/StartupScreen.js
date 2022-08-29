@@ -15,9 +15,11 @@ const StartupScreen = (props) => {
       const stored = await AsyncStorage.getItem('@userData');
       const userData = JSON.parse(stored);
 
+      console.log({ ...userData });
+
       // if there is no user data
       if (!userData || !userData.has_account) {
-        props.navigation.navigate('Create');
+        props.navigation.navigate('AuthStart');
         return;
       }
 

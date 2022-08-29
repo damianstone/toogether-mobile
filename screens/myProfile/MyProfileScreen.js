@@ -1,58 +1,46 @@
+import React, { useEffect, useState } from 'react';
 import {
-  Text,
-  View,
-  Platform,
-  ScrollView,
-  SafeAreaView,
+  ActivityIndicator,
   FlatList,
-  TouchableOpacity,
   Image,
+  Platform,
+  SafeAreaView,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
 } from 'react-native';
-import React, { useState, useRef, useDispatch, useEffect } from 'react';
-import { useSelector } from 'react-redux';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
-import { LinearGradient } from 'expo-linear-gradient';
+import { useDispatch, useSelector } from 'react-redux';
 import { useActionSheet } from '@expo/react-native-action-sheet';
+import Constants from 'expo-constants';
+import { LinearGradient } from 'expo-linear-gradient';
 
-import HeaderButtom from '../../components/UI/HeaderButton';
 import ActivityModal from '../../components/UI/ActivityModal';
-import styles from './styles';
+import HeaderButtom from '../../components/UI/HeaderButton';
 import Colors from '../../constants/Colors';
-import axios from 'axios';
-
-/* 
-MyProfileScreen
-
-where the user can see their profile
-
-Receive the profile object from... (?)
-
-Support the following changes to the profile
-- remove and add new photo
-
-redirects to
-- setting screen 
-- toogether pro explanation website
-
-*/
+import { listUserPhotos } from '../../store/actions/user';
+import styles from './styles';
 
 const MyProfileScreen = (props) => {
-  const [loading, setLoading] = useState(false);
-  const [user, setUser] = useState();
-  const [photos, setPhotos] = useState([]);
+  const BASE_URL = Constants.manifest.extra.LOCAL_URL;
+  const dispatch = useDispatch();
   const { showActionSheetWithOptions } = useActionSheet();
 
+  // TODO: get user
+
+  const userPhotos = useSelector((state) => state.userListPhotos);
+  const {
+    loading: loadingPhotos,
+    error: errorPhotos,
+    data: photos,
+  } = userPhotos;
+
   useEffect(() => {
-    setLoading(true);
-    const fetchUser = async () => {
-      // no write the entire url because the other part of the url is in proxy packajge.json
-      const { data } = await axios.get('http://127.0.0.1:8000/api/profiles/1');
-      setUser(data);
-      setPhotos(`http://127.0.0.1:8000${user.photo}`);
-    };
-    fetchUser();
-    setLoading(false);
-  }, []);
+    if (!photos) {
+      dispatch(listUserPhotos());
+    }
+  }, [photos]);
 
   const onOpenUploadPhotoActionSheet = () => {
     // Same interface as https://facebook.github.io/react-native/docs/actionsheetios.html
@@ -102,10 +90,21 @@ const MyProfileScreen = (props) => {
           <ScrollView style={styles.body}>
             {/* MAIN FOTOS AND COUNTERS */}
             <View style={styles.profilePictureContainer}>
-              <Image
-                style={{ width: 150, height: 150, borderRadius: 100 }}
-                source={require('../../assets/images/Profiles/user.jpeg')}
-              />
+              {loadingPhotos && <ActivityIndicator />}
+              {photos && (
+                <Image
+                  source={{
+                    uri: `${BASE_URL}${Object.values(photos)[0].image}`,
+                  }}
+                  style={{ width: 150, height: 150, borderRadius: 100 }}
+                />
+              )}
+              {!photos ||
+                (Object.values(photos).length === 0 && (
+                  <View style={styles.avatar_view}>
+                    <Text style={styles.avatar_initials}>DS</Text>
+                  </View>
+                ))}
             </View>
             <View style={styles.nameView}>
               <Text style={styles.name}>Damian Stone</Text>
@@ -128,27 +127,26 @@ const MyProfileScreen = (props) => {
                 <Text style={styles.photoTitleLabel}>My Photos</Text>
               </View>
               <FlatList
-                scrollEnabled={false}
-                horizontal={false}
-                numColumns={3}
                 data={photos}
+                horizontal={false}
                 keyExtractor={(item) => item}
+                numColumns={3}
                 renderItem={(photo, index) => (
                   <TouchableOpacity
-                    key={'item' + index}
-                    style={styles.myphotosItemView}
+                    key={`item${index}`}
                     onPress={onOpenActionSheet}
-                  >
+                    style={styles.myphotosItemView}>
                     <Image
+                      source=""
                       style={{ width: '100%', height: '100%' }}
-                      source={photo}
                     />
                   </TouchableOpacity>
                 )}
+                scrollEnabled={false}
               />
             </View>
 
-            {/* TOOGETHER PRO*/}
+            {/* TOOGETHER PRO */}
             <View style={styles.circle}>
               <LinearGradient
                 colors={['#ED665A', '#CF2A6E', '#BA007C']}
@@ -157,8 +155,8 @@ const MyProfileScreen = (props) => {
               <View style={{ alignItems: 'center' }}>
                 <View style={styles.logoContainer}>
                   <Image
-                    style={styles.logo}
                     source={require('../../assets/images/logo-2.png')}
+                    style={styles.logo}
                   />
                 </View>
                 <Text style={styles.proText}>
@@ -167,8 +165,7 @@ const MyProfileScreen = (props) => {
                 <View style={styles.buttonPremiumContainer}>
                   <TouchableOpacity
                     onPress={() => {}}
-                    style={styles.buttonPremiumView}
-                  >
+                    style={styles.buttonPremiumView}>
                     <LinearGradient
                       // Background Linear Gradient
                       colors={['#ED665A', '#CF2A6E', '#BA007C']}
@@ -192,24 +189,24 @@ MyProfileScreen.navigationOptions = (navData) => {
     headerRight: () => (
       <HeaderButtons HeaderButtonComponent={HeaderButtom}>
         <Item
-          title="Back arrow"
           iconName={Platform.OS === 'android' ? 'md-cart' : 'ios-arrow-back'}
           onPress={() => {
             // go to chat screen
             navData.navigation.navigate('Setting');
           }}
+          title="Back arrow"
         />
       </HeaderButtons>
     ),
     headerLeft: () => (
       <HeaderButtons HeaderButtonComponent={HeaderButtom}>
         <Item
-          title="Back arrow"
           iconName={Platform.OS === 'android' ? 'md-cart' : 'ios-arrow-back'}
           onPress={() => {
             // go to chat screen
             navData.navigation.navigate('Swipe');
           }}
+          title="Back arrow"
         />
       </HeaderButtons>
     ),

@@ -1,8 +1,8 @@
-import { StyleSheet, Platform, Dimensions } from 'react-native';
+import { Dimensions, Platform, StyleSheet } from 'react-native';
 import { linear } from 'react-native/Libraries/Animated/Easing';
 import Colors from '../../constants/Colors';
 
-const width = Dimensions.get('window').width;
+const { width } = Dimensions.get('window');
 
 export default StyleSheet.create({
   MainContainer: {
@@ -28,6 +28,18 @@ export default StyleSheet.create({
   profilePictureContainer: {
     marginTop: 20,
     alignItems: 'center',
+  },
+  avatar_view: {
+    backgroundColor: Colors.orange,
+    width: 150,
+    height: 150,
+    borderRadius: 100,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  avatar_initials: {
+    color: Colors.white,
+    fontSize: 25,
   },
   nameView: {
     width: '100%',
@@ -164,7 +176,7 @@ export default StyleSheet.create({
     height: '100%',
     width: '160%',
     borderRadius: 300,
-    //backgroundColor: '#494863',
+    // backgroundColor: '#494863',
     alignSelf: 'center',
     alignItems: 'center',
     transform: [{ scaleX: 1 }],

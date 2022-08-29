@@ -101,8 +101,7 @@ const SwipeCard = (props) => {
           paginationStyle={{ top: 5, bottom: null }}
           removeClippedSubviews={false}
           showsButtons
-          style={styles.wrapper}
-        >
+          style={styles.wrapper}>
           {isGroup ? (
             profile.members.map((profile, i) => {
               return (
@@ -111,8 +110,7 @@ const SwipeCard = (props) => {
                   key={profile.id}
                   resizeMode="cover"
                   source={require('../assets/images/Profiles/profile-1.jpeg')}
-                  style={styles.image}
-                >
+                  style={styles.image}>
                   <Info
                     age={profile.age}
                     firstName={profile.name}
@@ -122,8 +120,7 @@ const SwipeCard = (props) => {
                   />
                   <TouchableOpacity
                     onPress={() => props.onProfile(profile.id)}
-                    style={styles.arrowContainer}
-                  >
+                    style={styles.arrowContainer}>
                     <Text>A</Text>
                   </TouchableOpacity>
                 </ImageBackground>
@@ -135,8 +132,7 @@ const SwipeCard = (props) => {
               key={profile.id}
               resizeMode="cover"
               source={{ uri: `http://127.0.0.1:8000${profile.photo}` }} // just get the first photo of every profile
-              style={styles.image}
-            >
+              style={styles.image}>
               <Info
                 age={profile.age}
                 firstName={profile.name}
@@ -146,8 +142,7 @@ const SwipeCard = (props) => {
               />
               <TouchableOpacity
                 onPress={() => props.onProfile(profile.id)}
-                style={styles.arrowContainer}
-              >
+                style={styles.arrowContainer}>
                 <Text>A</Text>
               </TouchableOpacity>
             </ImageBackground>

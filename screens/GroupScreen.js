@@ -52,8 +52,7 @@ const Group = () => {
         <Text style={styles.cardTitle}>Start a group</Text>
         <TouchableOpacity
           onPress={onCreateGroup}
-          style={styles.buttonContainer}
-        >
+          style={styles.buttonContainer}>
           <Text style={styles.buttonText}>Create</Text>
         </TouchableOpacity>
       </View>

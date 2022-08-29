@@ -31,7 +31,6 @@ const SwipeScreen = (props) => {
   const [loading, setLoading] = useState(false);
   const [noCards, setNoCards] = useState(false);
 
-
   const undoSwipe = (swipeToUndo) => {
     if (!swipeToUndo) {
       return;

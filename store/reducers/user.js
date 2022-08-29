@@ -1,5 +1,7 @@
 import * as c from '../../constants/user';
 
+// -------------------------------- LOGIN / REGISTER REDUCERS --------------------------------
+
 export const userRegisterReducer = (state = {}, action) => {
   switch (action.type) {
     case c.USER_REGISTER_REQUEST:
@@ -48,6 +50,8 @@ export const userLoginReducer = (state = {}, action) => {
   }
 };
 
+// -------------------------------- PROFILE REDUCERS --------------------------------
+
 export const userCreateProfileReducer = (state = {}, action) => {
   switch (action.type) {
     case c.USER_CREATE_REQUEST:
@@ -69,6 +73,8 @@ export const userCreateProfileReducer = (state = {}, action) => {
       return state;
   }
 };
+
+// -------------------------------- PHOTOS REDUCERS --------------------------------
 
 export const userAddPhotoReducer = (state = {}, action) => {
   switch (action.type) {
@@ -109,23 +115,5 @@ export const userListPhotosReducer = (state = {}, action) => {
       };
     default:
       return state;
-  }
-};
-
-// GET USER DETAILS
-export const getUserDetailsReducer = (state = {}, action) => {
-  switch (action.type) {
-  }
-};
-
-// UPDATE USER
-export const updateUserReducer = (state = {}, action) => {
-  switch (action.type) {
-  }
-};
-
-// DELETE USER
-export const deleteUserReducer = (state = {}, action) => {
-  switch (action.type) {
   }
 };

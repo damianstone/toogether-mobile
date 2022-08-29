@@ -1,22 +1,44 @@
 import React, { useEffect } from 'react';
-import { StyleSheet, TouchableOpacity, Image } from 'react-native';
-import { useSelector, useDispatch } from 'react-redux';
+import {
+  ActivityIndicator,
+  Image,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
+import Constants from 'expo-constants';
+import Colors from '../../constants/Colors';
 import { listUserPhotos } from '../../store/actions/user';
 
 const Avatar = (props) => {
+  const BASE_URL = Constants.manifest.extra.LOCAL_URL;
   const dispatch = useDispatch();
   const userPhotos = useSelector((state) => state.userListPhotos);
   const { loading, error, data } = userPhotos;
 
   useEffect(() => {
-    dispatch(listUserPhotos());
+    if (!data) {
+      dispatch(listUserPhotos());
+    }
   }, []);
 
-  console.log('USER PHOTOS ---> ', data);
-
   return (
-    <TouchableOpacity style={styles.imgContainer} onPress={props.onPress}>
-      <Image source={''} style={styles.img} />
+    <TouchableOpacity onPress={props.onPress} style={styles.imgContainer}>
+      {loading && <ActivityIndicator />}
+      {data && (
+        <Image
+          source={{ uri: `${BASE_URL}${Object.values(data)[0].image}` }}
+          style={styles.img}
+        />
+      )}
+      {!data ||
+        (Object.values(data).length === 0 && (
+          <View style={styles.avatar_view}>
+            <Text style={styles.avatar_initials}>DS</Text>
+          </View>
+        ))}
     </TouchableOpacity>
   );
 };
@@ -34,5 +56,17 @@ const styles = StyleSheet.create({
   img: {
     width: '100%',
     height: '100%',
+  },
+
+  avatar_view: {
+    backgroundColor: Colors.orange,
+    width: '100%',
+    height: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  avatar_initials: {
+    color: Colors.white,
+    fontSize: 18,
   },
 });

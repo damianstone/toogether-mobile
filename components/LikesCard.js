@@ -44,8 +44,7 @@ const LikesCard = (props) => {
       <View style={{ ...cardType }}>
         <TouchableOpacity
           onPress={() => showProfile(group.id)}
-          style={styles.touch}
-        >
+          style={styles.touch}>
           {group.totalMembers > 1 && (
             <View style={styles.groupName}>
               <Text style={styles.text}>Grupo de {group.members[0].name}</Text>

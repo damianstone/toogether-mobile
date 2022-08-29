@@ -1,11 +1,13 @@
+import { Platform } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import Constants from 'expo-constants';
-import { Platform } from 'react-native';
-import * as c from '../../constants/user';
 import * as FileSystem from 'expo-file-system';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as c from '../../constants/user';
 
 const BASE_URL = Constants.manifest.extra.LOCAL_URL;
+
+// -------------------------------- LOGIN / REGISTER ACTIONS --------------------------------
 
 export const userRegister = (email, password, repeated_password) => {
   return async (dispatch) => {
@@ -21,9 +23,9 @@ export const userRegister = (email, password, repeated_password) => {
         url: `${BASE_URL}/api/v1/users/register/`,
         headers: config,
         data: {
-          email: email,
-          password: password,
-          repeated_password: repeated_password,
+          email,
+          password,
+          repeated_password,
         },
       });
 
@@ -65,8 +67,8 @@ export const userLogin = (email, password) => {
         url: `${BASE_URL}/api/v1/users/login/`,
         headers: config,
         data: {
-          email: email,
-          password: password,
+          email,
+          password,
         },
       });
 
@@ -92,15 +94,52 @@ export const userLogin = (email, password) => {
   };
 };
 
-export const logout = (name, email) => {
+export const logout = () => {
   return async (dispatch) => {
     try {
       await AsyncStorage.removeItem('@userData');
+
+      dispatch({ type: c.USER_LOGIN_RESET });
+      dispatch({ type: c.USER_LIST_PHOTOS_RESET });
+      dispatch({ type: c.USER_GET_PROFILE_RESET });
     } catch (e) {
       console.log(e);
     }
-    // TODO: remove data from localstorage
-    // TODO: dispatch reset all the status
+  };
+};
+
+// -------------------------------- PROFILE ACTIONS --------------------------------
+
+// GET USER -> get any profile
+export const getUserProfile = () => {
+  return async (dispatch) => {
+    try {
+      dispatch({ type: c.USER_GET_PROFILE_REQUEST });
+
+      const userData = JSON.parse(await AsyncStorage.getItem('@userData'));
+
+      const config = {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+        Authorization: 'Bearer ' + userData.token,
+      };
+
+      const { data } = await axios({
+        method: 'get',
+        url: `${BASE_URL}/api/v1/profiles/${userData.id}/`,
+        headers: config,
+      });
+
+      dispatch({
+        type: c.USER_GET_PROFILE_SUCCESS,
+        payload: data,
+      });
+    } catch (error) {
+      dispatch({
+        type: c.USER_GET_PROFILE_FAIL,
+        payload: error,
+      });
+    }
   };
 };
 
@@ -122,7 +161,7 @@ export const createUserProfile = (
       const config = {
         'Content-Type': 'application/json',
         Accept: 'application/json',
-        Authorization: 'Bearer ' + userData.token,
+        Authorization: `Bearer ${userData.token}`,
       };
 
       const { data } = await axios({
@@ -130,13 +169,13 @@ export const createUserProfile = (
         url: `${BASE_URL}/api/v1/profiles/${userData.id}/actions/create-profile/`,
         headers: config,
         data: {
-          firstname: firstname,
-          lastname: lastname,
-          birthdate: birthdate,
-          gender: gender,
-          show_me: show_me,
-          university: university ? university : null,
-          description: description ? description : null,
+          firstname,
+          lastname,
+          birthdate,
+          gender,
+          show_me,
+          university: university || null,
+          description: description || null,
         },
       });
 
@@ -161,6 +200,17 @@ export const createUserProfile = (
     }
   };
 };
+
+// UPDATE USER PROFILE
+export const updateUserProfile = () => {};
+
+// GET USER -> get any profile
+export const getUserDetails = () => {};
+
+// DELETE ACCOUNT
+export const deleteUser = () => {};
+
+// -------------------------------- PHOTOS ACTIONS --------------------------------
 
 export const addPhoto = (image) => {
   return async (dispatch) => {
@@ -188,7 +238,7 @@ export const addPhoto = (image) => {
           headers: {
             'Content-Type': 'multipart/form-data',
             Accept: 'application/json',
-            Authorization: 'Bearer ' + userData.token,
+            Authorization: `Bearer ${userData.token}`,
           },
         }
       );
@@ -197,7 +247,6 @@ export const addPhoto = (image) => {
         payload: data,
       });
     } catch (error) {
-      console.log({ ...error });
       dispatch({
         type: c.USER_ADD_PHOTO_FAIL,
         payload: error,
@@ -215,13 +264,17 @@ export const listUserPhotos = () => {
 
       const userData = JSON.parse(await AsyncStorage.getItem('@userData'));
 
-      console.log(userData.token);
       const config = {
         'Content-Type': 'application/json',
+        Accept: 'application/json',
         Authorization: 'Bearer ' + userData.token,
       };
 
-      const { data } = await axios.get(`${BASE_URL}/api/v1/photos/`, config);
+      const { data } = await axios({
+        method: 'get',
+        url: `${BASE_URL}/api/v1/photos/`,
+        headers: config,
+      });
 
       dispatch({
         type: c.USER_LIST_PHOTOS_SUCCESS,
@@ -236,15 +289,7 @@ export const listUserPhotos = () => {
   };
 };
 
+// -------------------------------- BLOCK ACTIONS --------------------------------
 export const blockUser = () => {};
 
 export const disblockUser = () => {};
-
-// UPDATE USER PROFILE
-export const updateUserProfile = () => {};
-
-// GET USER -> get any profile
-export const getUserDetails = () => {};
-
-// DELETE ACCOUNT
-export const deleteUser = () => {};
