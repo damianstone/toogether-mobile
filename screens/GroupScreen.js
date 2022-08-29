@@ -26,7 +26,7 @@ const Group = () => {
   if (showLink) {
     card = (
       <View style={styles.bigCard}>
-        <Text style={styles.cardTitle}>You've created a group</Text>
+        <Text style={styles.cardTitle}>You&aposve created a group</Text>
         <Text style={styles.smallText}>
           Copy the following code and send it to your friends so they can join
           your group.

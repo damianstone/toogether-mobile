@@ -36,8 +36,7 @@ const AuthSucess = (props) => {
           style={styles.touchable}
           onPress={() => {
             props.navigation.navigate('Create');
-          }}
-        >
+          }}>
           <Button
             onPress={() => {
               props.navigation.navigate('Create');

@@ -1,13 +1,12 @@
-import { StyleSheet, TouchableOpacity, Text } from 'react-native';
 import React from 'react';
+import { StyleSheet, TouchableOpacity, Text } from 'react-native';
 import Colors from '../../constants/Colors';
 
 const AuthButton = (props) => {
   return (
     <TouchableOpacity
       style={styles.auth_button_container}
-      onPress={props.onPress}
-    >
+      onPress={props.onPress}>
       <Text style={styles.auth_button_text}>{props.text}</Text>
     </TouchableOpacity>
   );

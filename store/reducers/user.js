@@ -52,6 +52,28 @@ export const userLoginReducer = (state = {}, action) => {
 
 // -------------------------------- PROFILE REDUCERS --------------------------------
 
+export const userGetProfileReducer = (state = {}, action) => {
+  switch (action.type) {
+    case c.USER_GET_PROFILE_REQUEST:
+      return {
+        loading: true,
+      };
+    case c.USER_GET_PROFILE_SUCCESS:
+      return {
+        data: { ...action.payload },
+      };
+    case c.USER_GET_PROFILE_FAIL:
+      return {
+        loading: false,
+        error: action.payload,
+      };
+    case c.USER_GET_PROFILE_RESET:
+      return {};
+    default:
+      return state;
+  }
+};
+
 export const userCreateProfileReducer = (state = {}, action) => {
   switch (action.type) {
     case c.USER_CREATE_REQUEST:

@@ -16,10 +16,10 @@ import { useActionSheet } from '@expo/react-native-action-sheet';
 import Constants from 'expo-constants';
 import { LinearGradient } from 'expo-linear-gradient';
 
-import ActivityModal from '../../components/UI/ActivityModal';
+// import ActivityModal from '../../components/UI/ActivityModal';
 import HeaderButtom from '../../components/UI/HeaderButton';
-import Colors from '../../constants/Colors';
-import { listUserPhotos } from '../../store/actions/user';
+// import Colors from '../../constants/Colors';
+import { listUserPhotos, getUserProfile } from '../../store/actions/user';
 import styles from './styles';
 
 const MyProfileScreen = (props) => {
@@ -27,21 +27,33 @@ const MyProfileScreen = (props) => {
   const dispatch = useDispatch();
   const { showActionSheetWithOptions } = useActionSheet();
 
-  // TODO: get user
+  const userGetProfile = useSelector((state) => state.userGetProfile);
+  const {
+    loading: loadingProfile,
+    error: errorProfile,
+    data: userProfile,
+  } = userGetProfile;
 
-  const userPhotos = useSelector((state) => state.userListPhotos);
+  const userListPhotos = useSelector((state) => state.userListPhotos);
   const {
     loading: loadingPhotos,
     error: errorPhotos,
     data: photos,
-  } = userPhotos;
+  } = userListPhotos;
 
   useEffect(() => {
     if (!photos) {
       dispatch(listUserPhotos());
     }
-  }, [photos]);
+    if (!userProfile) {
+      dispatch(getUserProfile());
+    }
+    if (errorProfile) {
+      console.log({ ...errorProfile });
+    }
+  }, [photos, userProfile]);
 
+  console.log({ ...userProfile });
   const onOpenUploadPhotoActionSheet = () => {
     // Same interface as https://facebook.github.io/react-native/docs/actionsheetios.html
     const options = ['From Camera', 'Upload from Gallery', 'Cancel'];
@@ -83,6 +95,14 @@ const MyProfileScreen = (props) => {
     );
   };
 
+  const renderNoPhotos = () => {
+    return (
+      <View>
+        <Text>NO PHOTOS YET COMPONENT</Text>
+      </View>
+    );
+  };
+
   return (
     <View style={styles.MainContainer}>
       <SafeAreaView style={styles.safeAreaContainer}>
@@ -107,7 +127,11 @@ const MyProfileScreen = (props) => {
                 ))}
             </View>
             <View style={styles.nameView}>
-              <Text style={styles.name}>Damian Stone</Text>
+              {userProfile && (
+                <Text style={styles.name}>
+                  {`${userProfile.firstname} ${userProfile.lastname}`}
+                </Text>
+              )}
             </View>
             <View style={styles.counterContainer}>
               <View style={styles.counterView}>
@@ -126,24 +150,31 @@ const MyProfileScreen = (props) => {
               <View style={styles.itemView}>
                 <Text style={styles.photoTitleLabel}>My Photos</Text>
               </View>
-              <FlatList
-                data={photos}
-                horizontal={false}
-                keyExtractor={(item) => item}
-                numColumns={3}
-                renderItem={(photo, index) => (
-                  <TouchableOpacity
-                    key={`item${index}`}
-                    onPress={onOpenActionSheet}
-                    style={styles.myphotosItemView}>
-                    <Image
-                      source=""
-                      style={{ width: '100%', height: '100%' }}
-                    />
-                  </TouchableOpacity>
-                )}
-                scrollEnabled={false}
-              />
+
+              {userProfile && (
+                <FlatList
+                  style={styles.flatlist_photos_style}
+                  contentContainerStyle={styles.flatlist_photos_container_style}
+                  data={[...userProfile.photos]}
+                  horizontal={false}
+                  keyExtractor={(photo) => photo.id}
+                  ListEmptyComponent={renderNoPhotos}
+                  nestedScrollEnabled
+                  numColumns={3}
+                  renderItem={({ item }) => (
+                    <TouchableOpacity
+                      key={item.id}
+                      onPress={onOpenActionSheet}
+                      style={styles.myphotosItemView}>
+                      <Image
+                        source={{ uri: `${BASE_URL}${item.image}` }}
+                        style={{ width: '100%', height: '100%' }}
+                      />
+                    </TouchableOpacity>
+                  )}
+                  scrollEnabled={false}
+                />
+              )}
             </View>
 
             {/* TOOGETHER PRO */}

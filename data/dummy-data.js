@@ -1,3 +1,4 @@
+/* eslint-disable import-helpers/order-imports */
 import Group from '../models/group';
 import Profile from '../models/profile';
 

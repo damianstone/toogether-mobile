@@ -7,16 +7,16 @@ import {
   ActivityIndicator,
   KeyboardAvoidingView,
 } from 'react-native';
-import { StatusBar } from 'expo-status-bar';
 import { useDispatch, useSelector } from 'react-redux';
-import { check400Error, checkServerError } from '../../utils/errors';
+import { StatusBar } from 'expo-status-bar';
 
-import styles from './styles';
-import Colors from '../../constants/Colors';
-import AuthInput from '../../components/UI/AuthInput';
 import AuthButton from '../../components/UI/AuthButton';
+import AuthInput from '../../components/UI/AuthInput';
+import Colors from '../../constants/Colors';
 import * as c from '../../constants/user';
 import { userRegister, userLogin } from '../../store/actions/user';
+import { check400Error, checkServerError } from '../../utils/errors';
+import styles from './styles';
 
 const FORM_UPDATE = 'FORM_UPDATE';
 
@@ -171,12 +171,11 @@ const AuthStartScreen = (props) => {
           </Text>
         </View>
       </View>
-      <KeyboardAvoidingView behavior={'position'}>
+      <KeyboardAvoidingView behavior="position">
         <ScrollView
           style={styles.scrollview_style}
           contentContainerStyle={styles.scrollview_content_container}
-          automaticallyAdjustKeyboardInsets={true}
-        >
+          automaticallyAdjustKeyboardInsets>
           <View style={styles.auth_input_container}>
             <AuthInput
               id="email"
@@ -192,8 +191,8 @@ const AuthStartScreen = (props) => {
               onInputChange={inputChangeHandler}
             />
             <AuthInput
-              secureTextEntry={true}
-              textContentType={'password'}
+              secureTextEntry
+              textContentType="password"
               id="password"
               label="Password"
               keyboardType="default"
@@ -205,8 +204,8 @@ const AuthStartScreen = (props) => {
             />
             {register && (
               <AuthInput
-                secureTextEntry={true}
-                textContentType={'password'}
+                secureTextEntry
+                textContentType="password"
                 required
                 autoCapitalize="none"
                 id="repeated_password"
@@ -229,7 +228,7 @@ const AuthStartScreen = (props) => {
             )}
             <Button
               style={styles.auth_text_button}
-              color={'#4A4A4A'}
+              color="#4A4A4A"
               title={
                 register
                   ? 'You already have an account?'

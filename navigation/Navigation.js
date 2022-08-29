@@ -119,7 +119,6 @@ const tabScreenCnfig = {
   Likes: {
     screen: LikeNavigator, // STACK NAVIGATOR
     navigationOptions: {
-      tabBarLabel: 'Likes', // cambiar el nombre
       tabBarIcon: (tabInfo) => {
         return <AntDesign color={tabInfo.tintColor} name="hearto" size={25} />;
       },
@@ -130,7 +129,6 @@ const tabScreenCnfig = {
   Group: {
     screen: GroupNavigator, // STACK NAVIGATOR
     navigationOptions: {
-      tabBarLabel: 'Groupppp', // cambiar el nombre
       tabBarIcon: (tabInfo) => {
         return (
           <AntDesign color={tabInfo.tintColor} name="addusergroup" size={25} />

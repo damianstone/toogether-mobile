@@ -107,7 +107,7 @@ const Input = (props) => {
         {...props}
         initialValue="YYYY-MM-DD"
         style={styles.input}
-        type={'datetime'}
+        type="datetime"
         options={{
           format: 'YYYY-MM-DD',
         }}

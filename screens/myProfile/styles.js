@@ -101,9 +101,22 @@ export default StyleSheet.create({
     height: '100%',
     width: '90%',
   },
+  flatlist_photos_style: {
+    width: '100%',
+  },
+  flatlist_photos_container_style: {
+    justifyContent: 'center',
+  },
+  photos_grid_view: {
+    flex: 3,
+    justifyContent: 'center',
+    flexDirection: 'row',
+    width: '100%',
+    marginHorizontal: 'auto',
+  },
   myphotosItemView: {
-    width: Math.floor(width * 0.24),
-    height: Math.floor(width * 0.24),
+    width: Math.floor(width * 0.29),
+    height: Math.floor(width * 0.29),
     marginHorizontal: 8,
     marginVertical: 8,
     borderRadius: 15,

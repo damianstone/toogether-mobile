@@ -1,9 +1,9 @@
 import React, { useState, Fragment } from 'react';
 import { View, Button, Text, StyleSheet, Image, Alert } from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 import * as ImagePicker from 'expo-image-picker';
 
 import Colors from '../../constants/Colors';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 
 const ImageSelector = (props) => {
   const [image, setImage] = useState();
@@ -52,7 +52,7 @@ const ImageSelector = (props) => {
             resizeMode="contain"
           />
         ) : (
-          <Fragment>
+          <>
             <Text style={{ marginBottom: 10, color: Colors.white }}>
               No Image picked yet.
             </Text>
@@ -63,7 +63,7 @@ const ImageSelector = (props) => {
                 takeImageHandler();
               }}
             />
-          </Fragment>
+          </>
         )}
       </View>
       {image && image.uri ? (
@@ -72,8 +72,7 @@ const ImageSelector = (props) => {
             flexDirection: 'row',
             justifyContent: 'space-around',
             width: '100%',
-          }}
-        >
+          }}>
           <TouchableOpacity onPress={deleteImageHandler}>
             <Text style={styles.redColor}>Remove</Text>
           </TouchableOpacity>

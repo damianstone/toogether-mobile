@@ -7,6 +7,7 @@ import {
   userListPhotosReducer,
   userLoginReducer,
   userRegisterReducer,
+  userGetProfileReducer,
 } from './reducers/user';
 
 const reducer = combineReducers({
@@ -15,6 +16,7 @@ const reducer = combineReducers({
   userCreateProfile: userCreateProfileReducer,
   userAddPhoto: userAddPhotoReducer,
   userListPhotos: userListPhotosReducer,
+  userGetProfile: userGetProfileReducer,
 });
 
 const getUserFromStorage = async () => {

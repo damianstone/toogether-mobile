@@ -7,8 +7,12 @@ import {
   ActivityIndicator,
   Alert,
 } from 'react-native';
-import { StatusBar } from 'expo-status-bar';
 import { useDispatch, useSelector } from 'react-redux';
+import { StatusBar } from 'expo-status-bar';
+import AuthButton from '../../components/UI/AuthButton';
+import Input from '../../components/UI/Input';
+import Colors from '../../constants/Colors';
+import * as c from '../../constants/user';
 import { createUserProfile } from '../../store/actions/user';
 import {
   checkServerError,
@@ -16,12 +20,8 @@ import {
   check400Error,
 } from '../../utils/errors';
 
-import Colors from '../../constants/Colors';
-import styles from './styles';
 import * as authStyles from '../Auth/styles';
-import * as c from '../../constants/user';
-import Input from '../../components/UI/Input';
-import AuthButton from '../../components/UI/AuthButton';
+import styles from './styles';
 
 const FORM_UPDATE = 'FORM_UPDATE';
 
@@ -193,19 +193,17 @@ const CreateProfileScreen = (props) => {
       behavior="padding"
       keyboardVerticalOffset={50}
       style={styles.screen}
-      contentContainerStyle={styles.screen}
-    >
+      contentContainerStyle={styles.screen}>
       <StatusBar style="light" />
       <ScrollView
         showsVerticalScrollIndicator={false}
         showsHorizontalScrollIndicator={false}
         style={styles.scroll}
-        contentContainerStyle={styles.contentContainer}
-      >
+        contentContainerStyle={styles.contentContainer}>
         <View style={styles.auth_text_view}>
           <View style={authStyles.default.auth_text_container}>
             <Text style={authStyles.default.auth_text_big}>
-              Let's create your profile
+              Let&aposs create your profile
             </Text>
           </View>
           <View style={authStyles.default.auth_text_container}>
@@ -268,7 +266,7 @@ const CreateProfileScreen = (props) => {
             keyboardType="default"
             autoCapitalize="sentences"
             required={false}
-            initialIsValid={true}
+            initialIsValid
             onInputChange={inputChangeHandler}
             initialValue=""
             autoCorrect={false}
@@ -347,7 +345,7 @@ const CreateProfileScreen = (props) => {
             underlineColorAndroid="transparent"
             placeholder="Type something"
             placeholderTextColor={Colors.placeholder}
-            multiline={true}
+            multiline
             numberOfLines={5}
             maxLength={500}
             inputType="textInput"
@@ -355,7 +353,7 @@ const CreateProfileScreen = (props) => {
             label="About (optional)"
             autoCapitalize="none"
             required={false}
-            initialIsValid={true}
+            initialIsValid
             onInputChange={inputChangeHandler}
             autoCorrect={false}
           />
@@ -373,9 +371,8 @@ const CreateProfileScreen = (props) => {
               alignSelf: 'center',
               alignItems: 'center',
               width: '70%',
-            }}
-          >
-            <AuthButton text={'continue'} onPress={createUserProfileHandler} />
+            }}>
+            <AuthButton text="continue" onPress={createUserProfileHandler} />
           </View>
         )}
       </ScrollView>

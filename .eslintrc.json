@@ -24,6 +24,12 @@
   ],
   "rules": {
     "comma-dangle": "off",
+    "prettier/prettier": [
+      "error",
+      {
+        "endOfLine": "auto"
+      }
+    ],
     "import-helpers/order-imports": [
       "error",
       {
@@ -56,26 +62,15 @@
         "custom": "ignore"
       }
     ],
-    "react/jsx-sort-props": [
-      "error",
-      {
-        "ignoreCase": true
-      }
-    ],
     "react/prop-types": "off",
     "react/react-in-jsx-scope": "off",
-    "sort-imports": [
-      "error",
-      {
-        "ignoreCase": true,
-        "ignoreDeclarationSort": true
-      }
-    ],
+    "sort-imports": "off",
     // ESLINT OFF
     "react/function-component-definition": "off",
     "react/button-has-type": "off",
     "react/require-default-props": "off",
     "react/jsx-filename-extension": "off",
+    "react/jsx-sort-props": "off",
     "no-plusplus": "off",
     "no-nested-ternary": "off",
     "jsx-a11y/anchor-is-valid": "off",
@@ -88,7 +83,15 @@
     "no-use-before-define": "off",
     "camelcase": "off",
     "prefer-template": "off",
-    "default-param-last": "off"
+    "default-param-last": "off",
+    "linebreak-style": "off",
+    "object-shorthand": "off",
+    "no-useless-escape": "off",
+    "guard-for-in": "off",
+    "no-restricted-syntax": "off",
+    "react/style-prop-object": "off",
+    "no-prototype-builtins": "off",
+    "no-underscore-dangle": "off"
   },
   "settings": {
     "react": {

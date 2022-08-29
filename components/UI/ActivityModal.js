@@ -1,6 +1,5 @@
 import React from 'react';
 import { StyleSheet, View, Text, Modal, ActivityIndicator } from 'react-native';
-import PropTypes from 'prop-types';
 
 const ActivityModal = ({
   loading = false,
@@ -12,13 +11,12 @@ const ActivityModal = ({
   titleColor,
 }) => {
   return (
-    <Modal transparent={true} animationType={'none'} visible={loading}>
+    <Modal transparent animationType="none" visible={loading}>
       <View
         style={[
           styles.modalBackground,
           { backgroundColor: `rgba(0,0,0,${opacity})` },
-        ]}
-      >
+        ]}>
         <View style={[styles.activityIndicatorWrapper, activityWrapperStyle]}>
           <ActivityIndicator
             animating={loading}
