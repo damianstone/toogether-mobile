@@ -255,7 +255,37 @@ export const addPhoto = (image) => {
   };
 };
 
-export const deleteUserPhoto = () => {};
+export const removeUserPhoto = (photo_id) => {
+  return async (dispatch) => {
+    try {
+      dispatch({ type: c.USER_REMOVE_PHOTO_REQUEST });
+
+      const userData = JSON.parse(await AsyncStorage.getItem('@userData'));
+
+      const config = {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+        Authorization: 'Bearer ' + userData.token,
+      };
+
+      const { data } = await axios({
+        method: 'delete',
+        url: `${BASE_URL}/api/v1/photos/${photo_id}/`,
+        headers: config,
+      });
+
+      dispatch({
+        type: c.USER_REMOVE_PHOTO_SUCCESS,
+        payload: data,
+      });
+    } catch (error) {
+      dispatch({
+        type: c.USER_REMOVE_PHOTO_FAIL,
+        payload: error,
+      });
+    }
+  };
+};
 
 export const listUserPhotos = () => {
   return async (dispatch) => {

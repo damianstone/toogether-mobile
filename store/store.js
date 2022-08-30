@@ -3,6 +3,7 @@ import { applyMiddleware, combineReducers, createStore } from 'redux';
 import thunk from 'redux-thunk';
 import {
   userAddPhotoReducer,
+  userRemovePhotoReducer,
   userCreateProfileReducer,
   userListPhotosReducer,
   userLoginReducer,
@@ -11,12 +12,15 @@ import {
 } from './reducers/user';
 
 const reducer = combineReducers({
+  // profile API
   userRegister: userRegisterReducer,
   userLogin: userLoginReducer,
   userCreateProfile: userCreateProfileReducer,
-  userAddPhoto: userAddPhotoReducer,
-  userListPhotos: userListPhotosReducer,
   userGetProfile: userGetProfileReducer,
+  // photos API
+  userAddPhoto: userAddPhotoReducer,
+  userRemovePhoto: userRemovePhotoReducer,
+  userListPhotos: userListPhotosReducer,
 });
 
 const getUserFromStorage = async () => {

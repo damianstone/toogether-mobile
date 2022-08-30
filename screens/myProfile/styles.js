@@ -16,6 +16,12 @@ export default StyleSheet.create({
   body: {
     width: '100%',
   },
+  scroll_container_style: {
+    width: '100%',
+    flexDirection: 'column', // inner items will be added vertically
+    flexGrow: 1, // all the available vertical space will be occupied by it
+    justifyContent: 'space-between', // will create the gutter between body and footer
+  },
   photoView: {
     top: Platform.OS === 'ios' ? '4%' : '1%',
     width: 146,
@@ -187,9 +193,7 @@ export default StyleSheet.create({
   circle: {
     marginTop: 20,
     height: '100%',
-    width: '160%',
-    borderRadius: 300,
-    // backgroundColor: '#494863',
+    width: '100%',
     alignSelf: 'center',
     alignItems: 'center',
     transform: [{ scaleX: 1 }],
@@ -198,7 +202,7 @@ export default StyleSheet.create({
     position: 'absolute',
     width: '100%',
     height: '100%',
-    borderRadius: 300,
+    borderRadius: 30,
     transform: [{ scaleX: 1 }],
   },
   logoContainer: {

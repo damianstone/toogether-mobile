@@ -120,6 +120,28 @@ export const userAddPhotoReducer = (state = {}, action) => {
   }
 };
 
+export const userRemovePhotoReducer = (state = {}, action) => {
+  switch (action.type) {
+    case c.USER_REMOVE_PHOTO_REQUEST:
+      return {
+        loading: true,
+      };
+    case c.USER_REMOVE_PHOTO_SUCCESS:
+      return {
+        data: { ...action.payload }, // detail: "Photo deleted"
+      };
+    case c.USER_REMOVE_PHOTO_FAIL:
+      return {
+        loading: false,
+        error: action.payload,
+      };
+    case c.USER_REMOVE_PHOTO_RESET:
+      return {};
+    default:
+      return state;
+  }
+};
+
 export const userListPhotosReducer = (state = {}, action) => {
   switch (action.type) {
     case c.USER_LIST_PHOTOS_REQUEST:
