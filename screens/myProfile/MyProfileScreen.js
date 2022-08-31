@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+/* eslint-disable react/jsx-curly-brace-presence */
+import React, { useEffect, useState, useCallback } from 'react';
 import {
-  ActivityIndicator,
   FlatList,
   Image,
   Platform,
@@ -10,6 +10,7 @@ import {
   TouchableOpacity,
   View,
   Alert,
+  RefreshControl,
 } from 'react-native';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { useDispatch, useSelector } from 'react-redux';
@@ -20,6 +21,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 
 // import ActivityModal from '../../components/UI/ActivityModal';
 import HeaderButtom from '../../components/UI/HeaderButton';
+import Loader from '../../components/UI/Loader';
 import Colors from '../../constants/Colors';
 import * as c from '../../constants/user';
 import {
@@ -28,7 +30,7 @@ import {
   removeUserPhoto,
   addPhoto,
 } from '../../store/actions/user';
-import { checkServerError } from '../../utils/errors';
+import { checkServerError, check400Error } from '../../utils/errors';
 import { verifyPermissions } from '../../utils/permissions';
 import styles from './styles';
 
@@ -63,7 +65,7 @@ const MyProfileScreen = (props) => {
   const BASE_URL = Constants.manifest.extra.LOCAL_URL;
   const dispatch = useDispatch();
   const { showActionSheetWithOptions } = useActionSheet();
-  const [image, setImage] = useState();
+  const [refreshing, setRefreshing] = useState(false);
 
   const userGetProfile = useSelector((state) => state.userGetProfile);
   const {
@@ -105,7 +107,7 @@ const MyProfileScreen = (props) => {
       dispatch(getUserProfile());
     }
     if (errorProfile) {
-      console.log({ ...errorProfile });
+      checkServerError(errorProfile);
     }
   }, [photos, userProfile]);
 
@@ -114,9 +116,15 @@ const MyProfileScreen = (props) => {
       dispatch(listUserPhotos());
     }
 
-    if (errorRemovePhoto || errorPhotos) {
+    if (errorRemovePhoto || errorPhotos || errorAddPhoto) {
+      if (errorAddPhoto.response?.status === 400) {
+        check400Error(errorAddPhoto, 'image');
+      } else {
+        checkServerError(errorAddPhoto);
+      }
       checkServerError(errorRemovePhoto);
     }
+
     if (dataRemovePhoto) {
       Alert.alert('Photo Removed', dataRemovePhoto.detail, {
         text: 'Ok',
@@ -125,10 +133,37 @@ const MyProfileScreen = (props) => {
         },
       });
     }
-    dispatch({ type: c.USER_REMOVE_PHOTO_RESET });
-  }, []);
 
-  // TODO: Add new photo action
+    dispatch({ type: c.USER_ADD_PHOTO_RESET });
+    dispatch({ type: c.USER_REMOVE_PHOTO_RESET });
+  }, [
+    photos,
+    dataRemovePhoto,
+    dataAddPhoto,
+    errorRemovePhoto,
+    errorPhotos,
+    errorAddPhoto,
+  ]);
+
+  // TODO: loading update profile doing pull down
+  const loadProfile = useCallback(async () => {
+    setRefreshing(true);
+    try {
+      await dispatch(getUserProfile());
+    } catch (err) {
+      checkServerError(err);
+    }
+    setRefreshing(false);
+  }, [dispatch]);
+
+  // add listener to fetch the user and re fetch it
+  useEffect(() => {
+    const unsubscribe = props.navigation.addListener('focus', () => {
+      loadProfile();
+    });
+    return unsubscribe;
+  }, [loadProfile]);
+
   const handleAddPhoto = async () => {
     const hasPermissions = await verifyPermissions();
     if (!hasPermissions) {
@@ -144,32 +179,9 @@ const MyProfileScreen = (props) => {
     }
   };
 
-  const onOpenUploadPhotoActionSheet = () => {
-    // Same interface as https://facebook.github.io/react-native/docs/actionsheetios.html
-    const options = ['From Camera', 'Upload from Gallery', 'Cancel'];
-    const destructiveButtonIndex = 0;
-    const cancelButtonIndex = 2;
-
-    showActionSheetWithOptions(
-      {
-        options,
-        cancelButtonIndex,
-        destructiveButtonIndex,
-      },
-      (buttonIndex) => {
-        if (buttonIndex === 2) console.log('cancel');
-      }
-    );
-  };
-
   const onOpenActionSheet = (photo_id) => {
     // Same interface as https://facebook.github.io/react-native/docs/actionsheetios.html
-    const options = [
-      'Make Profile Picture', // 0
-      'Add New Photo', // 1...
-      'Remove Photo',
-      'Cancel',
-    ];
+    const options = ['Add New Photo', 'Remove Photo', 'Cancel'];
     const destructiveButtonIndex = 2;
     const cancelButtonIndex = 3;
 
@@ -180,29 +192,30 @@ const MyProfileScreen = (props) => {
         destructiveButtonIndex,
       },
       (buttonIndex) => {
-        if (buttonIndex === 1) onOpenUploadPhotoActionSheet();
-        if (buttonIndex === 2) dispatch(removeUserPhoto(photo_id));
+        if (buttonIndex === 0) handleAddPhoto();
+        if (buttonIndex === 1) dispatch(removeUserPhoto(photo_id));
         return null;
       }
     );
   };
 
   const renderPhoto = (photo) => {
+    let stylesObj = {
+      ...styles.myphotosItemView,
+    };
+    if (loadingRemovePhoto || loadingAddPhoto) {
+      stylesObj = {
+        ...styles.myphotosItemView,
+        backgroundColor: Colors.bgCard,
+      };
+    }
     return (
       <TouchableOpacity
         key={photo.id}
         onPress={() => onOpenActionSheet(photo.id)}
-        style={styles.myphotosItemView}>
-        {loadingRemovePhoto ? (
-          <View
-            style={{
-              width: '100%',
-              height: '100%',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}>
-            <ActivityIndicator size="large" color={Colors.icons} />
-          </View>
+        style={{ ...stylesObj }}>
+        {loadingRemovePhoto || loadingAddPhoto ? (
+          <Loader size="small" />
         ) : (
           <Image
             source={{
@@ -215,114 +228,93 @@ const MyProfileScreen = (props) => {
     );
   };
 
-  const renderNoPhotos = () => {
-    return (
-      <View>
-        <Text>NO PHOTOS YET COMPONENT</Text>
-      </View>
-    );
-  };
-
   return (
     <View style={styles.MainContainer}>
       <SafeAreaView style={styles.safeAreaContainer}>
         <View style={styles.MainContainer}>
           <ScrollView
             style={styles.body}
-            contentContainerStyle={styles.scroll_container_style}>
-            {loadingProfile ? (
-              <View
-                style={{
-                  width: '100%',
-                  height: '100%',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}>
-                <ActivityIndicator size="large" color={Colors.icons} />
+            nestedScrollEnabled
+            contentContainerStyle={styles.scroll_container_style}
+            refreshControl={
+              <RefreshControl
+                refreshing={refreshing}
+                onRefresh={loadProfile}
+                tintColor={Colors.white}
+              />
+            }>
+            <View style={styles.profilePictureContainer}>
+              {loadingPhotos && <Loader size="large" />}
+              {photos && (
+                <Image
+                  source={{
+                    uri: `${BASE_URL}${Object.values(photos)[0].image}`,
+                  }}
+                  style={{ width: 150, height: 150, borderRadius: 100 }}
+                />
+              )}
+              {!photos ||
+                (Object.values(photos).length === 0 && (
+                  <View style={styles.avatar_view}>
+                    <Text style={styles.avatar_initials}>DS</Text>
+                  </View>
+                ))}
+            </View>
+            <View style={styles.nameView}>
+              {userProfile && (
+                <Text style={styles.name}>
+                  {`${userProfile.firstname} ${userProfile.lastname}`}
+                </Text>
+              )}
+            </View>
+            <View style={styles.counterContainer}>
+              <View style={styles.counterView}>
+                <Text style={styles.likesNumber}>100</Text>
+                <Text style={styles.counterText}>Likes</Text>
               </View>
-            ) : (
-              <>
-                <View style={styles.profilePictureContainer}>
-                  {loadingPhotos && <ActivityIndicator />}
-                  {photos && (
-                    <Image
-                      source={{
-                        uri: `${BASE_URL}${Object.values(photos)[0].image}`,
-                      }}
-                      style={{ width: 150, height: 150, borderRadius: 100 }}
-                    />
-                  )}
-                  {!photos ||
-                    (Object.values(photos).length === 0 && (
-                      <View style={styles.avatar_view}>
-                        <Text style={styles.avatar_initials}>DS</Text>
+              <View style={styles.counterView}>
+                <Text style={styles.matchesNumber}>320</Text>
+                <Text style={styles.counterText}>matches</Text>
+              </View>
+            </View>
+            <View style={styles.myphotosView}>
+              <View style={styles.itemView}>
+                <Text style={styles.photoTitleLabel}>My Photos</Text>
+              </View>
+              <FlatList
+                style={styles.flatlist_photos_style}
+                contentContainerStyle={styles.flatlist_photos_container_style}
+                data={BASE_PHOTOS}
+                horizontal={false}
+                keyExtractor={(photo) => photo.id}
+                nestedScrollEnabled
+                numColumns={3}
+                renderItem={({ item, index }) =>
+                  PHOTOS[index] ? (
+                    renderPhoto(PHOTOS[index])
+                  ) : (
+                    <TouchableOpacity
+                      key={item.id}
+                      onPress={handleAddPhoto}
+                      style={{
+                        ...styles.myphotosItemView,
+                        backgroundColor: Colors.bgCard,
+                      }}>
+                      <View
+                        style={{
+                          width: '100%',
+                          height: '100%',
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                        }}>
+                        <Text style={{ color: Colors.white }}>{item.text}</Text>
                       </View>
-                    ))}
-                </View>
-                <View style={styles.nameView}>
-                  {userProfile && (
-                    <Text style={styles.name}>
-                      {`${userProfile.firstname} ${userProfile.lastname}`}
-                    </Text>
-                  )}
-                </View>
-                <View style={styles.counterContainer}>
-                  <View style={styles.counterView}>
-                    <Text style={styles.likesNumber}>100</Text>
-                    <Text style={styles.counterText}>Likes</Text>
-                  </View>
-                  <View style={styles.counterView}>
-                    <Text style={styles.matchesNumber}>320</Text>
-                    <Text style={styles.counterText}>matches</Text>
-                  </View>
-                </View>
-                <View style={styles.myphotosView}>
-                  <View style={styles.itemView}>
-                    <Text style={styles.photoTitleLabel}>My Photos</Text>
-                  </View>
-                  {userProfile && (
-                    <FlatList
-                      style={styles.flatlist_photos_style}
-                      contentContainerStyle={
-                        styles.flatlist_photos_container_style
-                      }
-                      data={BASE_PHOTOS}
-                      horizontal={false}
-                      keyExtractor={(photo) => photo.id}
-                      ListEmptyComponent={renderNoPhotos}
-                      nestedScrollEnabled
-                      numColumns={3}
-                      renderItem={({ item, index }) =>
-                        PHOTOS[index] ? (
-                          renderPhoto(PHOTOS[index])
-                        ) : (
-                          <TouchableOpacity
-                            key={item.id}
-                            onPress={handleAddPhoto}
-                            style={{
-                              ...styles.myphotosItemView,
-                              backgroundColor: Colors.bgCard,
-                            }}>
-                            <View
-                              style={{
-                                width: '100%',
-                                height: '100%',
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                              }}>
-                              <Text style={{ color: Colors.white }}>
-                                {item.text}
-                              </Text>
-                            </View>
-                          </TouchableOpacity>
-                        )
-                      }
-                      scrollEnabled={false}
-                    />
-                  )}
-                </View>
-              </>
-            )}
+                    </TouchableOpacity>
+                  )
+                }
+                scrollEnabled={false}
+              />
+            </View>
 
             {/* TOOGETHER PRO */}
             <View style={styles.circle}>

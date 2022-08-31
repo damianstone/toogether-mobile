@@ -5,6 +5,7 @@ import Colors from '../../constants/Colors';
 const { width } = Dimensions.get('window');
 
 export default StyleSheet.create({
+  /* ----------------------- PROFILE DATA ----------------------  */
   MainContainer: {
     flex: 1,
     backgroundColor: Colors.bg,
@@ -82,6 +83,8 @@ export default StyleSheet.create({
     color: Colors.calypso,
     fontSize: 24,
   },
+
+  /* ----------------------- PHOTOS-----------------------  */
   myphotosView: {
     width: '100%',
     paddingHorizontal: 2,
@@ -190,6 +193,7 @@ export default StyleSheet.create({
     height: 40,
   },
 
+  /* ----------------------- TOOGETHER PREMIUM-----------------------  */
   circle: {
     marginTop: 20,
     height: '100%',
@@ -202,7 +206,7 @@ export default StyleSheet.create({
     position: 'absolute',
     width: '100%',
     height: '100%',
-    borderRadius: 30,
+    borderRadius: 20,
     transform: [{ scaleX: 1 }],
   },
   logoContainer: {
@@ -240,7 +244,7 @@ export default StyleSheet.create({
     width: 250,
     borderRadius: 20,
   },
-
+  /* ----------------------- SETTINGS -----------------------  */
   settingContainer: {
     margin: 20,
     paddingHorizontal: 2,
