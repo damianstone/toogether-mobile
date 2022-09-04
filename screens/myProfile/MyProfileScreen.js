@@ -29,6 +29,7 @@ import {
   getUserProfile,
   removeUserPhoto,
   addPhoto,
+  updatePhoto,
 } from '../../store/actions/user';
 import { checkServerError, check400Error } from '../../utils/errors';
 import { verifyPermissions } from '../../utils/permissions';
@@ -66,6 +67,7 @@ const MyProfileScreen = (props) => {
   const dispatch = useDispatch();
   const { showActionSheetWithOptions } = useActionSheet();
   const [refreshing, setRefreshing] = useState(false);
+  const [photoId, setPhotoId] = useState('');
 
   const userGetProfile = useSelector((state) => state.userGetProfile);
   const {
@@ -80,13 +82,6 @@ const MyProfileScreen = (props) => {
     error: errorPhotos,
     data: photos,
   } = userListPhotos;
-
-  let PHOTOS = {};
-  if (photos) {
-    PHOTOS = Object.keys(photos).map((key) => {
-      return photos[key];
-    });
-  }
 
   const userRemovePhoto = useSelector((state) => state.userRemovePhoto);
   const {
@@ -103,7 +98,7 @@ const MyProfileScreen = (props) => {
   } = userAddPhoto;
 
   useEffect(() => {
-    if (!userProfile) {
+    if (!userProfile && !errorProfile) {
       dispatch(getUserProfile());
     }
     if (errorProfile) {
@@ -112,12 +107,13 @@ const MyProfileScreen = (props) => {
   }, [photos, userProfile]);
 
   useEffect(() => {
-    if (!photos || dataRemovePhoto || dataAddPhoto) {
+    if ((!photos || dataRemovePhoto || dataAddPhoto) && !errorPhotos) {
       dispatch(listUserPhotos());
     }
 
     if (errorRemovePhoto || errorPhotos || errorAddPhoto) {
-      if (errorAddPhoto.response?.status === 400) {
+      console.log(errorAddPhoto);
+      if (errorAddPhoto?.response?.status === 400) {
         check400Error(errorAddPhoto, 'image');
       } else {
         checkServerError(errorAddPhoto);
@@ -134,6 +130,17 @@ const MyProfileScreen = (props) => {
       });
     }
 
+    // TODO: delete this after
+    if (dataAddPhoto) {
+      console.log('ADD PHOTO ---> ', dataAddPhoto);
+      Alert.alert('Photo added', 'well done', {
+        text: 'Ok',
+        onPress: () => {
+          dispatch({ type: c.USER_ADD_PHOTO_RESET });
+        },
+      });
+    }
+
     dispatch({ type: c.USER_ADD_PHOTO_RESET });
     dispatch({ type: c.USER_REMOVE_PHOTO_RESET });
   }, [
@@ -145,11 +152,11 @@ const MyProfileScreen = (props) => {
     errorAddPhoto,
   ]);
 
-  // TODO: loading update profile doing pull down
   const loadProfile = useCallback(async () => {
     setRefreshing(true);
     try {
       await dispatch(getUserProfile());
+      await dispatch(listUserPhotos());
     } catch (err) {
       checkServerError(err);
     }
@@ -164,7 +171,7 @@ const MyProfileScreen = (props) => {
     return unsubscribe;
   }, [loadProfile]);
 
-  const handleAddPhoto = async () => {
+  const handleAddPhoto = async (photo_id, isUpdate) => {
     const hasPermissions = await verifyPermissions();
     if (!hasPermissions) {
       return;
@@ -174,14 +181,17 @@ const MyProfileScreen = (props) => {
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       quality: 1,
     });
-    if (image) {
+    if (image && !isUpdate) {
       dispatch(addPhoto(image));
+    }
+    if (image && isUpdate) {
+      dispatch(updatePhoto(photo_id, image));
     }
   };
 
   const onOpenActionSheet = (photo_id) => {
     // Same interface as https://facebook.github.io/react-native/docs/actionsheetios.html
-    const options = ['Add New Photo', 'Remove Photo', 'Cancel'];
+    const options = ['Update photo', 'Remove Photo', 'Cancel'];
     const destructiveButtonIndex = 2;
     const cancelButtonIndex = 3;
 
@@ -192,11 +202,30 @@ const MyProfileScreen = (props) => {
         destructiveButtonIndex,
       },
       (buttonIndex) => {
-        if (buttonIndex === 0) handleAddPhoto();
-        if (buttonIndex === 1) dispatch(removeUserPhoto(photo_id));
+        if (buttonIndex === 0) {
+          handleAddPhoto(photo_id, true);
+          setPhotoId(photo_id); // to know in which base photo render the loader
+        }
+        if (buttonIndex === 1) {
+          dispatch(removeUserPhoto(photo_id));
+          setPhotoId(photo_id);
+        }
         return null;
       }
     );
+  };
+
+  const checkToRenderLoading = (photo) => {
+    if (loadingRemovePhoto) {
+      return true;
+    }
+    if (loadingAddPhoto && photo.id === photoId) {
+      return true;
+    }
+    if (dataAddPhoto && loadingAddPhoto && photo.id === dataAddPhoto.id) {
+      return true;
+    }
+    return false;
   };
 
   const renderPhoto = (photo) => {
@@ -214,7 +243,7 @@ const MyProfileScreen = (props) => {
         key={photo.id}
         onPress={() => onOpenActionSheet(photo.id)}
         style={{ ...stylesObj }}>
-        {loadingRemovePhoto || loadingAddPhoto ? (
+        {loadingRemovePhoto || (loadingAddPhoto && photo.id === photoId) ? (
           <Loader size="small" />
         ) : (
           <Image
@@ -244,8 +273,7 @@ const MyProfileScreen = (props) => {
               />
             }>
             <View style={styles.profilePictureContainer}>
-              {loadingPhotos && <Loader size="large" />}
-              {photos && (
+              {photos && Object.values(photos).length > 0 && (
                 <Image
                   source={{
                     uri: `${BASE_URL}${Object.values(photos)[0].image}`,
@@ -290,12 +318,15 @@ const MyProfileScreen = (props) => {
                 nestedScrollEnabled
                 numColumns={3}
                 renderItem={({ item, index }) =>
-                  PHOTOS[index] ? (
-                    renderPhoto(PHOTOS[index])
+                  photos && photos[index] ? (
+                    renderPhoto(photos[index], item.id)
                   ) : (
                     <TouchableOpacity
                       key={item.id}
-                      onPress={handleAddPhoto}
+                      onPress={() => {
+                        handleAddPhoto();
+                        setPhotoId(item.id);
+                      }}
                       style={{
                         ...styles.myphotosItemView,
                         backgroundColor: Colors.bgCard,
@@ -307,7 +338,13 @@ const MyProfileScreen = (props) => {
                           justifyContent: 'center',
                           alignItems: 'center',
                         }}>
-                        <Text style={{ color: Colors.white }}>{item.text}</Text>
+                        {loadingAddPhoto && item.id === photoId ? (
+                          <Loader size="small" />
+                        ) : (
+                          <Text style={{ color: Colors.white }}>
+                            {item.text}
+                          </Text>
+                        )}
                       </View>
                     </TouchableOpacity>
                   )

@@ -1,52 +1,181 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useReducer, useCallback } from 'react';
 import {
   ActivityIndicator,
   ScrollView,
   Text,
   TouchableOpacity,
   View,
+  Alert,
 } from 'react-native';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
+import AuthButton from '../../components/UI/AuthButton';
 import Input from '../../components/UI/Input';
 import Colors from '../../constants/Colors';
+import * as c from '../../constants/user';
 import { logout } from '../../store/actions/user';
+import {
+  getFieldErrorFromServer,
+  check400Error,
+  checkServerError,
+} from '../../utils/errors';
 import styles from './styles';
 
-// data to select from the form
-const show = [
-  {
-    label: 'Hombres',
-    value: 'hombres',
-  },
-  {
-    label: 'Mujeres',
-    value: 'mujeres',
-  },
-  {
-    label: 'Mixto',
-    value: 'Mixto',
-  },
-];
+const FORM_UPDATE = 'FORM_UPDATE';
+
+const formReducer = (state, action) => {
+  if (action.type === FORM_UPDATE) {
+    const updatedValued = {
+      ...state.inputValues,
+      [action.input]: action.value,
+    };
+    const updatedValidities = {
+      ...state.inputValidities,
+      [action.input]: action.isValid,
+    };
+    let updatedFormIsValid = true;
+    for (const key in updatedValidities) {
+      updatedFormIsValid = updatedValidities[key] && updatedFormIsValid;
+    }
+    return {
+      formIsValid: updatedFormIsValid,
+      inputValidities: updatedValidities,
+      inputValues: updatedValued,
+    };
+  }
+  return state;
+};
 
 const gender = [
   {
-    label: 'Masculino',
-    value: 'Masculino',
+    label: 'Male',
+    value: 'male',
   },
   {
-    label: 'Femenino',
-    value: 'Femenino',
+    label: 'Female',
+    value: 'female',
   },
   {
-    label: 'otro',
-    value: 'otro',
+    label: 'Chair',
+    value: 'chair',
+  },
+];
+
+const show = [
+  {
+    label: 'Men',
+    value: 'men',
+  },
+  {
+    label: 'Women',
+    value: 'women',
+  },
+  {
+    label: 'Both',
+    value: 'both',
   },
 ];
 
 const SettingScreen = (props) => {
-  const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
+
+  const [formState, dispatchFormState] = useReducer(formReducer, {
+    inputValues: {
+      img: '',
+      firstname: '',
+      lastname: '',
+      birthdate: '',
+      gender: '',
+      show_me: '',
+      university: '',
+      description: '',
+    },
+    inputValidities: {
+      img: true,
+      firstname: false,
+      lastname: false,
+      birthdate: false,
+      gender: false,
+      show_me: false,
+      university: true,
+      description: true,
+    },
+    formIsValid: false,
+  });
+
+  const { formIsValid, inputValues } = formState;
+
+  const userCreateProfile = useSelector((state) => state.userCreateProfile);
+  const {
+    error: createError,
+    data: createData,
+    loading: createLoading,
+  } = userCreateProfile;
+
+  useEffect(() => {
+    if (createError) {
+      if (createError.response && createError.response.status === 400) {
+        if (createError.response.data.hasOwnProperty('detail')) {
+          check400Error(createError);
+        } else {
+          setError(true);
+        }
+      } else {
+        checkServerError(createError);
+      }
+    }
+
+    if (createData && Object.keys(createData).length !== 0) {
+      Alert.alert(
+        `Your age is ${createData.age} ?`,
+        'Please confirm your age',
+        [
+          {
+            text: "No, I'm not",
+            onPress: () => {},
+            style: 'cancel',
+          },
+          {
+            text: 'OK',
+            onPress: () => {
+              props.navigation.navigate('AddPhoto');
+            },
+          },
+        ]
+      );
+    }
+
+    dispatch({ type: c.USER_CREATE_RESET });
+  }, [createError, createData]);
+
+  // ON CHANGE INPUTS
+  const inputChangeHandler = useCallback(
+    (inputIdentifier, inputValue, inputValidity) => {
+      dispatchFormState({
+        type: FORM_UPDATE,
+        value: inputValue,
+        isValid: inputValidity,
+        input: inputIdentifier,
+      });
+    },
+    [dispatchFormState]
+  );
+
+  // SAVE USER DATA
+  const updateUserProfile = () => {
+    // console.log({ ...inputValues });
+    if (!formIsValid) {
+      // Alert.alert(
+      //   `Required fields in blank;)`,
+      //   'Please fill the required fields',
+      //   [{ text: 'Okay' }]
+      // );
+    }
+
+    // TODO: dispatch
+  };
 
   const onLogOut = () => {
     dispatch(logout());
@@ -55,129 +184,173 @@ const SettingScreen = (props) => {
 
   const onDelete = () => {};
 
-  if (loading) {
-    return (
-      <View style={{ flex: 1, backgroundColor: Colors.bg }}>
-        <ActivityIndicator color={Colors.white} size="large" />
-      </View>
-    );
-  }
-
   return (
     <View style={{ flex: 1, backgroundColor: Colors.bg }}>
       <ScrollView contentContainerStyle={{ backgroundColor: Colors.bg }}>
         <View style={styles.settingContainer}>
           <View style={styles.inputContainer}>
             <Input
-              autoCapitalize="sentences"
-              autoCorrect={false} // disable auto correction
-              errorText="Please enter your real name"
-              id="name"
-              initialValue="Damian"
+              labelStyle={styles.label}
               inputStyle={styles.inputStyle}
+              id="firstname"
+              label="Name *"
               inputType="textInput"
-              keyboardType="default" // normal keyboard
-              label="Name"
-              labelStyle={styles.label} // style for the label
-              onInputChange={() => {}}
+              keyboardType="default"
               required
-              returnKeyType="next" // next button on keyboard instead of done
+              autoCapitalize="sentences"
+              onInputChange={inputChangeHandler}
+              initialValue=""
+              autoCorrect={false}
+              returnKeyType="next"
+              serverError={error}
+              errorText={getFieldErrorFromServer(
+                createError,
+                'firstname',
+                'Please enter a name'
+              )}
             />
           </View>
           <View style={styles.inputContainer}>
             <Input
-              autoCapitalize="sentences"
-              autoCorrect={false} // disable auto correction
-              errorText="Please enter you real lastname"
+              labelStyle={styles.label}
+              inputStyle={styles.inputStyle}
+              inputType="textInput"
               id="lastname"
-              initialValue="Stone"
-              inputStyle={styles.inputStyle}
-              inputType="textInput"
+              label="Lastname *"
               keyboardType="default"
-              label="Lastname"
-              labelStyle={styles.label}
-              onInputChange={() => {}}
               required
-              returnKeyType="next" // next button on keyboard instead of done
-            />
-          </View>
-          <View style={styles.inputContainer}>
-            <Input
               autoCapitalize="sentences"
-              autoCorrect={false} // disable auto correction
+              onInputChange={inputChangeHandler}
+              initialValue=""
+              autoCorrect={false}
+              returnKeyType="next"
+              serverError={error}
+              errorText={getFieldErrorFromServer(
+                createError,
+                'lastname',
+                'Please enter your latname'
+              )}
+            />
+          </View>
+          <View style={styles.inputContainer}>
+            <Input
+              labelStyle={styles.label}
+              inputStyle={styles.inputStyle}
+              inputType="textInput"
               id="university"
-              initialIsValid
-              initialValue="University of Bristol"
-              inputStyle={styles.inputStyle}
-              inputType="textInput"
+              label="University"
               keyboardType="default"
-              label="University (optional)"
-              labelStyle={styles.label}
-              onInputChange={() => {}}
+              autoCapitalize="sentences"
               required={false}
-              returnKeyType="next" // next button on keyboard instead of done
-            />
-          </View>
-          <View style={styles.inputContainer}>
-            <Input
-              errorText="Please select your gender"
-              id="gender"
-              initialValue="Man"
-              inputStyle={styles.inputStyle}
-              inputType="picker"
-              itemKey={show.value}
-              items={gender}
-              label="Gender"
-              labelStyle={styles.label}
-              onInputChange={() => {}}
-              pickerRequired
-              placeholder={{
-                label: 'Select an item',
-                value: 'Select an item',
-              }}
-            />
-          </View>
-          <View style={styles.inputContainer}>
-            <Input
-              errorText="Please select an option"
-              id="showme"
-              initialValue=""
-              inputStyle={styles.inputStyle}
-              inputType="picker"
-              itemKey={show.value}
-              items={show}
-              label="Show me"
-              labelStyle={styles.label}
-              onInputChange={() => {}}
-              pickerRequired
-              placeholder={{
-                label: 'Select an item',
-                value: 'Select an item',
-              }}
-            />
-          </View>
-          <View style={styles.inputContainer}>
-            <Input
-              autoCapitalize="none"
-              autoCorrect={false} // disable auto correction
-              id="about"
               initialIsValid
+              onInputChange={inputChangeHandler}
               initialValue=""
-              inputStyle={styles.textTareaStyle}
-              inputType="textInput"
-              label="About (optional)"
+              autoCorrect={false}
+              returnKeyType="next"
+            />
+          </View>
+          <View style={styles.inputContainer}>
+            <Input
               labelStyle={styles.label}
-              maxLength={500}
+              inputStyle={styles.inputStyle}
+              inputType="inputMask"
+              id="birthdate"
+              label="Birthdate *"
+              required
+              autoComplete="birthdate-day"
+              dataDetectorTypes="calendarEvent"
+              onInputChange={inputChangeHandler}
+              placeholder="YYYY-MM-DD"
+              placeholderTextColor={Colors.placeholder}
+              serverError={error}
+              errorText={getFieldErrorFromServer(
+                createError,
+                'birthdate',
+                'Please enter a birthdate'
+              )}
+            />
+          </View>
+          <View style={styles.inputContainer}>
+            <Input
+              pickerRequired
+              inputType="picker"
+              labelStyle={styles.label}
+              inputStyle={styles.inputStyle}
+              items={gender}
+              itemKey={show.value}
+              label="Gender *"
+              initialValue=""
+              id="gender"
+              placeholder={{ label: 'Select an item', value: 'Select an item' }}
+              placeholderTextColor={Colors.placeholder}
+              onInputChange={inputChangeHandler}
+              serverError={error}
+              errorText={getFieldErrorFromServer(
+                createError,
+                'gender',
+                'Please enter your gender'
+              )}
+            />
+          </View>
+          <View style={styles.inputContainer}>
+            <Input
+              pickerRequired
+              inputType="picker"
+              labelStyle={styles.label}
+              inputStyle={styles.inputStyle}
+              items={show}
+              itemKey={show.value}
+              label="Show me *"
+              id="show_me"
+              placeholder={{ label: 'Select an item', value: 'Select an item' }}
+              placeholderTextColor={Colors.placeholder}
+              onInputChange={inputChangeHandler}
+              serverError={error}
+              errorText={getFieldErrorFromServer(
+                createError,
+                'show_me',
+                'Please enter your show_me'
+              )}
+            />
+          </View>
+          <View style={styles.inputContainer}>
+            <Input
+              labelStyle={styles.label}
+              style={styles.textArea} // style for the
+              inputStyle={styles.textTareaStyle}
+              underlineColorAndroid="transparent"
+              placeholder="Type something"
+              placeholderTextColor={Colors.placeholder}
               multiline
               numberOfLines={5}
-              onInputChange={() => {}}
-              placeholder="Type something"
-              placeholderTextColor="grey"
+              maxLength={500}
+              inputType="textInput"
+              id="description"
+              label="About (optional)"
+              autoCapitalize="none"
               required={false}
-              style={styles.textArea} // style for the
-              underlineColorAndroid="transparent"
+              initialIsValid
+              onInputChange={inputChangeHandler}
+              autoCorrect={false}
             />
           </View>
+          {createLoading ? (
+            <View style={styles.centered}>
+              <ActivityIndicator size="large" color={Colors.icons} />
+            </View>
+          ) : (
+            <View
+              style={{
+                marginBottom: '10%',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                alignSelf: 'center',
+                alignItems: 'center',
+                width: '70%',
+              }}>
+              <AuthButton text="continue" onPress={updateUserProfile} />
+            </View>
+          )}
         </View>
 
         {/* INFORMATION */}

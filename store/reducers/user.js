@@ -98,6 +98,7 @@ export const userCreateProfileReducer = (state = {}, action) => {
 
 // -------------------------------- PHOTOS REDUCERS --------------------------------
 
+// Same reducer for add and update photo
 export const userAddPhotoReducer = (state = {}, action) => {
   switch (action.type) {
     case c.USER_ADD_PHOTO_REQUEST:
@@ -150,7 +151,7 @@ export const userListPhotosReducer = (state = {}, action) => {
       };
     case c.USER_LIST_PHOTOS_SUCCESS:
       return {
-        data: { ...action.payload },
+        data: [...action.payload],
       };
     case c.USER_LIST_PHOTOS_FAIL:
       return {

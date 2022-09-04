@@ -79,7 +79,6 @@ const show = [
 ];
 
 const CreateProfileScreen = (props) => {
-  const [image, setImage] = useState('');
   const [error, setError] = useState(false);
   const dispatch = useDispatch();
 

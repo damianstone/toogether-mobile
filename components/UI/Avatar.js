@@ -27,7 +27,7 @@ const Avatar = (props) => {
   return (
     <TouchableOpacity onPress={props.onPress} style={styles.imgContainer}>
       {loading && <ActivityIndicator />}
-      {data && (
+      {data && Object.values(data).length > 0 && (
         <Image
           source={{ uri: `${BASE_URL}${Object.values(data)[0].image}` }}
           style={styles.img}

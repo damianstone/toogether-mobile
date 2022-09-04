@@ -255,6 +255,49 @@ export const addPhoto = (image) => {
   };
 };
 
+export const updatePhoto = (photo_id, image) => {
+  return async (dispatch) => {
+    try {
+      dispatch({ type: c.USER_ADD_PHOTO_REQUEST });
+      const userData = JSON.parse(await AsyncStorage.getItem('@userData'));
+      const imageUri = image.uri;
+      const fileName = imageUri.split('/').pop();
+
+      const dataForm = new FormData();
+
+      dataForm.append('image', {
+        name: fileName,
+        type: image.type,
+        uri:
+          Platform.OS === 'android'
+            ? image.uri
+            : image.uri.replace('file://', ''),
+      });
+
+      const { data } = await axios.patch(
+        `${BASE_URL}/api/v1/photos/${photo_id}/`,
+        dataForm,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            Accept: 'application/json',
+            Authorization: `Bearer ${userData.token}`,
+          },
+        }
+      );
+      dispatch({
+        type: c.USER_ADD_PHOTO_SUCCESS,
+        payload: data,
+      });
+    } catch (error) {
+      dispatch({
+        type: c.USER_ADD_PHOTO_FAIL,
+        payload: error,
+      });
+    }
+  };
+};
+
 export const removeUserPhoto = (photo_id) => {
   return async (dispatch) => {
     try {

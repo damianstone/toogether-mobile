@@ -196,8 +196,8 @@ export default StyleSheet.create({
   /* ----------------------- TOOGETHER PREMIUM-----------------------  */
   circle: {
     marginTop: 20,
-    height: '100%',
     width: '100%',
+    height: '100%',
     alignSelf: 'center',
     alignItems: 'center',
     transform: [{ scaleX: 1 }],
@@ -210,8 +210,8 @@ export default StyleSheet.create({
     transform: [{ scaleX: 1 }],
   },
   logoContainer: {
-    marginVertical: 20,
-    marginTop: 40,
+    marginVertical: 10,
+    marginTop: 20,
     alignItems: 'center',
     justifyContent: 'center',
     width: '100%',
