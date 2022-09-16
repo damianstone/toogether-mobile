@@ -2,7 +2,6 @@ import { Platform } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import Constants from 'expo-constants';
-import * as FileSystem from 'expo-file-system';
 import * as c from '../../constants/user';
 
 const BASE_URL = Constants.manifest.extra.LOCAL_URL;
@@ -202,7 +201,61 @@ export const createUserProfile = (
 };
 
 // UPDATE USER PROFILE
-export const updateUserProfile = () => {};
+export const updateUserProfile = (
+  gender,
+  show_me,
+  university,
+  city,
+  description
+) => {
+  return async (dispatch) => {
+    try {
+      dispatch({ type: c.USER_UPDATE_REQUEST });
+
+      const userData = JSON.parse(await AsyncStorage.getItem('@userData'));
+
+      const config = {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+        Authorization: `Bearer ${userData.token}`,
+      };
+
+      const { data } = await axios({
+        method: 'PATCH',
+        url: `${BASE_URL}/api/v1/profiles/${userData.id}/actions/update-profile/`,
+        headers: config,
+        data: {
+          gender,
+          show_me,
+          university: university || null,
+          city: city || null,
+          description: description || null,
+        },
+      });
+
+      await AsyncStorage.setItem(
+        '@userData',
+        JSON.stringify({
+          id: data.id,
+          token: data.token,
+          has_account: data.has_account,
+        })
+      );
+
+      dispatch({
+        type: c.USER_UPDATE_SUCCESS,
+        payload: data,
+      });
+
+      dispatch({ type: c.USER_UPDATE_PHOTO_RESET });
+    } catch (error) {
+      dispatch({
+        type: c.USER_UPDATE_FAIL,
+        payload: error,
+      });
+    }
+  };
+};
 
 // GET USER -> get any profile
 export const getUserDetails = () => {};

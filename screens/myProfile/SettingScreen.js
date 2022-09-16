@@ -11,9 +11,10 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import AuthButton from '../../components/UI/AuthButton';
 import Input from '../../components/UI/Input';
+import Loader from '../../components/UI/Loader';
 import Colors from '../../constants/Colors';
 import * as c from '../../constants/user';
-import { logout } from '../../store/actions/user';
+import { logout, getUserProfile } from '../../store/actions/user';
 import {
   getFieldErrorFromServer,
   check400Error,
@@ -78,28 +79,38 @@ const show = [
 
 const SettingScreen = (props) => {
   const dispatch = useDispatch();
-  const [loading, setLoading] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState(false);
+
+  const userGetProfile = useSelector((state) => state.userGetProfile);
+  const {
+    loading: loadingProfile,
+    error: errorProfile,
+    data: userProfile,
+  } = userGetProfile;
+
+  console.log('USER PROFILE --> ', userProfile);
+
+  const userUpdateProfile = useSelector((state) => state.userUpdateProfile);
+  const {
+    loading: loadingUpdate,
+    error: errorUpdate,
+    data: dataUpdate,
+  } = userUpdateProfile;
 
   const [formState, dispatchFormState] = useReducer(formReducer, {
     inputValues: {
-      img: '',
-      firstname: '',
-      lastname: '',
-      birthdate: '',
       gender: '',
       show_me: '',
       university: '',
+      city: '',
       description: '',
     },
     inputValidities: {
-      img: true,
-      firstname: false,
-      lastname: false,
-      birthdate: false,
       gender: false,
       show_me: false,
       university: true,
+      city: true,
       description: true,
     },
     formIsValid: false,
@@ -107,48 +118,31 @@ const SettingScreen = (props) => {
 
   const { formIsValid, inputValues } = formState;
 
-  const userCreateProfile = useSelector((state) => state.userCreateProfile);
-  const {
-    error: createError,
-    data: createData,
-    loading: createLoading,
-  } = userCreateProfile;
-
   useEffect(() => {
-    if (createError) {
-      if (createError.response && createError.response.status === 400) {
-        if (createError.response.data.hasOwnProperty('detail')) {
-          check400Error(createError);
+    if (errorUpdate) {
+      if (errorUpdate.response && errorUpdate.response.status === 400) {
+        if (errorUpdate.response.data.hasOwnProperty('detail')) {
+          check400Error(errorUpdate);
         } else {
           setError(true);
         }
       } else {
-        checkServerError(createError);
+        checkServerError(errorUpdate);
       }
     }
 
-    if (createData && Object.keys(createData).length !== 0) {
-      Alert.alert(
-        `Your age is ${createData.age} ?`,
-        'Please confirm your age',
-        [
-          {
-            text: "No, I'm not",
-            onPress: () => {},
-            style: 'cancel',
-          },
-          {
-            text: 'OK',
-            onPress: () => {
-              props.navigation.navigate('AddPhoto');
-            },
-          },
-        ]
-      );
-    }
+    dispatch({ type: c.USER_UPDATE_RESET });
+  }, [errorUpdate, dataUpdate]);
 
-    dispatch({ type: c.USER_CREATE_RESET });
-  }, [createError, createData]);
+  const loadProfile = useCallback(async () => {
+    setRefreshing(true);
+    try {
+      await dispatch(getUserProfile());
+    } catch (err) {
+      checkServerError(err);
+    }
+    setRefreshing(false);
+  }, [dispatch]);
 
   // ON CHANGE INPUTS
   const inputChangeHandler = useCallback(
@@ -184,6 +178,12 @@ const SettingScreen = (props) => {
 
   const onDelete = () => {};
 
+  const showAlert = () => {};
+
+  if (loadingProfile) {
+    return <Loader />;
+  }
+
   return (
     <View style={{ flex: 1, backgroundColor: Colors.bg }}>
       <ScrollView contentContainerStyle={{ backgroundColor: Colors.bg }}>
@@ -193,21 +193,15 @@ const SettingScreen = (props) => {
               labelStyle={styles.label}
               inputStyle={styles.inputStyle}
               id="firstname"
-              label="Name *"
+              label="Name"
+              onInputChange={inputChangeHandler}
               inputType="textInput"
               keyboardType="default"
-              required
+              editable={false}
+              disable
               autoCapitalize="sentences"
-              onInputChange={inputChangeHandler}
-              initialValue=""
-              autoCorrect={false}
+              initialValue={userProfile.firstname}
               returnKeyType="next"
-              serverError={error}
-              errorText={getFieldErrorFromServer(
-                createError,
-                'firstname',
-                'Please enter a name'
-              )}
             />
           </View>
           <View style={styles.inputContainer}>
@@ -216,20 +210,58 @@ const SettingScreen = (props) => {
               inputStyle={styles.inputStyle}
               inputType="textInput"
               id="lastname"
-              label="Lastname *"
+              label="Lastname"
               keyboardType="default"
               required
               autoCapitalize="sentences"
               onInputChange={inputChangeHandler}
-              initialValue=""
+              initialValue={userProfile.lastname}
               autoCorrect={false}
               returnKeyType="next"
               serverError={error}
               errorText={getFieldErrorFromServer(
-                createError,
+                errorUpdate,
                 'lastname',
                 'Please enter your latname'
               )}
+            />
+          </View>
+          <View style={styles.inputContainer}>
+            <Input
+              labelStyle={styles.label}
+              inputStyle={styles.inputStyle}
+              inputType="inputMask"
+              id="birthdate"
+              label="Birthdate"
+              required
+              autoComplete="birthdate-day"
+              dataDetectorTypes="calendarEvent"
+              onInputChange={inputChangeHandler}
+              placeholder="YYYY-MM-DD"
+              initialValue={userProfile.birthdate}
+              placeholderTextColor={Colors.placeholder}
+              serverError={error}
+              errorText={getFieldErrorFromServer(
+                errorUpdate,
+                'birthdate',
+                'Please enter a birthdate'
+              )}
+            />
+          </View>
+          <View style={styles.inputContainer}>
+            <Input
+              labelStyle={styles.label}
+              inputStyle={styles.inputStyle}
+              inputType="textInput"
+              id="age"
+              label="Age"
+              keyboardType="default"
+              disabled
+              autoCapitalize="sentences"
+              required
+              onInputChange={inputChangeHandler}
+              initialValue={userProfile.age}
+              serverError={error}
             />
           </View>
           <View style={styles.inputContainer}>
@@ -244,7 +276,9 @@ const SettingScreen = (props) => {
               required={false}
               initialIsValid
               onInputChange={inputChangeHandler}
-              initialValue=""
+              initialValue={
+                userProfile.university ? userProfile.university : ''
+              }
               autoCorrect={false}
               returnKeyType="next"
             />
@@ -253,21 +287,17 @@ const SettingScreen = (props) => {
             <Input
               labelStyle={styles.label}
               inputStyle={styles.inputStyle}
-              inputType="inputMask"
-              id="birthdate"
-              label="Birthdate *"
-              required
-              autoComplete="birthdate-day"
-              dataDetectorTypes="calendarEvent"
+              inputType="textInput"
+              id="city"
+              label="City"
+              keyboardType="default"
+              autoCapitalize="sentences"
+              required={false}
+              initialIsValid
               onInputChange={inputChangeHandler}
-              placeholder="YYYY-MM-DD"
-              placeholderTextColor={Colors.placeholder}
-              serverError={error}
-              errorText={getFieldErrorFromServer(
-                createError,
-                'birthdate',
-                'Please enter a birthdate'
-              )}
+              initialValue={userProfile.city ? userProfile.city : ''}
+              autoCorrect={false}
+              returnKeyType="next"
             />
           </View>
           <View style={styles.inputContainer}>
@@ -279,14 +309,14 @@ const SettingScreen = (props) => {
               items={gender}
               itemKey={show.value}
               label="Gender *"
-              initialValue=""
+              initialValue={userProfile.value}
               id="gender"
               placeholder={{ label: 'Select an item', value: 'Select an item' }}
               placeholderTextColor={Colors.placeholder}
               onInputChange={inputChangeHandler}
               serverError={error}
               errorText={getFieldErrorFromServer(
-                createError,
+                errorUpdate,
                 'gender',
                 'Please enter your gender'
               )}
@@ -300,6 +330,7 @@ const SettingScreen = (props) => {
               inputStyle={styles.inputStyle}
               items={show}
               itemKey={show.value}
+              initialValue={userProfile.show_me}
               label="Show me *"
               id="show_me"
               placeholder={{ label: 'Select an item', value: 'Select an item' }}
@@ -307,7 +338,7 @@ const SettingScreen = (props) => {
               onInputChange={inputChangeHandler}
               serverError={error}
               errorText={getFieldErrorFromServer(
-                createError,
+                errorUpdate,
                 'show_me',
                 'Please enter your show_me'
               )}
@@ -330,11 +361,14 @@ const SettingScreen = (props) => {
               autoCapitalize="none"
               required={false}
               initialIsValid
+              initialValue={
+                userProfile.description ? userProfile.description : ''
+              }
               onInputChange={inputChangeHandler}
               autoCorrect={false}
             />
           </View>
-          {createLoading ? (
+          {loadingUpdate ? (
             <View style={styles.centered}>
               <ActivityIndicator size="large" color={Colors.icons} />
             </View>
@@ -348,7 +382,7 @@ const SettingScreen = (props) => {
                 alignItems: 'center',
                 width: '70%',
               }}>
-              <AuthButton text="continue" onPress={updateUserProfile} />
+              <AuthButton text="Update profile" onPress={updateUserProfile} />
             </View>
           )}
         </View>
@@ -360,15 +394,7 @@ const SettingScreen = (props) => {
             <Text>ICON</Text>
           </View>
           <View style={styles.textView}>
-            <Text style={styles.textLabel}>Account details</Text>
-          </View>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => {}} style={styles.optionView}>
-          <View style={styles.iconView}>
-            <Text>ICON</Text>
-          </View>
-          <View style={styles.textView}>
-            <Text style={styles.textLabel}>Update account</Text>
+            <Text style={styles.textLabel}>Blocked users</Text>
           </View>
         </TouchableOpacity>
         <TouchableOpacity onPress={onDelete} style={styles.optionView}>
@@ -376,7 +402,7 @@ const SettingScreen = (props) => {
             <Text>ICON</Text>
           </View>
           <View style={styles.textView}>
-            <Text style={styles.textLabel}>DELETE ACCOUNT</Text>
+            <Text style={styles.textLabel}>Delete account</Text>
           </View>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => {}} style={styles.optionView}>
@@ -385,14 +411,6 @@ const SettingScreen = (props) => {
           </View>
           <View style={styles.textView}>
             <Text style={styles.textLabel}>Contact Us</Text>
-          </View>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => {}} style={styles.optionView}>
-          <View style={styles.iconView}>
-            <Text>ICON</Text>
-          </View>
-          <View style={styles.textView}>
-            <Text style={styles.textLabel}>Blocked users</Text>
           </View>
         </TouchableOpacity>
         <TouchableOpacity onPress={onLogOut} style={styles.logoutView}>

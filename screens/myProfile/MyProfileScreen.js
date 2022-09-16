@@ -11,6 +11,7 @@ import {
   View,
   Alert,
   RefreshControl,
+  Linking,
 } from 'react-native';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { useDispatch, useSelector } from 'react-redux';
@@ -215,6 +216,7 @@ const MyProfileScreen = (props) => {
     );
   };
 
+  // funtion to check when to show a loader regarding a photo loading
   const checkToRenderLoading = (photo) => {
     if (loadingRemovePhoto) {
       return true;
@@ -227,6 +229,15 @@ const MyProfileScreen = (props) => {
     }
     return false;
   };
+
+  const handleOpenLink = useCallback(async (url) => {
+    const supported = await Linking.canOpenURL(url);
+    if (supported) {
+      await Linking.openURL(url);
+    } else {
+      Alert.alert(`Don't know how to open this URL: ${url}`);
+    }
+  }, []);
 
   const renderPhoto = (photo) => {
     let stylesObj = {
@@ -371,7 +382,7 @@ const MyProfileScreen = (props) => {
                 </Text>
                 <View style={styles.buttonPremiumContainer}>
                   <TouchableOpacity
-                    onPress={() => {}}
+                    onPress={() => handleOpenLink('https://toogether.app/')}
                     style={styles.buttonPremiumView}>
                     <LinearGradient
                       // Background Linear Gradient
@@ -421,32 +432,3 @@ MyProfileScreen.navigationOptions = (navData) => {
 };
 
 export default MyProfileScreen;
-
-/*
-          PICKERS AND MODALS NATIVE 
-          <ActivityModal
-            loading={loading}
-            title="please wait"
-            size={'large'}
-            activityColor={'white'}
-            titleColor={'white'}
-            activityWrapperStyle={{
-              backgroundColor: Colors.bg,
-            }}
-          />
-          <ActionSheet
-            ref={photoDialogActionSheetRef}
-            title={'Photo Dialog'}
-            options={['Remove Photo', 'Cancel', 'Make Profile Picture']}
-            cancelButtonIndex={1}
-            destructiveButtonIndex={0}
-            onPress={() => {}}
-          />
-          <ActionSheet
-            ref={photoUploadDialogActionSheetRef}
-            title={'Photo Upload'}
-            options={['Launch Camera', 'Open Photo Gallery', 'Cancel']}
-            cancelButtonIndex={2}
-            onPress={() => {}}
-          />
-*/

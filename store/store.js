@@ -5,6 +5,7 @@ import {
   userAddPhotoReducer,
   userRemovePhotoReducer,
   userCreateProfileReducer,
+  userUpdateProfileReducer,
   userListPhotosReducer,
   userLoginReducer,
   userRegisterReducer,
@@ -16,6 +17,7 @@ const reducer = combineReducers({
   userRegister: userRegisterReducer,
   userLogin: userLoginReducer,
   userCreateProfile: userCreateProfileReducer,
+  userUpdateProfile: userUpdateProfileReducer,
   userGetProfile: userGetProfileReducer,
   // photos API
   userAddPhoto: userAddPhotoReducer,

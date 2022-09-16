@@ -29,9 +29,6 @@ const inputReducer = (state, action) => {
 };
 
 const Input = (props) => {
-  const userCreateProfile = useSelector((state) => state.userCreateProfile);
-  const { error: createError } = userCreateProfile;
-
   const [inputState, dispatch] = useReducer(inputReducer, {
     value: props.initialValue ? props.initialValue : '',
     isValid: props.initialIsValid,

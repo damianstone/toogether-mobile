@@ -262,17 +262,17 @@ export default StyleSheet.create({
     justifyContent: 'center',
     padding: 3,
     backgroundColor: '#494863',
-    borderRadius: 20,
+    borderRadius: 10,
   },
   textTareaStyle: {
     height: 150,
     justifyContent: 'flex-start',
     padding: 3,
-    backgroundColor: Colors.bgCard,
+    backgroundColor: '#494863',
     borderRadius: 20,
   },
   textArea: {
-    height: 150,
+    height: 200,
     textAlignVertical: 'top',
   },
 });
