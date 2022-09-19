@@ -104,7 +104,7 @@ export const userUpdateProfileReducer = (state = {}, action) => {
       };
     case c.USER_UPDATE_SUCCESS:
       return {
-        loading: true,
+        data: { ...action.payload },
       };
     case c.USER_UPDATE_FAIL:
       return {

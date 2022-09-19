@@ -261,14 +261,20 @@ export default StyleSheet.create({
   inputStyle: {
     justifyContent: 'center',
     padding: 3,
-    backgroundColor: '#494863',
+    backgroundColor: Colors.bgCard,
+    borderRadius: 10,
+  },
+  desabledInputStyle: {
+    justifyContent: 'center',
+    padding: 3,
+    backgroundColor: '#363648',
     borderRadius: 10,
   },
   textTareaStyle: {
     height: 150,
     justifyContent: 'flex-start',
     padding: 3,
-    backgroundColor: '#494863',
+    backgroundColor: Colors.bgCard,
     borderRadius: 20,
   },
   textArea: {

@@ -6,23 +6,59 @@ import {
   TouchableOpacity,
   View,
   Alert,
+  RefreshControl,
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
+import {
+  logout,
+  getUserProfile,
+  updateUserProfile,
+} from '../../store/actions/user';
+import { UPDATE_PROFILE_INPUTS } from '../../data/profile';
+import {
+  getFieldErrorFromServer,
+  check400Error,
+  checkServerError,
+} from '../../utils/errors';
 
 import AuthButton from '../../components/UI/AuthButton';
 import Input from '../../components/UI/Input';
 import Loader from '../../components/UI/Loader';
 import Colors from '../../constants/Colors';
 import * as c from '../../constants/user';
-import { logout, getUserProfile } from '../../store/actions/user';
-import {
-  getFieldErrorFromServer,
-  check400Error,
-  checkServerError,
-} from '../../utils/errors';
 import styles from './styles';
 
 const FORM_UPDATE = 'FORM_UPDATE';
+
+const GENDER_OPTIONS = [
+  {
+    label: 'Male',
+    value: 'male',
+  },
+  {
+    label: 'Female',
+    value: 'female',
+  },
+  {
+    label: 'Chair',
+    value: 'chair',
+  },
+];
+
+const SHOW_ME_OPTIONS = [
+  {
+    label: 'Men',
+    value: 'men',
+  },
+  {
+    label: 'Women',
+    value: 'women',
+  },
+  {
+    label: 'Both',
+    value: 'both',
+  },
+];
 
 const formReducer = (state, action) => {
   if (action.type === FORM_UPDATE) {
@@ -47,36 +83,6 @@ const formReducer = (state, action) => {
   return state;
 };
 
-const gender = [
-  {
-    label: 'Male',
-    value: 'male',
-  },
-  {
-    label: 'Female',
-    value: 'female',
-  },
-  {
-    label: 'Chair',
-    value: 'chair',
-  },
-];
-
-const show = [
-  {
-    label: 'Men',
-    value: 'men',
-  },
-  {
-    label: 'Women',
-    value: 'women',
-  },
-  {
-    label: 'Both',
-    value: 'both',
-  },
-];
-
 const SettingScreen = (props) => {
   const dispatch = useDispatch();
   const [refreshing, setRefreshing] = useState(false);
@@ -89,34 +95,12 @@ const SettingScreen = (props) => {
     data: userProfile,
   } = userGetProfile;
 
-  console.log('USER PROFILE --> ', userProfile);
-
   const userUpdateProfile = useSelector((state) => state.userUpdateProfile);
   const {
     loading: loadingUpdate,
     error: errorUpdate,
     data: dataUpdate,
   } = userUpdateProfile;
-
-  const [formState, dispatchFormState] = useReducer(formReducer, {
-    inputValues: {
-      gender: '',
-      show_me: '',
-      university: '',
-      city: '',
-      description: '',
-    },
-    inputValidities: {
-      gender: false,
-      show_me: false,
-      university: true,
-      city: true,
-      description: true,
-    },
-    formIsValid: false,
-  });
-
-  const { formIsValid, inputValues } = formState;
 
   useEffect(() => {
     if (errorUpdate) {
@@ -131,7 +115,14 @@ const SettingScreen = (props) => {
       }
     }
 
-    dispatch({ type: c.USER_UPDATE_RESET });
+    if (dataUpdate) {
+      Alert.alert('Profile updated!', '', [
+        {
+          text: 'OK',
+        },
+      ]);
+      dispatch(getUserProfile());
+    }
   }, [errorUpdate, dataUpdate]);
 
   const loadProfile = useCallback(async () => {
@@ -143,6 +134,49 @@ const SettingScreen = (props) => {
     }
     setRefreshing(false);
   }, [dispatch]);
+
+  const getInputValue = (value) => {
+    if (typeof value === 'number') {
+      return value.toString();
+    }
+    return value;
+  };
+
+  const getPickerValue = (backendValue, items) => {
+    const item = items.find((item) => item.label === backendValue);
+    if (item) {
+      return item.value;
+    }
+    return '';
+  };
+
+  // TODO: fix this: chenge the backend to check if there exit any of the properties or check in the frontend
+  const [formState, dispatchFormState] = useReducer(formReducer, {
+    inputValues: {
+      // just two values, as the user is updated the new values will be included dynamically
+      gender: userProfile?.gender
+        ? getPickerValue(userProfile.gender, GENDER_OPTIONS)
+        : '',
+      show_me: userProfile?.show_me
+        ? getPickerValue(userProfile.show_me, SHOW_ME_OPTIONS)
+        : '',
+      nationality: userProfile?.nationality ? userProfile.nationality : '',
+      city: userProfile?.city ? userProfile.city : '',
+      university: userProfile?.university ? userProfile.university : '',
+      description: userProfile?.description ? userProfile.description : '',
+    },
+    inputValidities: {
+      gender: false,
+      show_me: false,
+      nationality: false,
+      city: false,
+      university: false,
+      description: false,
+    },
+    formIsValid: false,
+  });
+
+  const { formIsValid, inputValues } = formState;
 
   // ON CHANGE INPUTS
   const inputChangeHandler = useCallback(
@@ -158,192 +192,120 @@ const SettingScreen = (props) => {
   );
 
   // SAVE USER DATA
-  const updateUserProfile = () => {
-    // console.log({ ...inputValues });
-    if (!formIsValid) {
-      // Alert.alert(
-      //   `Required fields in blank;)`,
-      //   'Please fill the required fields',
-      //   [{ text: 'Okay' }]
-      // );
+  const handleUpdateUserProfile = () => {
+    // TODO: check when the user has not changed any data
+    const isEmpty = Object.values(inputValues).every(
+      (property) => property === null || property === ''
+    );
+
+    if (isEmpty) {
+      Alert.alert(
+        'No changes detected',
+        'Are you sure you made changes to your profile?',
+        [
+          {
+            text: 'OK',
+          },
+        ]
+      );
     }
 
-    // TODO: dispatch
+    if (!isEmpty) {
+      dispatch(updateUserProfile(inputValues));
+    }
+    return null;
   };
 
-  const onLogOut = () => {
+  const handleLogout = () => {
     dispatch(logout());
     props.navigation.navigate('AuthStart');
   };
 
-  const onDelete = () => {};
+  const handleDeleteUser = () => {};
 
-  const showAlert = () => {};
+  // for delete or log out
+  const showAlert = (
+    title,
+    text,
+    cancelButtonText,
+    okButtonText,
+    actionFunction
+  ) => {
+    Alert.alert(title, text, [
+      {
+        text: cancelButtonText,
+        onPress: () => {
+          actionFunction(); // Dispatch the action
+        },
+        style: 'cancel',
+      },
+      {
+        text: okButtonText,
+      },
+    ]);
+  };
 
   if (loadingProfile) {
     return <Loader />;
   }
 
+  console.log('USER PROFILE -> ', userProfile);
+  console.log({ ...inputValues });
+  console.log(formIsValid);
+
   return (
     <View style={{ flex: 1, backgroundColor: Colors.bg }}>
       <ScrollView contentContainerStyle={{ backgroundColor: Colors.bg }}>
-        <View style={styles.settingContainer}>
-          <View style={styles.inputContainer}>
-            <Input
-              labelStyle={styles.label}
-              inputStyle={styles.inputStyle}
-              id="firstname"
-              label="Name"
-              onInputChange={inputChangeHandler}
-              inputType="textInput"
-              keyboardType="default"
-              editable={false}
-              disable
-              autoCapitalize="sentences"
-              initialValue={userProfile.firstname}
-              returnKeyType="next"
+        <View
+          style={styles.settingContainer}
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={loadProfile}
+              tintColor={Colors.white}
             />
-          </View>
-          <View style={styles.inputContainer}>
-            <Input
-              labelStyle={styles.label}
-              inputStyle={styles.inputStyle}
-              inputType="textInput"
-              id="lastname"
-              label="Lastname"
-              keyboardType="default"
-              required
-              autoCapitalize="sentences"
-              onInputChange={inputChangeHandler}
-              initialValue={userProfile.lastname}
-              autoCorrect={false}
-              returnKeyType="next"
-              serverError={error}
-              errorText={getFieldErrorFromServer(
-                errorUpdate,
-                'lastname',
-                'Please enter your latname'
-              )}
-            />
-          </View>
-          <View style={styles.inputContainer}>
-            <Input
-              labelStyle={styles.label}
-              inputStyle={styles.inputStyle}
-              inputType="inputMask"
-              id="birthdate"
-              label="Birthdate"
-              required
-              autoComplete="birthdate-day"
-              dataDetectorTypes="calendarEvent"
-              onInputChange={inputChangeHandler}
-              placeholder="YYYY-MM-DD"
-              initialValue={userProfile.birthdate}
-              placeholderTextColor={Colors.placeholder}
-              serverError={error}
-              errorText={getFieldErrorFromServer(
-                errorUpdate,
-                'birthdate',
-                'Please enter a birthdate'
-              )}
-            />
-          </View>
-          <View style={styles.inputContainer}>
-            <Input
-              labelStyle={styles.label}
-              inputStyle={styles.inputStyle}
-              inputType="textInput"
-              id="age"
-              label="Age"
-              keyboardType="default"
-              disabled
-              autoCapitalize="sentences"
-              required
-              onInputChange={inputChangeHandler}
-              initialValue={userProfile.age}
-              serverError={error}
-            />
-          </View>
-          <View style={styles.inputContainer}>
-            <Input
-              labelStyle={styles.label}
-              inputStyle={styles.inputStyle}
-              inputType="textInput"
-              id="university"
-              label="University"
-              keyboardType="default"
-              autoCapitalize="sentences"
-              required={false}
-              initialIsValid
-              onInputChange={inputChangeHandler}
-              initialValue={
-                userProfile.university ? userProfile.university : ''
-              }
-              autoCorrect={false}
-              returnKeyType="next"
-            />
-          </View>
-          <View style={styles.inputContainer}>
-            <Input
-              labelStyle={styles.label}
-              inputStyle={styles.inputStyle}
-              inputType="textInput"
-              id="city"
-              label="City"
-              keyboardType="default"
-              autoCapitalize="sentences"
-              required={false}
-              initialIsValid
-              onInputChange={inputChangeHandler}
-              initialValue={userProfile.city ? userProfile.city : ''}
-              autoCorrect={false}
-              returnKeyType="next"
-            />
-          </View>
-          <View style={styles.inputContainer}>
-            <Input
-              pickerRequired
-              inputType="picker"
-              labelStyle={styles.label}
-              inputStyle={styles.inputStyle}
-              items={gender}
-              itemKey={show.value}
-              label="Gender *"
-              initialValue={userProfile.value}
-              id="gender"
-              placeholder={{ label: 'Select an item', value: 'Select an item' }}
-              placeholderTextColor={Colors.placeholder}
-              onInputChange={inputChangeHandler}
-              serverError={error}
-              errorText={getFieldErrorFromServer(
-                errorUpdate,
-                'gender',
-                'Please enter your gender'
-              )}
-            />
-          </View>
-          <View style={styles.inputContainer}>
-            <Input
-              pickerRequired
-              inputType="picker"
-              labelStyle={styles.label}
-              inputStyle={styles.inputStyle}
-              items={show}
-              itemKey={show.value}
-              initialValue={userProfile.show_me}
-              label="Show me *"
-              id="show_me"
-              placeholder={{ label: 'Select an item', value: 'Select an item' }}
-              placeholderTextColor={Colors.placeholder}
-              onInputChange={inputChangeHandler}
-              serverError={error}
-              errorText={getFieldErrorFromServer(
-                errorUpdate,
-                'show_me',
-                'Please enter your show_me'
-              )}
-            />
-          </View>
+          }>
+          {UPDATE_PROFILE_INPUTS.map((field) => (
+            <View style={styles.inputContainer} key={field.key}>
+              <Input
+                labelStyle={styles.label}
+                inputStyle={
+                  field.desabled ? styles.desabledInputStyle : styles.inputStyle
+                }
+                onInputChange={inputChangeHandler}
+                initialValue={
+                  field.pickerRequired
+                    ? getPickerValue(userProfile[field.field_name], field.items)
+                    : getInputValue(userProfile[field.field_name])
+                }
+                items={field.items}
+                itemKey={userProfile[field.field_name]}
+                id={field.id}
+                key={field.key}
+                label={field.label}
+                placeholder={field.placeholder}
+                placeholderTextColor={field.placeholderTextColor}
+                inputType={field.inputType}
+                keyboardType={field.keyboardType}
+                editable={field.editable}
+                desabled={field.desabled}
+                required={field.required}
+                pickerRequired={field.pickerRequired}
+                autoCorrect={field.autoCorrect}
+                autoCapitalize={field.autoCapitalize}
+                autoComplete={field.autoComplete}
+                dataDetectorTypes={field.dataDetectorTypes}
+                maxLength={field.maxLength}
+                returnKeyType={field.returnKeyType}
+                serverError={error}
+                errorText={getFieldErrorFromServer(
+                  errorUpdate,
+                  field.field_name,
+                  field.error_text_message
+                )}
+              />
+            </View>
+          ))}
           <View style={styles.inputContainer}>
             <Input
               labelStyle={styles.label}
@@ -357,7 +319,7 @@ const SettingScreen = (props) => {
               maxLength={500}
               inputType="textInput"
               id="description"
-              label="About (optional)"
+              label="About"
               autoCapitalize="none"
               required={false}
               initialIsValid
@@ -382,7 +344,10 @@ const SettingScreen = (props) => {
                 alignItems: 'center',
                 width: '70%',
               }}>
-              <AuthButton text="Update profile" onPress={updateUserProfile} />
+              <AuthButton
+                text="Update profile"
+                onPress={handleUpdateUserProfile}
+              />
             </View>
           )}
         </View>
@@ -397,7 +362,17 @@ const SettingScreen = (props) => {
             <Text style={styles.textLabel}>Blocked users</Text>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity onPress={onDelete} style={styles.optionView}>
+        <TouchableOpacity
+          onPress={() => {
+            showAlert(
+              'You sure you want to delete your account?',
+              'This is an irreversible action, all your data will be deleted. ',
+              'Yes',
+              'Keep my account',
+              handleDeleteUser
+            );
+          }}
+          style={styles.optionView}>
           <View style={styles.iconView}>
             <Text>ICON</Text>
           </View>
@@ -413,7 +388,17 @@ const SettingScreen = (props) => {
             <Text style={styles.textLabel}>Contact Us</Text>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity onPress={onLogOut} style={styles.logoutView}>
+        <TouchableOpacity
+          onPress={() =>
+            showAlert(
+              'Logout',
+              'You sure you want to logout?',
+              'Yes',
+              'Keep me in',
+              handleLogout
+            )
+          }
+          style={styles.logoutView}>
           <Text style={styles.textLabel}>Logout</Text>
         </TouchableOpacity>
       </ScrollView>

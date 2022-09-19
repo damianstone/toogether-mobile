@@ -201,13 +201,7 @@ export const createUserProfile = (
 };
 
 // UPDATE USER PROFILE
-export const updateUserProfile = (
-  gender,
-  show_me,
-  university,
-  city,
-  description
-) => {
+export const updateUserProfile = (dataObj) => {
   return async (dispatch) => {
     try {
       dispatch({ type: c.USER_UPDATE_REQUEST });
@@ -221,33 +215,17 @@ export const updateUserProfile = (
       };
 
       const { data } = await axios({
-        method: 'PATCH',
+        method: 'patch',
         url: `${BASE_URL}/api/v1/profiles/${userData.id}/actions/update-profile/`,
         headers: config,
-        data: {
-          gender,
-          show_me,
-          university: university || null,
-          city: city || null,
-          description: description || null,
-        },
+        data: dataObj,
       });
-
-      await AsyncStorage.setItem(
-        '@userData',
-        JSON.stringify({
-          id: data.id,
-          token: data.token,
-          has_account: data.has_account,
-        })
-      );
 
       dispatch({
         type: c.USER_UPDATE_SUCCESS,
         payload: data,
       });
-
-      dispatch({ type: c.USER_UPDATE_PHOTO_RESET });
+      dispatch({ type: c.USER_UPDATE_RESET });
     } catch (error) {
       dispatch({
         type: c.USER_UPDATE_FAIL,

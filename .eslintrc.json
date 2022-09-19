@@ -30,17 +30,7 @@
         "endOfLine": "auto"
       }
     ],
-    "import-helpers/order-imports": [
-      "error",
-      {
-        "alphabetize": {
-          "ignoreCase": true,
-          "order": "asc"
-        },
-        "groups": ["/^react/", "module", ["parent", "sibling", "index"]],
-        "newlinesBetween": "ignore"
-      }
-    ],
+    "import-helpers/order-imports": "off",
     "no-unused-vars": ["warn"],
     "no-multiple-empty-lines": [
       "error",

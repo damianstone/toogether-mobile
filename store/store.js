@@ -25,22 +25,7 @@ const reducer = combineReducers({
   userListPhotos: userListPhotosReducer,
 });
 
-const getUserFromStorage = async () => {
-  try {
-    const userData = await AsyncStorage.getItem('@userData');
-    return userData != null ? JSON.parse(userData) : null;
-  } catch (error) {
-    return {};
-  }
-};
-
-const initialState = {
-  userLogin: {
-    userData: getUserFromStorage().then((userData) => {
-      return userData;
-    }),
-  },
-};
+const initialState = {};
 
 const middleware = [thunk];
 

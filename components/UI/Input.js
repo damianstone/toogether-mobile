@@ -2,7 +2,6 @@ import React, { useReducer, useEffect } from 'react';
 import { StyleSheet, Text, View, TextInput } from 'react-native';
 import { TextInputMask } from 'react-native-masked-text';
 import RNPickerSelect from 'react-native-picker-select';
-import { useSelector } from 'react-redux';
 
 import Colors from '../../constants/Colors';
 

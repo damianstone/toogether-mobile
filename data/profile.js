@@ -118,6 +118,7 @@ export const CREATE_PROFILE_INPUTS = [
     error_text_message: 'Please select who you want to see in the swipe',
   },
 ];
+
 export const UPDATE_PROFILE_INPUTS = [
   {
     id: 'firstname',
@@ -183,7 +184,7 @@ export const UPDATE_PROFILE_INPUTS = [
     placeholder: null,
     placeholderTextColor: null,
     inputType: 'textInput',
-    keyboardType: 'default',
+    keyboardType: 'numeric',
     editable: false,
     desabled: true,
     required: false,
@@ -191,14 +192,15 @@ export const UPDATE_PROFILE_INPUTS = [
     autoCapitalize: null,
     autoComplete: null,
     dataDetectorTypes: null,
+    maxLength: 2,
     returnKeyType: 'next',
     field_name: 'age',
     error_text_message: 'Enter your age',
   },
   {
-    id: 'country',
-    key: 'country',
-    label: 'Home town',
+    id: 'nationality',
+    key: 'nationality',
+    label: 'Where are you from?',
     placeholder: null,
     placeholderTextColor: null,
     inputType: 'textInput',
@@ -211,7 +213,7 @@ export const UPDATE_PROFILE_INPUTS = [
     autoComplete: null,
     dataDetectorTypes: null,
     returnKeyType: 'next',
-    field_name: 'country',
+    field_name: 'nationality',
     error_text_message: null,
   },
   {
@@ -256,7 +258,7 @@ export const UPDATE_PROFILE_INPUTS = [
     id: 'gender',
     key: 'gender',
     label: 'Gender *',
-    placeholder: { label: 'Select an item', value: 'Select an item' },
+    placeholder: {},
     placeholderTextColor: Colors.placeholder,
     inputType: 'picker',
     keyboardType: 'default',
@@ -269,14 +271,28 @@ export const UPDATE_PROFILE_INPUTS = [
     autoComplete: null,
     dataDetectorTypes: null,
     returnKeyType: 'next',
-    field_name: 'university',
+    field_name: 'gender',
     error_text_message: 'Please enter your gender',
+    items: [
+      {
+        label: 'Male',
+        value: 'male',
+      },
+      {
+        label: 'Female',
+        value: 'female',
+      },
+      {
+        label: 'Chair',
+        value: 'chair',
+      },
+    ],
   },
   {
     id: 'show_me',
     key: 'show_me',
     label: 'Show me *',
-    placeholder: { label: 'Select an item', value: 'Select an item' },
+    placeholder: {},
     placeholderTextColor: Colors.placeholder,
     inputType: 'picker',
     keyboardType: 'default',
@@ -289,7 +305,21 @@ export const UPDATE_PROFILE_INPUTS = [
     autoComplete: null,
     dataDetectorTypes: null,
     returnKeyType: 'next',
-    field_name: 'university',
+    field_name: 'show_me',
     error_text_message: 'Please select who you want to see in the swipe',
+    items: [
+      {
+        label: 'Men',
+        value: 'men',
+      },
+      {
+        label: 'Women',
+        value: 'women',
+      },
+      {
+        label: 'Both',
+        value: 'both',
+      },
+    ],
   },
 ];
