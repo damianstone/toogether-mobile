@@ -9,10 +9,7 @@ import {
   KeyboardAvoidingView,
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  getUserProfile,
-  updateUserProfile,
-} from '../../store/actions/user';
+import { getUserProfile, updateUserProfile } from '../../store/actions/user';
 import { UPDATE_PROFILE_INPUTS } from '../../data/profile';
 import {
   getFieldErrorFromServer,
@@ -338,6 +335,12 @@ const EditProfileScreen = (props) => {
       </KeyboardAvoidingView>
     </View>
   );
+};
+
+EditProfileScreen.navigationOptions = () => {
+  return {
+    headerTitle: 'Edit Profile',
+  };
 };
 
 export default EditProfileScreen;

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Provider } from 'react-redux';
 import {
   ActionSheetProvider,
@@ -6,9 +6,14 @@ import {
 } from '@expo/react-native-action-sheet';
 import AppLoading from 'expo-app-loading';
 import * as Font from 'expo-font';
+import { FontAwesome5 } from '@expo/vector-icons';
 
 import Navigator from './navigation/Navigation';
 import store from './store/store';
+
+function cacheFonts(fonts) {
+  return fonts.map((font) => Font.loadAsync(font));
+}
 
 // FETCH FONTS
 const fetchFonts = () => {
@@ -18,8 +23,31 @@ const fetchFonts = () => {
   });
 };
 
-const App = (props) => {
+const App = () => {
   const [fontLoaded, setFontLoaded] = useState(false);
+  const [appIsReady, setAppIsReady] = useState(false);
+
+  // Load any resources or data that you need prior to rendering the app
+  useEffect(() => {
+    async function loadResourcesAndDataAsync() {
+      try {
+        const fontAssets = cacheFonts([FontAwesome5.font]);
+
+        await Promise.all([...fontAssets]);
+      } catch (e) {
+        // You might want to provide this error information to an error reporting service
+        console.warn(e);
+      } finally {
+        setAppIsReady(true);
+      }
+    }
+
+    loadResourcesAndDataAsync();
+  }, []);
+
+  if (!appIsReady) {
+    return null;
+  }
 
   if (!fontLoaded) {
     return (

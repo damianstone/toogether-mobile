@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { FontAwesome5 } from '@expo/vector-icons';
+import * as Font from 'expo-font';
 import { logout, userDelete } from '../../store/actions/user';
 import { SETTINGS_ACCOUNT_DATA, SETTINGS_APP_DATA } from '../../data/settings';
 import { check400Error, checkServerError } from '../../utils/errors';
@@ -20,6 +21,10 @@ import AuthButton from '../../components/UI/AuthButton';
 import ActivityModal from '../../components/UI/ActivityModal';
 import Colors from '../../constants/Colors';
 import * as c from '../../constants/user';
+
+function cacheFonts(fonts) {
+  return fonts.map((font) => Font.loadAsync(font));
+}
 
 const SettingScreen = (props) => {
   const dispatch = useDispatch();
@@ -32,6 +37,8 @@ const SettingScreen = (props) => {
   } = userDeleteReducer;
 
   useEffect(() => {
+    const fontAssets = cacheFonts([FontAwesome5.font]);
+
     if (errorDelete) {
       console.log({ ...errorDelete });
       if (errorDelete?.response?.status === 400) {
@@ -152,11 +159,9 @@ const SettingScreen = (props) => {
               </View>
             </TouchableOpacity>
           ))}
-
           <View style={styles.settingTitleView}>
             <Text style={styles.settingTitleText}>App</Text>
           </View>
-
           {SETTINGS_APP_DATA.map((setting) => (
             <TouchableOpacity
               onPress={() => checkAction(setting.action)}
@@ -174,7 +179,6 @@ const SettingScreen = (props) => {
               </View>
             </TouchableOpacity>
           ))}
-
           <View style={styles.buttonView}>
             <AuthButton
               text="Logout"
