@@ -11,4 +11,6 @@ npm-debug.*
 
 .env
 
+.node-modules/*
+
 .vscode

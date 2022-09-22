@@ -49,7 +49,8 @@ const ProfileModalScreen = (props) => {
               margin: 4,
             }}
           />
-        }>
+        }
+      >
         {profile.photos.map((ph) => {
           return (
             <ImageBackground

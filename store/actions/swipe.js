@@ -1,9 +1,9 @@
+import axios from 'axios';
 import {
   SWIPE_LIST_REQUEST,
   SWIPE_LIST_SUCCESS,
   SWIPE_LIST_FAIL,
 } from '../../constants/swipe';
-import axios from 'axios';
 
 // GET THE PRODUCTS
 export const listSwipes =
@@ -18,7 +18,7 @@ export const listSwipes =
 
       dispatch({
         type: SWIPE_LIST_SUCCESS,
-        payload: data, //. the payload is the entire data
+        payload: data, // . the payload is the entire data
       });
     } catch (error) {
       dispatch({

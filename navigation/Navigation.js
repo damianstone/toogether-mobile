@@ -21,6 +21,7 @@ import SettingScreen from '../screens/MyProfile/SettingScreen';
 import ProfileModalScreen from '../screens/profile/ProfileModalScreen';
 import StartupScreen from '../screens/StartupScreen';
 import SwipeScreen from '../screens/Swipe/SwipeScreen';
+import EditProfileScreen from '../screens/MyProfile/EditProfileScreen';
 
 const defaultNavOptions = {
   headerMode: 'none',
@@ -95,6 +96,9 @@ const MyProfileNavigator = createStackNavigator(
     },
     Setting: {
       screen: SettingScreen,
+    },
+    EditProfile: {
+      screen: EditProfileScreen,
     },
   },
   {

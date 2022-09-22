@@ -50,6 +50,26 @@ export const userLoginReducer = (state = {}, action) => {
   }
 };
 
+export const userDeleteReducer = (state = {}, action) => {
+  switch (action.type) {
+    case c.USER_DELETE_REQUEST:
+      return {
+        loading: true,
+      };
+    case c.USER_DELETE_SUCCESS:
+      return {
+        data: { ...action.payload },
+      };
+    case c.USER_DELETE_FAIL:
+      return {
+        loading: false,
+        error: action.payload,
+      };
+    default:
+      return state;
+  }
+};
+
 // -------------------------------- PROFILE REDUCERS --------------------------------
 
 export const userGetProfileReducer = (state = {}, action) => {

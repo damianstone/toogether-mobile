@@ -25,7 +25,7 @@
   "rules": {
     "comma-dangle": "off",
     "prettier/prettier": [
-      "error",
+      "warn",
       {
         "endOfLine": "auto"
       }

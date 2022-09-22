@@ -1,3 +1,5 @@
+/* eslint-disable import/extensions */
+/* eslint-disable import/no-unresolved */
 import {
   SWIPE_LIST_REQUEST,
   SWIPE_LIST_SUCCESS,

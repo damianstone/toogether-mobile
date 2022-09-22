@@ -19,8 +19,8 @@ import { useActionSheet } from '@expo/react-native-action-sheet';
 import Constants from 'expo-constants';
 import * as ImagePicker from 'expo-image-picker';
 import { LinearGradient } from 'expo-linear-gradient';
+import { MaterialIcons } from '@expo/vector-icons';
 
-// import ActivityModal from '../../components/UI/ActivityModal';
 import HeaderButtom from '../../components/UI/HeaderButton';
 import Loader from '../../components/UI/Loader';
 import Colors from '../../constants/Colors';
@@ -239,6 +239,10 @@ const MyProfileScreen = (props) => {
     }
   }, []);
 
+  const handleNavigate = (screen) => {
+    props.navigation.navigate(screen);
+  };
+
   const renderPhoto = (photo) => {
     let stylesObj = {
       ...styles.myphotosItemView,
@@ -301,9 +305,15 @@ const MyProfileScreen = (props) => {
             </View>
             <View style={styles.nameView}>
               {userProfile && (
-                <Text style={styles.name}>
-                  {`${userProfile.firstname} ${userProfile.lastname}`}
-                </Text>
+                <>
+                  <Text style={styles.name}>
+                    {`${userProfile.firstname} ${userProfile.lastname}`}
+                  </Text>
+                  <TouchableOpacity
+                    onPress={() => handleNavigate('EditProfile')}>
+                    <MaterialIcons name="edit" size={20} color="white" />
+                  </TouchableOpacity>
+                </>
               )}
             </View>
             <View style={styles.counterContainer}>

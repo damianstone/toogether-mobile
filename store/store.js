@@ -1,4 +1,3 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { applyMiddleware, combineReducers, createStore } from 'redux';
 import thunk from 'redux-thunk';
 import {
@@ -9,6 +8,7 @@ import {
   userListPhotosReducer,
   userLoginReducer,
   userRegisterReducer,
+  userDeleteReducer,
   userGetProfileReducer,
 } from './reducers/user';
 
@@ -16,6 +16,7 @@ const reducer = combineReducers({
   // profile API
   userRegister: userRegisterReducer,
   userLogin: userLoginReducer,
+  userDelete: userDeleteReducer,
   userCreateProfile: userCreateProfileReducer,
   userUpdateProfile: userUpdateProfileReducer,
   userGetProfile: userGetProfileReducer,

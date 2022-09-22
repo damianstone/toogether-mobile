@@ -13,9 +13,10 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
+    "packagerOpts": {
+      "assetExts": ["png", "js", "jpg", "tts"]
+    },
     "ios": {
       "supportsTablet": true
     },

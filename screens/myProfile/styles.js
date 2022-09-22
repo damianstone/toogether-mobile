@@ -13,6 +13,7 @@ export default StyleSheet.create({
   safeAreaContainer: {
     flex: 1,
     backgroundColor: Colors.bg,
+    position: 'absolute',
   },
   body: {
     width: '100%',
@@ -49,6 +50,7 @@ export default StyleSheet.create({
     fontSize: 25,
   },
   nameView: {
+    flexDirection: 'row',
     width: '100%',
     marginTop: -5,
     justifyContent: 'center',
@@ -160,18 +162,6 @@ export default StyleSheet.create({
     paddingLeft: 22,
     color: Colors.white,
   },
-  logoutView: {
-    width: '92%',
-    marginTop: 20,
-    marginBottom: 50,
-    marginHorizontal: 12,
-    padding: 10,
-    borderRadius: 10,
-    borderWidth: 1,
-    borderColor: Colors.white,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
   inactiveDot: {
     backgroundColor: Colors.white,
     width: 8,
@@ -244,7 +234,7 @@ export default StyleSheet.create({
     width: 250,
     borderRadius: 20,
   },
-  /* ----------------------- SETTINGS -----------------------  */
+  /* ----------------------- SETTINGS (edit profile) -----------------------  */
   settingContainer: {
     margin: 20,
     paddingHorizontal: 2,
@@ -256,7 +246,7 @@ export default StyleSheet.create({
   },
   label: {
     color: Colors.white,
-    fontSize: 18,
+    fontSize: 20,
   },
   inputStyle: {
     justifyContent: 'center',
@@ -281,4 +271,6 @@ export default StyleSheet.create({
     height: 200,
     textAlignVertical: 'top',
   },
+
+  // --------------- SETTINGS -------------------
 });

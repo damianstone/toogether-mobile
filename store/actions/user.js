@@ -107,6 +107,35 @@ export const logout = () => {
   };
 };
 
+export const userDelete = () => {
+  return async (dispatch) => {
+    try {
+      dispatch({ type: c.USER_DELETE_REQUEST });
+      const userData = JSON.parse(await AsyncStorage.getItem('@userData'));
+
+      const config = {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+        Authorization: 'Bearer ' + userData.token,
+      };
+
+      const { data } = await axios({
+        method: 'get',
+        url: `${BASE_URL}/api/v1/users/delete/`,
+        headers: config,
+      });
+      dispatch({ type: c.USER_DELETE_SUCCESS, payload: data });
+
+      await AsyncStorage.removeItem('@userData');
+      dispatch({ type: c.USER_LOGIN_RESET });
+      dispatch({ type: c.USER_LIST_PHOTOS_RESET });
+      dispatch({ type: c.USER_GET_PROFILE_RESET });
+    } catch (error) {
+      dispatch({ type: c.USER_DELETE_FAIL, payload: error });
+    }
+  };
+};
+
 // -------------------------------- PROFILE ACTIONS --------------------------------
 
 // GET USER -> get any profile

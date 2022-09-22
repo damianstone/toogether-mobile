@@ -67,8 +67,8 @@ export const check400Error = (errorFromServer, nameBackendField) => {
 
   if (
     errorFromServer.response &&
-    errorFromServer.response.hasOwnProperty('data') &&
-    errorFromServer.response.data.hasOwnProperty('detail')
+    errorFromServer?.response?.data &&
+    errorFromServer?.response?.data?.detail
   ) {
     message = {
       title: 'An error has occurred',
@@ -78,8 +78,8 @@ export const check400Error = (errorFromServer, nameBackendField) => {
 
   if (
     errorFromServer.response &&
-    errorFromServer.response.hasOwnProperty('data') &&
-    errorFromServer.response.data.hasOwnProperty('non_field_errors')
+    errorFromServer.response?.hasOwnProperty('data') &&
+    errorFromServer.response?.data?.hasOwnProperty('non_field_errors')
   ) {
     message = {
       title: 'An error has occurred',

@@ -10,7 +10,8 @@ const Loader = (props) => {
         height: '100%',
         justifyContent: 'center',
         alignItems: 'center',
-      }}>
+      }}
+    >
       <ActivityIndicator size={props.size} color={Colors.icons} />
     </View>
   );

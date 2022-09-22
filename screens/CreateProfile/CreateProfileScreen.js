@@ -166,14 +166,7 @@ const CreateProfileScreen = (props) => {
 
   // SAVE USER DATA
   const createUserProfileHandler = () => {
-    // console.log({ ...inputValues });
-    if (!formIsValid) {
-      // Alert.alert(
-      //   `Required fields in blank;)`,
-      //   'Please fill the required fields',
-      //   [{ text: 'Okay' }]
-      // );
-    }
+    // TODO: prevent infinite call to the backend
     dispatch(
       createUserProfile(
         inputValues.firstname,
@@ -192,13 +185,15 @@ const CreateProfileScreen = (props) => {
       behavior="padding"
       keyboardVerticalOffset={50}
       style={styles.screen}
-      contentContainerStyle={styles.screen}>
+      contentContainerStyle={styles.screen}
+    >
       <StatusBar style="light" />
       <ScrollView
         showsVerticalScrollIndicator={false}
         showsHorizontalScrollIndicator={false}
         style={styles.scroll}
-        contentContainerStyle={styles.contentContainer}>
+        contentContainerStyle={styles.contentContainer}
+      >
         <View style={styles.auth_text_view}>
           <View style={authStyles.default.auth_text_container}>
             <Text style={authStyles.default.auth_text_big}>
@@ -370,7 +365,8 @@ const CreateProfileScreen = (props) => {
               alignSelf: 'center',
               alignItems: 'center',
               width: '70%',
-            }}>
+            }}
+          >
             <AuthButton text="continue" onPress={createUserProfileHandler} />
           </View>
         )}
