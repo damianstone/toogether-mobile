@@ -1,11 +1,7 @@
 import { Alert } from 'react-native';
 
 // funcion that check error that are no coming from the frontend and return a message to the user
-export const checkServerError = (
-  errorFromServer,
-  customTitle,
-  customMessage
-) => {
+export const checkServerError = (errorFromServer) => {
   let message = { title: '', message: '' };
 
   if (
@@ -110,11 +106,7 @@ export const check400Error = (errorFromServer, nameBackendField) => {
 };
 
 // return the response of the serializer
-export const getFieldErrorFromServer = (
-  errorFromServer,
-  nameBackendField,
-  text
-) => {
+export const getFieldErrorFromServer = (errorFromServer, nameBackendField) => {
   if (
     errorFromServer &&
     errorFromServer.response !== undefined &&

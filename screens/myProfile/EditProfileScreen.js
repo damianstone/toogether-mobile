@@ -20,41 +20,12 @@ import {
 import AuthButton from '../../components/UI/AuthButton';
 import Input from '../../components/UI/Input';
 import Loader from '../../components/UI/Loader';
+import ActivityModal from '../../components/UI/ActivityModal';
 import Colors from '../../constants/Colors';
 import * as c from '../../constants/user';
 import styles from './styles';
 
 const FORM_UPDATE = 'FORM_UPDATE';
-
-const GENDER_OPTIONS = [
-  {
-    label: 'Male',
-    value: 'male',
-  },
-  {
-    label: 'Female',
-    value: 'female',
-  },
-  {
-    label: 'Chair',
-    value: 'chair',
-  },
-];
-
-const SHOW_ME_OPTIONS = [
-  {
-    label: 'Men',
-    value: 'men',
-  },
-  {
-    label: 'Women',
-    value: 'women',
-  },
-  {
-    label: 'Both',
-    value: 'both',
-  },
-];
 
 const formReducer = (state, action) => {
   if (action.type === FORM_UPDATE) {
@@ -112,15 +83,15 @@ const EditProfileScreen = (props) => {
     }
 
     if (dataUpdate) {
+      dispatch(getUserProfile());
       Alert.alert('Profile updated!', '', [
         {
           text: 'OK',
         },
       ]);
-      dispatch(getUserProfile());
       dispatch({ type: c.USER_UPDATE_RESET });
     }
-  }, [errorUpdate, dataUpdate]);
+  }, [dispatch, errorUpdate, dataUpdate]);
 
   const loadProfile = useCallback(async () => {
     setRefreshing(true);
@@ -131,6 +102,14 @@ const EditProfileScreen = (props) => {
     }
     setRefreshing(false);
   }, [dispatch]);
+
+  // add listener to fetch the user and re fetch it
+  useEffect(() => {
+    const unsubscribe = props.navigation.addListener('focus', () => {
+      loadProfile();
+    });
+    return unsubscribe;
+  }, [loadProfile]);
 
   const getInputValue = (value) => {
     if (typeof value === 'number') {
@@ -148,14 +127,7 @@ const EditProfileScreen = (props) => {
   };
 
   const [formState, dispatchFormState] = useReducer(formReducer, {
-    inputValues: {
-      gender: userProfile?.gender
-        ? getPickerValue(userProfile.gender, GENDER_OPTIONS)
-        : '',
-      show_me: userProfile?.show_me
-        ? getPickerValue(userProfile.show_me, SHOW_ME_OPTIONS)
-        : '',
-    },
+    inputValues: {},
     inputValidities: {
       gender: false,
       show_me: false,
@@ -194,7 +166,6 @@ const EditProfileScreen = (props) => {
     if (profile && !pickerRequired) {
       return getInputValue(profile[field_name]);
     }
-
     return '';
   };
 
@@ -221,7 +192,20 @@ const EditProfileScreen = (props) => {
     return null;
   };
 
-  console.log({ ...errorUpdate });
+  if (loadingUpdate || loadingProfile) {
+    return (
+      <ActivityModal
+        loading={loadingUpdate}
+        title="Please wait"
+        size="large"
+        activityColor="white"
+        titleColor="white"
+        activityWrapperStyle={{
+          backgroundColor: Colors.bg,
+        }}
+      />
+    );
+  }
 
   return (
     <View style={{ flex: 1, backgroundColor: Colors.bg }}>
@@ -240,54 +224,54 @@ const EditProfileScreen = (props) => {
             />
           }>
           <View style={styles.settingContainer}>
-            {UPDATE_PROFILE_INPUTS.map((field) => (
-              <View style={styles.inputContainer} key={field.key}>
-                <Input
-                  labelStyle={styles.label}
-                  inputStyle={
-                    field.desabled
-                      ? styles.desabledInputStyle
-                      : styles.inputStyle
-                  }
-                  onInputChange={inputChangeHandler}
-                  initialValue={getInitialValue(
-                    userProfile,
-                    field.pickerRequired,
-                    field.field_name,
-                    field.items
-                  )}
-                  items={field.items}
-                  itemKey={
-                    userProfile && !loadingProfile
-                      ? userProfile[field.field_name]
-                      : ''
-                  }
-                  id={field.id}
-                  key={field.key}
-                  label={field.label}
-                  placeholder={field.placeholder}
-                  placeholderTextColor={field.placeholderTextColor}
-                  inputType={field.inputType}
-                  keyboardType={field.keyboardType}
-                  editable={field.editable}
-                  desabled={field.desabled}
-                  required={field.required}
-                  pickerRequired={field.pickerRequired}
-                  autoCorrect={field.autoCorrect}
-                  autoCapitalize={field.autoCapitalize}
-                  autoComplete={field.autoComplete}
-                  dataDetectorTypes={field.dataDetectorTypes}
-                  maxLength={field.maxLength}
-                  returnKeyType={field.returnKeyType}
-                  serverError={error}
-                  errorText={getFieldErrorFromServer(
-                    errorUpdate,
-                    field.field_name,
-                    field.error_text_message
-                  )}
-                />
-              </View>
-            ))}
+            {userProfile &&
+              UPDATE_PROFILE_INPUTS.map((field) => (
+                <View style={styles.inputContainer} key={field.key}>
+                  <Input
+                    labelStyle={styles.label}
+                    inputStyle={
+                      field.desabled
+                        ? styles.desabledInputStyle
+                        : styles.inputStyle
+                    }
+                    onInputChange={inputChangeHandler}
+                    initialValue={getInitialValue(
+                      userProfile,
+                      field.pickerRequired,
+                      field.field_name,
+                      field.items
+                    )}
+                    items={field.items}
+                    itemKey={
+                      userProfile && !loadingProfile
+                        ? userProfile[field.field_name]
+                        : ''
+                    }
+                    id={field.id}
+                    key={field.key}
+                    label={field.label}
+                    placeholder={field.placeholder}
+                    placeholderTextColor={field.placeholderTextColor}
+                    inputType={field.inputType}
+                    keyboardType={field.keyboardType}
+                    editable={field.editable}
+                    desabled={field.desabled}
+                    required={field.required}
+                    pickerRequired={field.pickerRequired}
+                    autoCorrect={field.autoCorrect}
+                    autoCapitalize={field.autoCapitalize}
+                    autoComplete={field.autoComplete}
+                    dataDetectorTypes={field.dataDetectorTypes}
+                    maxLength={field.maxLength}
+                    returnKeyType={field.returnKeyType}
+                    serverError={error}
+                    errorText={getFieldErrorFromServer(
+                      errorUpdate,
+                      field.field_name
+                    )}
+                  />
+                </View>
+              ))}
             <View style={styles.inputContainer}>
               <Input
                 labelStyle={styles.label}

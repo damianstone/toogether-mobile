@@ -5,21 +5,14 @@ import Colors from '../constants/Colors';
 
 const Group = () => {
   const [showLink, setShowLink] = useState(false);
-  const withGroup = null;
-  const startGroup = null;
 
   const onCreateGroup = () => {
     setShowLink(true);
-    console.log('add backend login');
   };
 
-  const onDeleteGroup = () => {
-    alert('sure u wanna delete the group');
-  };
+  const onDeleteGroup = () => {};
 
-  const onGoToGroupChat = () => {
-    console.log('go to group chat');
-  };
+  const onGoToGroupChat = () => {};
 
   let card;
 

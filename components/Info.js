@@ -1,14 +1,13 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import tw from 'tailwind-rn';
 
 import Colors from '../constants/Colors';
 
 const Info = (props) => {
-  const sizeIcon = props.small ? 9 : 10;
-  const nameSize = props.small ? 12 : 17;
-  const textSiZe = props.small ? 9 : 15;
+  // const sizeIcon = props.small ? 9 : 10;
+  // const nameSize = props.small ? 12 : 17;
+  // const textSiZe = props.small ? 9 : 15;
 
   return (
     <View style={styles.cardShadow}>

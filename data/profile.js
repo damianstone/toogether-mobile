@@ -88,14 +88,28 @@ export const CREATE_PROFILE_INPUTS = [
     pickerRequired: true,
     editable: true,
     desabled: false,
-    required: false,
+    required: true,
     autoCorrect: false,
     autoCapitalize: 'sentences',
     autoComplete: null,
     dataDetectorTypes: null,
     returnKeyType: 'next',
-    field_name: 'university',
+    field_name: 'gender',
     error_text_message: 'Please enter your gender',
+    items: [
+      {
+        label: 'Male',
+        value: 'male',
+      },
+      {
+        label: 'Female',
+        value: 'female',
+      },
+      {
+        label: 'Chair',
+        value: 'chair',
+      },
+    ],
   },
   {
     id: 'show_me',
@@ -108,14 +122,28 @@ export const CREATE_PROFILE_INPUTS = [
     pickerRequired: true,
     editable: true,
     desabled: false,
-    required: false,
+    required: true,
     autoCorrect: false,
     autoCapitalize: null,
     autoComplete: null,
     dataDetectorTypes: null,
     returnKeyType: 'next',
-    field_name: 'university',
+    field_name: 'show_me',
     error_text_message: 'Please select who you want to see in the swipe',
+    items: [
+      {
+        label: 'Men',
+        value: 'men',
+      },
+      {
+        label: 'Women',
+        value: 'women',
+      },
+      {
+        label: 'Both',
+        value: 'both',
+      },
+    ],
   },
 ];
 

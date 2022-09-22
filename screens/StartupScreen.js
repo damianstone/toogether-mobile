@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
+import React, { useEffect } from 'react';
+import { ActivityIndicator, StyleSheet, View } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import Colors from '../constants/Colors';
@@ -14,8 +14,6 @@ const StartupScreen = (props) => {
       // get the user data as a promise
       const stored = await AsyncStorage.getItem('@userData');
       const userData = JSON.parse(stored);
-
-      console.log({ ...userData });
 
       // if there is no user data
       if (!userData || !userData.has_account) {

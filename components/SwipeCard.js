@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useState } from 'react';
 import {
   ImageBackground,
@@ -24,7 +25,7 @@ checkear si el objecto es de un grupo o no
 
 const SwipeCard = (props) => {
   // swipe pass as a props the profiles array of each group of the single profile
-  const { profile, setShowMode, showMode } = props;
+  const { profile, setShowMode } = props;
 
   let isGroup;
   if (profile.total_members) {

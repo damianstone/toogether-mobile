@@ -20,6 +20,7 @@ import {
   check400Error,
 } from '../../utils/errors';
 
+import { CREATE_PROFILE_INPUTS } from '../../data/profile';
 import * as authStyles from '../Auth/styles';
 import styles from './styles';
 
@@ -47,36 +48,6 @@ const formReducer = (state, action) => {
   }
   return state;
 };
-
-const gender = [
-  {
-    label: 'Male',
-    value: 'male',
-  },
-  {
-    label: 'Female',
-    value: 'female',
-  },
-  {
-    label: 'Chair',
-    value: 'chair',
-  },
-];
-
-const show = [
-  {
-    label: 'Men',
-    value: 'men',
-  },
-  {
-    label: 'Women',
-    value: 'women',
-  },
-  {
-    label: 'Both',
-    value: 'both',
-  },
-];
 
 const CreateProfileScreen = (props) => {
   const [error, setError] = useState(false);
@@ -117,8 +88,8 @@ const CreateProfileScreen = (props) => {
 
   useEffect(() => {
     if (createError) {
-      if (createError.response && createError.response.status === 400) {
-        if (createError.response.data.hasOwnProperty('detail')) {
+      if (createError.response && createError?.response?.status === 400) {
+        if (createError.response?.data?.hasOwnProperty('detail')) {
           check400Error(createError);
         } else {
           setError(true);
@@ -141,14 +112,13 @@ const CreateProfileScreen = (props) => {
           {
             text: 'OK',
             onPress: () => {
+              dispatch({ type: c.USER_CREATE_RESET });
               props.navigation.navigate('AddPhoto');
             },
           },
         ]
       );
     }
-
-    dispatch({ type: c.USER_CREATE_RESET });
   }, [createError, createData]);
 
   // ON CHANGE INPUTS
@@ -195,7 +165,7 @@ const CreateProfileScreen = (props) => {
         <View style={styles.auth_text_view}>
           <View style={authStyles.default.auth_text_container}>
             <Text style={authStyles.default.auth_text_big}>
-              Let&aposs create your profile
+              Lets poss create your profile
             </Text>
           </View>
           <View style={authStyles.default.auth_text_container}>
@@ -204,131 +174,38 @@ const CreateProfileScreen = (props) => {
             </Text>
           </View>
         </View>
-        <View style={styles.inputContainer}>
-          <Input
-            labelStyle={styles.label}
-            inputStyle={styles.inputStyle}
-            id="firstname"
-            label="Name *"
-            inputType="textInput"
-            keyboardType="default"
-            required
-            autoCapitalize="sentences"
-            onInputChange={inputChangeHandler}
-            initialValue=""
-            autoCorrect={false}
-            returnKeyType="next"
-            serverError={error}
-            errorText={getFieldErrorFromServer(
-              createError,
-              'firstname',
-              'Please enter a name'
-            )}
-          />
-        </View>
-        <View style={styles.inputContainer}>
-          <Input
-            labelStyle={styles.label}
-            inputStyle={styles.inputStyle}
-            inputType="textInput"
-            id="lastname"
-            label="Lastname *"
-            keyboardType="default"
-            required
-            autoCapitalize="sentences"
-            onInputChange={inputChangeHandler}
-            initialValue=""
-            autoCorrect={false}
-            returnKeyType="next"
-            serverError={error}
-            errorText={getFieldErrorFromServer(
-              createError,
-              'lastname',
-              'Please enter your latname'
-            )}
-          />
-        </View>
-        <View style={styles.inputContainer}>
-          <Input
-            labelStyle={styles.label}
-            inputStyle={styles.inputStyle}
-            inputType="textInput"
-            id="university"
-            label="University"
-            keyboardType="default"
-            autoCapitalize="sentences"
-            required={false}
-            initialIsValid
-            onInputChange={inputChangeHandler}
-            initialValue=""
-            autoCorrect={false}
-            returnKeyType="next"
-          />
-        </View>
-        <View style={styles.inputContainer}>
-          <Input
-            labelStyle={styles.label}
-            inputStyle={styles.inputStyle}
-            inputType="inputMask"
-            id="birthdate"
-            label="Birthdate *"
-            required
-            autoComplete="birthdate-day"
-            dataDetectorTypes="calendarEvent"
-            onInputChange={inputChangeHandler}
-            placeholder="YYYY-MM-DD"
-            placeholderTextColor={Colors.placeholder}
-            serverError={error}
-            errorText={getFieldErrorFromServer(
-              createError,
-              'birthdate',
-              'Please enter a birthdate'
-            )}
-          />
-        </View>
-        <View style={styles.inputContainer}>
-          <Input
-            pickerRequired
-            inputType="picker"
-            labelStyle={styles.label}
-            inputStyle={styles.inputStyle}
-            items={gender}
-            itemKey={show.value}
-            label="Gender *"
-            initialValue=""
-            id="gender"
-            placeholder={{ label: 'Select an item', value: 'Select an item' }}
-            placeholderTextColor={Colors.placeholder}
-            onInputChange={inputChangeHandler}
-            serverError={error}
-            errorText={getFieldErrorFromServer(
-              createError,
-              'gender',
-              'Please enter your gender'
-            )}
-          />
-        </View>
-        <View style={styles.inputContainer}>
-          <Input
-            pickerRequired
-            inputType="picker"
-            labelStyle={styles.label}
-            inputStyle={styles.inputStyle}
-            items={show}
-            itemKey={show.value}
-            label="Show me *"
-            id="show_me"
-            placeholder={{ label: 'Select an item', value: 'Select an item' }}
-            placeholderTextColor={Colors.placeholder}
-            onInputChange={inputChangeHandler}
-            serverError={error}
-            errorText={getFieldErrorFromServer(
-              createError,
-              'show_me',
-              'Please enter your show_me'
-            )}
-          />
-        </View>
+
+        {CREATE_PROFILE_INPUTS.map((field) => (
+          <View style={styles.inputContainer} key={field.key}>
+            <Input
+              labelStyle={styles.label}
+              inputStyle={styles.inputStyle}
+              onInputChange={inputChangeHandler}
+              initialValue=""
+              items={field.items}
+              itemKey=""
+              id={field.id}
+              key={field.key}
+              label={field.label}
+              placeholder={field.placeholder}
+              placeholderTextColor={field.placeholderTextColor}
+              inputType={field.inputType}
+              keyboardType={field.keyboardType}
+              editable={field.editable}
+              desabled={field.desabled}
+              required={field.required}
+              pickerRequired={field.pickerRequired}
+              autoCorrect={field.autoCorrect}
+              autoCapitalize={field.autoCapitalize}
+              autoComplete={field.autoComplete}
+              dataDetectorTypes={field.dataDetectorTypes}
+              maxLength={field.maxLength}
+              returnKeyType={field.returnKeyType}
+              serverError={error}
+              errorText={getFieldErrorFromServer(createError, field.field_name)}
+            />
+          </View>
+        ))}
         <View style={styles.inputContainer}>
           <Input
             labelStyle={styles.label}

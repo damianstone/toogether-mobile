@@ -1,11 +1,5 @@
 import React from 'react';
-import {
-  FlatList,
-  StyleSheet,
-  Text,
-  TouchableHighlight,
-  View,
-} from 'react-native';
+import { FlatList, StyleSheet, View } from 'react-native';
 import { useSelector } from 'react-redux';
 
 import LikesCard from '../components/LikesCard';
@@ -25,7 +19,7 @@ const Likes = (props) => {
         horizontal={false}
         keyExtractor={(group) => group._id}
         numColumns={2}
-        renderItem={(group, index, separator) => (
+        renderItem={(group) => (
           <LikesCard
             firstName="name"
             group={group.item}

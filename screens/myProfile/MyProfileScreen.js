@@ -69,6 +69,7 @@ const MyProfileScreen = (props) => {
   const { showActionSheetWithOptions } = useActionSheet();
   const [refreshing, setRefreshing] = useState(false);
   const [photoId, setPhotoId] = useState('');
+  const [photos, setPhotos] = useState();
 
   const userGetProfile = useSelector((state) => state.userGetProfile);
   const {
@@ -81,7 +82,7 @@ const MyProfileScreen = (props) => {
   const {
     loading: loadingPhotos,
     error: errorPhotos,
-    data: photos,
+    data: dataPhotos,
   } = userListPhotos;
 
   const userRemovePhoto = useSelector((state) => state.userRemovePhoto);
@@ -108,6 +109,10 @@ const MyProfileScreen = (props) => {
   }, [photos, userProfile]);
 
   useEffect(() => {
+    if (dataPhotos) {
+      setPhotos([...dataPhotos]);
+    }
+
     if ((!photos || dataRemovePhoto || dataAddPhoto) && !errorPhotos) {
       dispatch(listUserPhotos());
     }
@@ -133,7 +138,6 @@ const MyProfileScreen = (props) => {
 
     // TODO: delete this after
     if (dataAddPhoto) {
-      console.log('ADD PHOTO ---> ', dataAddPhoto);
       Alert.alert('Photo added', 'well done', {
         text: 'Ok',
         onPress: () => {
@@ -145,7 +149,7 @@ const MyProfileScreen = (props) => {
     dispatch({ type: c.USER_ADD_PHOTO_RESET });
     dispatch({ type: c.USER_REMOVE_PHOTO_RESET });
   }, [
-    photos,
+    dataPhotos,
     dataRemovePhoto,
     dataAddPhoto,
     errorRemovePhoto,
@@ -216,20 +220,6 @@ const MyProfileScreen = (props) => {
     );
   };
 
-  // funtion to check when to show a loader regarding a photo loading
-  const checkToRenderLoading = (photo) => {
-    if (loadingRemovePhoto) {
-      return true;
-    }
-    if (loadingAddPhoto && photo.id === photoId) {
-      return true;
-    }
-    if (dataAddPhoto && loadingAddPhoto && photo.id === dataAddPhoto.id) {
-      return true;
-    }
-    return false;
-  };
-
   const handleOpenLink = useCallback(async (url) => {
     const supported = await Linking.canOpenURL(url);
     if (supported) {
@@ -246,11 +236,12 @@ const MyProfileScreen = (props) => {
   const renderPhoto = (photo) => {
     let stylesObj = {
       ...styles.myphotosItemView,
+      backgroundColor: 'transparent',
     };
-    if (loadingRemovePhoto || loadingAddPhoto) {
+    if (loadingRemovePhoto || loadingAddPhoto || loadingPhotos) {
       stylesObj = {
         ...styles.myphotosItemView,
-        backgroundColor: Colors.bgCard,
+        backgroundColor: 'transparent',
       };
     }
     return (
@@ -258,14 +249,20 @@ const MyProfileScreen = (props) => {
         key={photo.id}
         onPress={() => onOpenActionSheet(photo.id)}
         style={{ ...stylesObj }}>
-        {loadingRemovePhoto || (loadingAddPhoto && photo.id === photoId) ? (
+        {loadingPhotos ||
+        loadingRemovePhoto ||
+        (loadingAddPhoto && photo.id === photoId) ? (
           <Loader size="small" />
         ) : (
           <Image
             source={{
               uri: `${BASE_URL}${photo.image}`,
             }}
-            style={{ width: '100%', height: '100%' }}
+            style={{
+              width: '100%',
+              height: '100%',
+              backgroundColor: 'transparent',
+            }}
           />
         )}
       </TouchableOpacity>
@@ -362,9 +359,7 @@ const MyProfileScreen = (props) => {
                         {loadingAddPhoto && item.id === photoId ? (
                           <Loader size="small" />
                         ) : (
-                          <Text style={{ color: Colors.white }}>
-                            {item.text}
-                          </Text>
+                          <Text style={{ color: Colors.white }}>Add photo</Text>
                         )}
                       </View>
                     </TouchableOpacity>

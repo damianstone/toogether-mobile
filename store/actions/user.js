@@ -120,16 +120,17 @@ export const userDelete = () => {
       };
 
       const { data } = await axios({
-        method: 'get',
+        method: 'delete',
         url: `${BASE_URL}/api/v1/users/delete/`,
         headers: config,
       });
-      dispatch({ type: c.USER_DELETE_SUCCESS, payload: data });
 
       await AsyncStorage.removeItem('@userData');
       dispatch({ type: c.USER_LOGIN_RESET });
       dispatch({ type: c.USER_LIST_PHOTOS_RESET });
       dispatch({ type: c.USER_GET_PROFILE_RESET });
+
+      dispatch({ type: c.USER_DELETE_SUCCESS, payload: data });
     } catch (error) {
       dispatch({ type: c.USER_DELETE_FAIL, payload: error });
     }

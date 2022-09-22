@@ -8,7 +8,6 @@ import {
 } from 'react-native';
 
 import Colors from '../constants/Colors';
-import Info from './Info';
 
 const LikesCard = (props) => {
   // swipe pass as a props the profiles array of each group of the single profile
@@ -17,7 +16,6 @@ const LikesCard = (props) => {
   // send the id to the swipe component
   const showProfile = (id) => {
     props.onProfile(id);
-    console.log('group id ---------->', id);
   };
 
   let cardType;

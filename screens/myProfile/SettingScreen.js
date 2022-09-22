@@ -37,8 +37,6 @@ const SettingScreen = (props) => {
   } = userDeleteReducer;
 
   useEffect(() => {
-    const fontAssets = cacheFonts([FontAwesome5.font]);
-
     if (errorDelete) {
       console.log({ ...errorDelete });
       if (errorDelete?.response?.status === 400) {
@@ -48,9 +46,9 @@ const SettingScreen = (props) => {
     }
 
     if (dataDeleted) {
-      props.navigation.navigate('');
+      props.navigation.navigate('AuthStart');
     }
-  }, [errorDelete]);
+  }, [errorDelete, dataDeleted]);
 
   const handleLogout = async () => {
     try {

@@ -36,6 +36,7 @@ const App = () => {
         await Promise.all([...fontAssets]);
       } catch (e) {
         // You might want to provide this error information to an error reporting service
+        // eslint-disable-next-line no-console
         console.warn(e);
       } finally {
         setAppIsReady(true);
@@ -52,7 +53,8 @@ const App = () => {
   if (!fontLoaded) {
     return (
       <AppLoading
-        onError={(err) => console.log(err)}
+        // eslint-disable-next-line no-console
+        onError={(err) => console.warn(err)}
         onFinish={() => {
           setFontLoaded(true);
         }}

@@ -1,6 +1,6 @@
 import React from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { Entypo, Ionicons } from '@expo/vector-icons';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import { Entypo } from '@expo/vector-icons';
 
 import tw from 'tailwind-rn';
 import Colors from '../constants/Colors';
