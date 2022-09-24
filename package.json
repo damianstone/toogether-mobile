@@ -40,6 +40,7 @@
     "expo-vector-icons": "^10.0.1",
     "firebase": "^7.24.0",
     "i18n-js": "^3.9.2",
+    "jwt-decode": "^3.1.2",
     "moment": "^2.29.1",
     "react": "17.0.1",
     "react-dom": "17.0.1",

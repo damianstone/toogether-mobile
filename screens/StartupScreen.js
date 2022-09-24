@@ -1,14 +1,13 @@
-import React, { useEffect } from 'react';
+/* eslint-disable consistent-return */
+import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, StyleSheet, View } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import Colors from '../constants/Colors';
 
-const StartupScreen = (props) => {
-  // Startup Screen to check if the user is logged in
-  // check the AsyncStorage for a valid token
-  // if there is a token, then we can go to the main screen
+const jwt_decode = require('jwt-decode');
 
+const StartupScreen = (props) => {
   useEffect(() => {
     const tryLogin = async () => {
       // get the user data as a promise

@@ -234,8 +234,19 @@ export default StyleSheet.create({
     width: 250,
     borderRadius: 20,
   },
-  /* ----------------------- SETTINGS (edit profile) -----------------------  */
-  settingContainer: {
+  /* ----------------------- EDIT PROFILE SCREEN -----------------------  */
+
+  screen: {
+    flex: 1,
+    backgroundColor: Colors.bg,
+  },
+  loadingScreen: {
+    backgroundColor: Colors.bg,
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  editContainer: {
     margin: 20,
     paddingHorizontal: 2,
     justifyContent: 'center',
@@ -271,6 +282,4 @@ export default StyleSheet.create({
     height: 200,
     textAlignVertical: 'top',
   },
-
-  // --------------- SETTINGS -------------------
 });

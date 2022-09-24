@@ -64,7 +64,6 @@ const AuthStartScreen = (props) => {
 
   const { formIsValid, inputValues } = formState;
 
-  // REGISTER REDUCER
   const userRegisterReducer = useSelector((state) => state.userRegister);
   const {
     loading: registerLoading,
@@ -73,7 +72,6 @@ const AuthStartScreen = (props) => {
     error: registerError,
   } = userRegisterReducer;
 
-  // LOGIN REDUCER
   const userLoginReducer = useSelector((state) => state.userLogin);
   const {
     loading: loginLoading,
@@ -138,6 +136,14 @@ const AuthStartScreen = (props) => {
     [dispatchFormState]
   );
 
+  const handleSwitch = () => {
+    if (register) {
+      props.navigation.navigate('Auth', { register: false });
+    } else {
+      props.navigation.navigate('Auth', { register: true });
+    }
+  };
+
   const handleRegister = () => {
     if (formIsValid) {
       dispatch(
@@ -175,8 +181,7 @@ const AuthStartScreen = (props) => {
         <ScrollView
           style={styles.scrollview_style}
           contentContainerStyle={styles.scrollview_content_container}
-          automaticallyAdjustKeyboardInsets
-        >
+          automaticallyAdjustKeyboardInsets>
           <View style={styles.auth_input_container}>
             <AuthInput
               id="email"
@@ -235,7 +240,7 @@ const AuthStartScreen = (props) => {
                   ? 'You already have an account?'
                   : 'You dont have an account?'
               }
-              onPress={() => {}}
+              onPress={handleSwitch}
             />
           </View>
         </ScrollView>

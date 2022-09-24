@@ -1,6 +1,7 @@
 import { applyMiddleware, combineReducers, createStore } from 'redux';
 import thunk from 'redux-thunk';
 import {
+  tokenRefreshReducer,
   userAddPhotoReducer,
   userRemovePhotoReducer,
   userCreateProfileReducer,
@@ -14,6 +15,7 @@ import {
 
 const reducer = combineReducers({
   // profile API
+  tokenRefresh: tokenRefreshReducer,
   userRegister: userRegisterReducer,
   userLogin: userLoginReducer,
   userDelete: userDeleteReducer,

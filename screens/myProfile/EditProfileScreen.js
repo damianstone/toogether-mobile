@@ -1,11 +1,10 @@
-/* eslint-disable no-fallthrough */
-/* eslint-disable prettier/prettier */
 import React, { useState, useEffect, useReducer, useCallback } from 'react';
 import {
   ScrollView,
   View,
   Alert,
   RefreshControl,
+  ActivityIndicator,
   KeyboardAvoidingView,
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
@@ -20,7 +19,6 @@ import {
 import AuthButton from '../../components/UI/AuthButton';
 import Input from '../../components/UI/Input';
 import Loader from '../../components/UI/Loader';
-import ActivityModal from '../../components/UI/ActivityModal';
 import Colors from '../../constants/Colors';
 import * as c from '../../constants/user';
 import styles from './styles';
@@ -194,21 +192,14 @@ const EditProfileScreen = (props) => {
 
   if (loadingUpdate || loadingProfile) {
     return (
-      <ActivityModal
-        loading={loadingUpdate}
-        title="Please wait"
-        size="large"
-        activityColor="white"
-        titleColor="white"
-        activityWrapperStyle={{
-          backgroundColor: Colors.bg,
-        }}
-      />
+      <View style={styles.loadingScreen}>
+        <ActivityIndicator color={Colors.orange} size="large" />
+      </View>
     );
   }
 
   return (
-    <View style={{ flex: 1, backgroundColor: Colors.bg }}>
+    <View style={styles.screen}>
       <KeyboardAvoidingView
         style={{ flex: 1, flexDirection: 'column', justifyContent: 'center' }}
         behavior="padding"
@@ -223,7 +214,7 @@ const EditProfileScreen = (props) => {
               tintColor={Colors.white}
             />
           }>
-          <View style={styles.settingContainer}>
+          <View style={styles.editContainer}>
             {userProfile &&
               UPDATE_PROFILE_INPUTS.map((field) => (
                 <View style={styles.inputContainer} key={field.key}>
@@ -275,7 +266,7 @@ const EditProfileScreen = (props) => {
             <View style={styles.inputContainer}>
               <Input
                 labelStyle={styles.label}
-                style={styles.textArea} // style for the
+                style={styles.textArea}
                 inputStyle={styles.textTareaStyle}
                 underlineColorAndroid="transparent"
                 placeholder="Type something"

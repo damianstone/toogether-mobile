@@ -50,6 +50,21 @@ export const userLoginReducer = (state = {}, action) => {
   }
 };
 
+export const tokenRefreshReducer = (state = {}, action) => {
+  switch (action.type) {
+    case c.REFRESH_TOKEN_REQUEST:
+      return {
+        loading: true,
+      };
+    case c.REFRESH_TOKEN_SUCCESS:
+      return {
+        data: { ...action.payload, updated: true },
+      };
+    default:
+      return state;
+  }
+};
+
 export const userDeleteReducer = (state = {}, action) => {
   switch (action.type) {
     case c.USER_DELETE_REQUEST:

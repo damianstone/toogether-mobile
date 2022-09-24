@@ -33,6 +33,8 @@ export const userRegister = (email, password, repeated_password) => {
         JSON.stringify({
           id: data.id,
           token: data.token,
+          access_token: data.access.token,
+          refresh_token: data.refresh,
           has_account: data.has_account,
         })
       );
@@ -76,6 +78,8 @@ export const userLogin = (email, password) => {
         JSON.stringify({
           id: data.id,
           token: data.token,
+          access_token: data.access,
+          refresh_token: data.refresh,
           has_account: data.has_account,
         })
       );
@@ -98,11 +102,48 @@ export const logout = () => {
     try {
       await AsyncStorage.removeItem('@userData');
 
+      // TODO: update the logout state so then in the startup screen we can check if logout = true and return the authScreen
       dispatch({ type: c.USER_LOGIN_RESET });
       dispatch({ type: c.USER_LIST_PHOTOS_RESET });
       dispatch({ type: c.USER_GET_PROFILE_RESET });
     } catch (e) {
       console.log(e);
+    }
+  };
+};
+
+export const updateToken = () => {
+  return async (dispatch) => {
+    try {
+      dispatch({ type: c.REFRESH_TOKEN_REQUEST });
+      const userData = JSON.parse(await AsyncStorage.getItem('@userData'));
+
+      const config = {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      };
+
+      const { data } = await axios({
+        method: 'POST',
+        url: `${BASE_URL}/api/v1/token/refresh/`,
+        headers: config,
+        data: {
+          refresh: userData.refresh_token,
+        },
+      });
+
+      await AsyncStorage.setItem(
+        '@userData',
+        JSON.stringify({
+          ...userData,
+          token: data.token,
+          access_token: data.access.token,
+          refresh_token: data.refresh,
+        })
+      );
+      dispatch({ type: c.REFRESH_TOKEN_SUCCESS, payload: data });
+    } catch (error) {
+      logout();
     }
   };
 };
@@ -211,9 +252,8 @@ export const createUserProfile = (
       await AsyncStorage.setItem(
         '@userData',
         JSON.stringify({
-          id: data.id,
-          token: data.token,
-          has_account: data.has_account,
+          ...userData,
+          has_account: data.has_account, // after crerate has_account is true
         })
       );
 
