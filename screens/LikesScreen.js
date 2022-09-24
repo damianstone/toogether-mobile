@@ -1,15 +1,9 @@
 import React from 'react';
+import { FlatList, StyleSheet, View } from 'react-native';
 import { useSelector } from 'react-redux';
-import {
-  StyleSheet,
-  Text,
-  View,
-  FlatList,
-  TouchableHighlight,
-} from 'react-native';
 
-import Colors from '../constants/Colors';
 import LikesCard from '../components/LikesCard';
+import Colors from '../constants/Colors';
 
 const Likes = (props) => {
   const likes = useSelector((state) => state.swipeList.swipes);
@@ -22,14 +16,14 @@ const Likes = (props) => {
     <View style={styles.screen}>
       <FlatList
         data={likes}
-        numColumns={2}
         horizontal={false}
         keyExtractor={(group) => group._id}
-        renderItem={(group, index, separator) => (
+        numColumns={2}
+        renderItem={(group) => (
           <LikesCard
-            key={group._id}
-            firstName={'name'}
+            firstName="name"
             group={group.item}
+            key={group._id}
             onProfile={showProfileHandler}
           />
         )}

@@ -1,5 +1,6 @@
-import Profile from '../models/profile';
+/* eslint-disable import-helpers/order-imports */
 import Group from '../models/group';
+import Profile from '../models/profile';
 
 const GROUPS = [
   new Group('g1', 3, [

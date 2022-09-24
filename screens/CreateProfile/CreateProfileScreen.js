@@ -7,8 +7,12 @@ import {
   ActivityIndicator,
   Alert,
 } from 'react-native';
-import { StatusBar } from 'expo-status-bar';
 import { useDispatch, useSelector } from 'react-redux';
+import { StatusBar } from 'expo-status-bar';
+import AuthButton from '../../components/UI/AuthButton';
+import Input from '../../components/UI/Input';
+import Colors from '../../constants/Colors';
+import * as c from '../../constants/user';
 import { createUserProfile } from '../../store/actions/user';
 import {
   checkServerError,
@@ -16,29 +20,24 @@ import {
   check400Error,
 } from '../../utils/errors';
 
-import Colors from '../../constants/Colors';
-import styles from './styles';
+import { CREATE_PROFILE_INPUTS } from '../../data/profile';
 import * as authStyles from '../Auth/styles';
-import Input from '../../components/UI/Input';
-import Header from '../../components/UI/Header';
-import AuthButton from '../../components/UI/AuthButton';
+import styles from './styles';
 
 const FORM_UPDATE = 'FORM_UPDATE';
 
-// to manage onChange with state
 const formReducer = (state, action) => {
   if (action.type === FORM_UPDATE) {
     const updatedValued = {
-      ...state.inputValues, // old input value
+      ...state.inputValues,
       [action.input]: action.value,
     };
     const updatedValidities = {
-      ...state.inputValidities, // old input validity
+      ...state.inputValidities,
       [action.input]: action.isValid,
     };
     let updatedFormIsValid = true;
     for (const key in updatedValidities) {
-      // if there are all true so the form is valid
       updatedFormIsValid = updatedValidities[key] && updatedFormIsValid;
     }
     return {
@@ -50,38 +49,7 @@ const formReducer = (state, action) => {
   return state;
 };
 
-const gender = [
-  {
-    label: 'Male',
-    value: 'male',
-  },
-  {
-    label: 'Female',
-    value: 'female',
-  },
-  {
-    label: 'Chair',
-    value: 'chair',
-  },
-];
-
-const show = [
-  {
-    label: 'Men',
-    value: 'men',
-  },
-  {
-    label: 'Women',
-    value: 'women',
-  },
-  {
-    label: 'Both',
-    value: 'both',
-  },
-];
-
 const CreateProfileScreen = (props) => {
-  const [image, setImage] = useState('');
   const [error, setError] = useState(false);
   const dispatch = useDispatch();
 
@@ -115,15 +83,13 @@ const CreateProfileScreen = (props) => {
   const {
     error: createError,
     data: createData,
-    success: createSuccess,
     loading: createLoading,
   } = userCreateProfile;
 
   useEffect(() => {
     if (createError) {
-      if (createError.response && createError.response.status === 400) {
-        if (createError.response.data.hasOwnProperty('detail')) {
-          console.log('400 ERROR DETAIL ---> ', { ...createError });
+      if (createError.response && createError?.response?.status === 400) {
+        if (createError.response?.data?.hasOwnProperty('detail')) {
           check400Error(createError);
         } else {
           setError(true);
@@ -133,7 +99,7 @@ const CreateProfileScreen = (props) => {
       }
     }
 
-    if (createSuccess && createData) {
+    if (createData && Object.keys(createData).length !== 0) {
       Alert.alert(
         `Your age is ${createData.age} ?`,
         'Please confirm your age',
@@ -146,13 +112,14 @@ const CreateProfileScreen = (props) => {
           {
             text: 'OK',
             onPress: () => {
+              dispatch({ type: c.USER_CREATE_RESET });
               props.navigation.navigate('AddPhoto');
             },
           },
         ]
       );
     }
-  }, [createError, createSuccess]);
+  }, [createError, createData]);
 
   // ON CHANGE INPUTS
   const inputChangeHandler = useCallback(
@@ -169,14 +136,7 @@ const CreateProfileScreen = (props) => {
 
   // SAVE USER DATA
   const createUserProfileHandler = () => {
-    // console.log({ ...inputValues });
-    if (!formIsValid) {
-      // Alert.alert(
-      //   `Required fields in blank;)`,
-      //   'Please fill the required fields',
-      //   [{ text: 'Okay' }]
-      // );
-    }
+    // TODO: prevent infinite call to the backend
     dispatch(
       createUserProfile(
         inputValues.firstname,
@@ -195,19 +155,17 @@ const CreateProfileScreen = (props) => {
       behavior="padding"
       keyboardVerticalOffset={50}
       style={styles.screen}
-      contentContainerStyle={styles.screen}
-    >
+      contentContainerStyle={styles.screen}>
       <StatusBar style="light" />
       <ScrollView
         showsVerticalScrollIndicator={false}
         showsHorizontalScrollIndicator={false}
         style={styles.scroll}
-        contentContainerStyle={styles.contentContainer}
-      >
+        contentContainerStyle={styles.contentContainer}>
         <View style={styles.auth_text_view}>
           <View style={authStyles.default.auth_text_container}>
             <Text style={authStyles.default.auth_text_big}>
-              Let's create your profile
+              Lets poss create your profile
             </Text>
           </View>
           <View style={authStyles.default.auth_text_container}>
@@ -216,131 +174,38 @@ const CreateProfileScreen = (props) => {
             </Text>
           </View>
         </View>
-        <View style={styles.inputContainer}>
-          <Input
-            labelStyle={styles.label}
-            inputStyle={styles.inputStyle}
-            id="firstname"
-            label="Name *"
-            inputType="textInput"
-            keyboardType="default"
-            required
-            autoCapitalize="sentences"
-            onInputChange={inputChangeHandler}
-            initialValue=""
-            autoCorrect={false}
-            returnKeyType="next"
-            serverError={error}
-            errorText={getFieldErrorFromServer(
-              createError,
-              'firstname',
-              'Please enter a name'
-            )}
-          />
-        </View>
-        <View style={styles.inputContainer}>
-          <Input
-            labelStyle={styles.label}
-            inputStyle={styles.inputStyle}
-            inputType="textInput"
-            id="lastname"
-            label="Lastname *"
-            keyboardType="default"
-            required
-            autoCapitalize="sentences"
-            onInputChange={inputChangeHandler}
-            initialValue=""
-            autoCorrect={false}
-            returnKeyType="next"
-            serverError={error}
-            errorText={getFieldErrorFromServer(
-              createError,
-              'lastname',
-              'Please enter your latname'
-            )}
-          />
-        </View>
-        <View style={styles.inputContainer}>
-          <Input
-            labelStyle={styles.label}
-            inputStyle={styles.inputStyle}
-            inputType="textInput"
-            id="university"
-            label="University"
-            keyboardType="default"
-            autoCapitalize="sentences"
-            required={false}
-            initialIsValid={true}
-            onInputChange={inputChangeHandler}
-            initialValue=""
-            autoCorrect={false}
-            returnKeyType="next"
-          />
-        </View>
-        <View style={styles.inputContainer}>
-          <Input
-            labelStyle={styles.label}
-            inputStyle={styles.inputStyle}
-            inputType="inputMask"
-            id="birthdate"
-            label="Birthdate *"
-            required
-            autoComplete="birthdate-day"
-            dataDetectorTypes="calendarEvent"
-            onInputChange={inputChangeHandler}
-            placeholder="YYYY-MM-DD"
-            placeholderTextColor={Colors.placeholder}
-            serverError={error}
-            errorText={getFieldErrorFromServer(
-              createError,
-              'birthdate',
-              'Please enter a birthdate'
-            )}
-          />
-        </View>
-        <View style={styles.inputContainer}>
-          <Input
-            pickerRequired
-            inputType="picker"
-            labelStyle={styles.label}
-            inputStyle={styles.inputStyle}
-            items={gender}
-            itemKey={show.value}
-            label="Gender *"
-            initialValue=""
-            id="gender"
-            placeholder={{ label: 'Select an item', value: 'Select an item' }}
-            placeholderTextColor={Colors.placeholder}
-            onInputChange={inputChangeHandler}
-            serverError={error}
-            errorText={getFieldErrorFromServer(
-              createError,
-              'gender',
-              'Please enter your gender'
-            )}
-          />
-        </View>
-        <View style={styles.inputContainer}>
-          <Input
-            pickerRequired
-            inputType="picker"
-            labelStyle={styles.label}
-            inputStyle={styles.inputStyle}
-            items={show}
-            itemKey={show.value}
-            label="Show me *"
-            id="show_me"
-            placeholder={{ label: 'Select an item', value: 'Select an item' }}
-            placeholderTextColor={Colors.placeholder}
-            onInputChange={inputChangeHandler}
-            serverError={error}
-            errorText={getFieldErrorFromServer(
-              createError,
-              'show_me',
-              'Please enter your show_me'
-            )}
-          />
-        </View>
+
+        {CREATE_PROFILE_INPUTS.map((field) => (
+          <View style={styles.inputContainer} key={field.key}>
+            <Input
+              labelStyle={styles.label}
+              inputStyle={styles.inputStyle}
+              onInputChange={inputChangeHandler}
+              initialValue=""
+              items={field.items}
+              itemKey=""
+              id={field.id}
+              key={field.key}
+              label={field.label}
+              placeholder={field.placeholder}
+              placeholderTextColor={field.placeholderTextColor}
+              inputType={field.inputType}
+              keyboardType={field.keyboardType}
+              editable={field.editable}
+              desabled={field.desabled}
+              required={field.required}
+              pickerRequired={field.pickerRequired}
+              autoCorrect={field.autoCorrect}
+              autoCapitalize={field.autoCapitalize}
+              autoComplete={field.autoComplete}
+              dataDetectorTypes={field.dataDetectorTypes}
+              maxLength={field.maxLength}
+              returnKeyType={field.returnKeyType}
+              serverError={error}
+              errorText={getFieldErrorFromServer(createError, field.field_name)}
+            />
+          </View>
+        ))}
         <View style={styles.inputContainer}>
           <Input
             labelStyle={styles.label}
@@ -349,7 +214,7 @@ const CreateProfileScreen = (props) => {
             underlineColorAndroid="transparent"
             placeholder="Type something"
             placeholderTextColor={Colors.placeholder}
-            multiline={true}
+            multiline
             numberOfLines={5}
             maxLength={500}
             inputType="textInput"
@@ -357,7 +222,7 @@ const CreateProfileScreen = (props) => {
             label="About (optional)"
             autoCapitalize="none"
             required={false}
-            initialIsValid={true}
+            initialIsValid
             onInputChange={inputChangeHandler}
             autoCorrect={false}
           />
@@ -375,9 +240,8 @@ const CreateProfileScreen = (props) => {
               alignSelf: 'center',
               alignItems: 'center',
               width: '70%',
-            }}
-          >
-            <AuthButton text={'continue'} onPress={createUserProfileHandler} />
+            }}>
+            <AuthButton text="continue" onPress={createUserProfileHandler} />
           </View>
         )}
       </ScrollView>

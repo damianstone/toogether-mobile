@@ -1,3 +1,4 @@
+import React, { useEffect, useState, useRef } from 'react';
 import {
   StyleSheet,
   Text,
@@ -6,7 +7,6 @@ import {
   TouchableOpacity,
   Button,
 } from 'react-native';
-import React, { useEffect, useState, useRef } from 'react';
 import RNPickerSelect from 'react-native-picker-select';
 
 import Colors from '../../constants/Colors';

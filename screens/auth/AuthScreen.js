@@ -1,29 +1,22 @@
-import React, {
-  useState,
-  useContext,
-  useEffect,
-  useReducer,
-  useCallback,
-} from 'react';
+import React, { useEffect, useReducer, useCallback } from 'react';
 import {
   View,
   Button,
   Text,
   ScrollView,
-  Alert,
   ActivityIndicator,
   KeyboardAvoidingView,
 } from 'react-native';
-import { StatusBar } from 'expo-status-bar';
 import { useDispatch, useSelector } from 'react-redux';
-import { checkServerError } from '../../utils/errors';
+import { StatusBar } from 'expo-status-bar';
 
-import styles from './styles';
-import Colors from '../../constants/Colors';
-import AuthInput from '../../components/UI/AuthInput';
 import AuthButton from '../../components/UI/AuthButton';
+import AuthInput from '../../components/UI/AuthInput';
+import Colors from '../../constants/Colors';
 import * as c from '../../constants/user';
 import { userRegister, userLogin } from '../../store/actions/user';
+import { check400Error, checkServerError } from '../../utils/errors';
+import styles from './styles';
 
 const FORM_UPDATE = 'FORM_UPDATE';
 
@@ -71,7 +64,6 @@ const AuthStartScreen = (props) => {
 
   const { formIsValid, inputValues } = formState;
 
-  // REGISTER REDUCER
   const userRegisterReducer = useSelector((state) => state.userRegister);
   const {
     loading: registerLoading,
@@ -80,7 +72,6 @@ const AuthStartScreen = (props) => {
     error: registerError,
   } = userRegisterReducer;
 
-  // LOGIN REDUCER
   const userLoginReducer = useSelector((state) => state.userLogin);
   const {
     loading: loginLoading,
@@ -92,9 +83,16 @@ const AuthStartScreen = (props) => {
   // REGISTER
   useEffect(() => {
     if (registerError) {
-      checkServerError(registerError);
-      dispatch({ type: c.USER_REGISTER_RESET });
+      if (
+        registerError.response.status >= 400 ||
+        registerError.response.status < 500
+      ) {
+        check400Error(registerError);
+      } else {
+        checkServerError(registerError);
+      }
     }
+
     if (register && registerSuccess) {
       props.navigation.navigate('Success', { register: register });
     }
@@ -103,9 +101,16 @@ const AuthStartScreen = (props) => {
 
   // LOGIN
   useEffect(() => {
+    console.log({ ...loginError });
     if (loginError) {
-      checkServerError(registerError);
-      dispatch({ type: c.USER_LOGIN_RESET });
+      if (
+        loginError.response.status >= 400 ||
+        loginError.response.status < 500
+      ) {
+        check400Error(loginError);
+      } else {
+        checkServerError(loginError);
+      }
     }
 
     if (loginSuccess && loginData.has_account) {
@@ -115,6 +120,8 @@ const AuthStartScreen = (props) => {
     if (loginSuccess && !loginData.has_account) {
       props.navigation.navigate('Success', { register: register });
     }
+
+    dispatch({ type: c.USER_LOGIN_RESET });
   }, [loginError, loginSuccess]);
 
   const inputChangeHandler = useCallback(
@@ -128,6 +135,14 @@ const AuthStartScreen = (props) => {
     },
     [dispatchFormState]
   );
+
+  const handleSwitch = () => {
+    if (register) {
+      props.navigation.navigate('Auth', { register: false });
+    } else {
+      props.navigation.navigate('Auth', { register: true });
+    }
+  };
 
   const handleRegister = () => {
     if (formIsValid) {
@@ -162,12 +177,11 @@ const AuthStartScreen = (props) => {
           </Text>
         </View>
       </View>
-      <KeyboardAvoidingView behavior={'position'}>
+      <KeyboardAvoidingView behavior="position">
         <ScrollView
           style={styles.scrollview_style}
           contentContainerStyle={styles.scrollview_content_container}
-          automaticallyAdjustKeyboardInsets={true}
-        >
+          automaticallyAdjustKeyboardInsets>
           <View style={styles.auth_input_container}>
             <AuthInput
               id="email"
@@ -183,8 +197,8 @@ const AuthStartScreen = (props) => {
               onInputChange={inputChangeHandler}
             />
             <AuthInput
-              secureTextEntry={true}
-              textContentType={'password'}
+              secureTextEntry
+              textContentType="password"
               id="password"
               label="Password"
               keyboardType="default"
@@ -196,8 +210,8 @@ const AuthStartScreen = (props) => {
             />
             {register && (
               <AuthInput
-                secureTextEntry={true}
-                textContentType={'password'}
+                secureTextEntry
+                textContentType="password"
                 required
                 autoCapitalize="none"
                 id="repeated_password"
@@ -220,13 +234,13 @@ const AuthStartScreen = (props) => {
             )}
             <Button
               style={styles.auth_text_button}
-              color={'#4A4A4A'}
+              color="#4A4A4A"
               title={
                 register
                   ? 'You already have an account?'
                   : 'You dont have an account?'
               }
-              onPress={() => {}}
+              onPress={handleSwitch}
             />
           </View>
         </ScrollView>

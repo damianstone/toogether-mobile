@@ -86,6 +86,7 @@ const styles = StyleSheet.create({
     padding: 3,
     flexDirection: 'row',
     justifyContent: 'center',
+    backgroundColor: Colors.orange,
     marginVertical: 10,
     width: '65%',
     height: 44,

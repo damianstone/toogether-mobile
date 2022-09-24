@@ -2,7 +2,6 @@ import React, { useReducer, useEffect } from 'react';
 import { StyleSheet, Text, View, TextInput } from 'react-native';
 import { TextInputMask } from 'react-native-masked-text';
 import RNPickerSelect from 'react-native-picker-select';
-import { useSelector } from 'react-redux';
 
 import Colors from '../../constants/Colors';
 
@@ -29,9 +28,6 @@ const inputReducer = (state, action) => {
 };
 
 const Input = (props) => {
-  const userCreateProfile = useSelector((state) => state.userCreateProfile);
-  const { error: createError } = userCreateProfile;
-
   const [inputState, dispatch] = useReducer(inputReducer, {
     value: props.initialValue ? props.initialValue : '',
     isValid: props.initialIsValid,
@@ -107,7 +103,7 @@ const Input = (props) => {
         {...props}
         initialValue="YYYY-MM-DD"
         style={styles.input}
-        type={'datetime'}
+        type="datetime"
         options={{
           format: 'YYYY-MM-DD',
         }}

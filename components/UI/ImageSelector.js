@@ -1,16 +1,15 @@
 import React, { useState, Fragment } from 'react';
 import { View, Button, Text, StyleSheet, Image, Alert } from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 import * as ImagePicker from 'expo-image-picker';
 
 import Colors from '../../constants/Colors';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 
 const ImageSelector = (props) => {
   const [image, setImage] = useState();
 
   const verifyPermissions = async () => {
     const result = await ImagePicker.getCameraPermissionsAsync();
-    //console.log(result);
     if (!result.granted) {
       const askPermissions = await ImagePicker.requestCameraPermissionsAsync();
       if (!askPermissions.granted) {
@@ -46,14 +45,14 @@ const ImageSelector = (props) => {
   return (
     <View style={styles.imagePicker}>
       <View style={styles.imagePreview}>
-        {image ? (
+        {image && image.uri ? (
           <Image
             style={styles.image}
             source={{ uri: image.uri }}
             resizeMode="contain"
           />
         ) : (
-          <Fragment>
+          <>
             <Text style={{ marginBottom: 10, color: Colors.white }}>
               No Image picked yet.
             </Text>
@@ -64,10 +63,10 @@ const ImageSelector = (props) => {
                 takeImageHandler();
               }}
             />
-          </Fragment>
+          </>
         )}
       </View>
-      {image ? (
+      {image && image.uri ? (
         <View
           style={{
             flexDirection: 'row',

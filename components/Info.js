@@ -1,28 +1,28 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import tw from 'tailwind-rn';
 import { Ionicons } from '@expo/vector-icons';
 
 import Colors from '../constants/Colors';
 
 const Info = (props) => {
-  let sizeIcon = props.small ? 9 : 10;
-  let nameSize = props.small ? 12 : 17;
-  let textSiZe = props.small ? 9 : 15;
+  // const sizeIcon = props.small ? 9 : 10;
+  // const nameSize = props.small ? 12 : 17;
+  // const textSiZe = props.small ? 9 : 15;
 
   return (
     <View style={styles.cardShadow}>
       <View style={styles.textContainer}>
         <Text
-          style={styles.name}
-        >{`${props.firstName} ${props.lastName}, ${props.age}`}</Text>
+          style={
+            styles.name
+          }>{`${props.firstName} ${props.lastName}, ${props.age}`}</Text>
       </View>
       <View style={styles.infoContainer}>
-        <Ionicons name="location" size={19} color="black" />
+        <Ionicons color="black" name="location" size={19} />
         <Text style={styles.text}>{`${props.location}`}</Text>
       </View>
       <View style={styles.infoContainer}>
-        <Ionicons name="location" size={19} color="black" />
+        <Ionicons color="black" name="location" size={19} />
         <Text style={styles.text}>{`${props.university}`}</Text>
       </View>
     </View>

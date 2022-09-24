@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, SafeAreaView } from 'react-native';
+import { Text, View } from 'react-native';
 
 const Chat = () => {
   return (
@@ -29,5 +29,3 @@ const Chat = () => {
 };
 
 export default Chat;
-
-const styles = StyleSheet.create({});

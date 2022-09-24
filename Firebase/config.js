@@ -1,6 +1,6 @@
+import Constants from 'expo-constants';
 import firebase from 'firebase';
 /* Contstants allow to read data from app.json */
-import Constants from 'expo-constants';
 const firebaseConfig = {
   apiKey: Constants.manifest.extra.API_KEY,
   authDomain: Constants.manifest.extra.AUTH_DOMAIN,
@@ -11,6 +11,6 @@ const firebaseConfig = {
   appId: Constants.manifest.extra.APP_ID,
   measurementId: Constants.manifest.extra.MEASUREMENT_ID,
 };
-let Firebase = firebase.initializeApp(firebaseConfig);
+const Firebase = firebase.initializeApp(firebaseConfig);
 
 export default Firebase;

@@ -20,46 +20,16 @@ import NewMatch from '../../components/NewMatch';
 import { listSwipes } from '../../store/actions/swipe';
 
 import axios from 'axios';
-
-/* 
-Toda la logica del swipe 
-
-recibe todos los datos que vienen desde el backend 
-
-distribuye los datos al deck para el swipe 
-
-renderiza newMatchprofile y noMoreProfiles si es que el deck llama estas funciones
-
-ERRORS
-render no cards screen 
-Loading while fetching data from the state
-
-*/
+import Avatar from '../../components/UI/Avatar';
 
 const SwipeScreen = (props) => {
-  // STATE
+  const dispatch = useDispatch();
   const [swipes, setSwipes] = useState([]);
   const [showMode, setShowMode] = useState(0);
   const [currentMatchData, setCurrentMatchData] = useState(null);
 
   const [loading, setLoading] = useState(false);
   const [noCards, setNoCards] = useState(false);
-
-  // GET DATA FROM REDUCERS
-
-  const dispatch = useDispatch();
-
-  // USE EFFECTS
-  useEffect(() => {
-    setLoading(true);
-    const fetchProd = async () => {
-      // no write the entire url because the other part of the url is in proxy packajge.json
-      const { data } = await axios.get('http://127.0.0.1:8000/api/profles/');
-      setSwipes(data);
-    };
-    fetchProd();
-    setLoading(false);
-  }, []);
 
   const undoSwipe = (swipeToUndo) => {
     if (!swipeToUndo) {
@@ -140,17 +110,11 @@ SwipeScreen.navigationOptions = (navData) => {
       />
     ),
     headerLeft: () => (
-      <TouchableOpacity
-        style={styles.imgContainer}
+      <Avatar
         onPress={() => {
           navData.navigation.navigate('MyProfile');
         }}
-      >
-        <Image
-          source={require('../../assets/images/Profiles/user.jpeg')}
-          style={styles.img}
-        />
-      </TouchableOpacity>
+      />
     ),
     headerRight: () => (
       <HeaderButtons HeaderButtonComponent={HeaderButtom}>

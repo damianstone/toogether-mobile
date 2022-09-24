@@ -1,32 +1,25 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 import Colors from '../constants/Colors';
 
 const Group = () => {
   const [showLink, setShowLink] = useState(false);
-  const withGroup = null;
-  const startGroup = null;
 
   const onCreateGroup = () => {
     setShowLink(true);
-    console.log('add backend login');
   };
 
-  const onDeleteGroup = () => {
-    alert('sure u wanna delete the group');
-  };
+  const onDeleteGroup = () => {};
 
-  const onGoToGroupChat = () => {
-    console.log('go to group chat');
-  };
+  const onGoToGroupChat = () => {};
 
   let card;
 
   if (showLink) {
     card = (
       <View style={styles.bigCard}>
-        <Text style={styles.cardTitle}>You've created a group</Text>
+        <Text style={styles.cardTitle}>You&aposve created a group</Text>
         <Text style={styles.smallText}>
           Copy the following code and send it to your friends so they can join
           your group.
@@ -52,8 +45,7 @@ const Group = () => {
         <Text style={styles.cardTitle}>Start a group</Text>
         <TouchableOpacity
           onPress={onCreateGroup}
-          style={styles.buttonContainer}
-        >
+          style={styles.buttonContainer}>
           <Text style={styles.buttonText}>Create</Text>
         </TouchableOpacity>
       </View>

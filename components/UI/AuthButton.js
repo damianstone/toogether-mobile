@@ -1,5 +1,5 @@
-import { StyleSheet, TouchableOpacity, Text } from 'react-native';
 import React from 'react';
+import { StyleSheet, TouchableOpacity, Text } from 'react-native';
 import Colors from '../../constants/Colors';
 
 const AuthButton = (props) => {

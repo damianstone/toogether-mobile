@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, ImageBackground, Modal } from 'react-native';
-import { useSelector } from 'react-redux';
 import Swiper from 'react-native-swiper';
+import { useSelector } from 'react-redux';
 
-import Colors from '../../constants/Colors';
 import DetailCard from '../../components/DetailCard';
+import Colors from '../../constants/Colors';
 
 const ProfileModalScreen = (props) => {
   const groups = useSelector((state) => state.groups.groups);
@@ -25,7 +25,7 @@ const ProfileModalScreen = (props) => {
       <Swiper
         style={styles.wrapper}
         removeClippedSubviews={false}
-        showsButtons={true}
+        showsButtons
         loop={false}
         paginationStyle={{ top: 5, bottom: null }}
         dot={
@@ -59,7 +59,7 @@ const ProfileModalScreen = (props) => {
               imageStyle={styles.imageStyle}
               source={ph}
               resizeMode="cover"
-            ></ImageBackground>
+            />
           );
         })}
       </Swiper>

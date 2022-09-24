@@ -1,11 +1,7 @@
 import { Alert } from 'react-native';
 
 // funcion that check error that are no coming from the frontend and return a message to the user
-export const checkServerError = (
-  errorFromServer,
-  customTitle,
-  customMessage
-) => {
+export const checkServerError = (errorFromServer) => {
   let message = { title: '', message: '' };
 
   if (
@@ -67,9 +63,8 @@ export const check400Error = (errorFromServer, nameBackendField) => {
 
   if (
     errorFromServer.response &&
-    errorFromServer.response.status === 400 &&
-    errorFromServer.response.hasOwnProperty('data') &&
-    errorFromServer.response.data.hasOwnProperty('detail')
+    errorFromServer?.response?.data &&
+    errorFromServer?.response?.data?.detail
   ) {
     message = {
       title: 'An error has occurred',
@@ -79,9 +74,8 @@ export const check400Error = (errorFromServer, nameBackendField) => {
 
   if (
     errorFromServer.response &&
-    errorFromServer.response.status === 400 &&
-    errorFromServer.response.hasOwnProperty('data') &&
-    errorFromServer.response.data.hasOwnProperty('non_field_errors')
+    errorFromServer.response?.hasOwnProperty('data') &&
+    errorFromServer.response?.data?.hasOwnProperty('non_field_errors')
   ) {
     message = {
       title: 'An error has occurred',
@@ -112,11 +106,7 @@ export const check400Error = (errorFromServer, nameBackendField) => {
 };
 
 // return the response of the serializer
-export const getFieldErrorFromServer = (
-  errorFromServer,
-  nameBackendField,
-  text
-) => {
+export const getFieldErrorFromServer = (errorFromServer, nameBackendField) => {
   if (
     errorFromServer &&
     errorFromServer.response !== undefined &&

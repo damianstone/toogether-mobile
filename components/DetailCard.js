@@ -1,7 +1,7 @@
-import { StyleSheet, Text, View, ScrollView } from 'react-native';
 import React from 'react';
-import Colors from '../constants/Colors';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import Colors from '../constants/Colors';
 import SwipeButtons from './SwipeButtons';
 
 const DetailCard = (props) => {
@@ -9,9 +9,10 @@ const DetailCard = (props) => {
     <ScrollView style={styles.screen}>
       <View style={styles.container1}>
         <Text
-          style={styles.nameText}
-        >{`${props.name} ${props.lastname}, ${props.age}`}</Text>
-        <TouchableOpacity style={styles.closeContainer} onPress={props.onClose}>
+          style={
+            styles.nameText
+          }>{`${props.name} ${props.lastname}, ${props.age}`}</Text>
+        <TouchableOpacity onPress={props.onClose} style={styles.closeContainer}>
           <Text>C</Text>
         </TouchableOpacity>
       </View>
@@ -29,16 +30,16 @@ const DetailCard = (props) => {
           <Text style={styles.text}>{props.university}</Text>
         </View>
       </View>
-      <View style={styles.line}></View>
+      <View style={styles.line} />
       <View style={styles.descriptionContainer}>
         <Text style={{ fontSize: 18, fontWeight: '500', marginBottom: 4 }}>
           About
         </Text>
         <Text style={styles.descriptionText}>{props.description}</Text>
       </View>
-      <View style={styles.line}></View>
+      <View style={styles.line} />
       <SwipeButtons rewind={false} />
-      <View style={styles.line}></View>
+      <View style={styles.line} />
       <View style={styles.reportContainer}>
         <TouchableOpacity>
           <Text style={styles.redText}>

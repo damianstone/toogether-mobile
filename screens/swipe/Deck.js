@@ -140,7 +140,7 @@ const Deck = (props) => {
       <View style={styles.swipeContainer}>
         <Swiper
           containerStyle={tw('bg-transparent')}
-          showSecondCard={true}
+          showSecondCard
           cards={swipeProfiles}
           ref={swipeRef}
           stackSize={3}
@@ -178,7 +178,7 @@ const Deck = (props) => {
       </View>
       <View style={styles.buttonsContainer}>
         <SwipeButtons
-          rewind={true}
+          rewind
           onLeft={onLikePressed}
           onRight={onDislikePressed}
           onRewind={onRewindPressed}
@@ -186,21 +186,19 @@ const Deck = (props) => {
       </View>
       {/* PROBLE RENDERIZAR SHOW PRPFILE  */}
       {showMode == 1 && swipeProfiles[currentDeckIndex.current] && (
-        <Modal animationType={'slide'}>{renderProfile}</Modal>
+        <Modal animationType="slide">{renderProfile}</Modal>
       )}
       {showMode == 2 && (
         <Modal
           transparent={false}
-          visible={showMode == 2 ? true : false}
-          animationType={'slide'}
-        >
+          visible={showMode == 2}
+          animationType="slide">
           <View
             style={{
               width: SCREEN_WIDTH,
               height: SCREEN_HEIGHT,
               backgroundColor: 'white',
-            }}
-          >
+            }}>
             {renderNewMatch()}
           </View>
         </Modal>

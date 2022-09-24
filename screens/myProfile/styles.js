@@ -1,10 +1,11 @@
-import { StyleSheet, Platform, Dimensions } from 'react-native';
+import { Dimensions, Platform, StyleSheet } from 'react-native';
 import { linear } from 'react-native/Libraries/Animated/Easing';
 import Colors from '../../constants/Colors';
 
-const width = Dimensions.get('window').width;
+const { width } = Dimensions.get('window');
 
 export default StyleSheet.create({
+  /* ----------------------- PROFILE DATA ----------------------  */
   MainContainer: {
     flex: 1,
     backgroundColor: Colors.bg,
@@ -12,9 +13,16 @@ export default StyleSheet.create({
   safeAreaContainer: {
     flex: 1,
     backgroundColor: Colors.bg,
+    position: 'absolute',
   },
   body: {
     width: '100%',
+  },
+  scroll_container_style: {
+    width: '100%',
+    flexDirection: 'column', // inner items will be added vertically
+    flexGrow: 1, // all the available vertical space will be occupied by it
+    justifyContent: 'space-between', // will create the gutter between body and footer
   },
   photoView: {
     top: Platform.OS === 'ios' ? '4%' : '1%',
@@ -29,7 +37,20 @@ export default StyleSheet.create({
     marginTop: 20,
     alignItems: 'center',
   },
+  avatar_view: {
+    backgroundColor: Colors.orange,
+    width: 150,
+    height: 150,
+    borderRadius: 100,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  avatar_initials: {
+    color: Colors.white,
+    fontSize: 25,
+  },
   nameView: {
+    flexDirection: 'row',
     width: '100%',
     marginTop: -5,
     justifyContent: 'center',
@@ -64,6 +85,8 @@ export default StyleSheet.create({
     color: Colors.calypso,
     fontSize: 24,
   },
+
+  /* ----------------------- PHOTOS-----------------------  */
   myphotosView: {
     width: '100%',
     paddingHorizontal: 2,
@@ -89,9 +112,22 @@ export default StyleSheet.create({
     height: '100%',
     width: '90%',
   },
+  flatlist_photos_style: {
+    width: '100%',
+  },
+  flatlist_photos_container_style: {
+    justifyContent: 'center',
+  },
+  photos_grid_view: {
+    flex: 3,
+    justifyContent: 'center',
+    flexDirection: 'row',
+    width: '100%',
+    marginHorizontal: 'auto',
+  },
   myphotosItemView: {
-    width: Math.floor(width * 0.24),
-    height: Math.floor(width * 0.24),
+    width: Math.floor(width * 0.29),
+    height: Math.floor(width * 0.29),
     marginHorizontal: 8,
     marginVertical: 8,
     borderRadius: 15,
@@ -126,18 +162,6 @@ export default StyleSheet.create({
     paddingLeft: 22,
     color: Colors.white,
   },
-  logoutView: {
-    width: '92%',
-    marginTop: 20,
-    marginBottom: 50,
-    marginHorizontal: 12,
-    padding: 10,
-    borderRadius: 10,
-    borderWidth: 1,
-    borderColor: Colors.white,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
   inactiveDot: {
     backgroundColor: Colors.white,
     width: 8,
@@ -159,12 +183,11 @@ export default StyleSheet.create({
     height: 40,
   },
 
+  /* ----------------------- TOOGETHER PREMIUM-----------------------  */
   circle: {
     marginTop: 20,
+    width: '100%',
     height: '100%',
-    width: '160%',
-    borderRadius: 300,
-    //backgroundColor: '#494863',
     alignSelf: 'center',
     alignItems: 'center',
     transform: [{ scaleX: 1 }],
@@ -173,12 +196,12 @@ export default StyleSheet.create({
     position: 'absolute',
     width: '100%',
     height: '100%',
-    borderRadius: 300,
+    borderRadius: 20,
     transform: [{ scaleX: 1 }],
   },
   logoContainer: {
-    marginVertical: 20,
-    marginTop: 40,
+    marginVertical: 10,
+    marginTop: 20,
     alignItems: 'center',
     justifyContent: 'center',
     width: '100%',
@@ -211,8 +234,19 @@ export default StyleSheet.create({
     width: 250,
     borderRadius: 20,
   },
+  /* ----------------------- EDIT PROFILE SCREEN -----------------------  */
 
-  settingContainer: {
+  screen: {
+    flex: 1,
+    backgroundColor: Colors.bg,
+  },
+  loadingScreen: {
+    backgroundColor: Colors.bg,
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  editContainer: {
     margin: 20,
     paddingHorizontal: 2,
     justifyContent: 'center',
@@ -223,13 +257,19 @@ export default StyleSheet.create({
   },
   label: {
     color: Colors.white,
-    fontSize: 18,
+    fontSize: 20,
   },
   inputStyle: {
     justifyContent: 'center',
     padding: 3,
-    backgroundColor: '#494863',
-    borderRadius: 20,
+    backgroundColor: Colors.bgCard,
+    borderRadius: 10,
+  },
+  desabledInputStyle: {
+    justifyContent: 'center',
+    padding: 3,
+    backgroundColor: '#363648',
+    borderRadius: 10,
   },
   textTareaStyle: {
     height: 150,
@@ -239,7 +279,7 @@ export default StyleSheet.create({
     borderRadius: 20,
   },
   textArea: {
-    height: 150,
+    height: 200,
     textAlignVertical: 'top',
   },
 });

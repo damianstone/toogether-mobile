@@ -8,44 +8,35 @@ import {
   ScrollView,
   Alert,
 } from 'react-native';
-import { StatusBar } from 'expo-status-bar';
 import { useDispatch, useSelector } from 'react-redux';
+import { StatusBar } from 'expo-status-bar';
+
+import AuthButton from '../../components/UI/AuthButton';
+import ImageSelector from '../../components/UI/ImageSelector';
+import Colors from '../../constants/Colors';
+import * as c from '../../constants/user';
 import { addPhoto } from '../../store/actions/user';
 import { check400Error, checkServerError } from '../../utils/errors';
-import * as c from '../../constants/user';
 
-import Colors from '../../constants/Colors';
 import * as authStyles from '../Auth/styles';
-import ImageSelector from '../../components/UI/ImageSelector';
-import Header from '../../components/UI/Header';
-import AuthButton from '../../components/UI/AuthButton';
 
 const AddProfilePhotoScreen = (props) => {
   const [image, setImage] = useState('');
   const dispatch = useDispatch();
 
   const userAddPhotoReducer = useSelector((state) => state.userAddPhoto);
-  const { error, loading, success, data } = userAddPhotoReducer;
-
-  // TODO: fix send photo
+  const { error, loading, data } = userAddPhotoReducer;
   useEffect(() => {
-    // console.log({ ...error });
-
-    console.log(data);
-
-    if (error && error.response.status !== 400) {
-      checkServerError(error);
-      dispatch({ type: c.USER_ADD_PHOTO_RESET });
-    }
-
-    if (error && error.response.status === 400) {
-      check400Error(error, 'image');
-      dispatch({ type: c.USER_ADD_PHOTO_RESET });
+    if (error) {
+      if (error.response.status === 400) {
+        check400Error(error, 'image');
+      } else {
+        checkServerError(error);
+      }
     }
 
     if (data) {
       props.navigation.navigate('Swipe');
-      dispatch({ type: c.USER_ADD_PHOTO_RESET });
     }
 
     dispatch({ type: c.USER_ADD_PHOTO_RESET });
@@ -55,8 +46,40 @@ const AddProfilePhotoScreen = (props) => {
     setImage(imagePath);
   };
 
+  const handleSkip = () => {
+    Alert.alert(
+      `You sure you want to continue without a photo`,
+      'A pic worth more than 1000 words ;)',
+      [
+        {
+          text: 'Later',
+          onPress: () => {
+            props.navigation.navigate('Swipe');
+          },
+          style: 'cancel',
+        },
+        {
+          text: 'Add photo',
+        },
+      ]
+    );
+  };
+
   const handleAddPhoto = () => {
-    dispatch(addPhoto(image));
+    if (image && image.uri) {
+      dispatch(addPhoto(image));
+    }
+    if (!image || !image.uri) {
+      Alert.alert(
+        `You have not upload any photo`,
+        'Choose one from your gallery',
+        [
+          {
+            text: 'OK',
+          },
+        ]
+      );
+    }
   };
 
   return (
@@ -70,7 +93,7 @@ const AddProfilePhotoScreen = (props) => {
       <View style={styles.auth_text_view}>
         <View style={authStyles.default.auth_text_container}>
           <Text style={authStyles.default.auth_text_big}>
-            Let's upload your first photo
+            Let&aposs upload your first photo
           </Text>
         </View>
         <View style={authStyles.default.auth_text_container}>
@@ -89,7 +112,7 @@ const AddProfilePhotoScreen = (props) => {
           </View>
         ) : (
           <>
-            <Button title="Skip" color={Colors.white} />
+            <Button title="Skip" color={Colors.white} onPress={handleSkip} />
             <AuthButton text="Continue" onPress={handleAddPhoto} />
           </>
         )}

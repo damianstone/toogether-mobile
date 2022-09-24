@@ -1,85 +1,202 @@
+/* eslint-disable react/jsx-curly-brace-presence */
+import React, { useEffect, useState, useCallback } from 'react';
 import {
-  Text,
-  View,
-  Platform,
-  ScrollView,
-  SafeAreaView,
   FlatList,
-  TouchableOpacity,
   Image,
+  Platform,
+  SafeAreaView,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
+  Alert,
+  RefreshControl,
+  Linking,
 } from 'react-native';
-import React, { useState, useRef, useDispatch, useEffect } from 'react';
-import { useSelector } from 'react-redux';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
-import { LinearGradient } from 'expo-linear-gradient';
+import { useDispatch, useSelector } from 'react-redux';
 import { useActionSheet } from '@expo/react-native-action-sheet';
+import Constants from 'expo-constants';
+import * as ImagePicker from 'expo-image-picker';
+import { LinearGradient } from 'expo-linear-gradient';
+import { MaterialIcons } from '@expo/vector-icons';
 
 import HeaderButtom from '../../components/UI/HeaderButton';
-import ActivityModal from '../../components/UI/ActivityModal';
-import styles from './styles';
+import Loader from '../../components/UI/Loader';
 import Colors from '../../constants/Colors';
-import axios from 'axios';
+import * as c from '../../constants/user';
+import {
+  listUserPhotos,
+  getUserProfile,
+  removeUserPhoto,
+  addPhoto,
+  updatePhoto,
+} from '../../store/actions/user';
+import { checkServerError, check400Error } from '../../utils/errors';
+import { verifyPermissions } from '../../utils/permissions';
+import styles from './styles';
 
-/* 
-MyProfileScreen
-
-where the user can see their profile
-
-Receive the profile object from... (?)
-
-Support the following changes to the profile
-- remove and add new photo
-
-redirects to
-- setting screen 
-- toogether pro explanation website
-
-*/
+const BASE_PHOTOS = [
+  {
+    id: 1,
+    text: 'Add photo',
+  },
+  {
+    id: 2,
+    text: 'Add photo',
+  },
+  {
+    id: 3,
+    text: 'Add photo',
+  },
+  {
+    id: 4,
+    text: 'Add photo',
+  },
+  {
+    id: 5,
+    text: 'Add photo',
+  },
+  {
+    id: 6,
+    text: 'Add photo',
+  },
+];
 
 const MyProfileScreen = (props) => {
-  const [loading, setLoading] = useState(false);
-  const [user, setUser] = useState();
-  const [photos, setPhotos] = useState([]);
+  const BASE_URL = Constants.manifest.extra.LOCAL_URL;
+  const dispatch = useDispatch();
   const { showActionSheetWithOptions } = useActionSheet();
+  const [refreshing, setRefreshing] = useState(false);
+  const [photoId, setPhotoId] = useState('');
+  const [photos, setPhotos] = useState();
+
+  const userGetProfile = useSelector((state) => state.userGetProfile);
+  const {
+    loading: loadingProfile,
+    error: errorProfile,
+    data: userProfile,
+  } = userGetProfile;
+
+  const userListPhotos = useSelector((state) => state.userListPhotos);
+  const {
+    loading: loadingPhotos,
+    error: errorPhotos,
+    data: dataPhotos,
+  } = userListPhotos;
+
+  const userRemovePhoto = useSelector((state) => state.userRemovePhoto);
+  const {
+    loading: loadingRemovePhoto,
+    error: errorRemovePhoto,
+    data: dataRemovePhoto,
+  } = userRemovePhoto;
+
+  const userAddPhoto = useSelector((state) => state.userAddPhoto);
+  const {
+    loading: loadingAddPhoto,
+    error: errorAddPhoto,
+    data: dataAddPhoto,
+  } = userAddPhoto;
 
   useEffect(() => {
-    setLoading(true);
-    const fetchUser = async () => {
-      // no write the entire url because the other part of the url is in proxy packajge.json
-      const { data } = await axios.get('http://127.0.0.1:8000/api/profiles/1');
-      setUser(data);
-      setPhotos(`http://127.0.0.1:8000${user.photo}`);
-    };
-    fetchUser();
-    setLoading(false);
-  }, []);
+    if (!userProfile && !errorProfile) {
+      dispatch(getUserProfile());
+    }
+    if (errorProfile) {
+      checkServerError(errorProfile);
+    }
+  }, [photos, userProfile]);
 
-  const onOpenUploadPhotoActionSheet = () => {
-    // Same interface as https://facebook.github.io/react-native/docs/actionsheetios.html
-    const options = ['From Camera', 'Upload from Gallery', 'Cancel'];
-    const destructiveButtonIndex = 0;
-    const cancelButtonIndex = 2;
+  useEffect(() => {
+    if (dataPhotos) {
+      setPhotos([...dataPhotos]);
+    }
 
-    showActionSheetWithOptions(
-      {
-        options,
-        cancelButtonIndex,
-        destructiveButtonIndex,
-      },
-      (buttonIndex) => {
-        if (buttonIndex === 2) console.log('cancel');
+    if ((!photos || dataRemovePhoto || dataAddPhoto) && !errorPhotos) {
+      dispatch(listUserPhotos());
+    }
+
+    if (errorRemovePhoto || errorPhotos || errorAddPhoto) {
+      console.log(errorAddPhoto);
+      if (errorAddPhoto?.response?.status === 400) {
+        check400Error(errorAddPhoto, 'image');
+      } else {
+        checkServerError(errorAddPhoto);
       }
-    );
+      checkServerError(errorRemovePhoto);
+    }
+
+    if (dataRemovePhoto) {
+      Alert.alert('Photo Removed', dataRemovePhoto.detail, {
+        text: 'Ok',
+        onPress: () => {
+          dispatch({ type: c.USER_REMOVE_PHOTO_RESET });
+        },
+      });
+    }
+
+    // TODO: delete this after
+    if (dataAddPhoto) {
+      Alert.alert('Photo added', 'well done', {
+        text: 'Ok',
+        onPress: () => {
+          dispatch({ type: c.USER_ADD_PHOTO_RESET });
+        },
+      });
+    }
+
+    dispatch({ type: c.USER_ADD_PHOTO_RESET });
+    dispatch({ type: c.USER_REMOVE_PHOTO_RESET });
+  }, [
+    dataPhotos,
+    dataRemovePhoto,
+    dataAddPhoto,
+    errorRemovePhoto,
+    errorPhotos,
+    errorAddPhoto,
+  ]);
+
+  const loadProfile = useCallback(async () => {
+    setRefreshing(true);
+    try {
+      await dispatch(getUserProfile());
+      await dispatch(listUserPhotos());
+    } catch (err) {
+      checkServerError(err);
+    }
+    setRefreshing(false);
+  }, [dispatch]);
+
+  // add listener to fetch the user and re fetch it
+  useEffect(() => {
+    const unsubscribe = props.navigation.addListener('focus', () => {
+      loadProfile();
+    });
+    return unsubscribe;
+  }, [loadProfile]);
+
+  const handleAddPhoto = async (photo_id, isUpdate) => {
+    const hasPermissions = await verifyPermissions();
+    if (!hasPermissions) {
+      return;
+    }
+    const image = await ImagePicker.launchImageLibraryAsync({
+      base64: true,
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      quality: 1,
+    });
+    if (image && !isUpdate) {
+      dispatch(addPhoto(image));
+    }
+    if (image && isUpdate) {
+      dispatch(updatePhoto(photo_id, image));
+    }
   };
 
-  const onOpenActionSheet = () => {
+  const onOpenActionSheet = (photo_id) => {
     // Same interface as https://facebook.github.io/react-native/docs/actionsheetios.html
-    const options = [
-      'Make Profile Picture',
-      'Add New Photo',
-      'Remove Photo',
-      'Cancel',
-    ];
+    const options = ['Update photo', 'Remove Photo', 'Cancel'];
     const destructiveButtonIndex = 2;
     const cancelButtonIndex = 3;
 
@@ -90,8 +207,65 @@ const MyProfileScreen = (props) => {
         destructiveButtonIndex,
       },
       (buttonIndex) => {
-        if (buttonIndex === 1) onOpenUploadPhotoActionSheet();
+        if (buttonIndex === 0) {
+          handleAddPhoto(photo_id, true);
+          setPhotoId(photo_id); // to know in which base photo render the loader
+        }
+        if (buttonIndex === 1) {
+          dispatch(removeUserPhoto(photo_id));
+          setPhotoId(photo_id);
+        }
+        return null;
       }
+    );
+  };
+
+  const handleOpenLink = useCallback(async (url) => {
+    const supported = await Linking.canOpenURL(url);
+    if (supported) {
+      await Linking.openURL(url);
+    } else {
+      Alert.alert(`Don't know how to open this URL: ${url}`);
+    }
+  }, []);
+
+  const handleNavigate = (screen) => {
+    props.navigation.navigate(screen);
+  };
+
+  const renderPhoto = (photo) => {
+    let stylesObj = {
+      ...styles.myphotosItemView,
+      backgroundColor: 'transparent',
+    };
+    if (loadingRemovePhoto || loadingAddPhoto || loadingPhotos) {
+      stylesObj = {
+        ...styles.myphotosItemView,
+        backgroundColor: 'transparent',
+      };
+    }
+    return (
+      <TouchableOpacity
+        key={photo.id}
+        onPress={() => onOpenActionSheet(photo.id)}
+        style={{ ...stylesObj }}>
+        {loadingPhotos ||
+        loadingRemovePhoto ||
+        (loadingAddPhoto && photo.id === photoId) ? (
+          <Loader size="small" />
+        ) : (
+          <Image
+            source={{
+              uri: `${BASE_URL}${photo.image}`,
+            }}
+            style={{
+              width: '100%',
+              height: '100%',
+              backgroundColor: 'transparent',
+            }}
+          />
+        )}
+      </TouchableOpacity>
     );
   };
 
@@ -99,16 +273,45 @@ const MyProfileScreen = (props) => {
     <View style={styles.MainContainer}>
       <SafeAreaView style={styles.safeAreaContainer}>
         <View style={styles.MainContainer}>
-          <ScrollView style={styles.body}>
-            {/* MAIN FOTOS AND COUNTERS */}
-            <View style={styles.profilePictureContainer}>
-              <Image
-                style={{ width: 150, height: 150, borderRadius: 100 }}
-                source={require('../../assets/images/Profiles/user.jpeg')}
+          <ScrollView
+            style={styles.body}
+            nestedScrollEnabled
+            contentContainerStyle={styles.scroll_container_style}
+            refreshControl={
+              <RefreshControl
+                refreshing={refreshing}
+                onRefresh={loadProfile}
+                tintColor={Colors.white}
               />
+            }>
+            <View style={styles.profilePictureContainer}>
+              {photos && Object.values(photos).length > 0 && (
+                <Image
+                  source={{
+                    uri: `${BASE_URL}${Object.values(photos)[0].image}`,
+                  }}
+                  style={{ width: 150, height: 150, borderRadius: 100 }}
+                />
+              )}
+              {!photos ||
+                (Object.values(photos).length === 0 && (
+                  <View style={styles.avatar_view}>
+                    <Text style={styles.avatar_initials}>DS</Text>
+                  </View>
+                ))}
             </View>
             <View style={styles.nameView}>
-              <Text style={styles.name}>Damian Stone</Text>
+              {userProfile && (
+                <>
+                  <Text style={styles.name}>
+                    {`${userProfile.firstname} ${userProfile.lastname}`}
+                  </Text>
+                  <TouchableOpacity
+                    onPress={() => handleNavigate('EditProfile')}>
+                    <MaterialIcons name="edit" size={20} color="white" />
+                  </TouchableOpacity>
+                </>
+              )}
             </View>
             <View style={styles.counterContainer}>
               <View style={styles.counterView}>
@@ -120,35 +323,53 @@ const MyProfileScreen = (props) => {
                 <Text style={styles.counterText}>matches</Text>
               </View>
             </View>
-
-            {/* PHOTOS */}
-
             <View style={styles.myphotosView}>
               <View style={styles.itemView}>
                 <Text style={styles.photoTitleLabel}>My Photos</Text>
               </View>
               <FlatList
-                scrollEnabled={false}
+                style={styles.flatlist_photos_style}
+                contentContainerStyle={styles.flatlist_photos_container_style}
+                data={BASE_PHOTOS}
                 horizontal={false}
+                keyExtractor={(photo) => photo.id}
+                nestedScrollEnabled
                 numColumns={3}
-                data={photos}
-                keyExtractor={(item) => item}
-                renderItem={(photo, index) => (
-                  <TouchableOpacity
-                    key={'item' + index}
-                    style={styles.myphotosItemView}
-                    onPress={onOpenActionSheet}
-                  >
-                    <Image
-                      style={{ width: '100%', height: '100%' }}
-                      source={photo}
-                    />
-                  </TouchableOpacity>
-                )}
+                renderItem={({ item, index }) =>
+                  photos && photos[index] ? (
+                    renderPhoto(photos[index], item.id)
+                  ) : (
+                    <TouchableOpacity
+                      key={item.id}
+                      onPress={() => {
+                        handleAddPhoto();
+                        setPhotoId(item.id);
+                      }}
+                      style={{
+                        ...styles.myphotosItemView,
+                        backgroundColor: Colors.bgCard,
+                      }}>
+                      <View
+                        style={{
+                          width: '100%',
+                          height: '100%',
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                        }}>
+                        {loadingAddPhoto && item.id === photoId ? (
+                          <Loader size="small" />
+                        ) : (
+                          <Text style={{ color: Colors.white }}>Add photo</Text>
+                        )}
+                      </View>
+                    </TouchableOpacity>
+                  )
+                }
+                scrollEnabled={false}
               />
             </View>
 
-            {/* TOOGETHER PRO*/}
+            {/* TOOGETHER PRO */}
             <View style={styles.circle}>
               <LinearGradient
                 colors={['#ED665A', '#CF2A6E', '#BA007C']}
@@ -157,8 +378,8 @@ const MyProfileScreen = (props) => {
               <View style={{ alignItems: 'center' }}>
                 <View style={styles.logoContainer}>
                   <Image
-                    style={styles.logo}
                     source={require('../../assets/images/logo-2.png')}
+                    style={styles.logo}
                   />
                 </View>
                 <Text style={styles.proText}>
@@ -166,9 +387,8 @@ const MyProfileScreen = (props) => {
                 </Text>
                 <View style={styles.buttonPremiumContainer}>
                   <TouchableOpacity
-                    onPress={() => {}}
-                    style={styles.buttonPremiumView}
-                  >
+                    onPress={() => handleOpenLink('https://toogether.app/')}
+                    style={styles.buttonPremiumView}>
                     <LinearGradient
                       // Background Linear Gradient
                       colors={['#ED665A', '#CF2A6E', '#BA007C']}
@@ -192,24 +412,24 @@ MyProfileScreen.navigationOptions = (navData) => {
     headerRight: () => (
       <HeaderButtons HeaderButtonComponent={HeaderButtom}>
         <Item
-          title="Back arrow"
           iconName={Platform.OS === 'android' ? 'md-cart' : 'ios-arrow-back'}
           onPress={() => {
             // go to chat screen
             navData.navigation.navigate('Setting');
           }}
+          title="Back arrow"
         />
       </HeaderButtons>
     ),
     headerLeft: () => (
       <HeaderButtons HeaderButtonComponent={HeaderButtom}>
         <Item
-          title="Back arrow"
           iconName={Platform.OS === 'android' ? 'md-cart' : 'ios-arrow-back'}
           onPress={() => {
             // go to chat screen
             navData.navigation.navigate('Swipe');
           }}
+          title="Back arrow"
         />
       </HeaderButtons>
     ),
@@ -217,32 +437,3 @@ MyProfileScreen.navigationOptions = (navData) => {
 };
 
 export default MyProfileScreen;
-
-/*
-          PICKERS AND MODALS NATIVE 
-          <ActivityModal
-            loading={loading}
-            title="please wait"
-            size={'large'}
-            activityColor={'white'}
-            titleColor={'white'}
-            activityWrapperStyle={{
-              backgroundColor: Colors.bg,
-            }}
-          />
-          <ActionSheet
-            ref={photoDialogActionSheetRef}
-            title={'Photo Dialog'}
-            options={['Remove Photo', 'Cancel', 'Make Profile Picture']}
-            cancelButtonIndex={1}
-            destructiveButtonIndex={0}
-            onPress={() => {}}
-          />
-          <ActionSheet
-            ref={photoUploadDialogActionSheetRef}
-            title={'Photo Upload'}
-            options={['Launch Camera', 'Open Photo Gallery', 'Cancel']}
-            cancelButtonIndex={2}
-            onPress={() => {}}
-          />
-*/
