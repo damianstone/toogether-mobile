@@ -305,12 +305,6 @@ export const updateUserProfile = (dataObj) => {
   };
 };
 
-// GET USER -> get any profile
-export const getUserDetails = () => {};
-
-// DELETE ACCOUNT
-export const deleteUser = () => {};
-
 // -------------------------------- PHOTOS ACTIONS --------------------------------
 
 export const addPhoto = (image) => {

@@ -7,20 +7,26 @@ import { createBottomTabNavigator } from 'react-navigation-tabs';
 import { AntDesign } from '@expo/vector-icons';
 import Colors from '../constants/Colors';
 
+import ProfileModalScreen from '../screens/SwipeProfile/ProfileModalScreen';
+
+import StartupScreen from '../screens/StartupScreen';
 import AuthScreen from '../screens/Auth/AuthScreen';
 import AuthStartScreen from '../screens/Auth/AuthStartScreen';
 import AuthSucess from '../screens/Auth/AuthSuccess';
-import ChatScreen from '../screens/ChatScreen';
-import AddProfilePhotoScreen from '../screens/CreateProfile/AddProfilePhotoScreen';
 import CreateProfileScreen from '../screens/CreateProfile/CreateProfileScreen';
-import GroupScreen from '../screens/GroupScreen';
-import LikesScreen from '../screens/LikesScreen';
+import AddProfilePhotoScreen from '../screens/CreateProfile/AddProfilePhotoScreen';
+
+import StartGroupScreen from '../screens/Group/StartGroupScreen';
+import JoinGroupScreen from '../screens/Group/JoinGroupScreen';
+import GroupScreen from '../screens/Group/GroupScreen';
+
 import MyProfileScreen from '../screens/MyProfile/MyProfileScreen';
 import SettingScreen from '../screens/MyProfile/SettingScreen';
-import ProfileModalScreen from '../screens/profile/ProfileModalScreen';
-import StartupScreen from '../screens/StartupScreen';
-import SwipeScreen from '../screens/Swipe/SwipeScreen';
 import EditProfileScreen from '../screens/MyProfile/EditProfileScreen';
+
+import SwipeScreen from '../screens/Swipe/SwipeScreen';
+import ChatScreen from '../screens/ChatScreen';
+import LikesScreen from '../screens/LikesScreen';
 
 const defaultNavOptions = {
   headerMode: 'none',
@@ -78,6 +84,8 @@ const LikeNavigator = createStackNavigator(
 
 const GroupNavigator = createStackNavigator(
   {
+    StartGroup: StartGroupScreen,
+    JoinGroup: JoinGroupScreen,
     Group: GroupScreen,
   },
   {

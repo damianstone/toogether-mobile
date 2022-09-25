@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
-import Colors from '../constants/Colors';
+import Colors from '../../constants/Colors';
 
 const Group = () => {
   const [showLink, setShowLink] = useState(false);
