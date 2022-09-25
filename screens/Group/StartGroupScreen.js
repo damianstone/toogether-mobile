@@ -1,27 +1,93 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Image,
   View,
   Button,
   ScrollView,
-  ActivityIndicator,
   StyleSheet,
+  Alert,
+  ActivityIndicator,
 } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
+import { useDispatch, useSelector } from 'react-redux';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { createGroup, getGroup } from '../../store/actions/group';
+import { check400Error, checkServerError } from '../../utils/errors';
 
 import AuthButton from '../../components/UI/AuthButton';
 import Avatar from '../../components/UI/Avatar';
 import Colors from '../../constants/Colors';
+import * as g from '../../constants/group';
+
+// TODO: create group action
+// TODO: check storage and redirect user
+// TODO: navigate to the join screen
 
 const StartGroupScreen = (props) => {
+  const [groupData, setGroupData] = useState();
+
+  const dispatch = useDispatch();
+  const createGroupReducer = useSelector((state) => state.createGroup);
+  const {
+    loading: loadingCreate,
+    error: errorCreate,
+    data: dataCreate,
+  } = createGroupReducer;
+
+  const getAsyncData = async () => {
+    try {
+      const value = JSON.parse(await AsyncStorage.getItem('@groupData'));
+
+      if (value !== null) {
+        setGroupData(value);
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  useEffect(() => {
+    getAsyncData();
+  }, []);
+
+  useEffect(() => {
+    if (groupData) {
+      props.navigation.replace('Group');
+    }
+
+    if (errorCreate) {
+      if (errorCreate?.response?.status === 400) {
+        check400Error(errorCreate);
+      }
+      checkServerError(errorCreate);
+      dispatch({ type: g.CREATE_GROUP_RESET });
+    }
+
+    if (dataCreate) {
+      Alert.alert('Joined to the group', '', [
+        {
+          text: 'OK',
+        },
+      ]);
+    }
+  }, [dataCreate, errorCreate, groupData]);
+
   const handleCreateGroup = () => {
     // TODO: use replace instead of navigate
-    props.navigation.navigate('Group');
+    dispatch(createGroup());
   };
 
   const handleJoinToGroup = () => {
     props.navigation.navigate('JoinGroup');
   };
+
+  if (loadingCreate) {
+    return (
+      <View style={styles.loadingScreen}>
+        <ActivityIndicator color={Colors.orange} size="large" />
+      </View>
+    );
+  }
 
   return (
     <View style={styles.screen}>
@@ -72,7 +138,12 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     height: '100%',
   },
-
+  loadingScreen: {
+    backgroundColor: Colors.bg,
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   gradient: {
     flex: 1,
     width: '100%',

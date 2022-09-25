@@ -1,20 +1,22 @@
 import React, { useEffect, useReducer, useCallback, useState } from 'react';
 import {
   View,
-  Button,
   Text,
   Image,
   ScrollView,
   ActivityIndicator,
   KeyboardAvoidingView,
+  Alert,
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { StatusBar } from 'expo-status-bar';
+import { joinGroup } from '../../store/actions/group';
+import { check400Error, checkServerError } from '../../utils/errors';
 
 import AuthButton from '../../components/UI/AuthButton';
 import AuthInput from '../../components/UI/AuthInput';
 import Colors from '../../constants/Colors';
-import { check400Error, checkServerError } from '../../utils/errors';
+import * as g from '../../constants/group';
 
 import styles from './styles';
 
@@ -45,26 +47,47 @@ const formReducer = (state, action) => {
 };
 
 const JoinGroupScreen = (props) => {
-  const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
+
+  const joinGroupReducer = useSelector((state) => state.joinGroup);
+  const {
+    loading: loadingJoin,
+    error: errorJoin,
+    data: dataJoin,
+  } = joinGroupReducer;
 
   const [formState, dispatchFormState] = useReducer(formReducer, {
     inputValues: {
-      email: '',
-      password: '',
-      repeated_password: '',
+      share_link: '',
     },
     inputValidities: {
-      email: false,
-      password: true,
-      repeated_password: true,
+      share_link: false,
     },
     formIsValid: false,
   });
 
   const { formIsValid, inputValues } = formState;
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    if (errorJoin) {
+      if (errorJoin?.response?.status === 400) {
+        check400Error(errorJoin);
+      }
+      checkServerError(errorJoin);
+      dispatch({ type: g.JOIN_GROUP_RESET });
+    }
+
+    if (dataJoin) {
+      Alert.alert('Joined to the group', '', [
+        {
+          text: 'OK',
+        },
+      ]);
+      dispatch({ type: g.JOIN_GROUP_RESET });
+      // TODO: REPLACE
+      props.navigation.replace('Group');
+    }
+  }, [errorJoin, dataJoin]);
 
   const inputChangeHandler = useCallback(
     (inputIdentifier, inputValue, inputValidity) => {
@@ -77,6 +100,20 @@ const JoinGroupScreen = (props) => {
     },
     [dispatchFormState]
   );
+
+  const handleJoinGroup = () => {
+    if (!inputValues.share_link) {
+      Alert.alert('No Link', 'Please enter the link of the group', [
+        {
+          text: 'OK',
+          onPress: () => {
+            dispatch({ type: g.JOIN_GROUP_RESET });
+          },
+        },
+      ]);
+    }
+    dispatch(joinGroup(inputValues.share_link));
+  };
 
   return (
     <View style={styles.screen}>
@@ -108,18 +145,18 @@ const JoinGroupScreen = (props) => {
               keyboardType="email-address"
               required
               autoCapitalize="none"
-              errorText="Verify if the link"
+              errorText="Paste the group link to join"
               placeholder="start.the.night/wceJKbhsJKB"
               placeholderTextColor="#D8D8D8"
               autoCorrect={false}
               onInputChange={inputChangeHandler}
             />
-            {loading ? (
+            {loadingJoin ? (
               <View style={styles.join_loader_container}>
                 <ActivityIndicator size="large" />
               </View>
             ) : (
-              <AuthButton text="Join" onPress={() => {}} />
+              <AuthButton text="Join" onPress={handleJoinGroup} />
             )}
           </View>
         </ScrollView>

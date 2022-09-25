@@ -36,12 +36,13 @@ export const listGroup = () => {
   };
 };
 
-export const getGroup = (group_id) => {
+export const getGroup = () => {
   return async (dispatch) => {
     try {
       dispatch({ type: g.GET_GROUP_REQUEST });
 
       const userData = JSON.parse(await AsyncStorage.getItem('@userData'));
+      const groupData = JSON.parse(await AsyncStorage.getItem('@groupData'));
 
       const config = {
         'Content-Type': 'application/json',
@@ -51,7 +52,7 @@ export const getGroup = (group_id) => {
 
       const { data } = await axios({
         method: 'get',
-        url: `${BASE_URL}/api/v1/groups/${group_id}/`,
+        url: `${BASE_URL}/api/v1/groups/${groupData.id}/`,
         headers: config,
       });
       dispatch({
@@ -85,6 +86,16 @@ export const createGroup = () => {
         url: `${BASE_URL}/api/v1/groups/`,
         headers: config,
       });
+
+      await AsyncStorage.setItem(
+        '@groupData',
+        JSON.stringify({
+          id: data.id,
+          owner: data.owner,
+          share_link: data.share_link,
+        })
+      );
+
       dispatch({
         type: g.CREATE_GROUP_SUCCESS,
         payload: data,
@@ -116,6 +127,9 @@ export const deleteGroup = (group_id) => {
         url: `${BASE_URL}/api/v1/groups/${group_id}/`,
         headers: config,
       });
+
+      await AsyncStorage.removeItem('@groupData');
+
       dispatch({
         type: g.DELETE_GROUP_SUCCESS,
         payload: data,
@@ -153,6 +167,16 @@ export const joinGroup = (share_link) => {
           share_link: share_link,
         },
       });
+
+      await AsyncStorage.setItem(
+        '@groupData',
+        JSON.stringify({
+          id: data.id,
+          owner: data.owner,
+          share_link: data.share_link,
+        })
+      );
+
       dispatch({
         type: g.JOIN_GROUP_SUCCESS,
         payload: data,
@@ -184,6 +208,7 @@ export const leaveGroup = (group_id) => {
         url: `${BASE_URL}/api/v1/groups/${group_id}/actions/leave/`,
         headers: config,
       });
+      await AsyncStorage.removeItem('@groupData');
       dispatch({
         type: g.LEAVE_GROUP_SUCCESS,
         payload: data,

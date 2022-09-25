@@ -12,6 +12,14 @@ import {
   userDeleteReducer,
   userGetProfileReducer,
 } from './reducers/user';
+import {
+  listGroupReducer,
+  getGroupReducer,
+  createGroupReducer,
+  joinGroupReducer,
+  leaveGroupReducer,
+  removeMemberReducer,
+} from './reducers/group';
 
 const reducer = combineReducers({
   // profile API
@@ -26,6 +34,13 @@ const reducer = combineReducers({
   userAddPhoto: userAddPhotoReducer,
   userRemovePhoto: userRemovePhotoReducer,
   userListPhotos: userListPhotosReducer,
+  // Group API
+  listGroup: listGroupReducer,
+  getGroup: getGroupReducer,
+  createGroup: createGroupReducer,
+  joinGroup: joinGroupReducer,
+  leaveGroup: leaveGroupReducer,
+  removeMember: removeMemberReducer,
 });
 
 const initialState = {};

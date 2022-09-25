@@ -86,7 +86,14 @@ const GroupNavigator = createStackNavigator(
   {
     StartGroup: StartGroupScreen,
     JoinGroup: JoinGroupScreen,
-    Group: GroupScreen,
+    Group: {
+      screen: GroupScreen,
+      navigationOptions: {
+        tabBarStyle: {
+          backgroundColor: Colors.bgCard,
+        },
+      },
+    },
   },
   {
     defaultNavigationOptions: defaultNavOptions,

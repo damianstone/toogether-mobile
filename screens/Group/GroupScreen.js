@@ -1,182 +1,370 @@
-import React, { useState } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import React, { useEffect, useState, useCallback } from 'react';
+import {
+  FlatList,
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  Platform,
+  ScrollView,
+  RefreshControl,
+  ActivityIndicator,
+} from 'react-native';
+import { HeaderButtons, Item } from 'react-navigation-header-buttons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useDispatch, useSelector } from 'react-redux';
+import { useActionSheet } from '@expo/react-native-action-sheet';
+import { LinearGradient } from 'expo-linear-gradient';
+import Constants from 'expo-constants';
+import {
+  getGroup,
+  leaveGroup,
+  removeMember,
+  deleteGroup,
+} from '../../store/actions/group';
+import { getUserProfile } from '../../store/actions/user';
+
+import HeaderButtom from '../../components/UI/HeaderButton';
+import Avatar from '../../components/UI/Avatar';
+import ActionButton from '../../components/UI/ActionButton';
+import * as g from '../../constants/group';
+import { checkServerError, check400Error } from '../../utils/errors';
 
 import Colors from '../../constants/Colors';
+import ClipBoard from '../../components/UI/ClipBoard';
+import MemberAvatar from '../../components/MemberAvatar';
 
-const Group = () => {
-  const [showLink, setShowLink] = useState(false);
+const GroupScreen = (props) => {
+  const BASE_URL = Constants.manifest.extra.LOCAL_URL;
+  const [group, setGroup] = useState();
+  const [ownerProfile, setOwnerProfile] = useState();
+  const [storedGroupData, setStoredGroupData] = useState();
+  const [storedProfileData, setStoredProfileData] = useState();
+  const [isOwner, setIsOwner] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
+  const dispatch = useDispatch();
 
-  const onCreateGroup = () => {
-    setShowLink(true);
+  const getCurrentProfile = useSelector((state) => state.userGetProfile);
+  const {
+    loading: loadingGetProfile,
+    error: errorGetProfile,
+    data: dataGetProfile,
+  } = getCurrentProfile;
+
+  const getGroupReducer = useSelector((state) => state.getGroup);
+  const {
+    loading: loadingGroup,
+    error: errorGroup,
+    data: groupFromReducer,
+  } = getGroupReducer;
+
+  const deleteGroupReducer = useSelector((state) => state.deleteGroup);
+  const {
+    loading: loadingDelete,
+    error: errorDelete,
+    data: dataDelete,
+  } = deleteGroupReducer;
+
+  const leaveGroupReducer = useSelector((state) => state.leaveGroup);
+  const { loading, error, data } = leaveGroupReducer;
+
+  const getAsyncData = async () => {
+    try {
+      const group = JSON.parse(await AsyncStorage.getItem('@groupData'));
+      const profile = JSON.parse(await AsyncStorage.getItem('@userData'));
+
+      if (group !== null) {
+        setStoredGroupData(group);
+      }
+      if (profile !== null) {
+        setStoredProfileData(profile);
+      }
+      if (!group) {
+        props.navigation.navigate('Swipe');
+      }
+    } catch (e) {
+      console.log(e);
+      props.navigation.navigate('Swipe');
+    }
   };
 
-  const onDeleteGroup = () => {};
+  useEffect(() => {
+    getAsyncData();
+    dispatch(getGroup());
+  }, []);
 
-  const onGoToGroupChat = () => {};
+  // TODO: checking ownership
+  useEffect(() => {
+    if (storedGroupData && !ownerProfile) {
+      // TODO: call the owner profile using the id
+      dispatch(getUserProfile());
+      dispatch(getGroup());
+    }
 
-  let card;
+    if (!groupFromReducer) {
+      dispatch(getGroup());
+    }
 
-  if (showLink) {
-    card = (
-      <View style={styles.bigCard}>
-        <Text style={styles.cardTitle}>You&aposve created a group</Text>
-        <Text style={styles.smallText}>
-          Copy the following code and send it to your friends so they can join
-          your group.
+    if (groupFromReducer) {
+      setGroup(groupFromReducer);
+    }
+
+    if (dataGetProfile) {
+      setOwnerProfile(dataGetProfile);
+    }
+
+    // TODO: check if the current user is owner
+    if (
+      storedGroupData &&
+      storedProfileData &&
+      storedGroupData.owner === storedProfileData.id
+    ) {
+      setIsOwner(true);
+    }
+  }, [storedGroupData, storedProfileData, dataGetProfile]);
+
+  const loadProfile = useCallback(async () => {
+    setRefreshing(true);
+    try {
+      await dispatch(getUserProfile());
+    } catch (err) {
+      checkServerError(err);
+    }
+    setRefreshing(false);
+  }, [dispatch]);
+
+  // add listener to fetch the user and re fetch it
+  useEffect(() => {
+    const unsubscribe = props.navigation.addListener('focus', () => {
+      loadProfile();
+    });
+    return unsubscribe;
+  }, [loadProfile]);
+
+  // TODO: useEffect to handle actions
+  useEffect(() => {}, []);
+
+  // TODO: navigate to the group chat
+  const handleNavigate = (screen) => {
+    return props.navigation.navigate(screen);
+  };
+
+  // TODO: delete group
+  const handleDeleteGroup = () => {
+    if (isOwner) {
+      dispatch(deleteGroup());
+    }
+  };
+
+  // TODO: leave group
+  const handleLeaveGroup = () => {
+    dispatch(leaveGroup(storedGroupData.id));
+  };
+
+  // TODO: remove member
+  const handleRemoveMember = (member_id) => {
+    if (isOwner) {
+      dispatch(removeMember(storedGroupData.id, member_id));
+    }
+  };
+
+  // if (loadingGroup || loadingGetProfile) {
+  //   return (
+  //     <View style={styles.loadingScreen}>
+  //       <ActivityIndicator color={Colors.orange} size="large" />
+  //     </View>
+  //   );
+  // }
+
+  const renderMemberItem = ({ item, index, separators }) => {
+    // TODO: display everyone except the owner
+    if (item.id === ownerProfile.id) {
+      return null;
+    }
+    return (
+      <View style={styles.flatlist_item_container}>
+        <MemberAvatar photos={item.photos} onPress={() => {}} />
+        <Text
+          style={{
+            alignSelf: 'center',
+            alignItems: 'center',
+          }}>
+          {item.firstname}
         </Text>
-        <View style={styles.linkContainer}>
-          <Text style={styles.linkText}>
-            https://meet.google.com/xco-vjay-dyq
-          </Text>
-        </View>
-        <View style={styles.buttonsContainer}>
-          <TouchableOpacity onPress={onDeleteGroup} style={styles.buttonDelete}>
-            <Text style={styles.buttonText}>Delete Group</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={onGoToGroupChat} style={styles.buttonChat}>
-            <Text style={styles.buttonText}>Chat Group</Text>
-          </TouchableOpacity>
-        </View>
       </View>
     );
-  } else {
-    card = (
-      <View style={styles.card}>
-        <Text style={styles.cardTitle}>Start a group</Text>
-        <TouchableOpacity
-          onPress={onCreateGroup}
-          style={styles.buttonContainer}>
-          <Text style={styles.buttonText}>Create</Text>
-        </TouchableOpacity>
-      </View>
-    );
-  }
+  };
 
   return (
-    <View style={styles.screen}>
-      {card}
-      <View style={styles.howContainer}>
-        <Text style={styles.howTitlee}>Como functiona</Text>
-        <Text style={styles.howText}>
-          En Toogether puedes crear perfiles grupales, de esta forma te puedes
-          mostrar a las demas personas como un grupo
-        </Text>
-        <Text style={styles.howText}>
-          1️⃣ Genera tu propio link y compartelo el link con tus amigos para que
-          puedan unirse a tu grupo
-        </Text>
-        <Text style={styles.howText}>
-          2️⃣ Se creara un chat grupal automatico con los integrantes que se unan
-        </Text>
-        <Text style={styles.howText}>
-          3️⃣ En el chat pueden compartir sus matchs y plenear su gran noche
-        </Text>
-        <Text style={styles.howText}>
-          🍻 Todos los participantes puedes swipear y conectar con otros grupos
-        </Text>
-        <Text style={styles.howText}>
-          🔥 Tus matchs, son tus matchs. Nadie mas podra verlos
-        </Text>
+    <ScrollView
+      style={{ backgroundColor: Colors.bg, flex: 1 }}
+      contentContainerStyle={styles.screen}
+      nestedScrollEnabled
+      refreshControl={
+        <RefreshControl
+          refreshing={refreshing}
+          onRefresh={loadProfile}
+          tintColor={Colors.white}
+        />
+      }>
+      <View style={styles.action_view}>
+        <View style={styles.profile_photo_container}>
+          {ownerProfile?.photos && ownerProfile?.photos.length > 0 && (
+            <Image
+              source={{
+                uri: `${BASE_URL}${ownerProfile.photos[0].image}`,
+              }}
+              style={{ width: 150, height: 150, borderRadius: 100 }}
+            />
+          )}
+          {!ownerProfile?.photos ||
+            (ownerProfile?.photos.length === 0 && (
+              <View style={styles.avatar_view}>
+                <Text style={styles.avatar_initials}>DS</Text>
+              </View>
+            ))}
+        </View>
+        <View style={styles.nameView}>
+          {ownerProfile && (
+            <Text style={styles.name}>
+              {`${ownerProfile.firstname}'s group`}
+            </Text>
+          )}
+        </View>
+        <View style={styles.buttons_container}>
+          {isOwner && storedGroupData && (
+            <ClipBoard
+              text={storedGroupData.share_link}
+              backgroundColor={Colors.white}
+            />
+          )}
+          <ActionButton
+            onPress={() => {}}
+            text="Group chat"
+            backgroundColor={Colors.orange}
+          />
+          {isOwner && (
+            <ActionButton
+              onPress={() => {}}
+              text="Delete group"
+              backgroundColor={Colors.orange}
+            />
+          )}
+          {!isOwner && (
+            <ActionButton
+              onPress={() => {}}
+              text="Leave group"
+              backgroundColor={Colors.orange}
+            />
+          )}
+        </View>
       </View>
-    </View>
+      <View style={styles.members_view}>
+        {group && (
+          <FlatList
+            nestedScrollEnabled
+            data={group.members}
+            renderItem={renderMemberItem}
+            keyExtractor={(item) => item.id}
+          />
+        )}
+      </View>
+    </ScrollView>
   );
 };
 
-export default Group;
+GroupScreen.navigationOptions = (navData) => {
+  return {
+    headerTitle: 'Group',
+    headerLeft: () => (
+      <Avatar
+        onPress={() => {
+          navData.navigation.navigate('MyProfile');
+        }}
+      />
+    ),
+    headerRight: () => (
+      <HeaderButtons HeaderButtonComponent={HeaderButtom}>
+        <Item
+          iconName={Platform.OS === 'android' ? 'md-cart' : 'ios-arrow-back'}
+          onPress={() => {
+            navData.navigation.navigate('Swipe');
+          }}
+          title="Back arrow"
+        />
+      </HeaderButtons>
+    ),
+  };
+};
+
+export default GroupScreen;
 
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
     backgroundColor: Colors.bg,
-    justifyContent: 'space-around',
+    justifyContent: 'space-between',
     alignItems: 'center',
   },
-  card: {
-    width: '90%',
-    height: '30%',
-    backgroundColor: Colors.bgCard,
-    borderRadius: 30,
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    padding: 15,
-  },
-  cardTitle: {
-    fontSize: 20,
-    color: Colors.white,
-  },
-  buttonContainer: {
-    backgroundColor: Colors.green,
-    width: 100,
-    height: 40,
-    borderRadius: 20,
-    alignItems: 'center',
+  loadingScreen: {
+    backgroundColor: Colors.bg,
+    flex: 1,
     justifyContent: 'center',
-  },
-  buttonText: {
-    fontSize: 15,
-    color: Colors.white,
-  },
-  linkContainer: {
-    backgroundColor: Colors.white,
-    width: 300,
-    height: 40,
-    borderRadius: 10,
     alignItems: 'center',
-    justifyContent: 'center',
   },
-  linkText: {
-    color: Colors.black,
-  },
-  bigCard: {
-    width: '90%',
-    height: '40%',
-    backgroundColor: Colors.bgCard,
-    borderRadius: 30,
-    justifyContent: 'space-around',
+  action_view: {
     alignItems: 'center',
-    padding: 15,
-  },
-  smallText: {
-    color: Colors.white,
-    fontSize: 12,
-  },
-  buttonsContainer: {
-    marginVertical: 15,
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'stretch',
     width: '100%',
+    minHeight: '60%',
   },
-  buttonDelete: {
-    padding: 5,
-    backgroundColor: Colors.red,
-    width: 110,
-    height: 40,
-    borderRadius: 20,
+  profile_photo_container: {
+    marginTop: 20,
     alignItems: 'center',
-    justifyContent: 'center',
   },
-  buttonChat: {
-    padding: 5,
-    backgroundColor: Colors.green,
-    width: 110,
-    height: 40,
-    borderRadius: 20,
+  avatar_view: {
+    backgroundColor: Colors.orange,
+    width: 120,
+    height: 120,
+    borderRadius: 100,
+    justifyContent: 'center',
     alignItems: 'center',
-    justifyContent: 'center',
   },
-  howContainer: {
-    flexDirection: 'column',
-    padding: 20,
-  },
-  howTitlee: {
-    marginVertical: 7,
+  avatar_initials: {
     color: Colors.white,
+    fontSize: 25,
+  },
+  nameView: {
+    flexDirection: 'row',
+    width: '100%',
+    marginTop: -5,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  name: {
     fontSize: 20,
-  },
-  howText: {
-    marginVertical: 7,
+    fontWeight: 'bold',
+    // marginRight: 10,
     color: Colors.white,
-    fontSize: 15,
+    padding: 10,
+  },
+  buttons_container: {
+    width: '90%',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+  },
+
+  members_view: {
+    width: '100%',
+    minHeight: '30%',
+    maxHeight: '40%',
+    backgroundColor: Colors.bgCard,
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    padding: 10,
+  },
+  flatlist_item_container: {
+    width: 50,
+    height: 50,
+    alignItems: 'center',
   },
 });
