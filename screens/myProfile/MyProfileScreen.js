@@ -220,6 +220,10 @@ const MyProfileScreen = (props) => {
     );
   };
 
+  const handleOpenPreview = () => {
+    console.log('open preview');
+  };
+
   const handleOpenLink = useCallback(async (url) => {
     const supported = await Linking.canOpenURL(url);
     if (supported) {
@@ -284,13 +288,15 @@ const MyProfileScreen = (props) => {
                 tintColor={Colors.white}
               />
             }>
-            <View style={styles.profilePictureContainer}>
+            <TouchableOpacity
+              style={styles.profilePictureContainer}
+              onPress={handleOpenPreview}>
               {photos && Object.values(photos).length > 0 && (
                 <Image
                   source={{
                     uri: `${BASE_URL}${Object.values(photos)[0].image}`,
                   }}
-                  style={{ width: 150, height: 150, borderRadius: 100 }}
+                  style={styles.image}
                 />
               )}
               {!photos ||
@@ -299,7 +305,7 @@ const MyProfileScreen = (props) => {
                     <Text style={styles.avatar_initials}>DS</Text>
                   </View>
                 ))}
-            </View>
+            </TouchableOpacity>
             <View style={styles.nameView}>
               {userProfile && (
                 <>

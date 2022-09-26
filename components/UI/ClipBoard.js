@@ -1,5 +1,6 @@
 import React from 'react';
-import { StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Feather } from '@expo/vector-icons';
 import * as Clipboard from 'expo-clipboard';
 import Colors from '../../constants/Colors';
 
@@ -8,16 +9,22 @@ const ClipBoard = (props) => {
     Clipboard.setString(text);
   };
 
+  const removeHttp = (url) => {
+    return url.replace(/^https?:\/\//, '');
+  };
+
   return (
-    <TouchableOpacity
+    <View
       style={{
         ...styles.clipboard_button_container,
         backgroundColor: props.backgroundColor,
       }}
       onPress={() => copyToClipboard(props.text)}>
-      <Text style={styles.clipboard_button_text}>{props.text}</Text>
-      <Text style={styles.clipboard_icon}>ICON</Text>
-    </TouchableOpacity>
+      <Text style={styles.clipboard_button_text}>{removeHttp(props.text)}</Text>
+      <TouchableOpacity style={styles.clipboard_icon}>
+        <Feather name="copy" size={24} color="white" />
+      </TouchableOpacity>
+    </View>
   );
 };
 export default ClipBoard;
@@ -25,7 +32,7 @@ export default ClipBoard;
 const styles = StyleSheet.create({
   clipboard_button_container: {
     marginVertical: 10,
-    padding: 3,
+    padding: 0,
     flexDirection: 'row',
     width: '100%',
     height: 44,
@@ -34,15 +41,21 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   clipboard_button_text: {
-    color: Colors.black,
-    fontSize: 12,
+    paddingHorizontal: 7,
+    color: Colors.placeholder,
+    fontSize: 13,
+    width: '85%',
   },
   clipboard_icon: {
+    padding: 3,
     justifyContent: 'center',
     alignItems: 'center',
     alignSelf: 'center',
     color: Colors.white,
     backgroundColor: Colors.bgCard,
-    height: 44,
+    height: '100%',
+    width: '15%',
+    borderTopRightRadius: 10,
+    borderBottomRightRadius: 10,
   },
 });

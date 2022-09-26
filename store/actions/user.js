@@ -181,13 +181,18 @@ export const userDelete = () => {
 // -------------------------------- PROFILE ACTIONS --------------------------------
 
 // GET USER -> get any profile
-export const getUserProfile = () => {
+export const getUserProfile = (profile_id) => {
   return async (dispatch) => {
     try {
       dispatch({ type: c.USER_GET_PROFILE_REQUEST });
 
+      let id;
       const userData = JSON.parse(await AsyncStorage.getItem('@userData'));
-
+      if (profile_id) {
+        id = profile_id;
+      } else {
+        id = userData.id;
+      }
       const config = {
         'Content-Type': 'application/json',
         Accept: 'application/json',
@@ -196,7 +201,7 @@ export const getUserProfile = () => {
 
       const { data } = await axios({
         method: 'get',
-        url: `${BASE_URL}/api/v1/profiles/${userData.id}/`,
+        url: `${BASE_URL}/api/v1/profiles/${id}/`,
         headers: config,
       });
 

@@ -2,6 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import Constants from 'expo-constants';
 import * as g from '../../constants/group';
+import * as c from '../../constants/user';
 
 const BASE_URL = Constants.manifest.extra.LOCAL_URL;
 
@@ -137,6 +138,9 @@ export const deleteGroup = (group_id) => {
       dispatch({
         type: g.GET_GROUP_RESET,
       });
+      dispatch({
+        type: c.USER_GET_PROFILE_RESET,
+      });
     } catch (error) {
       dispatch({
         type: g.DELETE_GROUP_FAIL,
@@ -212,6 +216,12 @@ export const leaveGroup = (group_id) => {
       dispatch({
         type: g.LEAVE_GROUP_SUCCESS,
         payload: data,
+      });
+      dispatch({
+        type: g.GET_GROUP_RESET,
+      });
+      dispatch({
+        type: c.USER_GET_PROFILE_RESET,
       });
     } catch (error) {
       dispatch({

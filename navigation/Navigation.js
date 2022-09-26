@@ -84,13 +84,26 @@ const LikeNavigator = createStackNavigator(
 
 const GroupNavigator = createStackNavigator(
   {
-    StartGroup: StartGroupScreen,
+    StartGroup: {
+      screen: StartGroupScreen,
+      navigationOptions: {
+        gestureDirection: 'horizontal-inverted',
+      },
+    },
     JoinGroup: JoinGroupScreen,
     Group: {
       screen: GroupScreen,
       navigationOptions: {
-        tabBarStyle: {
+        gestureDirection: 'horizontal',
+      },
+      tabBarOptions: {
+        tabStyle: {
           backgroundColor: Colors.bgCard,
+          statusBarStyle: Colors.bg,
+        },
+        style: {
+          backgroundColor: Colors.bgCard,
+          borderTopWidth: 0,
         },
       },
     },

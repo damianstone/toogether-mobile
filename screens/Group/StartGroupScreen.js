@@ -24,7 +24,7 @@ import * as g from '../../constants/group';
 // TODO: navigate to the join screen
 
 const StartGroupScreen = (props) => {
-  const [groupData, setGroupData] = useState();
+  const [storedGroupData, setStoredGroupData] = useState();
 
   const dispatch = useDispatch();
   const createGroupReducer = useSelector((state) => state.createGroup);
@@ -39,7 +39,7 @@ const StartGroupScreen = (props) => {
       const value = JSON.parse(await AsyncStorage.getItem('@groupData'));
 
       if (value !== null) {
-        setGroupData(value);
+        setStoredGroupData(value);
       }
     } catch (e) {
       console.log(e);
@@ -51,7 +51,8 @@ const StartGroupScreen = (props) => {
   }, []);
 
   useEffect(() => {
-    if (groupData) {
+    getAsyncData();
+    if (storedGroupData) {
       props.navigation.replace('Group');
     }
 
@@ -64,13 +65,15 @@ const StartGroupScreen = (props) => {
     }
 
     if (dataCreate) {
-      Alert.alert('Joined to the group', '', [
+      Alert.alert('GroupCreated', '', [
         {
           text: 'OK',
         },
       ]);
+      props.navigation.navigate('Group', { createGroupData: dataCreate });
+      dispatch({ type: g.CREATE_GROUP_RESET });
     }
-  }, [dataCreate, errorCreate, groupData]);
+  }, [dataCreate, errorCreate, storedGroupData]);
 
   const handleCreateGroup = () => {
     // TODO: use replace instead of navigate
@@ -98,7 +101,7 @@ const StartGroupScreen = (props) => {
         <View>
           <View style={styles.imageContainer}>
             <Image
-              source={require('../../assets/images/balls_group.png')}
+              source={require('../../assets/images/hands.png')}
               style={styles.image}
             />
           </View>

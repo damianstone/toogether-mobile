@@ -7,14 +7,14 @@ import {
   Image,
   Platform,
   ScrollView,
-  RefreshControl,
   ActivityIndicator,
+  RefreshControl,
+  Alert,
 } from 'react-native';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useDispatch, useSelector } from 'react-redux';
 import { useActionSheet } from '@expo/react-native-action-sheet';
-import { LinearGradient } from 'expo-linear-gradient';
 import Constants from 'expo-constants';
 import {
   getGroup,
@@ -36,20 +36,20 @@ import MemberAvatar from '../../components/MemberAvatar';
 
 const GroupScreen = (props) => {
   const BASE_URL = Constants.manifest.extra.LOCAL_URL;
-  const [group, setGroup] = useState();
-  const [ownerProfile, setOwnerProfile] = useState();
   const [storedGroupData, setStoredGroupData] = useState();
   const [storedProfileData, setStoredProfileData] = useState();
   const [isOwner, setIsOwner] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
+  const { showActionSheetWithOptions } = useActionSheet();
+  const createData = props.navigation.getParam('createGroupData');
   const dispatch = useDispatch();
 
-  const getCurrentProfile = useSelector((state) => state.userGetProfile);
+  const getProfileReducer = useSelector((state) => state.userGetProfile);
   const {
     loading: loadingGetProfile,
     error: errorGetProfile,
     data: dataGetProfile,
-  } = getCurrentProfile;
+  } = getProfileReducer;
 
   const getGroupReducer = useSelector((state) => state.getGroup);
   const {
@@ -66,20 +66,37 @@ const GroupScreen = (props) => {
   } = deleteGroupReducer;
 
   const leaveGroupReducer = useSelector((state) => state.leaveGroup);
-  const { loading, error, data } = leaveGroupReducer;
+  const {
+    loading: loadingLeave,
+    error: errorLeave,
+    data: dataLeave,
+  } = leaveGroupReducer;
+
+  const removeMemberReducer = useSelector((state) => state.removeMember);
+  const {
+    loading: loadingRemoveMember,
+    error: errorRemoveMember,
+    data: dataRemoveMember,
+  } = removeMemberReducer;
+
+  const [group, setGroup] = useState(
+    groupFromReducer ? { ...groupFromReducer } : null
+  );
+  const [ownerProfile, setOwnerProfile] = useState(
+    dataGetProfile ? { ...dataGetProfile } : null
+  );
 
   const getAsyncData = async () => {
     try {
       const group = JSON.parse(await AsyncStorage.getItem('@groupData'));
       const profile = JSON.parse(await AsyncStorage.getItem('@userData'));
 
-      if (group !== null) {
+      if (group != null && profile != null) {
         setStoredGroupData(group);
-      }
-      if (profile !== null) {
         setStoredProfileData(profile);
       }
-      if (!group) {
+
+      if (!group || !profile) {
         props.navigation.navigate('Swipe');
       }
     } catch (e) {
@@ -88,21 +105,33 @@ const GroupScreen = (props) => {
     }
   };
 
+  // TODO: get async stored data
   useEffect(() => {
     getAsyncData();
-    dispatch(getGroup());
   }, []);
 
   // TODO: checking ownership
   useEffect(() => {
-    if (storedGroupData && !ownerProfile) {
-      // TODO: call the owner profile using the id
-      dispatch(getUserProfile());
+    if (errorGroup) {
+      if (errorGroup?.response?.status === 400) {
+        check400Error(errorGroup);
+      }
+      checkServerError(errorGroup);
+    }
+
+    if (errorGetProfile) {
+      if (errorGetProfile?.response?.status === 400) {
+        check400Error(errorGetProfile);
+      }
+      checkServerError(errorGetProfile);
+    }
+
+    if (!group) {
       dispatch(getGroup());
     }
 
-    if (!groupFromReducer) {
-      dispatch(getGroup());
+    if (!ownerProfile) {
+      dispatch(getUserProfile(storedGroupData.id));
     }
 
     if (groupFromReducer) {
@@ -121,19 +150,19 @@ const GroupScreen = (props) => {
     ) {
       setIsOwner(true);
     }
-  }, [storedGroupData, storedProfileData, dataGetProfile]);
+  }, [dispatch, storedGroupData, storedProfileData, ownerProfile, group]);
 
   const loadProfile = useCallback(async () => {
     setRefreshing(true);
     try {
-      await dispatch(getUserProfile());
+      await dispatch(getUserProfile(storedGroupData.owner));
+      await dispatch(getGroup());
     } catch (err) {
       checkServerError(err);
     }
     setRefreshing(false);
   }, [dispatch]);
 
-  // add listener to fetch the user and re fetch it
   useEffect(() => {
     const unsubscribe = props.navigation.addListener('focus', () => {
       loadProfile();
@@ -142,48 +171,162 @@ const GroupScreen = (props) => {
   }, [loadProfile]);
 
   // TODO: useEffect to handle actions
-  useEffect(() => {}, []);
+  useEffect(() => {
+    if (errorDelete) {
+      if (errorDelete?.response?.status === 400) {
+        check400Error(errorDelete);
+      }
+      checkServerError(errorDelete);
+    }
 
-  // TODO: navigate to the group chat
+    if (errorLeave) {
+      if (errorLeave?.response?.status === 400) {
+        check400Error(errorLeave);
+      }
+      checkServerError(errorLeave);
+    }
+
+    if (errorRemoveMember) {
+      if (errorRemoveMember?.response?.status === 400) {
+        check400Error(errorRemoveMember);
+      }
+      checkServerError(errorRemoveMember);
+    }
+
+    if (dataDelete) {
+      props.navigation.navigate('StartGroup');
+      dispatch({ type: g.DELETE_GROUP_RESET });
+    }
+
+    if (dataLeave) {
+      props.navigation.navigate('StartGroup');
+      dispatch({ type: g.LEAVE_GROUP_RESET });
+    }
+
+    if (dataRemoveMember) {
+      Alert.alert(`Member removed`, 'You removed one of the members', [
+        {
+          text: 'OK',
+        },
+      ]);
+      dispatch({ type: g.REMOVE_MEMBER_RESET });
+    }
+  }, [
+    errorDelete,
+    dataDelete,
+    errorLeave,
+    dataLeave,
+    errorRemoveMember,
+    dataRemoveMember,
+  ]);
+
   const handleNavigate = (screen) => {
     return props.navigation.navigate(screen);
   };
 
-  // TODO: delete group
   const handleDeleteGroup = () => {
-    if (isOwner) {
-      dispatch(deleteGroup());
-    }
+    Alert.alert(
+      `Are you sure you want to delete this group`,
+      'All members will be eliminated automatically',
+      [
+        {
+          text: 'Cancel',
+        },
+        {
+          text: 'Leave',
+          onPress: () => {
+            if (isOwner && storedGroupData?.id) {
+              dispatch(deleteGroup(storedGroupData.id));
+            }
+          },
+          style: 'destructive',
+        },
+      ]
+    );
   };
 
-  // TODO: leave group
   const handleLeaveGroup = () => {
-    dispatch(leaveGroup(storedGroupData.id));
+    Alert.alert(
+      `Are you sure you want to leave this group`,
+      'This action is irreversible',
+      [
+        {
+          text: 'Cancel',
+        },
+        {
+          text: 'Leave',
+          onPress: () => {
+            dispatch(leaveGroup(storedGroupData.id));
+          },
+          style: 'destructive',
+        },
+      ]
+    );
   };
 
-  // TODO: remove member
   const handleRemoveMember = (member_id) => {
     if (isOwner) {
       dispatch(removeMember(storedGroupData.id, member_id));
     }
   };
 
-  // if (loadingGroup || loadingGetProfile) {
-  //   return (
-  //     <View style={styles.loadingScreen}>
-  //       <ActivityIndicator color={Colors.orange} size="large" />
-  //     </View>
-  //   );
-  // }
+  const handleOpenActionSheet = (member_id, member_firstname) => {
+    // Same interface as https://facebook.github.io/react-native/docs/actionsheetios.html
+    const options = ['Remove member', 'Cancel'];
+    const destructiveButtonIndex = 0;
+    const cancelButtonIndex = 1;
+
+    showActionSheetWithOptions(
+      {
+        options,
+        cancelButtonIndex,
+        destructiveButtonIndex,
+      },
+      (buttonIndex) => {
+        if (buttonIndex === 0) {
+          Alert.alert(
+            `Are you sure you want to remove ${member_firstname}`,
+            'This action is irreversible',
+            [
+              {
+                text: 'Cancel',
+              },
+              {
+                text: 'Yes',
+                onPress: () => {
+                  handleRemoveMember(member_id);
+                },
+                style: 'destructive',
+              },
+            ]
+          );
+        }
+        return null;
+      }
+    );
+  };
+
+  if (loadingDelete || loadingLeave) {
+    return (
+      <View style={styles.loadingScreen}>
+        <ActivityIndicator color={Colors.orange} size="large" />
+      </View>
+    );
+  }
 
   const renderMemberItem = ({ item, index, separators }) => {
     // TODO: display everyone except the owner
-    if (item.id === ownerProfile.id) {
+    if (ownerProfile && item.id === ownerProfile.id) {
       return null;
     }
     return (
       <View style={styles.flatlist_item_container}>
-        <MemberAvatar photos={item.photos} onPress={() => {}} />
+        <MemberAvatar
+          photos={item.photos}
+          onPress={() =>
+            isOwner ? handleOpenActionSheet(item.id, item.firstname) : null
+          }
+        />
         <Text
           style={{
             alignSelf: 'center',
@@ -239,20 +382,20 @@ const GroupScreen = (props) => {
             />
           )}
           <ActionButton
-            onPress={() => {}}
+            onPress={() => handleNavigate('Swipe')}
             text="Group chat"
-            backgroundColor={Colors.orange}
+            backgroundColor={Colors.blue}
           />
           {isOwner && (
             <ActionButton
-              onPress={() => {}}
+              onPress={handleDeleteGroup}
               text="Delete group"
               backgroundColor={Colors.orange}
             />
           )}
           {!isOwner && (
             <ActionButton
-              onPress={() => {}}
+              onPress={handleLeaveGroup}
               text="Leave group"
               backgroundColor={Colors.orange}
             />
@@ -352,7 +495,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'flex-end',
   },
-
   members_view: {
     width: '100%',
     minHeight: '30%',
