@@ -1,3 +1,4 @@
+/* eslint-disable no-promise-executor-return */
 import React, { useEffect, useState, useCallback } from 'react';
 import {
   FlatList,
@@ -26,6 +27,7 @@ import { getUserProfile } from '../../store/actions/user';
 
 import HeaderButtom from '../../components/UI/HeaderButton';
 import Avatar from '../../components/UI/Avatar';
+import Loader from '../../components/UI/Loader';
 import ActionButton from '../../components/UI/ActionButton';
 import * as g from '../../constants/group';
 import { checkServerError, check400Error } from '../../utils/errors';
@@ -48,14 +50,14 @@ const GroupScreen = (props) => {
   const {
     loading: loadingGetProfile,
     error: errorGetProfile,
-    data: dataGetProfile,
+    data: ownerProfile,
   } = getProfileReducer;
 
   const getGroupReducer = useSelector((state) => state.getGroup);
   const {
     loading: loadingGroup,
     error: errorGroup,
-    data: groupFromReducer,
+    data: group,
   } = getGroupReducer;
 
   const deleteGroupReducer = useSelector((state) => state.deleteGroup);
@@ -79,25 +81,21 @@ const GroupScreen = (props) => {
     data: dataRemoveMember,
   } = removeMemberReducer;
 
-  const [group, setGroup] = useState(
-    groupFromReducer ? { ...groupFromReducer } : null
-  );
-  const [ownerProfile, setOwnerProfile] = useState(
-    dataGetProfile ? { ...dataGetProfile } : null
-  );
+  // https://start.the.night/mphHZJT8EpvJECXbyDKqVd
 
   const getAsyncData = async () => {
+    let group;
+    let profile;
     try {
-      const group = JSON.parse(await AsyncStorage.getItem('@groupData'));
-      const profile = JSON.parse(await AsyncStorage.getItem('@userData'));
-
-      if (group != null && profile != null) {
-        setStoredGroupData(group);
-        setStoredProfileData(profile);
-      }
+      group = JSON.parse(await AsyncStorage.getItem('@groupData'));
+      profile = JSON.parse(await AsyncStorage.getItem('@userData'));
 
       if (!group || !profile) {
         props.navigation.navigate('Swipe');
+      }
+      if (group !== null && profile !== null) {
+        setStoredGroupData(group);
+        setStoredProfileData(profile);
       }
     } catch (e) {
       console.log(e);
@@ -112,6 +110,14 @@ const GroupScreen = (props) => {
 
   // TODO: checking ownership
   useEffect(() => {
+    if (storedGroupData && !ownerProfile) {
+      dispatch(getUserProfile(storedGroupData.owner));
+    }
+
+    if (!group) {
+      dispatch(getGroup());
+    }
+
     if (errorGroup) {
       if (errorGroup?.response?.status === 400) {
         check400Error(errorGroup);
@@ -126,22 +132,6 @@ const GroupScreen = (props) => {
       checkServerError(errorGetProfile);
     }
 
-    if (!group) {
-      dispatch(getGroup());
-    }
-
-    if (!ownerProfile) {
-      dispatch(getUserProfile(storedGroupData.id));
-    }
-
-    if (groupFromReducer) {
-      setGroup(groupFromReducer);
-    }
-
-    if (dataGetProfile) {
-      setOwnerProfile(dataGetProfile);
-    }
-
     // TODO: check if the current user is owner
     if (
       storedGroupData &&
@@ -150,18 +140,13 @@ const GroupScreen = (props) => {
     ) {
       setIsOwner(true);
     }
-  }, [dispatch, storedGroupData, storedProfileData, ownerProfile, group]);
-
-  const loadProfile = useCallback(async () => {
-    setRefreshing(true);
-    try {
-      await dispatch(getUserProfile(storedGroupData.owner));
-      await dispatch(getGroup());
-    } catch (err) {
-      checkServerError(err);
-    }
-    setRefreshing(false);
-  }, [dispatch]);
+  }, [
+    dispatch,
+    errorGroup,
+    errorGetProfile,
+    storedGroupData,
+    storedProfileData,
+  ]);
 
   useEffect(() => {
     const unsubscribe = props.navigation.addListener('focus', () => {
@@ -194,13 +179,13 @@ const GroupScreen = (props) => {
     }
 
     if (dataDelete) {
-      props.navigation.navigate('StartGroup');
       dispatch({ type: g.DELETE_GROUP_RESET });
+      props.navigation.navigate('StartGroup');
     }
 
     if (dataLeave) {
-      props.navigation.navigate('StartGroup');
       dispatch({ type: g.LEAVE_GROUP_RESET });
+      props.navigation.navigate('StartGroup');
     }
 
     if (dataRemoveMember) {
@@ -220,6 +205,17 @@ const GroupScreen = (props) => {
     dataRemoveMember,
   ]);
 
+  const loadProfile = useCallback(async () => {
+    setRefreshing(true);
+    try {
+      await dispatch(getUserProfile(storedGroupData.owner));
+      await dispatch(getGroup());
+    } catch (err) {
+      checkServerError(err);
+    }
+    setRefreshing(false);
+  }, [dispatch]);
+
   const handleNavigate = (screen) => {
     return props.navigation.navigate(screen);
   };
@@ -237,6 +233,8 @@ const GroupScreen = (props) => {
           onPress: () => {
             if (isOwner && storedGroupData?.id) {
               dispatch(deleteGroup(storedGroupData.id));
+              setStoredGroupData();
+              setStoredProfileData();
             }
           },
           style: 'destructive',
@@ -257,6 +255,8 @@ const GroupScreen = (props) => {
           text: 'Leave',
           onPress: () => {
             dispatch(leaveGroup(storedGroupData.id));
+            setStoredGroupData();
+            setStoredProfileData();
           },
           style: 'destructive',
         },
@@ -306,6 +306,12 @@ const GroupScreen = (props) => {
     );
   };
 
+  const getInitials = (firstname, lastname) => {
+    const first = firstname ? firstname.charAt(0).toUpperCase : 'N';
+    const second = lastname ? lastname.charAt(0).toUpperCase : 'N';
+    return first + second;
+  };
+
   if (loadingDelete || loadingLeave) {
     return (
       <View style={styles.loadingScreen}>
@@ -352,20 +358,25 @@ const GroupScreen = (props) => {
       }>
       <View style={styles.action_view}>
         <View style={styles.profile_photo_container}>
-          {ownerProfile?.photos && ownerProfile?.photos.length > 0 && (
-            <Image
-              source={{
-                uri: `${BASE_URL}${ownerProfile.photos[0].image}`,
-              }}
-              style={{ width: 150, height: 150, borderRadius: 100 }}
-            />
-          )}
-          {!ownerProfile?.photos ||
+          {ownerProfile &&
+            ownerProfile.photos &&
+            ownerProfile.photos.length > 0 && (
+              <Image
+                source={{
+                  uri: `${BASE_URL}${ownerProfile.photos[0].image}`,
+                }}
+                style={{ width: 150, height: 150, borderRadius: 100 }}
+              />
+            )}
+          {(ownerProfile && !ownerProfile.photos) ||
             (ownerProfile?.photos.length === 0 && (
               <View style={styles.avatar_view}>
-                <Text style={styles.avatar_initials}>DS</Text>
+                <Text style={styles.avatar_initials}>
+                  {getInitials(ownerProfile.firstname, ownerProfile.lastname)}
+                </Text>
               </View>
             ))}
+          {!ownerProfile && <Loader />}
         </View>
         <View style={styles.nameView}>
           {ownerProfile && (
@@ -375,11 +386,8 @@ const GroupScreen = (props) => {
           )}
         </View>
         <View style={styles.buttons_container}>
-          {isOwner && storedGroupData && (
-            <ClipBoard
-              text={storedGroupData.share_link}
-              backgroundColor={Colors.white}
-            />
+          {isOwner && group?.share_link && (
+            <ClipBoard text={group.share_link} backgroundColor={Colors.white} />
           )}
           <ActionButton
             onPress={() => handleNavigate('Swipe')}

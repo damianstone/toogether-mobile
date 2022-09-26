@@ -47,11 +47,10 @@ const StartGroupScreen = (props) => {
   };
 
   useEffect(() => {
-    getAsyncData();
+    // getAsyncData();
   }, []);
 
   useEffect(() => {
-    getAsyncData();
     if (storedGroupData) {
       props.navigation.replace('Group');
     }
@@ -70,10 +69,10 @@ const StartGroupScreen = (props) => {
           text: 'OK',
         },
       ]);
-      props.navigation.navigate('Group', { createGroupData: dataCreate });
+      props.navigation.replace('Group', { createGroupData: dataCreate });
       dispatch({ type: g.CREATE_GROUP_RESET });
     }
-  }, [dataCreate, errorCreate, storedGroupData]);
+  }, [dispatch, dataCreate, errorCreate, storedGroupData]);
 
   const handleCreateGroup = () => {
     // TODO: use replace instead of navigate

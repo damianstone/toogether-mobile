@@ -83,11 +83,10 @@ const JoinGroupScreen = (props) => {
           text: 'OK',
         },
       ]);
-      dispatch({ type: g.JOIN_GROUP_RESET });
-      // TODO: REPLACE
       props.navigation.replace('Group');
+      dispatch({ type: g.JOIN_GROUP_RESET });
     }
-  }, [errorJoin, dataJoin]);
+  }, [dispatch, errorJoin, dataJoin]);
 
   const inputChangeHandler = useCallback(
     (inputIdentifier, inputValue, inputValidity) => {
@@ -114,6 +113,14 @@ const JoinGroupScreen = (props) => {
     }
     dispatch(joinGroup(inputValues.share_link));
   };
+
+  if (loadingJoin) {
+    return (
+      <View style={styles.loadingScreen}>
+        <ActivityIndicator color={Colors.orange} size="large" />
+      </View>
+    );
+  }
 
   return (
     <View style={styles.screen}>

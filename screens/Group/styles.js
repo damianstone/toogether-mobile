@@ -13,6 +13,13 @@ export default StyleSheet.create({
     height: '100%',
   },
 
+  loadingScreen: {
+    backgroundColor: Colors.bg,
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
   gradient: {
     flex: 1,
     width: '100%',
