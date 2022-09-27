@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { useDispatch, useSelector } from 'react-redux';
+import { NavigationActions } from 'react-navigation';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createGroup, getGroup } from '../../store/actions/group';
 import { check400Error, checkServerError } from '../../utils/errors';
@@ -47,7 +48,7 @@ const StartGroupScreen = (props) => {
   };
 
   useEffect(() => {
-    // getAsyncData();
+    getAsyncData();
   }, []);
 
   useEffect(() => {

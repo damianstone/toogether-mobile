@@ -43,8 +43,14 @@ const GroupScreen = (props) => {
   const [isOwner, setIsOwner] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
   const { showActionSheetWithOptions } = useActionSheet();
-  const createData = props.navigation.getParam('createGroupData');
   const dispatch = useDispatch();
+
+  const HEIGHT_ACTION_CONTAINER = isOwner
+    ? { height: '70%' }
+    : { height: '60%' };
+  const HEIGHT_MEMBER_CARD_CONTAINER = isOwner
+    ? { minHeight: '30%', maxHeight: '35%' }
+    : { minHeight: '40%', maxHeight: '45%' };
 
   const getProfileReducer = useSelector((state) => state.userGetProfile);
   const {
@@ -321,7 +327,6 @@ const GroupScreen = (props) => {
   }
 
   const renderMemberItem = ({ item, index, separators }) => {
-    // TODO: display everyone except the owner
     if (ownerProfile && item.id === ownerProfile.id) {
       return null;
     }
@@ -333,13 +338,7 @@ const GroupScreen = (props) => {
             isOwner ? handleOpenActionSheet(item.id, item.firstname) : null
           }
         />
-        <Text
-          style={{
-            alignSelf: 'center',
-            alignItems: 'center',
-          }}>
-          {item.firstname}
-        </Text>
+        <Text style={styles.firstname_text}>{item.firstname}</Text>
       </View>
     );
   };
@@ -356,7 +355,7 @@ const GroupScreen = (props) => {
           tintColor={Colors.white}
         />
       }>
-      <View style={styles.action_view}>
+      <View style={{ ...styles.action_view, ...HEIGHT_ACTION_CONTAINER }}>
         <View style={styles.profile_photo_container}>
           {ownerProfile &&
             ownerProfile.photos &&
@@ -377,13 +376,13 @@ const GroupScreen = (props) => {
               </View>
             ))}
           {!ownerProfile && <Loader />}
-        </View>
-        <View style={styles.nameView}>
-          {ownerProfile && (
-            <Text style={styles.name}>
-              {`${ownerProfile.firstname}'s group`}
-            </Text>
-          )}
+          <View style={styles.nameView}>
+            {ownerProfile && (
+              <Text style={styles.name}>
+                {`${ownerProfile.firstname}'s group`}
+              </Text>
+            )}
+          </View>
         </View>
         <View style={styles.buttons_container}>
           {isOwner && group?.share_link && (
@@ -410,7 +409,7 @@ const GroupScreen = (props) => {
           )}
         </View>
       </View>
-      <View style={styles.members_view}>
+      <View style={{ ...styles.members_view, ...HEIGHT_MEMBER_CARD_CONTAINER }}>
         {group && (
           <FlatList
             nestedScrollEnabled
@@ -465,12 +464,13 @@ const styles = StyleSheet.create({
   },
   action_view: {
     alignItems: 'center',
+    flexDirection: 'column',
     width: '100%',
-    minHeight: '60%',
   },
   profile_photo_container: {
     marginTop: 20,
     alignItems: 'center',
+    justifyContent: 'center',
   },
   avatar_view: {
     backgroundColor: Colors.orange,
@@ -485,7 +485,6 @@ const styles = StyleSheet.create({
     fontSize: 25,
   },
   nameView: {
-    flexDirection: 'row',
     width: '100%',
     marginTop: -5,
     justifyContent: 'center',
@@ -499,22 +498,31 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   buttons_container: {
+    marginTop: 20,
+    flexDirection: 'column',
     width: '90%',
     alignItems: 'center',
     justifyContent: 'flex-end',
   },
   members_view: {
+    flex: 1,
     width: '100%',
-    minHeight: '30%',
-    maxHeight: '40%',
+    height: '100%',
     backgroundColor: Colors.bgCard,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
     padding: 10,
   },
+  firstname_text: {
+    width: '100%',
+    alignSelf: 'center',
+    textAlign: 'center',
+    fontSize: 12,
+    color: Colors.bg,
+  },
   flatlist_item_container: {
-    width: 50,
-    height: 50,
+    width: 70,
+    height: 70,
     alignItems: 'center',
   },
 });

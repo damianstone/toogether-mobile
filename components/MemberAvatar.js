@@ -26,8 +26,8 @@ export default MemberAvatar;
 
 const styles = StyleSheet.create({
   imgContainer: {
-    width: 60,
-    height: 60,
+    width: 70,
+    height: 70,
     overflow: 'hidden',
     marginLeft: 10,
     borderRadius: 100,

@@ -96,20 +96,14 @@ const GroupNavigator = createStackNavigator(
       navigationOptions: {
         gestureDirection: 'horizontal',
       },
-      tabBarOptions: {
-        tabStyle: {
-          backgroundColor: Colors.bgCard,
-          statusBarStyle: Colors.bg,
-        },
-        style: {
-          backgroundColor: Colors.bgCard,
-          borderTopWidth: 0,
-        },
-      },
     },
   },
   {
     defaultNavigationOptions: defaultNavOptions,
+    // navigationOptions: ({ navigation }) => ({
+    //   title: `${console.log(navigation)}'s Profile'`,
+    // }),
+    initialRouteName: 'StartGroup',
   }
 );
 
@@ -159,7 +153,7 @@ const tabScreenCnfig = {
   },
   Group: {
     screen: GroupNavigator, // STACK NAVIGATOR
-    navigationOptions: {
+    navigationOptions: ({ navigation }) => ({
       tabBarIcon: (tabInfo) => {
         return (
           <AntDesign color={tabInfo.tintColor} name="addusergroup" size={25} />
@@ -167,7 +161,24 @@ const tabScreenCnfig = {
       },
       tabBarColor: Colors.orange,
       tabBarLabel: Platform.OS === 'android' ? <Text>Create group</Text> : null,
-    },
+      tabBarOptions: {
+        style: {
+          // include safe area
+          backgroundColor:
+            navigation.state.routes[0].routeName === 'StartGroup'
+              ? Colors.bg
+              : Colors.bgCard,
+          borderTopWidth: 0,
+        },
+        tabStyle: {
+          backgroundColor:
+            navigation.state.routes[0].routeName === 'StartGroup'
+              ? Colors.bg
+              : Colors.bgCard,
+          statusBarStyle: Colors.bg,
+        },
+      },
+    }),
   },
 };
 
@@ -192,7 +203,6 @@ const ToogetherTab =
         tabBarOptions: {
           showLabel: false,
           activeTintColor: Colors.orange,
-          labelStyle: {},
           tabStyle: {
             backgroundColor: Colors.bg,
             statusBarStyle: Colors.bg,
