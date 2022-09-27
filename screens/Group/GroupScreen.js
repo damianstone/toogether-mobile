@@ -8,6 +8,7 @@ import {
   Image,
   Platform,
   ScrollView,
+  SafeAreaView,
   ActivityIndicator,
   RefreshControl,
   Alert,
@@ -34,6 +35,7 @@ import { checkServerError, check400Error } from '../../utils/errors';
 
 import Colors from '../../constants/Colors';
 import ClipBoard from '../../components/UI/ClipBoard';
+import ScrollViewBackgroundLayer from '../../components/UI/ScrollViewBackgroundLayer';
 import MemberAvatar from '../../components/MemberAvatar';
 
 const GroupScreen = (props) => {
@@ -344,82 +346,87 @@ const GroupScreen = (props) => {
   };
 
   return (
-    <ScrollView
-      style={{ backgroundColor: Colors.bg, flex: 1 }}
-      contentContainerStyle={styles.screen}
-      nestedScrollEnabled
-      refreshControl={
-        <RefreshControl
-          refreshing={refreshing}
-          onRefresh={loadProfile}
-          tintColor={Colors.white}
-        />
-      }>
-      <View style={{ ...styles.action_view, ...HEIGHT_ACTION_CONTAINER }}>
-        <View style={styles.profile_photo_container}>
-          {ownerProfile &&
-            ownerProfile.photos &&
-            ownerProfile.photos.length > 0 && (
-              <Image
-                source={{
-                  uri: `${BASE_URL}${ownerProfile.photos[0].image}`,
-                }}
-                style={{ width: 150, height: 150, borderRadius: 100 }}
+    <View style={styles.screen}>
+      <ScrollView
+        style={{ flex: 1, height: '100%' }}
+        nestedScrollEnabled
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={loadProfile}
+            tintColor={Colors.white}
+          />
+        }>
+        <View style={{ ...styles.action_view, ...HEIGHT_ACTION_CONTAINER }}>
+          <View style={styles.profile_photo_container}>
+            {ownerProfile &&
+              ownerProfile.photos &&
+              ownerProfile.photos.length > 0 && (
+                <Image
+                  source={{
+                    uri: `${BASE_URL}${ownerProfile.photos[0].image}`,
+                  }}
+                  style={{ width: 150, height: 150, borderRadius: 100 }}
+                />
+              )}
+            {(ownerProfile && !ownerProfile.photos) ||
+              (ownerProfile?.photos.length === 0 && (
+                <View style={styles.avatar_view}>
+                  <Text style={styles.avatar_initials}>
+                    {getInitials(ownerProfile.firstname, ownerProfile.lastname)}
+                  </Text>
+                </View>
+              ))}
+            {!ownerProfile && <Loader />}
+            <View style={styles.nameView}>
+              {ownerProfile && (
+                <Text style={styles.name}>
+                  {`${ownerProfile.firstname}'s group`}
+                </Text>
+              )}
+            </View>
+          </View>
+          <View style={styles.buttons_container}>
+            {isOwner && group?.share_link && (
+              <ClipBoard
+                text={group.share_link}
+                backgroundColor={Colors.white}
               />
             )}
-          {(ownerProfile && !ownerProfile.photos) ||
-            (ownerProfile?.photos.length === 0 && (
-              <View style={styles.avatar_view}>
-                <Text style={styles.avatar_initials}>
-                  {getInitials(ownerProfile.firstname, ownerProfile.lastname)}
-                </Text>
-              </View>
-            ))}
-          {!ownerProfile && <Loader />}
-          <View style={styles.nameView}>
-            {ownerProfile && (
-              <Text style={styles.name}>
-                {`${ownerProfile.firstname}'s group`}
-              </Text>
+            <ActionButton
+              onPress={() => handleNavigate('Swipe')}
+              text="Group chat"
+              backgroundColor={Colors.blue}
+            />
+            {isOwner && (
+              <ActionButton
+                onPress={handleDeleteGroup}
+                text="Delete group"
+                backgroundColor={Colors.orange}
+              />
+            )}
+            {!isOwner && (
+              <ActionButton
+                onPress={handleLeaveGroup}
+                text="Leave group"
+                backgroundColor={Colors.orange}
+              />
             )}
           </View>
         </View>
-        <View style={styles.buttons_container}>
-          {isOwner && group?.share_link && (
-            <ClipBoard text={group.share_link} backgroundColor={Colors.white} />
-          )}
-          <ActionButton
-            onPress={() => handleNavigate('Swipe')}
-            text="Group chat"
-            backgroundColor={Colors.blue}
-          />
-          {isOwner && (
-            <ActionButton
-              onPress={handleDeleteGroup}
-              text="Delete group"
-              backgroundColor={Colors.orange}
-            />
-          )}
-          {!isOwner && (
-            <ActionButton
-              onPress={handleLeaveGroup}
-              text="Leave group"
-              backgroundColor={Colors.orange}
+        <View
+          style={{ ...styles.members_view, ...HEIGHT_MEMBER_CARD_CONTAINER }}>
+          {group && (
+            <FlatList
+              nestedScrollEnabled
+              data={group.members}
+              renderItem={renderMemberItem}
+              keyExtractor={(item) => item.id}
             />
           )}
         </View>
-      </View>
-      <View style={{ ...styles.members_view, ...HEIGHT_MEMBER_CARD_CONTAINER }}>
-        {group && (
-          <FlatList
-            nestedScrollEnabled
-            data={group.members}
-            renderItem={renderMemberItem}
-            keyExtractor={(item) => item.id}
-          />
-        )}
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </View>
   );
 };
 
@@ -452,6 +459,8 @@ export default GroupScreen;
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
+    width: '100%',
+    height: '100%',
     backgroundColor: Colors.bg,
     justifyContent: 'space-between',
     alignItems: 'center',
@@ -505,13 +514,12 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   members_view: {
-    flex: 1,
-    width: '100%',
-    height: '100%',
+    minWidth: '100%',
     backgroundColor: Colors.bgCard,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
     padding: 10,
+    zIndex: -1,
   },
   firstname_text: {
     width: '100%',
