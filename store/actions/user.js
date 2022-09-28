@@ -7,6 +7,11 @@ import * as c from '../../constants/user';
 const BASE_URL = Constants.manifest.extra.LOCAL_URL;
 
 // -------------------------------- LOGIN / REGISTER ACTIONS --------------------------------
+export const authenticate = (userDataObj) => {
+  return (dispatch) => {
+    dispatch({ type: c.AUTHENTICATE, payload: userDataObj });
+  };
+};
 
 export const userRegister = (email, password, repeated_password) => {
   return async (dispatch) => {

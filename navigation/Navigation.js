@@ -100,12 +100,23 @@ const GroupNavigator = createStackNavigator(
   },
   {
     defaultNavigationOptions: defaultNavOptions,
-    // navigationOptions: ({ navigation }) => ({
-    //   title: `${console.log(navigation)}'s Profile'`,
-    // }),
-    initialRouteName: 'StartGroup',
   }
 );
+
+// const GroupNavigator = createStackNavigator(
+//   {
+//     Group: {
+//       screen: GroupScreen,
+//       navigationOptions: {
+//         gestureDirection: 'horizontal',
+//       },
+//     },
+//     Start: StartGroupNavigator,
+//   },
+//   {
+//     defaultNavigationOptions: defaultNavOptions,
+//   }
+// );
 
 const MyProfileNavigator = createStackNavigator(
   {
@@ -162,19 +173,21 @@ const tabScreenCnfig = {
       tabBarColor: Colors.orange,
       tabBarLabel: Platform.OS === 'android' ? <Text>Create group</Text> : null,
       tabBarOptions: {
+        showLabel: false,
         style: {
-          // include safe area
           backgroundColor:
-            navigation.state.routes[0].routeName === 'StartGroup'
-              ? Colors.bg
-              : Colors.bgCard,
+            navigation.state.routes[navigation.state.index].routeName ===
+            'Group'
+              ? Colors.bgCard
+              : Colors.bg,
           borderTopWidth: 0,
         },
         tabStyle: {
           backgroundColor:
-            navigation.state.routes[0].routeName === 'StartGroup'
-              ? Colors.bg
-              : Colors.bgCard,
+            navigation.state.routes[navigation.state.index].routeName ===
+            'Group'
+              ? Colors.bgCard
+              : Colors.bg,
           statusBarStyle: Colors.bg,
         },
       },
@@ -229,6 +242,7 @@ const AppNavigator = createStackNavigator(
   {
     Swipe: HomeNavigator,
     Chat: ChatNavigator,
+    Group: GroupNavigator,
     MyProfile: MyProfileNavigator,
   },
   {

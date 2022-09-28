@@ -8,7 +8,6 @@ import {
   Image,
   Platform,
   ScrollView,
-  SafeAreaView,
   ActivityIndicator,
   RefreshControl,
   Alert,
@@ -17,6 +16,7 @@ import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useDispatch, useSelector } from 'react-redux';
 import { useActionSheet } from '@expo/react-native-action-sheet';
+import { NavigationActions, StackActions } from 'react-navigation';
 import Constants from 'expo-constants';
 import {
   getGroup,
@@ -35,7 +35,6 @@ import { checkServerError, check400Error } from '../../utils/errors';
 
 import Colors from '../../constants/Colors';
 import ClipBoard from '../../components/UI/ClipBoard';
-import ScrollViewBackgroundLayer from '../../components/UI/ScrollViewBackgroundLayer';
 import MemberAvatar from '../../components/MemberAvatar';
 
 const GroupScreen = (props) => {
@@ -51,7 +50,7 @@ const GroupScreen = (props) => {
     ? { height: '70%' }
     : { height: '60%' };
   const HEIGHT_MEMBER_CARD_CONTAINER = isOwner
-    ? { minHeight: '30%', maxHeight: '35%' }
+    ? { minHeight: '30%', maxHeight: '30%' }
     : { minHeight: '40%', maxHeight: '45%' };
 
   const getProfileReducer = useSelector((state) => state.userGetProfile);
@@ -89,7 +88,19 @@ const GroupScreen = (props) => {
     data: dataRemoveMember,
   } = removeMemberReducer;
 
+  const replaceAction = StackActions.replace({
+    routeName: 'StartGroup',
+    params: {
+      group_id: null,
+    },
+  });
+
+  // store.dispatch(navigateAction);
+
   // https://start.the.night/mphHZJT8EpvJECXbyDKqVd
+
+  console.log(storedGroupData);
+  console.log(props.navigation);
 
   const getAsyncData = async () => {
     let group;
@@ -122,7 +133,7 @@ const GroupScreen = (props) => {
       dispatch(getUserProfile(storedGroupData.owner));
     }
 
-    if (!group) {
+    if (storedGroupData && !group) {
       dispatch(getGroup());
     }
 
@@ -131,6 +142,7 @@ const GroupScreen = (props) => {
         check400Error(errorGroup);
       }
       checkServerError(errorGroup);
+      props.navigation.dispatch(replaceAction);
     }
 
     if (errorGetProfile) {
@@ -138,6 +150,7 @@ const GroupScreen = (props) => {
         check400Error(errorGetProfile);
       }
       checkServerError(errorGetProfile);
+      props.navigation.dispatch(replaceAction);
     }
 
     // TODO: check if the current user is owner
@@ -188,12 +201,12 @@ const GroupScreen = (props) => {
 
     if (dataDelete) {
       dispatch({ type: g.DELETE_GROUP_RESET });
-      props.navigation.navigate('StartGroup');
+      props.navigation.dispatch(replaceAction);
     }
 
     if (dataLeave) {
       dispatch({ type: g.LEAVE_GROUP_RESET });
-      props.navigation.navigate('StartGroup');
+      props.navigation.dispatch(replaceAction);
     }
 
     if (dataRemoveMember) {
@@ -346,87 +359,82 @@ const GroupScreen = (props) => {
   };
 
   return (
-    <View style={styles.screen}>
-      <ScrollView
-        style={{ flex: 1, height: '100%' }}
-        nestedScrollEnabled
-        refreshControl={
-          <RefreshControl
-            refreshing={refreshing}
-            onRefresh={loadProfile}
-            tintColor={Colors.white}
-          />
-        }>
-        <View style={{ ...styles.action_view, ...HEIGHT_ACTION_CONTAINER }}>
-          <View style={styles.profile_photo_container}>
-            {ownerProfile &&
-              ownerProfile.photos &&
-              ownerProfile.photos.length > 0 && (
-                <Image
-                  source={{
-                    uri: `${BASE_URL}${ownerProfile.photos[0].image}`,
-                  }}
-                  style={{ width: 150, height: 150, borderRadius: 100 }}
-                />
-              )}
-            {(ownerProfile && !ownerProfile.photos) ||
-              (ownerProfile?.photos.length === 0 && (
-                <View style={styles.avatar_view}>
-                  <Text style={styles.avatar_initials}>
-                    {getInitials(ownerProfile.firstname, ownerProfile.lastname)}
-                  </Text>
-                </View>
-              ))}
-            {!ownerProfile && <Loader />}
-            <View style={styles.nameView}>
-              {ownerProfile && (
-                <Text style={styles.name}>
-                  {`${ownerProfile.firstname}'s group`}
+    <ScrollView
+      style={{ flex: 1, backgroundColor: Colors.bg }}
+      contentContainerStyle={styles.screen}
+      nestedScrollEnabled
+      refreshControl={
+        <RefreshControl
+          refreshing={refreshing}
+          onRefresh={loadProfile}
+          tintColor={Colors.white}
+        />
+      }>
+      <View style={{ ...styles.action_view, ...HEIGHT_ACTION_CONTAINER }}>
+        <View style={styles.profile_photo_container}>
+          {ownerProfile &&
+            ownerProfile.photos &&
+            ownerProfile.photos.length > 0 && (
+              <Image
+                source={{
+                  uri: `${BASE_URL}${ownerProfile.photos[0].image}`,
+                }}
+                style={{ width: 150, height: 150, borderRadius: 100 }}
+              />
+            )}
+          {(ownerProfile && !ownerProfile.photos) ||
+            (ownerProfile?.photos.length === 0 && (
+              <View style={styles.avatar_view}>
+                <Text style={styles.avatar_initials}>
+                  {getInitials(ownerProfile.firstname, ownerProfile.lastname)}
                 </Text>
-              )}
-            </View>
-          </View>
-          <View style={styles.buttons_container}>
-            {isOwner && group?.share_link && (
-              <ClipBoard
-                text={group.share_link}
-                backgroundColor={Colors.white}
-              />
-            )}
-            <ActionButton
-              onPress={() => handleNavigate('Swipe')}
-              text="Group chat"
-              backgroundColor={Colors.blue}
-            />
-            {isOwner && (
-              <ActionButton
-                onPress={handleDeleteGroup}
-                text="Delete group"
-                backgroundColor={Colors.orange}
-              />
-            )}
-            {!isOwner && (
-              <ActionButton
-                onPress={handleLeaveGroup}
-                text="Leave group"
-                backgroundColor={Colors.orange}
-              />
+              </View>
+            ))}
+          {!ownerProfile && <Loader />}
+          <View style={styles.nameView}>
+            {ownerProfile && (
+              <Text style={styles.name}>
+                {`${ownerProfile.firstname}'s group`}
+              </Text>
             )}
           </View>
         </View>
-        <View
-          style={{ ...styles.members_view, ...HEIGHT_MEMBER_CARD_CONTAINER }}>
-          {group && (
-            <FlatList
-              nestedScrollEnabled
-              data={group.members}
-              renderItem={renderMemberItem}
-              keyExtractor={(item) => item.id}
+        <View style={styles.buttons_container}>
+          {isOwner && group?.share_link && (
+            <ClipBoard text={group.share_link} backgroundColor={Colors.white} />
+          )}
+          <ActionButton
+            onPress={() => handleNavigate('Swipe')}
+            text="Group chat"
+            backgroundColor={Colors.blue}
+          />
+          {isOwner && (
+            <ActionButton
+              onPress={handleDeleteGroup}
+              text="Delete group"
+              backgroundColor={Colors.orange}
+            />
+          )}
+          {!isOwner && (
+            <ActionButton
+              onPress={handleLeaveGroup}
+              text="Leave group"
+              backgroundColor={Colors.orange}
             />
           )}
         </View>
-      </ScrollView>
-    </View>
+      </View>
+      <View style={{ ...styles.members_view, ...HEIGHT_MEMBER_CARD_CONTAINER }}>
+        {group && (
+          <FlatList
+            nestedScrollEnabled
+            data={group.members}
+            renderItem={renderMemberItem}
+            keyExtractor={(item) => item.id}
+          />
+        )}
+      </View>
+    </ScrollView>
   );
 };
 

@@ -10,7 +10,8 @@ import {
 } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { useDispatch, useSelector } from 'react-redux';
-import { NavigationActions } from 'react-navigation';
+import { StackActions, NavigationActions } from 'react-navigation';
+
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createGroup, getGroup } from '../../store/actions/group';
 import { check400Error, checkServerError } from '../../utils/errors';
@@ -28,6 +29,8 @@ const StartGroupScreen = (props) => {
   const [storedGroupData, setStoredGroupData] = useState();
 
   const dispatch = useDispatch();
+  const deletedGroup = useSelector((state) => state.deleteGroup.data);
+  const leavedGroup = useSelector((state) => state.leaveGroup.data);
   const createGroupReducer = useSelector((state) => state.createGroup);
   const {
     loading: loadingCreate,
@@ -35,12 +38,23 @@ const StartGroupScreen = (props) => {
     data: dataCreate,
   } = createGroupReducer;
 
-  const getAsyncData = async () => {
-    try {
-      const value = JSON.parse(await AsyncStorage.getItem('@groupData'));
+  const replaceAction = StackActions.replace({
+    routeName: 'Group',
+    params: {
+      group_id: dataCreate ? dataCreate.id : null,
+    },
+  });
 
-      if (value !== null) {
-        setStoredGroupData(value);
+  console.log('storedGroupData --> ', storedGroupData); // undefined
+  console.log('props navigation --> ', props.navigation);
+
+  const getAsyncData = async () => {
+    let group;
+    try {
+      group = JSON.parse(await AsyncStorage.getItem('@groupData'));
+
+      if (group !== null) {
+        setStoredGroupData(group);
       }
     } catch (e) {
       console.log(e);
@@ -52,8 +66,15 @@ const StartGroupScreen = (props) => {
   }, []);
 
   useEffect(() => {
+    const unsubscribe = props.navigation.addListener('focus', () => {
+      console.log('Refreshed');
+    });
+    return unsubscribe;
+  }, [props.navigation]);
+
+  useEffect(() => {
     if (storedGroupData) {
-      props.navigation.replace('Group');
+      props.navigation.dispatch(replaceAction);
     }
 
     if (errorCreate) {
@@ -70,7 +91,7 @@ const StartGroupScreen = (props) => {
           text: 'OK',
         },
       ]);
-      props.navigation.replace('Group', { createGroupData: dataCreate });
+      props.navigation.dispatch(replaceAction);
       dispatch({ type: g.CREATE_GROUP_RESET });
     }
   }, [dispatch, dataCreate, errorCreate, storedGroupData]);

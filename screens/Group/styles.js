@@ -62,23 +62,21 @@ export default StyleSheet.create({
   },
 
   imageContainer: {
-    height: '60%',
+    maxHeight: '100%',
     width: '100%',
-    alignItems: 'flex-start',
-    justifyContent: 'flex-start',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 
   image: {
     width: '100%',
-    height: 400,
+    height: 470,
   },
 
   join_input_container: {
     backgroundColor: Colors.bg,
-    alignItems: 'center',
     width: '100%',
     paddingHorizontal: 20,
-    paddingVertical: '2%',
     marginBottom: 20,
   },
 

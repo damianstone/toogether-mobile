@@ -4,6 +4,7 @@ import {
   Text,
   Image,
   ScrollView,
+  SafeAreaView,
   ActivityIndicator,
   KeyboardAvoidingView,
   Alert,
@@ -123,16 +124,8 @@ const JoinGroupScreen = (props) => {
   }
 
   return (
-    <View style={styles.screen}>
+    <SafeAreaView style={styles.screen}>
       <StatusBar style="light" />
-      <View style={styles.join_text_view}>
-        <View style={styles.join_text_container}>
-          <Text style={styles.join_text_big}>Start the night</Text>
-        </View>
-        <View style={styles.join_text_container}>
-          <Text style={styles.join_text_small}>Have fun</Text>
-        </View>
-      </View>
       <KeyboardAvoidingView behavior="position">
         <ScrollView
           style={styles.scrollview_style}
@@ -140,7 +133,7 @@ const JoinGroupScreen = (props) => {
           automaticallyAdjustKeyboardInsets>
           <View style={styles.imageContainer}>
             <Image
-              source={require('../../assets/images/balls_group.png')}
+              source={require('../../assets/images/hand_join.png')}
               style={styles.image}
             />
           </View>
@@ -168,7 +161,7 @@ const JoinGroupScreen = (props) => {
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
-    </View>
+    </SafeAreaView>
   );
 };
 
