@@ -87,6 +87,7 @@ const GroupNavigator = createStackNavigator(
     StartGroup: {
       screen: StartGroupScreen,
       navigationOptions: {
+        ...defaultNavOptions,
         gestureDirection: 'horizontal-inverted',
       },
     },
@@ -94,30 +95,19 @@ const GroupNavigator = createStackNavigator(
     Group: {
       screen: GroupScreen,
       navigationOptions: {
+        ...defaultNavOptions,
         gestureDirection: 'horizontal',
       },
     },
   },
   {
     defaultNavigationOptions: defaultNavOptions,
+    transparentCard: true,
+    cardStyle: {
+      backgroundColor: 'transparent',
+    },
   }
 );
-
-// const GroupNavigator = createStackNavigator(
-//   {
-//     Group: {
-//       screen: GroupScreen,
-//       navigationOptions: {
-//         gestureDirection: 'horizontal',
-//       },
-//     },
-//     Start: StartGroupNavigator,
-//   },
-//   {
-//     defaultNavigationOptions: defaultNavOptions,
-//   }
-// );
-
 const MyProfileNavigator = createStackNavigator(
   {
     MyProfile: {

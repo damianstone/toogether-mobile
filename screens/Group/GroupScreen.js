@@ -24,7 +24,6 @@ import {
   removeMember,
   deleteGroup,
 } from '../../store/actions/group';
-import { getUserProfile } from '../../store/actions/user';
 
 import HeaderButtom from '../../components/UI/HeaderButton';
 import Avatar from '../../components/UI/Avatar';
@@ -36,6 +35,9 @@ import { checkServerError, check400Error } from '../../utils/errors';
 import Colors from '../../constants/Colors';
 import ClipBoard from '../../components/UI/ClipBoard';
 import MemberAvatar from '../../components/MemberAvatar';
+
+// TODO: instead of call the owner profile, send the entire object of the owner profile (make another seralzier)
+// TODO: filter in the backend when serialize members, all of the excluding the owner
 
 const GroupScreen = (props) => {
   const BASE_URL = Constants.manifest.extra.LOCAL_URL;
@@ -95,13 +97,6 @@ const GroupScreen = (props) => {
     },
   });
 
-  // store.dispatch(navigateAction);
-
-  // https://start.the.night/mphHZJT8EpvJECXbyDKqVd
-
-  console.log(storedGroupData);
-  console.log(props.navigation);
-
   const getAsyncData = async () => {
     let group;
     let profile;
@@ -124,19 +119,12 @@ const GroupScreen = (props) => {
 
   // TODO: get async stored data
   useEffect(() => {
+    dispatch(getGroup());
     getAsyncData();
   }, []);
 
   // TODO: checking ownership
   useEffect(() => {
-    if (storedGroupData && !ownerProfile) {
-      dispatch(getUserProfile(storedGroupData.owner));
-    }
-
-    if (storedGroupData && !group) {
-      dispatch(getGroup());
-    }
-
     if (errorGroup) {
       if (errorGroup?.response?.status === 400) {
         check400Error(errorGroup);
@@ -145,19 +133,14 @@ const GroupScreen = (props) => {
       props.navigation.dispatch(replaceAction);
     }
 
-    if (errorGetProfile) {
-      if (errorGetProfile?.response?.status === 400) {
-        check400Error(errorGetProfile);
-      }
-      checkServerError(errorGetProfile);
-      props.navigation.dispatch(replaceAction);
+    if (storedGroupData && !group) {
+      dispatch(getGroup());
     }
 
-    // TODO: check if the current user is owner
     if (
       storedGroupData &&
       storedProfileData &&
-      storedGroupData.owner === storedProfileData.id
+      storedGroupData.owner.id === storedProfileData.id
     ) {
       setIsOwner(true);
     }
@@ -171,12 +154,11 @@ const GroupScreen = (props) => {
 
   useEffect(() => {
     const unsubscribe = props.navigation.addListener('focus', () => {
-      loadProfile();
+      loadGroup();
     });
     return unsubscribe;
-  }, [loadProfile]);
+  }, [loadGroup]);
 
-  // TODO: useEffect to handle actions
   useEffect(() => {
     if (errorDelete) {
       if (errorDelete?.response?.status === 400) {
@@ -210,6 +192,7 @@ const GroupScreen = (props) => {
     }
 
     if (dataRemoveMember) {
+      dispatch(getGroup());
       Alert.alert(`Member removed`, 'You removed one of the members', [
         {
           text: 'OK',
@@ -226,10 +209,9 @@ const GroupScreen = (props) => {
     dataRemoveMember,
   ]);
 
-  const loadProfile = useCallback(async () => {
+  const loadGroup = useCallback(async () => {
     setRefreshing(true);
     try {
-      await dispatch(getUserProfile(storedGroupData.owner));
       await dispatch(getGroup());
     } catch (err) {
       checkServerError(err);
@@ -333,6 +315,13 @@ const GroupScreen = (props) => {
     return first + second;
   };
 
+  const getFirstName = (firstname) => {
+    if (firstname) {
+      return firstname;
+    }
+    return 'Null';
+  };
+
   if (loadingDelete || loadingLeave) {
     return (
       <View style={styles.loadingScreen}>
@@ -342,18 +331,19 @@ const GroupScreen = (props) => {
   }
 
   const renderMemberItem = ({ item, index, separators }) => {
-    if (ownerProfile && item.id === ownerProfile.id) {
-      return null;
-    }
     return (
       <View style={styles.flatlist_item_container}>
         <MemberAvatar
+          firstname={item.firstname}
+          lastname={item.lastname}
           photos={item.photos}
           onPress={() =>
             isOwner ? handleOpenActionSheet(item.id, item.firstname) : null
           }
         />
-        <Text style={styles.firstname_text}>{item.firstname}</Text>
+        <Text style={styles.firstname_text}>
+          {getFirstName(item.firstname)}
+        </Text>
       </View>
     );
   };
@@ -366,35 +356,33 @@ const GroupScreen = (props) => {
       refreshControl={
         <RefreshControl
           refreshing={refreshing}
-          onRefresh={loadProfile}
+          onRefresh={loadGroup}
           tintColor={Colors.white}
         />
       }>
       <View style={{ ...styles.action_view, ...HEIGHT_ACTION_CONTAINER }}>
         <View style={styles.profile_photo_container}>
-          {ownerProfile &&
-            ownerProfile.photos &&
-            ownerProfile.photos.length > 0 && (
-              <Image
-                source={{
-                  uri: `${BASE_URL}${ownerProfile.photos[0].image}`,
-                }}
-                style={{ width: 150, height: 150, borderRadius: 100 }}
-              />
-            )}
-          {(ownerProfile && !ownerProfile.photos) ||
-            (ownerProfile?.photos.length === 0 && (
+          {!group && <Loader />}
+          {group && group.owner.photos && group.owner.photos.length > 0 && (
+            <Image
+              source={{
+                uri: `${group.owner.photos[0].image}`,
+              }}
+              style={{ width: 150, height: 150, borderRadius: 100 }}
+            />
+          )}
+          {(group && !group.owner.photos) ||
+            (group?.owner.photos.length === 0 && (
               <View style={styles.avatar_view}>
                 <Text style={styles.avatar_initials}>
-                  {getInitials(ownerProfile.firstname, ownerProfile.lastname)}
+                  {getInitials(group.owner.firstname, group.owner.lastname)}
                 </Text>
               </View>
             ))}
-          {!ownerProfile && <Loader />}
           <View style={styles.nameView}>
-            {ownerProfile && (
+            {group?.owner && (
               <Text style={styles.name}>
-                {`${ownerProfile.firstname}'s group`}
+                {`${group.owner.firstname}'s group`}
               </Text>
             )}
           </View>
@@ -427,7 +415,14 @@ const GroupScreen = (props) => {
       <View style={{ ...styles.members_view, ...HEIGHT_MEMBER_CARD_CONTAINER }}>
         {group && (
           <FlatList
+            style={{ flex: 1 }}
+            contentContainerStyle={{
+              justifyContent: 'center',
+              paddingBottom: 20,
+            }}
             nestedScrollEnabled
+            horizontal={false}
+            numColumns={3}
             data={group.members}
             renderItem={renderMemberItem}
             keyExtractor={(item) => item.id}
@@ -523,22 +518,25 @@ const styles = StyleSheet.create({
   },
   members_view: {
     minWidth: '100%',
+    justifyContent: 'center',
     backgroundColor: Colors.bgCard,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
     padding: 10,
     zIndex: -1,
   },
+  flatlist_item_container: {
+    marginVertical: 15,
+    width: '33%',
+    height: 70,
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
   firstname_text: {
+    padding: 5,
     width: '100%',
-    alignSelf: 'center',
     textAlign: 'center',
     fontSize: 12,
     color: Colors.bg,
-  },
-  flatlist_item_container: {
-    width: 70,
-    height: 70,
-    alignItems: 'center',
   },
 });

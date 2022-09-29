@@ -1,5 +1,11 @@
 import React from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  Platform,
+} from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import * as Clipboard from 'expo-clipboard';
 import Colors from '../../constants/Colors';
@@ -18,10 +24,11 @@ const ClipBoard = (props) => {
       style={{
         ...styles.clipboard_button_container,
         backgroundColor: props.backgroundColor,
-      }}
-      onPress={() => copyToClipboard(props.text)}>
+      }}>
       <Text style={styles.clipboard_button_text}>{removeHttp(props.text)}</Text>
-      <TouchableOpacity style={styles.clipboard_icon}>
+      <TouchableOpacity
+        style={styles.clipboard_icon}
+        onPress={() => copyToClipboard(props.text)}>
         <Feather name="copy" size={24} color="white" />
       </TouchableOpacity>
     </View>

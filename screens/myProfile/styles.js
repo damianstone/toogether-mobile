@@ -41,8 +41,6 @@ export default StyleSheet.create({
     width: 150,
     height: 150,
     borderRadius: 100,
-    borderWidth: 1,
-    borderColor: Colors.orange,
   },
   avatar_view: {
     backgroundColor: Colors.orange,
