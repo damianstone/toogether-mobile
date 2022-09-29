@@ -36,9 +36,6 @@ import Colors from '../../constants/Colors';
 import ClipBoard from '../../components/UI/ClipBoard';
 import MemberAvatar from '../../components/MemberAvatar';
 
-// TODO: instead of call the owner profile, send the entire object of the owner profile (make another seralzier)
-// TODO: filter in the backend when serialize members, all of the excluding the owner
-
 const GroupScreen = (props) => {
   const BASE_URL = Constants.manifest.extra.LOCAL_URL;
   const [storedGroupData, setStoredGroupData] = useState();
@@ -117,13 +114,11 @@ const GroupScreen = (props) => {
     }
   };
 
-  // TODO: get async stored data
   useEffect(() => {
     dispatch(getGroup());
     getAsyncData();
   }, []);
 
-  // TODO: checking ownership
   useEffect(() => {
     if (errorGroup) {
       if (errorGroup?.response?.status === 400) {
