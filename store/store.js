@@ -1,6 +1,7 @@
 import { applyMiddleware, combineReducers, createStore } from 'redux';
 import thunk from 'redux-thunk';
 import {
+  authenticateReducer,
   tokenRefreshReducer,
   userAddPhotoReducer,
   userRemovePhotoReducer,
@@ -12,9 +13,19 @@ import {
   userDeleteReducer,
   userGetProfileReducer,
 } from './reducers/user';
+import {
+  listGroupReducer,
+  getGroupReducer,
+  createGroupReducer,
+  deleteGroupReducer,
+  joinGroupReducer,
+  leaveGroupReducer,
+  removeMemberReducer,
+} from './reducers/group';
 
 const reducer = combineReducers({
   // profile API
+  auth: authenticateReducer,
   tokenRefresh: tokenRefreshReducer,
   userRegister: userRegisterReducer,
   userLogin: userLoginReducer,
@@ -26,6 +37,14 @@ const reducer = combineReducers({
   userAddPhoto: userAddPhotoReducer,
   userRemovePhoto: userRemovePhotoReducer,
   userListPhotos: userListPhotosReducer,
+  // Group API
+  listGroup: listGroupReducer,
+  getGroup: getGroupReducer,
+  createGroup: createGroupReducer,
+  deleteGroup: deleteGroupReducer,
+  joinGroup: joinGroupReducer,
+  leaveGroup: leaveGroupReducer,
+  removeMember: removeMemberReducer,
 });
 
 const initialState = {};

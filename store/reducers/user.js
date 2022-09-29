@@ -1,6 +1,16 @@
 import * as c from '../../constants/user';
 
 // -------------------------------- LOGIN / REGISTER REDUCERS --------------------------------
+export const authenticateReducer = (state = {}, action) => {
+  switch (action.type) {
+    case c.AUTHENTICATE:
+      return {
+        userData: { ...action.payload },
+      };
+    default:
+      return state;
+  }
+};
 
 export const userRegisterReducer = (state = {}, action) => {
   switch (action.type) {

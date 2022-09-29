@@ -7,6 +7,11 @@ import * as c from '../../constants/user';
 const BASE_URL = Constants.manifest.extra.LOCAL_URL;
 
 // -------------------------------- LOGIN / REGISTER ACTIONS --------------------------------
+export const authenticate = (userDataObj) => {
+  return (dispatch) => {
+    dispatch({ type: c.AUTHENTICATE, payload: userDataObj });
+  };
+};
 
 export const userRegister = (email, password, repeated_password) => {
   return async (dispatch) => {
@@ -181,13 +186,18 @@ export const userDelete = () => {
 // -------------------------------- PROFILE ACTIONS --------------------------------
 
 // GET USER -> get any profile
-export const getUserProfile = () => {
+export const getUserProfile = (profile_id) => {
   return async (dispatch) => {
     try {
       dispatch({ type: c.USER_GET_PROFILE_REQUEST });
 
+      let id;
       const userData = JSON.parse(await AsyncStorage.getItem('@userData'));
-
+      if (profile_id) {
+        id = profile_id;
+      } else {
+        id = userData.id;
+      }
       const config = {
         'Content-Type': 'application/json',
         Accept: 'application/json',
@@ -196,7 +206,7 @@ export const getUserProfile = () => {
 
       const { data } = await axios({
         method: 'get',
-        url: `${BASE_URL}/api/v1/profiles/${userData.id}/`,
+        url: `${BASE_URL}/api/v1/profiles/${id}/`,
         headers: config,
       });
 
@@ -304,12 +314,6 @@ export const updateUserProfile = (dataObj) => {
     }
   };
 };
-
-// GET USER -> get any profile
-export const getUserDetails = () => {};
-
-// DELETE ACCOUNT
-export const deleteUser = () => {};
 
 // -------------------------------- PHOTOS ACTIONS --------------------------------
 

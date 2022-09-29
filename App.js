@@ -8,8 +8,9 @@ import AppLoading from 'expo-app-loading';
 import * as Font from 'expo-font';
 import { FontAwesome5 } from '@expo/vector-icons';
 
-import Navigator from './navigation/Navigation';
+import ToogetherNavigation from './navigation/NavigationContainer';
 import store from './store/store';
+import 'react-native-gesture-handler';
 
 function cacheFonts(fonts) {
   return fonts.map((font) => Font.loadAsync(font));
@@ -66,7 +67,7 @@ const App = () => {
   return (
     <Provider store={store}>
       <ActionSheetProvider>
-        <Navigator theme="dark" />
+        <ToogetherNavigation theme="dark" />
       </ActionSheetProvider>
     </Provider>
   );

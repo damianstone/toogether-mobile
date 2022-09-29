@@ -26,9 +26,9 @@ export default StyleSheet.create({
   },
   photoView: {
     top: Platform.OS === 'ios' ? '4%' : '1%',
-    width: 146,
-    height: 146,
-    borderRadius: 73,
+    width: 150,
+    height: 150,
+    borderRadius: 100,
     backgroundColor: 'grey',
     overflow: 'hidden',
     alignSelf: 'center',
@@ -36,6 +36,11 @@ export default StyleSheet.create({
   profilePictureContainer: {
     marginTop: 20,
     alignItems: 'center',
+  },
+  image: {
+    width: 150,
+    height: 150,
+    borderRadius: 100,
   },
   avatar_view: {
     backgroundColor: Colors.orange,

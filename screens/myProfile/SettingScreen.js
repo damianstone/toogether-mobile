@@ -22,10 +22,6 @@ import ActivityModal from '../../components/UI/ActivityModal';
 import Colors from '../../constants/Colors';
 import * as c from '../../constants/user';
 
-function cacheFonts(fonts) {
-  return fonts.map((font) => Font.loadAsync(font));
-}
-
 const SettingScreen = (props) => {
   const dispatch = useDispatch();
 

@@ -83,10 +83,7 @@ const AuthStartScreen = (props) => {
   // REGISTER
   useEffect(() => {
     if (registerError) {
-      if (
-        registerError.response.status >= 400 ||
-        registerError.response.status < 500
-      ) {
+      if (registerError?.response?.status === 400) {
         check400Error(registerError);
       } else {
         checkServerError(registerError);
@@ -103,10 +100,7 @@ const AuthStartScreen = (props) => {
   useEffect(() => {
     console.log({ ...loginError });
     if (loginError) {
-      if (
-        loginError.response.status >= 400 ||
-        loginError.response.status < 500
-      ) {
+      if (loginError?.response?.status === 400) {
         check400Error(loginError);
       } else {
         checkServerError(loginError);
