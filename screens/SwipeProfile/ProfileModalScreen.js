@@ -5,9 +5,10 @@ import { useSelector } from 'react-redux';
 
 import DetailCard from '../../components/DetailCard';
 import Colors from '../../constants/Colors';
+import GROUPS from '../../data/dummy-data';
 
 const ProfileModalScreen = (props) => {
-  const groups = useSelector((state) => state.groups.groups);
+  const groups = GROUPS;
 
   const profiles = [];
   for (let i = 0; i < groups.length; i++) {
@@ -49,8 +50,7 @@ const ProfileModalScreen = (props) => {
               margin: 4,
             }}
           />
-        }
-      >
+        }>
         {profile.photos.map((ph) => {
           return (
             <ImageBackground

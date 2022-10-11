@@ -5,6 +5,7 @@ import Colors from '../constants/Colors';
 
 const MemberAvatar = (props) => {
   const BASE_URL = Constants.manifest.extra.LOCAL_URL;
+
   const getInitials = (firstname, lastname) => {
     const first = firstname ? firstname.charAt(0).toUpperCase : 'N';
     const second = lastname ? lastname.charAt(0).toUpperCase : 'N';

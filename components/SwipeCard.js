@@ -28,7 +28,7 @@ const SwipeCard = (props) => {
   const { profile, setShowMode } = props;
 
   let isGroup;
-  if (profile.total_members) {
+  if (profile.totalMembers) {
     isGroup = true;
   } else {
     isGroup = false;
@@ -45,34 +45,44 @@ const SwipeCard = (props) => {
   };
 
   let cardType;
+  let imageStyle;
   // if the profiles array > 1
   if (!isGroup) {
     cardType = {
       position: 'absolute',
       width: '107%',
       height: '80%',
-      borderRadius: 30,
+      borderRadius: 20,
       justifyContent: 'center',
       alignItems: 'center',
+    };
+    imageStyle = {
+      borderRadius: 20,
+      height: '100%',
     };
   } else {
     cardType = {
       position: 'absolute',
       width: '107%',
       height: '80%',
-      borderRadius: 30,
+      borderRadius: 20,
       justifyContent: 'center',
       alignItems: 'center',
       backgroundColor: Colors.orange,
+    };
+    imageStyle = {
+      borderBottomRightRadius: 20,
+      borderBottomLeftRadius: 20,
+      height: '100%',
     };
   }
 
   return (
     <View style={styles.screen}>
       <View style={{ ...cardType }}>
-        {profile.length > 1 && (
+        {isGroup && (
           <View style={styles.groupName}>
-            <Text style={styles.text}>Grupo de {profile[0].name}</Text>
+            <Text style={styles.text}>Toogether group</Text>
           </View>
         )}
         <Swiper
@@ -107,7 +117,7 @@ const SwipeCard = (props) => {
             profile.members.map((profile, i) => {
               return (
                 <ImageBackground
-                  imageStyle={styles.imageStyle}
+                  imageStyle={{ ...imageStyle }}
                   key={profile.id}
                   resizeMode="cover"
                   source={require('../assets/images/Profiles/profile-1.jpeg')}
@@ -132,7 +142,7 @@ const SwipeCard = (props) => {
               imageStyle={styles.imageStyle}
               key={profile.id}
               resizeMode="cover"
-              source={{ uri: `http://127.0.0.1:8000${profile.photo}` }} // just get the first photo of every profile
+              source={require('../assets/images/Profiles/profile-1.jpeg')} // just get the first photo of every profile uri: `http://127.0.0.1:8000${profile.photo}`
               style={styles.image}>
               <Info
                 age={profile.age}
@@ -164,7 +174,7 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   groupName: {
-    borderRadius: 30,
+    borderRadius: 20,
     justifyContent: 'center',
     alignItems: 'center',
     marginVertical: 2,
@@ -177,10 +187,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'flex-end',
     flexDirection: 'row',
-  },
-  imageStyle: {
-    borderRadius: 30,
-    height: '100%',
   },
   text: {
     fontSize: 13,

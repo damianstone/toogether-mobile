@@ -1,6 +1,7 @@
 import { applyMiddleware, combineReducers, createStore } from 'redux';
 import thunk from 'redux-thunk';
 import {
+  userLocationReducer,
   authenticateReducer,
   tokenRefreshReducer,
   userAddPhotoReducer,
@@ -25,6 +26,7 @@ import {
 
 const reducer = combineReducers({
   // profile API
+  userLocation: userLocationReducer,
   auth: authenticateReducer,
   tokenRefresh: tokenRefreshReducer,
   userRegister: userRegisterReducer,
