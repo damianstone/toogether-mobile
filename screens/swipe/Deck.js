@@ -22,23 +22,19 @@ import styles from './styles';
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
-/* 
-Deck - muestra los grupos o perfiles individuales
-*/
-
 // TODO: handle likes
 // TODO:
 
 const Deck = (props) => {
   const {
-    swipeProfiles, // total groups or profiles to swipe
-    setShowMode, // set show mode
-    setAllCardsSwiped,
-    onUndoSwipe, //
-    onSwipe, //
+    swipeProfiles,
+    setShowMode,
     showMode, // check to show a profile or a new match modal
-    renderNewMatch, //
-    showProfileHandler, //
+    setAllCardsSwiped,
+    onUndoSwipe,
+    onSwipe,
+    renderNewMatch,
+    showProfileHandler,
   } = props;
 
   const swipeRef = useRef();
@@ -109,16 +105,14 @@ const Deck = (props) => {
     );
   };
 
-  // render a card containing all of the profile members of the group
-  const renderCard = (elem) => {
-    // TRANFORM THE OBJECT INTO AN ARRAY WHEN IS NOT A GROUP?
-    const name = 'NAME GROUP';
+  // render a card with the profiles (single and group)
+  const renderCard = (profile) => {
     return (
       <SwipeCard
-        key={elem._id}
-        firstName={name}
-        profile={elem}
-        onProfile={showProfileHandler}
+        key={profile.id}
+        isGroup={'members' in profile}
+        profile={profile}
+        showProfileHandler={showProfileHandler}
         setShowMode={setShowMode}
         onSwipeRight={onLikePressed}
         onSwipeLeft={onDislikePressed}

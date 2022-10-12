@@ -8,46 +8,22 @@ import {
   View,
 } from 'react-native';
 import Swiper from 'react-native-swiper';
+import Constants from 'expo-constants';
 
 import Colors from '../constants/Colors';
-import ProfileModal from '../screens/Swipe/ProfileModal';
 import Info from './Info';
 
-/*
-
-Muestra cada perfil individual del grupo y si es que es solo un perfil muestra undo
-
-Aqui es donde llama al showProfile modal para ver en detalle cada perfil
-
-checkear si el objecto es de un grupo o no
-
-*/
-
 const SwipeCard = (props) => {
-  // swipe pass as a props the profiles array of each group of the single profile
-  const { profile, setShowMode } = props;
-
-  let isGroup;
-  if (profile.totalMembers) {
-    isGroup = true;
-  } else {
-    isGroup = false;
-  }
-
-  // send the id to the swipe component
-  const showProfile = (id) => {
-    props.onProfile(id);
-  };
-
+  const BASE_URL = Constants.manifest.extra.LOCAL_URL;
   const showProfilee = (profile) => {
     props.onRenderProfile(profile);
-    setShowMode(1);
+    props.setShowMode(1);
   };
 
   let cardType;
   let imageStyle;
   // if the profiles array > 1
-  if (!isGroup) {
+  if (!props.isGroup) {
     cardType = {
       position: 'absolute',
       width: '107%',
@@ -80,7 +56,7 @@ const SwipeCard = (props) => {
   return (
     <View style={styles.screen}>
       <View style={{ ...cardType }}>
-        {isGroup && (
+        {props.isGroup && (
           <View style={styles.groupName}>
             <Text style={styles.text}>Toogether group</Text>
           </View>
@@ -113,24 +89,25 @@ const SwipeCard = (props) => {
           removeClippedSubviews={false}
           showsButtons
           style={styles.wrapper}>
-          {isGroup ? (
-            profile.members.map((profile, i) => {
+          {props.isGroup ? (
+            props.profile.members.map((profile) => {
               return (
                 <ImageBackground
                   imageStyle={{ ...imageStyle }}
                   key={profile.id}
                   resizeMode="cover"
-                  source={require('../assets/images/Profiles/profile-1.jpeg')}
+                  source={{ uri: `${BASE_URL}${profile.photos[0].image}` }}
                   style={styles.image}>
                   <Info
-                    age={profile.age}
-                    firstName={profile.name}
+                    firstName={profile.firstname}
                     lastName={profile.lastname}
-                    location={profile.location}
+                    city={profile.city}
+                    live_in={profile.live_in}
+                    age={profile.age}
                     university={profile.university}
                   />
                   <TouchableOpacity
-                    onPress={() => props.onProfile(profile.id)}
+                    onPress={() => props.showProfileHandler(profile)}
                     style={styles.arrowContainer}>
                     <Text>A</Text>
                   </TouchableOpacity>
@@ -139,20 +116,21 @@ const SwipeCard = (props) => {
             })
           ) : (
             <ImageBackground
-              imageStyle={styles.imageStyle}
-              key={profile.id}
+              imageStyle={{ ...imageStyle }}
+              key={props.profile.id}
               resizeMode="cover"
-              source={require('../assets/images/Profiles/profile-1.jpeg')} // just get the first photo of every profile uri: `http://127.0.0.1:8000${profile.photo}`
+              source={{ uri: `${BASE_URL}${props.profile.photos[0].image}` }} // just get the first photo of every profile uri: `http://127.0.0.1:8000${profile.photo}`
               style={styles.image}>
               <Info
-                age={profile.age}
-                firstName={profile.name}
-                lastName={profile.lastname}
-                location={profile.location}
-                university={profile.university}
+                firstName={props.profile.firstname}
+                lastName={props.profile.lastname}
+                city={props.profile.city}
+                live_in={props.profile.live_in}
+                age={props.profile.age}
+                university={props.profile.university}
               />
               <TouchableOpacity
-                onPress={() => props.onProfile(profile.id)}
+                onPress={() => props.showProfileHandler(props.profile)}
                 style={styles.arrowContainer}>
                 <Text>A</Text>
               </TouchableOpacity>

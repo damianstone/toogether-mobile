@@ -1,59 +1,99 @@
 import React from 'react';
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, View, Button } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import Colors from '../constants/Colors';
 import SwipeButtons from './SwipeButtons';
+import BottomSheet from './BottomSheet';
+
+// TODO: like action
+// TODO:
 
 const DetailCard = (props) => {
-  return (
-    <ScrollView style={styles.screen}>
-      <View style={styles.container1}>
-        <Text
-          style={
-            styles.nameText
-          }>{`${props.name} ${props.lastname}, ${props.age}`}</Text>
-        <TouchableOpacity onPress={props.onClose} style={styles.closeContainer}>
-          <Text>C</Text>
-        </TouchableOpacity>
-      </View>
-      <View style={styles.container2}>
-        <View style={styles.infoWrapper}>
-          <Text style={styles.icon}>📍</Text>
-          <Text style={styles.text}>{props.location}</Text>
-        </View>
-        <View style={styles.infoWrapper}>
-          <Text style={styles.icon}>🏠</Text>
-          <Text style={styles.text}>{props.location}</Text>
-        </View>
-        <View style={styles.infoWrapper}>
-          <Text style={styles.icon}>🎓</Text>
-          <Text style={styles.text}>{props.university}</Text>
-        </View>
-      </View>
-      <View style={styles.line} />
-      <View style={styles.descriptionContainer}>
-        <Text style={{ fontSize: 18, fontWeight: '500', marginBottom: 4 }}>
-          About
-        </Text>
-        <Text style={styles.descriptionText}>{props.description}</Text>
-      </View>
-      <View style={styles.line} />
-      <SwipeButtons rewind={false} />
-      <View style={styles.line} />
-      <View style={styles.reportContainer}>
-        <TouchableOpacity>
-          <Text style={styles.redText}>
-            REPORT {props.name.toUpperCase()} {props.lastname.toUpperCase()}
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity>
-          <Text style={styles.redText}>
-            BLOCK {props.name.toUpperCase()} {props.lastname.toUpperCase}
-          </Text>
-        </TouchableOpacity>
-      </View>
-    </ScrollView>
+  const {
+    firstname,
+    lastname,
+    age,
+    city,
+    live_in,
+    university,
+    occupation,
+    description,
+  } = props;
+
+  const details = [
+    {
+      detail: university,
+      iconName: 'location',
+    },
+    {
+      detail: occupation,
+      iconName: 'location',
+    },
+    {
+      detail: live_in,
+      iconName: 'location',
+    },
+    {
+      detail: city,
+      iconName: 'location',
+    },
+  ];
+
+  const filtered = details.filter(
+    (obj) => obj.detail && obj.detail !== undefined
   );
+
+  return <BottomSheet />;
+
+  // return (
+  //   <ScrollView style={styles.screen}>
+  //     <View style={styles.container1}>
+  //       <Text
+  //         style={
+  //           styles.nameText
+  //         }>{`${props.name} ${props.lastname}, ${props.age}`}</Text>
+  //       <TouchableOpacity onPress={props.onClose} style={styles.closeContainer}>
+  //         <Text>C</Text>
+  //       </TouchableOpacity>
+  //     </View>
+
+  //     <View style={styles.container2}>
+  //       <View style={styles.infoWrapper}>
+  //         <Text style={styles.icon}>📍</Text>
+  //         <Text style={styles.text}>{props.location}</Text>
+  //       </View>
+
+  //       <View style={styles.infoWrapper}>
+  //         <Text style={styles.icon}>🏠</Text>
+  //         <Text style={styles.text}>{props.city}</Text>
+  //       </View>
+
+  //       <View style={styles.infoWrapper}>
+  //         <Text style={styles.icon}>🎓</Text>
+  //         <Text style={styles.text}>{props.university}</Text>
+  //       </View>
+  //     </View>
+
+  //     <View style={styles.line} />
+
+  //     <View style={styles.descriptionContainer}>
+  //       <Text style={{ fontSize: 18, fontWeight: '500', marginBottom: 4 }}>
+  //         About
+  //       </Text>
+  //       <Text style={styles.descriptionText}>{props.description}</Text>
+  //     </View>
+
+  //     <View style={styles.line} />
+
+  //     <SwipeButtons rewind={false} />
+
+  //     <View style={styles.line} />
+
+  //     <View style={styles.reportContainer}>
+  //       <Button title="Block profile" color={Colors.red} onPress={() => {}} />
+  //     </View>
+  //   </ScrollView>
+  // );
 };
 
 export default DetailCard;
@@ -62,9 +102,10 @@ const styles = StyleSheet.create({
   screen: {
     flex: 1,
     backgroundColor: Colors.white,
-    padding: 15,
-    maxHeight: '40%',
+    padding: 20,
     borderRadius: 20,
+    minHeight: '30%',
+    maxHeight: '40%',
     shadowColor: '#000',
     shadowOffset: {
       width: 0,

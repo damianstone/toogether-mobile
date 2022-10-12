@@ -12,7 +12,7 @@ import { StatusBar } from 'expo-status-bar';
 import { useSelector, useDispatch } from 'react-redux';
 import { verifyLocationPermissions } from '../../utils/permissions';
 import { userLocation } from '../../store/actions/user';
-import { listSwipes } from '../../store/actions/swipe';
+import { listSwipe } from '../../store/actions/swipe';
 
 import Deck from './Deck';
 import HeaderButtom from '../../components/UI/HeaderButton';
@@ -35,17 +35,24 @@ const SwipeScreen = (props) => {
   const [swipes, setSwipes] = useState([...GROUPS]);
   const [showMode, setShowMode] = useState(0);
 
-  const [loading, setLoading] = useState(false);
+  const [localLoading, setLocalLoading] = useState(false);
   const [noCards, setNoCards] = useState(false);
   const [allCardsSwiped, setAllCardsSwiped] = useState(false);
   const [locationError, setLocationError] = useState(false);
 
   const userLocationReducer = useSelector((state) => state.userLocation);
   const {
-    loading: loadingLocation,
-    error: errorLocation,
-    success: successLocation,
+    loading: postLocationLoading,
+    error: postLocationError,
+    success: postLocationSuccess,
   } = userLocationReducer;
+
+  const listSwipeReducer = useSelector((state) => state.listSwipe);
+  const {
+    loading: loadingSwipe,
+    error: errorSwipe,
+    data: swipe,
+  } = listSwipeReducer;
 
   useEffect(() => {
     const permissionGranted = verifyLocationPermissions();
@@ -59,25 +66,42 @@ const SwipeScreen = (props) => {
         [{ text: 'Okay', onPress: () => verifyLocationPermissions() }]
       );
     }
+    if (postLocationError) {
+      setLocationError(true);
+    } else {
+      setLocationError(false);
+    }
     return null;
   }, [dispatch, locationError]);
+
+  // TODO: use effect to list swipes
+  useEffect(() => {
+    dispatch(listSwipe());
+    if (swipe && swipe.results.length === 0) {
+      setNoCards(true);
+    } else {
+      setNoCards(false);
+    }
+  }, [dispatch]);
 
   // add listener to fetch the user and re fetch it
   useEffect(() => {
     const unsubscribe = props.navigation.addListener('focus', () => {
-      loadLocation();
+      reload();
     });
     return unsubscribe;
-  }, [loadLocation]);
+  }, [reload]);
 
-  const loadLocation = useCallback(async () => {
-    setLoading(true);
+  const reload = useCallback(async () => {
+    setLocalLoading(true);
     try {
       await dispatch(userLocation());
+      await dispatch(listSwipe());
     } catch (err) {
       console.log(err);
     }
-    setLoading(false);
+    setAllCardsSwiped(false);
+    setLocalLoading(false);
   }, [dispatch]);
 
   // TODO: why those functions ??--------
@@ -102,8 +126,8 @@ const SwipeScreen = (props) => {
   // TODO: ------------------------------
 
   // pasa como props al deck y del deck al swipecard
-  const showProfileHandler = (id) => {
-    props.navigation.navigate('Profile', { profileId: id });
+  const showProfileHandler = (profile) => {
+    props.navigation.navigate('Profile', { profile: profile });
   };
 
   const onShareApp = async () => {
@@ -133,7 +157,6 @@ const SwipeScreen = (props) => {
     console.log('match');
   };
 
-  // TODO: create a button to reload and fetch profiles
   const renderAllCardSwiped = () => {
     return (
       <SwipeError
@@ -142,6 +165,8 @@ const SwipeScreen = (props) => {
         text="There seems to be no one around you using Toogether. Why not tell them to download it? ;)"
         onPress={onShareApp}
         buttonText="Share this amazing app"
+        reload
+        onReload={reload}
       />
     );
   };
@@ -154,6 +179,8 @@ const SwipeScreen = (props) => {
         text="There seems to be no one around you using Toogether. Why not tell them to download it? ;)"
         onPress={onShareApp}
         buttonText="Share this amazing app"
+        reload
+        onReload={reload}
       />
     );
   };
@@ -177,30 +204,35 @@ const SwipeScreen = (props) => {
         {locationError && renderLocationError()}
         {allCardsSwiped && renderAllCardSwiped()}
         {noCards && !locationError && renderNoCardsFound()}
-        {swipes.length > 0 && !locationError && !noCards && !allCardsSwiped && (
-          <Deck
-            swipeProfiles={swipes}
-            setShowMode={setShowMode}
-            setAllCardsSwiped={setAllCardsSwiped}
-            onUndoSwipe={undoSwipe}
-            onSwipe={onSwipe}
-            showMode={showMode}
-            renderNewMatch={renderNewMatch}
-            showProfileHandler={showProfileHandler}
-          />
-        )}
-        {swipes.length === 0 && loading && (
-          <ActivityModal
-            loading={swipes.length === 0}
-            title="Please wait"
-            size="large"
-            activityColor="white"
-            titleColor="white"
-            activityWrapperStyle={{
-              backgroundColor: '#404040',
-            }}
-          />
-        )}
+        {loadingSwipe ||
+          (localLoading && (
+            <ActivityModal
+              loading
+              title="Please wait"
+              size="large"
+              activityColor="white"
+              titleColor="white"
+              activityWrapperStyle={{
+                backgroundColor: '#404040',
+              }}
+            />
+          ))}
+        {swipe &&
+          swipe.results.length > 0 &&
+          !locationError &&
+          !noCards &&
+          !allCardsSwiped && (
+            <Deck
+              swipeProfiles={swipe.results}
+              setShowMode={setShowMode}
+              setAllCardsSwiped={setAllCardsSwiped}
+              onUndoSwipe={undoSwipe}
+              onSwipe={onSwipe}
+              showMode={showMode}
+              renderNewMatch={renderNewMatch}
+              showProfileHandler={showProfileHandler}
+            />
+          )}
       </View>
     </SafeAreaView>
   );

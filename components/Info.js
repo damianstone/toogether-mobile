@@ -5,26 +5,64 @@ import { Ionicons } from '@expo/vector-icons';
 import Colors from '../constants/Colors';
 
 const Info = (props) => {
-  // const sizeIcon = props.small ? 9 : 10;
-  // const nameSize = props.small ? 12 : 17;
-  // const textSiZe = props.small ? 9 : 15;
+  const { firstName, lastName, city, live_in, age, university, occupation } =
+    props;
+
+  const details = [
+    {
+      detail: university,
+      iconName: 'location',
+    },
+    {
+      detail: occupation,
+      iconName: 'location',
+    },
+    {
+      detail: live_in,
+      iconName: 'location',
+    },
+    {
+      detail: city,
+      iconName: 'location',
+    },
+  ];
+
+  const filtered = details.filter(
+    (obj) => obj.detail && obj.detail !== undefined
+  );
+
+  let cardShadow;
+  if (filtered.length < 2) {
+    cardShadow = {
+      width: '50%',
+      maxHeight: '60%',
+      height: '10%',
+    };
+  } else {
+    cardShadow = {
+      width: '50%',
+      maxHeight: '60%',
+      height: '16%',
+    };
+  }
 
   return (
-    <View style={styles.cardShadow}>
+    <View style={{ ...styles.cardShadow, ...cardShadow }}>
       <View style={styles.textContainer}>
-        <Text
-          style={
-            styles.name
-          }>{`${props.firstName} ${props.lastName}, ${props.age}`}</Text>
+        <Text style={styles.name}>{`${firstName} ${lastName}, ${age}`}</Text>
       </View>
-      <View style={styles.infoContainer}>
-        <Ionicons color="black" name="location" size={19} />
-        <Text style={styles.text}>{`${props.location}`}</Text>
-      </View>
-      <View style={styles.infoContainer}>
-        <Ionicons color="black" name="location" size={19} />
-        <Text style={styles.text}>{`${props.university}`}</Text>
-      </View>
+      {filtered[0] && (
+        <View style={styles.infoContainer}>
+          <Ionicons color="black" name={filtered[0].iconName} size={16} />
+          <Text style={styles.text}>{filtered[0].detail}</Text>
+        </View>
+      )}
+      {filtered[1] && (
+        <View style={styles.infoContainer}>
+          <Ionicons color="black" name={filtered[1].iconName} size={16} />
+          <Text style={styles.text}>{filtered[1].detail}</Text>
+        </View>
+      )}
     </View>
   );
 };
@@ -42,22 +80,20 @@ const styles = StyleSheet.create({
     shadowRadius: 1.41,
     elevation: 2,
     backgroundColor: Colors.white,
-    width: '60%',
-    height: '16%',
-    borderRadius: 30,
+    borderRadius: 20,
     paddingHorizontal: 15,
-    paddingVertical: 10,
+    paddingVertical: 8,
     marginVertical: 15,
     marginHorizontal: 3,
     flexDirection: 'column',
-    justifyContent: 'center',
+    justifyContent: 'space-around',
   },
   textContainer: {
     marginVertical: 1,
   },
   name: {
     fontStyle: 'normal',
-    fontSize: 17,
+    fontSize: 15,
     color: Colors.black,
     fontWeight: '600',
   },
@@ -69,7 +105,7 @@ const styles = StyleSheet.create({
   },
   text: {
     fontStyle: 'normal',
-    fontSize: 15,
+    fontSize: 12,
     marginLeft: 10,
   },
 });

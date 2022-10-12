@@ -1,5 +1,12 @@
 import React from 'react';
-import { Image, StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import {
+  Image,
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  Button,
+} from 'react-native';
 import Colors from '../constants/Colors';
 
 const SwipeError = (props) => {
@@ -30,6 +37,13 @@ const SwipeError = (props) => {
             {buttonText}
           </Text>
         </TouchableOpacity>
+        {props.reload && (
+          <Button
+            title="Reload"
+            color={Colors.white}
+            onPress={props.onReload}
+          />
+        )}
       </View>
     </View>
   );
@@ -47,7 +61,7 @@ const styles = StyleSheet.create({
   },
   bottomContainer: {
     width: '80%',
-    height: '30%',
+    height: '35%',
     justifyContent: 'flex-end',
     alignItems: 'center',
   },
@@ -63,5 +77,6 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.orange,
     borderRadius: 10,
     justifyContent: 'center',
+    marginBottom: 10,
   },
 });

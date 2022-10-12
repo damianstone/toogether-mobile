@@ -2,24 +2,16 @@ import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, ImageBackground, Modal } from 'react-native';
 import Swiper from 'react-native-swiper';
 import { useSelector } from 'react-redux';
+import Constants from 'expo-constants';
 
 import DetailCard from '../../components/DetailCard';
 import Colors from '../../constants/Colors';
-import GROUPS from '../../data/dummy-data';
 
 const ProfileModalScreen = (props) => {
-  const groups = GROUPS;
+  const BASE_URL = Constants.manifest.extra.LOCAL_URL;
+  const profile = props.navigation.getParam('profile');
 
-  const profiles = [];
-  for (let i = 0; i < groups.length; i++) {
-    for (let j = 0; j < groups[i].members.length; j++) {
-      profiles.push(groups[i].members[j]);
-    }
-  }
-
-  const profileId = props.navigation.getParam('profileId');
-
-  const profile = profiles.find((profile) => profile.id === profileId);
+  // TODO: add buttom sheet
 
   return (
     <View style={{ flex: 1 }}>
@@ -51,13 +43,13 @@ const ProfileModalScreen = (props) => {
             }}
           />
         }>
-        {profile.photos.map((ph) => {
+        {profile.photos.map((photo) => {
           return (
             <ImageBackground
               key={profile.id}
               style={styles.image}
               imageStyle={styles.imageStyle}
-              source={ph}
+              source={{ uri: `${BASE_URL}${photo.image}` }}
               resizeMode="cover"
             />
           );
@@ -65,10 +57,10 @@ const ProfileModalScreen = (props) => {
       </Swiper>
       <DetailCard
         onClose={() => props.navigation.goBack(null)}
-        name={profile.name}
+        name={profile.firstname}
         lastname={profile.lastname}
         age={profile.age}
-        location={profile.location}
+        city={profile.city}
         university={profile.university}
         description={profile.description}
       />
