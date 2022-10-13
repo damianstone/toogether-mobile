@@ -15,6 +15,11 @@ import {
   userGetProfileReducer,
 } from './reducers/user';
 import {
+  listBlockedProfilesReducer,
+  blockProfileReducer,
+  disblockProfileReducer,
+} from './reducers/block';
+import {
   listGroupReducer,
   getGroupReducer,
   createGroupReducer,
@@ -42,6 +47,10 @@ const reducer = combineReducers({
   userAddPhoto: userAddPhotoReducer,
   userRemovePhoto: userRemovePhotoReducer,
   userListPhotos: userListPhotosReducer,
+  // Block API
+  listBlockedProfiles: listBlockedProfilesReducer,
+  blockProfile: blockProfileReducer,
+  disblockProfileReducer: disblockProfileReducer,
   // Group API
   listGroup: listGroupReducer,
   getGroup: getGroupReducer,

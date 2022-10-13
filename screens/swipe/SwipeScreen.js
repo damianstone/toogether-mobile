@@ -13,6 +13,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { verifyLocationPermissions } from '../../utils/permissions';
 import { userLocation } from '../../store/actions/user';
 import { listSwipe } from '../../store/actions/swipe';
+import * as b from '../../constants/block';
 
 import Deck from './Deck';
 import HeaderButtom from '../../components/UI/HeaderButton';
@@ -54,6 +55,9 @@ const SwipeScreen = (props) => {
     data: swipe,
   } = listSwipeReducer;
 
+  const blockProfileReducer = useSelector((state) => state.blockProfile);
+  const { data: blockData } = blockProfileReducer;
+
   useEffect(() => {
     const permissionGranted = verifyLocationPermissions();
     if (permissionGranted) {
@@ -74,7 +78,6 @@ const SwipeScreen = (props) => {
     return null;
   }, [dispatch, locationError]);
 
-  // TODO: use effect to list swipes
   useEffect(() => {
     dispatch(listSwipe());
     if (swipe && swipe.results.length === 0) {
@@ -126,8 +129,11 @@ const SwipeScreen = (props) => {
   // TODO: ------------------------------
 
   // pasa como props al deck y del deck al swipecard
-  const showProfileHandler = (profile) => {
-    props.navigation.navigate('Profile', { profile: profile });
+  const showProfileHandler = (profile, isGroup) => {
+    props.navigation.navigate('Profile', {
+      profile: profile,
+      isGroup: isGroup,
+    });
   };
 
   const onShareApp = async () => {
@@ -197,12 +203,28 @@ const SwipeScreen = (props) => {
     );
   };
 
+  // if (blockData) {
+  //   Alert.alert(
+  //     'Profile blocked',
+  //     'None of you will be able to see their profiles',
+  //     [
+  //       {
+  //         text: 'OK',
+  //       },
+  //     ]
+  //   );
+  //   dispatch({ type: b.BLOCK_PROFILE_RESET });
+  //   reload();
+  // }
+
   return (
     <SafeAreaView style={styles.safe}>
       <StatusBar style="light" />
       <View style={styles.screen}>
         {locationError && renderLocationError()}
+
         {allCardsSwiped && renderAllCardSwiped()}
+
         {noCards && !locationError && renderNoCardsFound()}
         {loadingSwipe ||
           (localLoading && (
@@ -217,6 +239,7 @@ const SwipeScreen = (props) => {
               }}
             />
           ))}
+
         {swipe &&
           swipe.results.length > 0 &&
           !locationError &&

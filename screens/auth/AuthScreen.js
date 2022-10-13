@@ -4,6 +4,7 @@ import {
   Button,
   Text,
   ScrollView,
+  Platform,
   ActivityIndicator,
   KeyboardAvoidingView,
 } from 'react-native';
@@ -228,7 +229,7 @@ const AuthStartScreen = (props) => {
             )}
             <Button
               style={styles.auth_text_button}
-              color="#4A4A4A"
+              color={Platform.OS === 'ios' ? Colors.white : Colors.bgCard}
               title={
                 register
                   ? 'You already have an account?'

@@ -4,6 +4,7 @@ import {
   View,
   Button,
   ScrollView,
+  Platform,
   ActivityIndicator,
   StyleSheet,
 } from 'react-native';
@@ -50,7 +51,11 @@ const AuthStartScreen = (props) => {
           </View>
         </View>
         <View style={styles.buttonsContainer}>
-          <Button title="Login" color={Colors.white} onPress={handleLogin} />
+          <Button
+            title="Login"
+            color={Platform.OS === 'ios' ? Colors.white : Colors.bgCard}
+            onPress={handleLogin}
+          />
           <AuthButton onPress={handleRegister} text="Create Account" />
         </View>
       </ScrollView>

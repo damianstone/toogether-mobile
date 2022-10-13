@@ -511,8 +511,3 @@ export const listUserPhotos = () => {
     }
   };
 };
-
-// -------------------------------- BLOCK ACTIONS --------------------------------
-export const blockUser = () => {};
-
-export const disblockUser = () => {};

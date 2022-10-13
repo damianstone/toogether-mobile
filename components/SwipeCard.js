@@ -11,7 +11,7 @@ import Swiper from 'react-native-swiper';
 import Constants from 'expo-constants';
 
 import Colors from '../constants/Colors';
-import Info from './Info';
+import InfoCard from './InfoCard';
 
 const SwipeCard = (props) => {
   const BASE_URL = Constants.manifest.extra.LOCAL_URL;
@@ -98,7 +98,7 @@ const SwipeCard = (props) => {
                   resizeMode="cover"
                   source={{ uri: `${BASE_URL}${profile.photos[0].image}` }}
                   style={styles.image}>
-                  <Info
+                  <InfoCard
                     firstName={profile.firstname}
                     lastName={profile.lastname}
                     city={profile.city}
@@ -107,7 +107,9 @@ const SwipeCard = (props) => {
                     university={profile.university}
                   />
                   <TouchableOpacity
-                    onPress={() => props.showProfileHandler(profile)}
+                    onPress={() =>
+                      props.showProfileHandler(profile, props.isGroup)
+                    }
                     style={styles.arrowContainer}>
                     <Text>A</Text>
                   </TouchableOpacity>
@@ -121,7 +123,7 @@ const SwipeCard = (props) => {
               resizeMode="cover"
               source={{ uri: `${BASE_URL}${props.profile.photos[0].image}` }} // just get the first photo of every profile uri: `http://127.0.0.1:8000${profile.photo}`
               style={styles.image}>
-              <Info
+              <InfoCard
                 firstName={props.profile.firstname}
                 lastName={props.profile.lastname}
                 city={props.profile.city}
@@ -130,7 +132,9 @@ const SwipeCard = (props) => {
                 university={props.profile.university}
               />
               <TouchableOpacity
-                onPress={() => props.showProfileHandler(props.profile)}
+                onPress={() =>
+                  props.showProfileHandler(props.profile, props.isGroup)
+                }
                 style={styles.arrowContainer}>
                 <Text>A</Text>
               </TouchableOpacity>

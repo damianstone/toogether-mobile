@@ -1,21 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
-import {
-  StyleSheet,
-  Text,
-  View,
-  Dimensions,
-  Modal,
-  Share,
-  SafeAreaView,
-} from 'react-native';
+import { StyleSheet, Text, View, Dimensions, Modal } from 'react-native';
 import Swiper from 'react-native-deck-swiper';
 import { useDispatch, useSelector } from 'react-redux';
-import tw from 'tailwind-rn';
 
+import tw from 'tailwind-rn';
 import SwipeCard from '../../components/SwipeCard';
 import SwipeButtons from '../../components/SwipeButtons';
-import SwipeError from '../../components/SwipeError';
-import ProfileModal from './ProfileModal';
 import Colors from '../../constants/Colors';
 import styles from './styles';
 
@@ -81,30 +71,6 @@ const Deck = (props) => {
 
   // TODO: Render functions ----------------------------
 
-  // in swipe card the user want to open a specific profile in the group
-  // el id
-  // NO WORK
-  const renderProfile = (item, isDone) => {
-    return (
-      item && (
-        <ProfileModal
-          key={'CardDetail' + item.id}
-          photosArr={item.photos}
-          firstName={item.firstname}
-          lastName={item.lastname}
-          age={item.age}
-          university={item.university}
-          location={item.location}
-          description={item.description}
-          setShowMode={setShowMode}
-          onSwipeRight={onLikePressed}
-          onSwipeLeft={onDislikePressed}
-          isDone={isDone}
-        />
-      )
-    );
-  };
-
   // render a card with the profiles (single and group)
   const renderCard = (profile) => {
     return (
@@ -116,7 +82,6 @@ const Deck = (props) => {
         setShowMode={setShowMode}
         onSwipeRight={onLikePressed}
         onSwipeLeft={onDislikePressed}
-        onRenderProfile={renderProfile}
       />
     );
   };
@@ -175,10 +140,6 @@ const Deck = (props) => {
           onRewind={onRewindPressed}
         />
       </View>
-      {/* PROBLE RENDERIZAR SHOW PRPFILE  */}
-      {showMode === 1 && swipeProfiles[currentDeckIndex.current] && (
-        <Modal animationType="slide">{renderProfile}</Modal>
-      )}
       {showMode === 2 && (
         <Modal
           transparent={false}
