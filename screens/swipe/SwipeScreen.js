@@ -55,9 +55,6 @@ const SwipeScreen = (props) => {
     data: swipe,
   } = listSwipeReducer;
 
-  const blockProfileReducer = useSelector((state) => state.blockProfile);
-  const { data: blockData } = blockProfileReducer;
-
   useEffect(() => {
     const permissionGranted = verifyLocationPermissions();
     if (permissionGranted) {
@@ -104,28 +101,6 @@ const SwipeScreen = (props) => {
     setAllCardsSwiped(false);
     setLocalLoading(false);
   }, [dispatch]);
-
-  // TODO: why those functions ??--------
-  const undoSwipe = (swipeToUndo) => {
-    if (!swipeToUndo) {
-      return;
-    }
-    const swipeToUndoId = swipeToUndo.id || swipeToUndo.userID;
-    const userID = 'id';
-
-    swipeTracker.current.removeSwipe(swipeToUndoId, userID);
-  };
-
-  const onSwipe = (type, swipeItem) => {
-    const user = {
-      name: 'Damian',
-    };
-    if (swipeItem) {
-      swipeTracker.current.addSwipe(user, swipeItem, type, (response) => {});
-    }
-  };
-  // TODO: ------------------------------
-
   // pasa como props al deck y del deck al swipecard
   const showProfileHandler = (profile, isGroup) => {
     props.navigation.navigate('SwipeProfile', {
@@ -202,6 +177,7 @@ const SwipeScreen = (props) => {
       />
     );
   };
+
   return (
     <SafeAreaView style={styles.safe}>
       <StatusBar style="light" />
@@ -237,8 +213,6 @@ const SwipeScreen = (props) => {
               swipeProfiles={swipe.results}
               setShowMode={setShowMode}
               setAllCardsSwiped={setAllCardsSwiped}
-              onUndoSwipe={undoSwipe}
-              onSwipe={onSwipe}
               showMode={showMode}
               renderNewMatch={renderNewMatch}
               showProfileHandler={showProfileHandler}

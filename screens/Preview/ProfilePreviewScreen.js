@@ -19,8 +19,6 @@ import HeaderButtom from '../../components/UI/HeaderButton';
 import InfoCard from '../../components/InfoCard';
 import Colors from '../../constants/Colors';
 
-// TODO: cuando el usuario aun no ha ido a my profile el current id no existe
-
 const ProfilePreviewScreen = (props) => {
   const BASE_URL = Constants.manifest.extra.LOCAL_URL;
   const dispatch = useDispatch();
@@ -61,7 +59,6 @@ const ProfilePreviewScreen = (props) => {
 
   let cardType;
   let imageStyle;
-  // if the profiles array > 1
   if (swipeProfile && !swipeProfile.members) {
     cardType = {
       position: 'absolute',

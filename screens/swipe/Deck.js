@@ -13,7 +13,7 @@ const SCREEN_HEIGHT = Dimensions.get('window').height;
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
 // TODO: handle likes
-// TODO:
+// TODO: handle if its match
 
 const Deck = (props) => {
   const {
@@ -21,8 +21,6 @@ const Deck = (props) => {
     setShowMode,
     showMode, // check to show a profile or a new match modal
     setAllCardsSwiped,
-    onUndoSwipe,
-    onSwipe,
     renderNewMatch,
     showProfileHandler,
   } = props;
@@ -30,25 +28,25 @@ const Deck = (props) => {
   const swipeRef = useRef();
   const currentDeckIndex = useRef(0);
 
-  // TODO: Handle swipe functions ----------------------------
-  const handleSwipe = (type, index) => {
-    // just the current profile or group that just swiped
-    const currentDeckItem = swipeProfiles[index];
+  // Swiper actions
+  const handleLike = (index) => {
+    console.log('LIKE');
+    const likedProfile = swipeProfiles[index];
+
+    console.log(swipeProfiles[index]);
+
+    // TODO: dispatch like
 
     currentDeckIndex.current = index;
   };
 
-  const undoSwipe = () => {
-    swipeRef.current.swipeBack((index) => {
-      const prevDeckItem = swipeProfiles[index - 1];
-
-      currentDeckIndex.current = index;
-      onUndoSwipe(prevDeckItem);
-    });
+  const handleDislike = (index) => {
+    currentDeckIndex.current = index;
   };
 
-  // TODO: Buttons functions swipe ----------------------------
+  // Buttons actions
   const onLikePressed = () => {
+    // swipeLeft() function activates the onLike function
     swipeRef.current.swipeLeft();
   };
 
@@ -57,19 +55,12 @@ const Deck = (props) => {
   };
 
   const onRewindPressed = () => {
-    swipeRef.current.swipeBack();
-  };
+    swipeRef.current.swipeBack((index) => {
+      const prevDeckItem = swipeProfiles[index - 1];
 
-  // TODO: Finger swipe actions ----------------------------
-  const onSwipedLeft = (index) => {
-    handleSwipe('Dislike', index);
+      currentDeckIndex.current = index;
+    });
   };
-
-  const onSwipedRight = (index) => {
-    handleSwipe('Like', index);
-  };
-
-  // TODO: Render functions ----------------------------
 
   // render a card with the profiles (single and group)
   const renderCard = (profile) => {
@@ -108,11 +99,12 @@ const Deck = (props) => {
           swipeBackCard
           overlayLabels={{
             left: {
-              title: 'NOPE',
+              title: 'DISLIKE',
               style: {
                 label: {
                   textAlign: 'right',
-                  color: 'red',
+                  color: Colors.red,
+                  fontSize: 25,
                 },
               },
             },
@@ -121,13 +113,16 @@ const Deck = (props) => {
               style: {
                 label: {
                   textAlign: 'left',
-                  color: 'green',
+                  color: Colors.calypso,
+                  fontSize: 25,
                 },
               },
             },
           }}
-          onSwipedLeft={onSwipedLeft}
-          onSwipedRight={onSwipedRight}
+          onSwipedLeft={handleDislike}
+          onSwipedRight={handleLike}
+          onSwipedTop={handleLike}
+          onSwipedBottom={handleDislike}
           renderCard={renderCard}
           onSwipedAll={() => setAllCardsSwiped(true)}
         />
