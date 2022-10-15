@@ -221,7 +221,7 @@ const MyProfileScreen = (props) => {
   };
 
   const handleOpenPreview = () => {
-    console.log('open preview');
+    props.navigation.navigate('Preview');
   };
 
   const handleOpenLink = useCallback(async (url) => {

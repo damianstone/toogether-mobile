@@ -1,23 +1,34 @@
-/* eslint-disable import/extensions */
-/* eslint-disable import/no-unresolved */
-import {
-  SWIPE_LIST_REQUEST,
-  SWIPE_LIST_SUCCESS,
-  SWIPE_LIST_FAIL,
-} from '../../constants/swipeConstants';
+import * as w from '../../constants/swipe';
 
-export const swipeListReducer = (state = { swipes: [] }, action) => {
+export const listSwipeReducer = (state = {}, action) => {
   switch (action.type) {
-    case SWIPE_LIST_REQUEST:
-      return { loading: true, swipes: [] };
+    case w.LIST_SWIPE_REQUEST:
+      return { loading: true };
 
-    case SWIPE_LIST_SUCCESS:
+    case w.LIST_SWIPE_SUCCESS:
       return {
-        loading: false,
-        swipes: [...action.payload.profiles],
+        data: { ...action.payload },
       };
 
-    case SWIPE_LIST_FAIL:
+    case w.LIST_SWIPE_FAIL:
+      return { loading: false, error: action.payload };
+
+    default:
+      return state;
+  }
+};
+
+export const getCurrentSwipeProfileReducer = (state = {}, action) => {
+  switch (action.type) {
+    case w.GET_CURRENT_SWIPE_PROFILE_REQUEST:
+      return { loading: true };
+
+    case w.GET_CURRENT_SWIPE_PROFILE_SUCCESS:
+      return {
+        data: { ...action.payload },
+      };
+
+    case w.GET_CURRENT_SWIPE_PROFILE_FAIL:
       return { loading: false, error: action.payload };
 
     default:

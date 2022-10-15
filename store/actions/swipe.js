@@ -1,32 +1,71 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
-import {
-  SWIPE_LIST_REQUEST,
-  SWIPE_LIST_SUCCESS,
-  SWIPE_LIST_FAIL,
-} from '../../constants/swipe';
+import Constants from 'expo-constants';
+import * as w from '../../constants/swipe';
 
-// GET THE PRODUCTS
-export const listSwipes =
-  (keyword = '') =>
-  async (dispatch) => {
+const BASE_URL = Constants.manifest.extra.LOCAL_URL;
+
+export const listSwipe = () => {
+  return async (dispatch) => {
     try {
-      dispatch({ type: SWIPE_LIST_REQUEST });
+      dispatch({ type: w.LIST_SWIPE_REQUEST });
 
-      const { data } = await axios.get(
-        `http://127.0.0.1:8000/api/profiles${keyword}`
-      );
+      const userData = JSON.parse(await AsyncStorage.getItem('@userData'));
+
+      const config = {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+        Authorization: 'Bearer ' + userData.token,
+      };
+
+      const { data } = await axios({
+        method: 'get',
+        url: `${BASE_URL}/api/v1/swipe/`,
+        headers: config,
+      });
 
       dispatch({
-        type: SWIPE_LIST_SUCCESS,
-        payload: data, // . the payload is the entire data
+        type: w.LIST_SWIPE_SUCCESS,
+        payload: data,
       });
     } catch (error) {
       dispatch({
-        type: SWIPE_LIST_FAIL,
-        payload:
-          error.response && error.response.data.detail
-            ? error.response.data.detail
-            : error.message,
+        type: w.LIST_SWIPE_FAIL,
+        payload: error,
       });
     }
   };
+};
+
+// get the current swipe profile that could be as a single profile or a group (show preview porpuses)
+export const getCurrentSwipeProfile = () => {
+  return async (dispatch) => {
+    try {
+      dispatch({ type: w.GET_CURRENT_SWIPE_PROFILE_REQUEST });
+
+      const userData = JSON.parse(await AsyncStorage.getItem('@userData'));
+
+      const config = {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+        Authorization: 'Bearer ' + userData.token,
+      };
+
+      const { data } = await axios({
+        method: 'get',
+        url: `${BASE_URL}/api/v1/swipe/actions/get-swipe-profile/`,
+        headers: config,
+      });
+
+      dispatch({
+        type: w.GET_CURRENT_SWIPE_PROFILE_SUCCESS,
+        payload: data,
+      });
+    } catch (error) {
+      dispatch({
+        type: w.GET_CURRENT_SWIPE_PROFILE_FAIL,
+        payload: error,
+      });
+    }
+  };
+};

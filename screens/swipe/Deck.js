@@ -1,59 +1,45 @@
+import React, { useState, useEffect, useRef } from 'react';
 import { StyleSheet, Text, View, Dimensions, Modal } from 'react-native';
-import React, { useRef } from 'react';
 import Swiper from 'react-native-deck-swiper';
-import tw from 'tailwind-rn';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
+import tw from 'tailwind-rn';
 import SwipeCard from '../../components/SwipeCard';
 import SwipeButtons from '../../components/SwipeButtons';
-import ProfileModal from './ProfileModal';
+import Colors from '../../constants/Colors';
 import styles from './styles';
 
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
-/* 
-Deck - muestra los grupos o perfiles individuales
-
-componente del swipeScreen 
-basicamente toda la implementacion del swipe
-
-manejo de los swipes, que pasa si es un like, que pasa si es dislike, etc
-
-muestra los perfiles, grupos y llama a la funcion newmatch si es que hay un match lo que renderiza 
-en pantalla completa newmatchscren
-
-llama a la funcion renderEmpy, que muestra cuando no hay mas perfiles que mostrar
-*/
+// TODO: handle likes
+// TODO:
 
 const Deck = (props) => {
-  // PROPS
   const {
-    swipeProfiles, // total groups or profiles to swipe
-    setShowMode, // set show mode
-    onUndoSwipe, //
-    onSwipe, //
+    swipeProfiles,
+    setShowMode,
     showMode, // check to show a profile or a new match modal
-    onAllCardsSwiped, //
-    renderEmptyState, //
-    renderNewMatch, //
-    showProfileHandler, //
+    setAllCardsSwiped,
+    onUndoSwipe,
+    onSwipe,
+    renderNewMatch,
+    showProfileHandler,
   } = props;
 
-  // REF
-  const swipeRef = useRef(null);
+  const swipeRef = useRef();
   const currentDeckIndex = useRef(0);
 
-  // HANDLE SWIPE
+  // TODO: Handle swipe functions ----------------------------
   const handleSwipe = (type, index) => {
+    // just the current profile or group that just swiped
     const currentDeckItem = swipeProfiles[index];
 
     currentDeckIndex.current = index;
   };
 
-  // REWIND SWIPE
   const undoSwipe = () => {
-    useSwiper.current.swipeBack((index) => {
+    swipeRef.current.swipeBack((index) => {
       const prevDeckItem = swipeProfiles[index - 1];
 
       currentDeckIndex.current = index;
@@ -61,6 +47,7 @@ const Deck = (props) => {
     });
   };
 
+  // TODO: Buttons functions swipe ----------------------------
   const onLikePressed = () => {
     swipeRef.current.swipeLeft();
   };
@@ -73,6 +60,7 @@ const Deck = (props) => {
     swipeRef.current.swipeBack();
   };
 
+  // TODO: Finger swipe actions ----------------------------
   const onSwipedLeft = (index) => {
     handleSwipe('Dislike', index);
   };
@@ -81,55 +69,22 @@ const Deck = (props) => {
     handleSwipe('Like', index);
   };
 
-  const onSwipedAll = () => {
-    onAllCardsSwiped();
-  };
+  // TODO: Render functions ----------------------------
 
-  // in swipe card the user want to open a specific profile in the group
-  // el id
-  // NO WORK
-  const renderProfile = (item, isDone) => {
-    return (
-      item && (
-        <ProfileModal
-          key={'CardDetail' + item.id}
-          photosArr={item.photos}
-          firstName={item.firstname}
-          lastName={item.lastname}
-          age={item.age}
-          university={item.university}
-          location={item.location}
-          description={item.description}
-          setShowMode={setShowMode}
-          onSwipeRight={onLikePressed}
-          onSwipeLeft={onDislikePressed}
-          isDone={isDone}
-        />
-      )
-    );
-  };
-
-  // render a card containing all of the profile members of the group
-  const renderCard = (elem) => {
-    // TRANFORM THE OBJECT INTO AN ARRAY WHEN IS NOT A GROUP?
-    const name = 'NAME GROUP';
+  // render a card with the profiles (single and group)
+  const renderCard = (profile) => {
     return (
       <SwipeCard
-        key={elem._id}
-        firstName={name}
-        profile={elem}
-        onProfile={showProfileHandler}
+        key={profile.id}
+        isGroup={'members' in profile}
+        profile={profile}
+        showProfileHandler={showProfileHandler}
         setShowMode={setShowMode}
         onSwipeRight={onLikePressed}
         onSwipeLeft={onDislikePressed}
-        onRenderProfile={renderProfile}
       />
     );
   };
-
-  if (swipeProfiles.length === 0) {
-    return <View>{renderEmptyState()}</View>;
-  }
 
   // dependiendo del showMode deberia retornar
   // 0 swipe
@@ -140,13 +95,14 @@ const Deck = (props) => {
       <View style={styles.swipeContainer}>
         <Swiper
           containerStyle={tw('bg-transparent')}
-          showSecondCard
           cards={swipeProfiles}
           ref={swipeRef}
-          stackSize={3}
+          stackSize={2}
           cardIndex={0}
-          verticalSwipe={false}
+          verticalSwipe
+          infinite={false}
           stackAnimationFriction={10}
+          showSecondCard
           animateCardOpacity
           animateOverlayLabelsOpacity
           swipeBackCard
@@ -173,7 +129,7 @@ const Deck = (props) => {
           onSwipedLeft={onSwipedLeft}
           onSwipedRight={onSwipedRight}
           renderCard={renderCard}
-          onSwipedAll={onSwipedAll}
+          onSwipedAll={() => setAllCardsSwiped(true)}
         />
       </View>
       <View style={styles.buttonsContainer}>
@@ -184,14 +140,10 @@ const Deck = (props) => {
           onRewind={onRewindPressed}
         />
       </View>
-      {/* PROBLE RENDERIZAR SHOW PRPFILE  */}
-      {showMode == 1 && swipeProfiles[currentDeckIndex.current] && (
-        <Modal animationType="slide">{renderProfile}</Modal>
-      )}
-      {showMode == 2 && (
+      {showMode === 2 && (
         <Modal
           transparent={false}
-          visible={showMode == 2}
+          visible={showMode === 2}
           animationType="slide">
           <View
             style={{

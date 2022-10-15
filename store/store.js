@@ -1,6 +1,7 @@
 import { applyMiddleware, combineReducers, createStore } from 'redux';
 import thunk from 'redux-thunk';
 import {
+  userLocationReducer,
   authenticateReducer,
   tokenRefreshReducer,
   userAddPhotoReducer,
@@ -14,6 +15,11 @@ import {
   userGetProfileReducer,
 } from './reducers/user';
 import {
+  listBlockedProfilesReducer,
+  blockProfileReducer,
+  disblockProfileReducer,
+} from './reducers/block';
+import {
   listGroupReducer,
   getGroupReducer,
   createGroupReducer,
@@ -22,9 +28,16 @@ import {
   leaveGroupReducer,
   removeMemberReducer,
 } from './reducers/group';
+import {
+  listSwipeReducer,
+  getCurrentSwipeProfileReducer,
+} from './reducers/swipe';
+
+// TODO: fix this error: when reload here screen change to login
 
 const reducer = combineReducers({
   // profile API
+  userLocation: userLocationReducer,
   auth: authenticateReducer,
   tokenRefresh: tokenRefreshReducer,
   userRegister: userRegisterReducer,
@@ -37,6 +50,10 @@ const reducer = combineReducers({
   userAddPhoto: userAddPhotoReducer,
   userRemovePhoto: userRemovePhotoReducer,
   userListPhotos: userListPhotosReducer,
+  // Block API
+  listBlockedProfiles: listBlockedProfilesReducer,
+  blockProfile: blockProfileReducer,
+  disblockProfileReducer: disblockProfileReducer,
   // Group API
   listGroup: listGroupReducer,
   getGroup: getGroupReducer,
@@ -45,6 +62,9 @@ const reducer = combineReducers({
   joinGroup: joinGroupReducer,
   leaveGroup: leaveGroupReducer,
   removeMember: removeMemberReducer,
+  // Swipe API
+  listSwipe: listSwipeReducer,
+  getCurrentSwipeProfile: getCurrentSwipeProfileReducer,
 });
 
 const initialState = {};

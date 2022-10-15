@@ -2,11 +2,55 @@ import { Platform } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import Constants from 'expo-constants';
+import * as Location from 'expo-location';
 import * as c from '../../constants/user';
 
 const BASE_URL = Constants.manifest.extra.LOCAL_URL;
 
+// -------------------------------- LOCATION --------------------------------
+
+export const userLocation = () => {
+  return async (dispatch) => {
+    try {
+      dispatch({ type: c.USER_LOCATION_REQUEST });
+
+      const userData = JSON.parse(await AsyncStorage.getItem('@userData'));
+
+      const config = {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+        Authorization: `Bearer ${userData.token}`,
+      };
+
+      const location = await Location.getCurrentPositionAsync({
+        accuracy: 3,
+      });
+
+      const { data } = await axios({
+        method: 'POST',
+        url: `${BASE_URL}/api/v1/profiles/actions/location/`,
+        headers: config,
+        data: {
+          lat: location.coords.latitude,
+          lon: location.coords.longitude,
+        },
+      });
+
+      dispatch({
+        type: c.USER_LOCATION_SUCCESS,
+        payload: data,
+      });
+    } catch (error) {
+      dispatch({
+        type: c.USER_LOCATION_FAIL,
+        payload: error,
+      });
+    }
+  };
+};
+
 // -------------------------------- LOGIN / REGISTER ACTIONS --------------------------------
+
 export const authenticate = (userDataObj) => {
   return (dispatch) => {
     dispatch({ type: c.AUTHENTICATE, payload: userDataObj });
@@ -466,8 +510,3 @@ export const listUserPhotos = () => {
     }
   };
 };
-
-// -------------------------------- BLOCK ACTIONS --------------------------------
-export const blockUser = () => {};
-
-export const disblockUser = () => {};

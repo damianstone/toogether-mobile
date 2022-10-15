@@ -1,101 +1,249 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
 import {
   View,
   Image,
+  Share,
   Platform,
   SafeAreaView,
-  TouchableOpacity,
-  Text,
+  Alert,
 } from 'react-native';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
+import { withNavigation } from 'react-navigation';
 import { StatusBar } from 'expo-status-bar';
-import { useSelector, useDispatch, ReactReduxContext } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { verifyLocationPermissions } from '../../utils/permissions';
+import { userLocation } from '../../store/actions/user';
+import { listSwipe } from '../../store/actions/swipe';
+import * as b from '../../constants/block';
 
-import styles from './styles';
 import Deck from './Deck';
 import HeaderButtom from '../../components/UI/HeaderButton';
-import NoMoreCards from '../../components/NoMoreCards';
 import ActivityModal from '../../components/UI/ActivityModal';
-import NewMatch from '../../components/NewMatch';
-import { listSwipes } from '../../store/actions/swipe';
-
-import axios from 'axios';
 import Avatar from '../../components/UI/Avatar';
+import NewMatch from '../../components/NewMatch';
+import SwipeError from '../../components/SwipeError';
+import GROUPS from '../../data/dummy-data';
+import Colors from '../../constants/Colors';
+import styles from './styles';
+
+// TODO: manage render match screen
+// TODO: manage render cards not found
+// TODO: manage render location error
+// TODO: manage render all cards swiped
 
 const SwipeScreen = (props) => {
   const dispatch = useDispatch();
-  const [swipes, setSwipes] = useState([]);
+  const swipeTracker = useRef(null);
+  const [swipes, setSwipes] = useState([...GROUPS]);
   const [showMode, setShowMode] = useState(0);
-  const [currentMatchData, setCurrentMatchData] = useState(null);
 
-  const [loading, setLoading] = useState(false);
-  const [noCards, setNoCards] = useState(false);
+  const [localLoading, setLocalLoading] = useState(false);
+  const [allCardsSwiped, setAllCardsSwiped] = useState(false);
+  const [locationError, setLocationError] = useState(false);
 
+  const userLocationReducer = useSelector((state) => state.userLocation);
+  const {
+    loading: postLocationLoading,
+    error: postLocationError,
+    success: postLocationSuccess,
+  } = userLocationReducer;
+
+  const listSwipeReducer = useSelector((state) => state.listSwipe);
+  const {
+    loading: loadingSwipe,
+    error: errorSwipe,
+    data: swipe,
+  } = listSwipeReducer;
+
+  const blockProfileReducer = useSelector((state) => state.blockProfile);
+  const { data: blockData } = blockProfileReducer;
+
+  useEffect(() => {
+    const permissionGranted = verifyLocationPermissions();
+    if (permissionGranted) {
+      dispatch(userLocation());
+    } else {
+      setLocationError(true);
+      return Alert.alert(
+        'Insufficient Permissions!',
+        'You need to grant Location permissions to be able to access your location',
+        [{ text: 'Okay', onPress: () => verifyLocationPermissions() }]
+      );
+    }
+    if (postLocationError) {
+      setLocationError(true);
+    } else {
+      setLocationError(false);
+    }
+    return null;
+  }, [dispatch, locationError]);
+
+  useEffect(() => {
+    dispatch(listSwipe());
+  }, [dispatch]);
+
+  // TODO: fix render when enter the screen
+
+  // add listener to fetch the user and re fetch it
+  // useEffect(() => {
+  //   const unsubscribe = props.navigation.addListener('didFocus', () => {
+  //     console.log('RELOAD SWIPE');
+  //       reload();
+  //   });
+  //   return unsubscribe;
+  // }, [props.navigation]);
+
+  const reload = useCallback(async () => {
+    setLocalLoading(true);
+    try {
+      await dispatch(userLocation());
+      await dispatch(listSwipe());
+    } catch (err) {
+      console.log(err);
+    }
+    setAllCardsSwiped(false);
+    setLocalLoading(false);
+  }, [dispatch]);
+
+  // TODO: why those functions ??--------
   const undoSwipe = (swipeToUndo) => {
     if (!swipeToUndo) {
       return;
     }
     const swipeToUndoId = swipeToUndo.id || swipeToUndo.userID;
-    const userID = user.id || user.userID;
+    const userID = 'id';
 
     swipeTracker.current.removeSwipe(swipeToUndoId, userID);
   };
 
   const onSwipe = (type, swipeItem) => {
+    const user = {
+      name: 'Damian',
+    };
     if (swipeItem) {
       swipeTracker.current.addSwipe(user, swipeItem, type, (response) => {});
     }
   };
-
-  const onAllCardsSwiped = () => {
-    setNoCards(true);
-    return <NoMoreCards />;
-  };
+  // TODO: ------------------------------
 
   // pasa como props al deck y del deck al swipecard
-  const showProfileHandler = (id) => {
-    props.navigation.navigate('Profile', { profileId: id });
+  const showProfileHandler = (profile, isGroup) => {
+    props.navigation.navigate('SwipeProfile', {
+      profile: profile,
+      isGroup: isGroup,
+    });
   };
 
-  const renderEmptyState = () => {
-    setNoCards(true);
-    return <NoMoreCards />;
+  const onShareApp = async () => {
+    try {
+      const result = await Share.share({
+        message:
+          'Toogether App | The app to have fun and meet other students, download it using the following link ;) URL',
+      });
+      console.log('SHARE RESULT -> ', result);
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+          // shared with activity type of result.activityType
+          // TODO: dispatch list swipes
+          console.log('SHARE RESULT -> ', result.activityType);
+        } else {
+          // shared
+        }
+      } else if (result.action === Share.dismissedAction) {
+        // dismissed
+        // just for IOS
+        // TODO: list swipes
+      }
+    } catch (error) {
+      alert(error.message);
+    }
   };
 
   const renderNewMatch = () => {
-    return <NewMatch url={currentMatchData.profilePictureURL} />;
+    console.log('match');
   };
 
+  const renderAllCardSwiped = () => {
+    return (
+      <SwipeError
+        imageUrl={require('../../assets/images/radar.png')}
+        title="Why not? 🤔"
+        text="There seems to be no one around you using Toogether. Why not tell them to download it? ;)"
+        onPress={onShareApp}
+        buttonText="Share this amazing app"
+        reload
+        onReload={reload}
+      />
+    );
+  };
+
+  const renderNoCardsFound = () => {
+    return (
+      <SwipeError
+        imageUrl={require('../../assets/images/radar.png')}
+        title="Why not? 🤔"
+        text="There seems to be no one around you using Toogether. Why not tell them to download it? ;)"
+        onPress={onShareApp}
+        buttonText="Share this amazing app"
+        reload
+        onReload={reload}
+      />
+    );
+  };
+
+  const renderLocationError = () => {
+    return (
+      <SwipeError
+        imageUrl={require('../../assets/images/radar.png')}
+        title="Allow your location"
+        text="In order to render profiles and groups around you, we need your location ;)"
+        onPress={verifyLocationPermissions}
+        buttonText="Enable location service"
+      />
+    );
+  };
   return (
     <SafeAreaView style={styles.safe}>
       <StatusBar style="light" />
       <View style={styles.screen}>
-        {swipes.length > 0 && (
-          <Deck
-            swipeProfiles={swipes}
-            setShowMode={setShowMode}
-            onUndoSwipe={undoSwipe}
-            onSwipe={onSwipe}
-            showMode={showMode}
-            onAllCardsSwiped={onAllCardsSwiped}
-            renderEmptyState={renderEmptyState}
-            renderNewMatch={renderNewMatch}
-            showProfileHandler={showProfileHandler}
-          />
-        )}
-        {swipes.length === 0 && loading && (
-          <ActivityModal
-            loading={swipes.length === 0}
-            title={'Please wait'}
-            size={'large'}
-            activityColor={'white'}
-            titleColor={'white'}
-            activityWrapperStyle={{
-              backgroundColor: '#404040',
-            }}
-          />
-        )}
-        {noCards === true && renderEmptyState()}
+        {locationError && renderLocationError()}
+
+        {allCardsSwiped && renderAllCardSwiped()}
+
+        {!locationError &&
+          swipe &&
+          swipe.results.length === 0 &&
+          renderNoCardsFound()}
+
+        {loadingSwipe ||
+          (localLoading && (
+            <ActivityModal
+              loading
+              title="Please wait"
+              size="large"
+              activityColor="white"
+              titleColor="white"
+              activityWrapperStyle={{
+                backgroundColor: '#404040',
+              }}
+            />
+          ))}
+
+        {swipe &&
+          swipe.results.length > 0 &&
+          !locationError &&
+          !allCardsSwiped && (
+            <Deck
+              swipeProfiles={swipe.results}
+              setShowMode={setShowMode}
+              setAllCardsSwiped={setAllCardsSwiped}
+              onUndoSwipe={undoSwipe}
+              onSwipe={onSwipe}
+              showMode={showMode}
+              renderNewMatch={renderNewMatch}
+              showProfileHandler={showProfileHandler}
+            />
+          )}
       </View>
     </SafeAreaView>
   );
@@ -131,4 +279,4 @@ SwipeScreen.navigationOptions = (navData) => {
   };
 };
 
-export default SwipeScreen;
+export default withNavigation(SwipeScreen);

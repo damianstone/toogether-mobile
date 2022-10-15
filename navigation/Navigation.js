@@ -21,6 +21,7 @@ import JoinGroupScreen from '../screens/Group/JoinGroupScreen';
 import GroupScreen from '../screens/Group/GroupScreen';
 
 import MyProfileScreen from '../screens/MyProfile/MyProfileScreen';
+import ProfilePreviewScreen from '../screens/Preview/ProfilePreviewScreen';
 import SettingScreen from '../screens/MyProfile/SettingScreen';
 import EditProfileScreen from '../screens/MyProfile/EditProfileScreen';
 
@@ -52,6 +53,44 @@ const AuthNavigator = createStackNavigator(
     defaultNavigationOptions: {
       headerShown: false,
     },
+  }
+);
+
+const ProfilePreviewNavigator = createStackNavigator(
+  {
+    ProfilePreview: {
+      screen: ProfilePreviewScreen,
+      navigationOptions: {
+        headerTitle: 'Profile Preview',
+      },
+    },
+    Profile: ProfileModalScreen,
+  },
+  {
+    mode: 'modal',
+    headerMode: 'none',
+    tabBarVisible: false,
+  }
+);
+
+const MyProfileNavigator = createStackNavigator(
+  {
+    MyProfile: {
+      screen: MyProfileScreen,
+      navigationOptions: {
+        gestureDirection: 'horizontal-inverted',
+      },
+    },
+    Preview: ProfilePreviewNavigator,
+    Setting: {
+      screen: SettingScreen,
+    },
+    EditProfile: {
+      screen: EditProfileScreen,
+    },
+  },
+  {
+    defaultNavigationOptions: defaultNavOptions,
   }
 );
 
@@ -108,25 +147,6 @@ const GroupNavigator = createStackNavigator(
     },
   }
 );
-const MyProfileNavigator = createStackNavigator(
-  {
-    MyProfile: {
-      screen: MyProfileScreen,
-      navigationOptions: {
-        gestureDirection: 'horizontal-inverted',
-      },
-    },
-    Setting: {
-      screen: SettingScreen,
-    },
-    EditProfile: {
-      screen: EditProfileScreen,
-    },
-  },
-  {
-    defaultNavigationOptions: defaultNavOptions,
-  }
-);
 
 // CREAR NAVBAR
 const tabScreenCnfig = {
@@ -180,6 +200,9 @@ const tabScreenCnfig = {
               : Colors.bg,
           statusBarStyle: Colors.bg,
         },
+        tabBarVisible:
+          navigation.state.routes[navigation.state.index].routeName !==
+          'ProfilePreview',
       },
     }),
   },
@@ -220,7 +243,7 @@ const ToogetherTab =
 const HomeNavigator = createStackNavigator(
   {
     Main: ToogetherTab,
-    Profile: ProfileModalScreen,
+    SwipeProfile: ProfileModalScreen,
   },
   {
     mode: 'modal',

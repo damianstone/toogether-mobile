@@ -1,5 +1,25 @@
 import * as c from '../../constants/user';
 
+export const userLocationReducer = (state = {}, action) => {
+  switch (action.type) {
+    case c.USER_LOCATION_REQUEST:
+      return {
+        loading: true,
+      };
+    case c.USER_LOCATION_SUCCESS:
+      return {
+        success: true,
+      };
+    case c.USER_LOCATION_FAIL:
+      return {
+        loading: false,
+        error: action.payload,
+      };
+    default:
+      return state;
+  }
+};
+
 // -------------------------------- LOGIN / REGISTER REDUCERS --------------------------------
 export const authenticateReducer = (state = {}, action) => {
   switch (action.type) {
