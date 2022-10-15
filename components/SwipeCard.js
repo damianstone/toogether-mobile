@@ -15,10 +15,6 @@ import InfoCard from './InfoCard';
 
 const SwipeCard = (props) => {
   const BASE_URL = Constants.manifest.extra.LOCAL_URL;
-  const showProfilee = (profile) => {
-    props.onRenderProfile(profile);
-    props.setShowMode(1);
-  };
 
   let cardType;
   let imageStyle;
@@ -88,13 +84,14 @@ const SwipeCard = (props) => {
           paginationStyle={{ top: 5, bottom: null }}
           removeClippedSubviews={false}
           showsButtons
+          buttonWrapperStyle={{ color: Colors.placeholder }}
           style={styles.wrapper}>
           {props.isGroup ? (
             props.profile.members.map((profile) => {
               return (
                 <ImageBackground
-                  imageStyle={{ ...imageStyle }}
                   key={profile.id}
+                  imageStyle={{ ...imageStyle }}
                   resizeMode="cover"
                   source={{ uri: `${BASE_URL}${profile.photos[0].image}` }}
                   style={styles.image}>

@@ -1,23 +1,28 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, ImageBackground, Alert } from 'react-native';
+import { withNavigationFocus } from 'react-navigation';
 import Swiper from 'react-native-swiper';
 import Constants from 'expo-constants';
 import { useDispatch, useSelector } from 'react-redux';
 import { blockProfile } from '../../store/actions/block';
 import { checkServerError, check400Error } from '../../utils/errors';
+import * as b from '../../constants/block';
 
 import ActivityModal from '../../components/UI/ActivityModal';
 import Loader from '../../components/UI/Loader';
 import DetailBottomSheet from '../../components/DetailBottomSheet';
 import Colors from '../../constants/Colors';
 
-// TODO: should I make a call to the profiler or receive the data as props
+// TODO: like action
+
+// TODO: solve error with block profile
 
 const ProfileModalScreen = (props) => {
   const dispatch = useDispatch();
   const BASE_URL = Constants.manifest.extra.LOCAL_URL;
   const profile = props.navigation.getParam('profile');
   const isGroup = props.navigation.getParam('isGroup');
+  const preview = props.navigation.getParam('preview');
 
   const blockProfileReducer = useSelector((state) => state.blockProfile);
   const {
@@ -25,28 +30,6 @@ const ProfileModalScreen = (props) => {
     error: blockError,
     data: blockData,
   } = blockProfileReducer;
-
-  // TODO: add buttom sheet
-
-  // TODO: like action
-
-  // TODO: solve error with block profile
-
-  useEffect(() => {
-    if (blockError) {
-      if (blockError?.response?.status === 400) {
-        check400Error(blockError);
-      } else {
-        checkServerError(blockError);
-      }
-      checkServerError(blockError);
-    }
-
-    if (blockData) {
-      props.navigation.goBack(0);
-    }
-    return null;
-  }, [blockError]);
 
   const handleLike = () => {};
 
@@ -76,67 +59,88 @@ const ProfileModalScreen = (props) => {
     );
   };
 
+  if (blockError) {
+    if (blockError?.response?.status === 400) {
+      check400Error(blockError);
+    } else {
+      checkServerError(blockError);
+    }
+    checkServerError(blockError);
+  }
+
+  if (blockData) {
+    Alert.alert(
+      'Profile blocked',
+      'None of you will be able to see their profiles',
+      [
+        {
+          text: 'OK',
+          onPress: () => props.navigation.navigate('Swipe'),
+        },
+      ]
+    );
+    dispatch({ type: b.BLOCK_PROFILE_RESET });
+  }
+
   return (
     <View style={{ flex: 1 }}>
-      {blockLoading && <Loader />}
-      {!blockLoading && (
-        <>
-          <Swiper
-            style={styles.wrapper}
-            removeClippedSubviews={false}
-            showsButtons
-            loop={false}
-            paginationStyle={{ top: 5, bottom: null }}
-            dot={
-              <View
-                style={{
-                  backgroundColor: 'rgba(0,0,0,.2)',
-                  width: 8,
-                  height: 8,
-                  borderRadius: 4,
-                  margin: 4,
-                }}
+      <>
+        <Swiper
+          style={styles.wrapper}
+          removeClippedSubviews={false}
+          showsButtons
+          loop={false}
+          paginationStyle={{ top: 5, bottom: null }}
+          dot={
+            <View
+              style={{
+                backgroundColor: 'rgba(0,0,0,.2)',
+                width: 8,
+                height: 8,
+                borderRadius: 4,
+                margin: 4,
+              }}
+            />
+          }
+          activeDot={
+            <View
+              style={{
+                backgroundColor: Colors.orange,
+                width: 8,
+                height: 8,
+                borderRadius: 4,
+                margin: 4,
+              }}
+            />
+          }>
+          {profile.photos.map((photo) => {
+            return (
+              <ImageBackground
+                key={profile.id}
+                style={styles.image}
+                imageStyle={styles.imageStyle}
+                source={{ uri: `${BASE_URL}${photo.image}` }}
+                resizeMode="cover"
               />
-            }
-            activeDot={
-              <View
-                style={{
-                  backgroundColor: Colors.orange,
-                  width: 8,
-                  height: 8,
-                  borderRadius: 4,
-                  margin: 4,
-                }}
-              />
-            }>
-            {profile.photos.map((photo) => {
-              return (
-                <ImageBackground
-                  key={profile.id}
-                  style={styles.image}
-                  imageStyle={styles.imageStyle}
-                  source={{ uri: `${BASE_URL}${photo.image}` }}
-                  resizeMode="cover"
-                />
-              );
-            })}
-          </Swiper>
-          <DetailBottomSheet
-            onClose={() => props.navigation.goBack(null)}
-            handleLike={handleLike}
-            openAlert={openAlert}
-            isGroup={isGroup}
-            firstname={profile.firstname}
-            lastname={profile.lastname}
-            age={profile.age}
-            city={profile.city}
-            live_in={profile.live_in}
-            from={profile.nationality}
-            university={profile.university}
-            description={profile.description}
-          />
-        </>
-      )}
+            );
+          })}
+        </Swiper>
+        <DetailBottomSheet
+          onClose={() => props.navigation.goBack()}
+          handleLike={handleLike}
+          openAlert={openAlert}
+          isGroup={isGroup}
+          preview={preview}
+          firstname={profile.firstname}
+          lastname={profile.lastname}
+          age={profile.age}
+          city={profile.city}
+          live_in={profile.live_in}
+          from={profile.nationality}
+          university={profile.university}
+          description={profile.description}
+        />
+      </>
     </View>
   );
 };

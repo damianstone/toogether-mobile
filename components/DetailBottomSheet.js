@@ -6,7 +6,7 @@ import Colors from '../constants/Colors';
 import SwipeButtons from './SwipeButtons';
 import BottomSheet from './BottomSheet';
 
-const DetailCard = (props) => {
+const DetailBottomSheet = (props) => {
   const {
     firstname,
     lastname,
@@ -68,7 +68,7 @@ const DetailCard = (props) => {
 
       {filtered &&
         filtered.map((obj) => (
-          <View style={styles.infoWrapper}>
+          <View style={styles.infoWrapper} key={obj.detail}>
             <Ionicons color="black" name={obj.iconName} size={16} />
             <Text style={styles.text}>{obj.detail}</Text>
           </View>
@@ -83,28 +83,29 @@ const DetailCard = (props) => {
         <Text style={styles.descriptionText}>{description}</Text>
       </View>
 
-      <View style={styles.line} />
-
-      <SwipeButtons
-        rewind={false}
-        onLeft={props.onClose}
-        onRight={props.handleLike}
-      />
-
-      <View style={styles.line} />
-
-      <View style={styles.reportContainer}>
-        <Button
-          title="Block profile"
-          color={Colors.red}
-          onPress={props.openAlert}
-        />
-      </View>
+      {!props.preview && (
+        <>
+          <View style={styles.line} />
+          <SwipeButtons
+            rewind={false}
+            onLeft={props.onClose}
+            onRight={props.handleLike}
+          />
+          <View style={styles.line} />
+          <View style={styles.reportContainer}>
+            <Button
+              title="Block profile"
+              color={Colors.red}
+              onPress={props.openAlert}
+            />
+          </View>
+        </>
+      )}
     </ScrollView>
   );
 };
 
-export default DetailCard;
+export default DetailBottomSheet;
 
 const styles = StyleSheet.create({
   screen: {

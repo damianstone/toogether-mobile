@@ -17,3 +17,21 @@ export const listSwipeReducer = (state = {}, action) => {
       return state;
   }
 };
+
+export const getCurrentSwipeProfileReducer = (state = {}, action) => {
+  switch (action.type) {
+    case w.GET_CURRENT_SWIPE_PROFILE_REQUEST:
+      return { loading: true };
+
+    case w.GET_CURRENT_SWIPE_PROFILE_SUCCESS:
+      return {
+        data: { ...action.payload },
+      };
+
+    case w.GET_CURRENT_SWIPE_PROFILE_FAIL:
+      return { loading: false, error: action.payload };
+
+    default:
+      return state;
+  }
+};

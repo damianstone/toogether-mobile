@@ -8,6 +8,7 @@ import {
   Alert,
 } from 'react-native';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
+import { withNavigation } from 'react-navigation';
 import { StatusBar } from 'expo-status-bar';
 import { useSelector, useDispatch } from 'react-redux';
 import { verifyLocationPermissions } from '../../utils/permissions';
@@ -37,7 +38,6 @@ const SwipeScreen = (props) => {
   const [showMode, setShowMode] = useState(0);
 
   const [localLoading, setLocalLoading] = useState(false);
-  const [noCards, setNoCards] = useState(false);
   const [allCardsSwiped, setAllCardsSwiped] = useState(false);
   const [locationError, setLocationError] = useState(false);
 
@@ -80,20 +80,18 @@ const SwipeScreen = (props) => {
 
   useEffect(() => {
     dispatch(listSwipe());
-    if (swipe && swipe.results.length === 0) {
-      setNoCards(true);
-    } else {
-      setNoCards(false);
-    }
   }, [dispatch]);
 
+  // TODO: fix render when enter the screen
+
   // add listener to fetch the user and re fetch it
-  useEffect(() => {
-    const unsubscribe = props.navigation.addListener('focus', () => {
-      reload();
-    });
-    return unsubscribe;
-  }, [reload]);
+  // useEffect(() => {
+  //   const unsubscribe = props.navigation.addListener('didFocus', () => {
+  //     console.log('RELOAD SWIPE');
+  //       reload();
+  //   });
+  //   return unsubscribe;
+  // }, [props.navigation]);
 
   const reload = useCallback(async () => {
     setLocalLoading(true);
@@ -130,7 +128,7 @@ const SwipeScreen = (props) => {
 
   // pasa como props al deck y del deck al swipecard
   const showProfileHandler = (profile, isGroup) => {
-    props.navigation.navigate('Profile', {
+    props.navigation.navigate('SwipeProfile', {
       profile: profile,
       isGroup: isGroup,
     });
@@ -142,10 +140,12 @@ const SwipeScreen = (props) => {
         message:
           'Toogether App | The app to have fun and meet other students, download it using the following link ;) URL',
       });
+      console.log('SHARE RESULT -> ', result);
       if (result.action === Share.sharedAction) {
         if (result.activityType) {
           // shared with activity type of result.activityType
           // TODO: dispatch list swipes
+          console.log('SHARE RESULT -> ', result.activityType);
         } else {
           // shared
         }
@@ -202,21 +202,6 @@ const SwipeScreen = (props) => {
       />
     );
   };
-
-  // if (blockData) {
-  //   Alert.alert(
-  //     'Profile blocked',
-  //     'None of you will be able to see their profiles',
-  //     [
-  //       {
-  //         text: 'OK',
-  //       },
-  //     ]
-  //   );
-  //   dispatch({ type: b.BLOCK_PROFILE_RESET });
-  //   reload();
-  // }
-
   return (
     <SafeAreaView style={styles.safe}>
       <StatusBar style="light" />
@@ -225,7 +210,11 @@ const SwipeScreen = (props) => {
 
         {allCardsSwiped && renderAllCardSwiped()}
 
-        {noCards && !locationError && renderNoCardsFound()}
+        {!locationError &&
+          swipe &&
+          swipe.results.length === 0 &&
+          renderNoCardsFound()}
+
         {loadingSwipe ||
           (localLoading && (
             <ActivityModal
@@ -243,7 +232,6 @@ const SwipeScreen = (props) => {
         {swipe &&
           swipe.results.length > 0 &&
           !locationError &&
-          !noCards &&
           !allCardsSwiped && (
             <Deck
               swipeProfiles={swipe.results}
@@ -291,4 +279,4 @@ SwipeScreen.navigationOptions = (navData) => {
   };
 };
 
-export default SwipeScreen;
+export default withNavigation(SwipeScreen);

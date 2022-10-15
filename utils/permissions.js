@@ -20,7 +20,7 @@ export const verifyPermissions = async () => {
 
 export const verifyLocationPermissions = async () => {
   const result = await Location.getForegroundPermissionsAsync();
-  console.log('RESULT -> ', result);
+
   if (!result.granted) {
     const askPermissions = await Location.requestForegroundPermissionsAsync();
     if (!askPermissions.granted) {

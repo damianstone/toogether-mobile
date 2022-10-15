@@ -438,17 +438,6 @@ GroupScreen.navigationOptions = (navData) => {
         }}
       />
     ),
-    headerRight: () => (
-      <HeaderButtons HeaderButtonComponent={HeaderButtom}>
-        <Item
-          iconName={Platform.OS === 'android' ? 'md-cart' : 'ios-arrow-back'}
-          onPress={() => {
-            navData.navigation.navigate('Swipe');
-          }}
-          title="Back arrow"
-        />
-      </HeaderButtons>
-    ),
   };
 };
 

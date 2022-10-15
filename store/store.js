@@ -28,7 +28,10 @@ import {
   leaveGroupReducer,
   removeMemberReducer,
 } from './reducers/group';
-import { listSwipeReducer } from './reducers/swipe';
+import {
+  listSwipeReducer,
+  getCurrentSwipeProfileReducer,
+} from './reducers/swipe';
 
 // TODO: fix this error: when reload here screen change to login
 
@@ -61,6 +64,7 @@ const reducer = combineReducers({
   removeMember: removeMemberReducer,
   // Swipe API
   listSwipe: listSwipeReducer,
+  getCurrentSwipeProfile: getCurrentSwipeProfileReducer,
 });
 
 const initialState = {};

@@ -25,7 +25,6 @@ export const userLocation = () => {
       const location = await Location.getCurrentPositionAsync({
         accuracy: 3,
       });
-      console.log('loc', location);
 
       const { data } = await axios({
         method: 'POST',
