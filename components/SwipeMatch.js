@@ -37,10 +37,8 @@ const SwipeMatch = (props) => {
     laterOnPress,
   } = props;
 
-  console.log('name qlo -> ', matchedProfileImage);
-
   return (
-    <Modal transparent={false} visible={visible} animationType="slide">
+    <Modal transparent={false} visible={visible} animationType="fade">
       <View style={styles.screen}>
         <View style={styles.titleContainer}>
           <GradientText style={styles.matchTitle}>{title}</GradientText>
@@ -71,19 +69,12 @@ const SwipeMatch = (props) => {
               style={{ color: Colors.white, fontSize: 15, fontWeight: '500' }}>
               {chatButtonText}
             </Text>
-            <LinearGradient
-              colors={['#ED665A', '#CF2A6E', '#BA007C']}
-              style={{
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}>
-              <FontAwesome5
-                name="chat"
-                size={18}
-                color="white"
-                type="FontAwesome5"
-              />
-            </LinearGradient>
+            <FontAwesome5
+              name="chat"
+              size={18}
+              color="white"
+              type="FontAwesome5"
+            />
           </TouchableOpacity>
           <Button
             title="Later"

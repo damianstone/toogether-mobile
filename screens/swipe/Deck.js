@@ -24,12 +24,12 @@ import styles from './styles';
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
+// TODO: solver render match
+
 const Deck = (props) => {
   const dispatch = useDispatch();
   const swipeRef = useRef();
   const currentDeckIndex = useRef(0);
-  const [itsMatch, setItsMatch] = useState(true);
-
   const { swipeProfiles, setAllCardsSwiped, showProfileHandler } = props;
 
   const userGetProfile = useSelector((state) => state.userGetProfile);
@@ -42,6 +42,11 @@ const Deck = (props) => {
     data: likeData,
   } = likeReducer;
 
+  const [itsMatch, setItsMatch] = useState(
+    likeData?.details === Response.NEW_MATCH ||
+      likeData?.details === Response.SAME_MATCH
+  );
+
   useEffect(() => {
     if (likeError) {
       Alert.alert('Like error');
@@ -53,8 +58,10 @@ const Deck = (props) => {
         likeData.details === Response.SAME_MATCH
       ) {
         setItsMatch(true);
+      } else {
+        // if there is not a match, just reset
+        dispatch({ type: w.LIKE_PROFILE_RESET });
       }
-      console.log('LIKE DATA -> ', { ...likeData });
     }
   }, [likeError]);
 
@@ -101,9 +108,10 @@ const Deck = (props) => {
     });
   };
 
-  const handleCloseMatch = async () => {
-    await dispatch({ type: w.LIKE_PROFILE_RESET });
+  // Match actions
+  const handleCloseMatch = () => {
     setItsMatch(false);
+    dispatch({ type: w.LIKE_PROFILE_RESET });
   };
 
   const getCurrentProfile = (matchData, currentProfile) => {
@@ -185,24 +193,13 @@ const Deck = (props) => {
     }
   };
 
-  // render a card with the profiles (single and group)
-  const renderCard = (profile) => {
-    return (
-      <SwipeCard
-        key={profile.id}
-        isGroup={'members' in profile}
-        profile={profile}
-        showProfileHandler={showProfileHandler}
-      />
-    );
-  };
-
+  // render match
   const renderMatch = () => {
-    if (likeData && likeData.details) {
+    if (likeData) {
       const matchData = getMatchData(likeData);
       return (
         <SwipeMatch
-          visible={itsMatch}
+          visible
           title={matchData.title}
           currentProfileImage={matchData.curretProfileImage}
           matchedProfileImage={matchData.matchedProfileImage}
@@ -213,6 +210,21 @@ const Deck = (props) => {
           chatButtonText={matchData.chatButtonText}
           chatOnPress={() => console.log('go to chat')}
           laterOnPress={handleCloseMatch}
+        />
+      );
+    }
+    return null;
+  };
+
+  // render a card with the profiles (single and group)
+  const renderCard = (profile) => {
+    if (typeof profile === 'object') {
+      return (
+        <SwipeCard
+          key={profile.id}
+          isGroup={profile.hasOwnProperty('members')}
+          profile={profile}
+          showProfileHandler={showProfileHandler}
         />
       );
     }
@@ -242,7 +254,7 @@ const Deck = (props) => {
                 label: {
                   textAlign: 'right',
                   color: Colors.red,
-                  fontSize: 25,
+                  fontSize: 30,
                 },
               },
             },
@@ -252,7 +264,7 @@ const Deck = (props) => {
                 label: {
                   textAlign: 'left',
                   color: Colors.calypso,
-                  fontSize: 25,
+                  fontSize: 30,
                 },
               },
             },
@@ -263,7 +275,9 @@ const Deck = (props) => {
           onSwipedBottom={handleDislike}
           renderCard={renderCard}
           onSwipedAll={() => {
-            setAllCardsSwiped(true);
+            if (!itsMatch) {
+              setAllCardsSwiped(true);
+            }
           }}
         />
       </View>

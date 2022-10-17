@@ -57,7 +57,7 @@ const DetailBottomSheet = (props) => {
           <Text style={styles.nameText}>
             {`${firstname} ${lastname}, ${age}`}
           </Text>
-          {!props.isGroup && (
+          {props.isGroup && (
             <Text style={styles.toogetherGroupText}>Toogether group</Text>
           )}
         </View>

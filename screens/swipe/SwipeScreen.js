@@ -47,6 +47,9 @@ const SwipeScreen = (props) => {
     data: swipe,
   } = listSwipeReducer;
 
+  const likeReducer = useSelector((state) => state.like);
+  const { data: likeData } = likeReducer;
+
   useEffect(() => {
     const permissionGranted = verifyLocationPermissions();
     if (permissionGranted) {

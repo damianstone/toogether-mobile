@@ -104,9 +104,7 @@ const SwipeCard = (props) => {
                     university={profile.university}
                   />
                   <TouchableOpacity
-                    onPress={() =>
-                      props.showProfileHandler(profile, props.isGroup)
-                    }
+                    onPress={() => props.showProfileHandler(profile, true)}
                     style={styles.arrowContainer}>
                     <Text>A</Text>
                   </TouchableOpacity>
@@ -129,9 +127,7 @@ const SwipeCard = (props) => {
                 university={props.profile.university}
               />
               <TouchableOpacity
-                onPress={() =>
-                  props.showProfileHandler(props.profile, props.isGroup)
-                }
+                onPress={() => props.showProfileHandler(props.profile, false)}
                 style={styles.arrowContainer}>
                 <Text>A</Text>
               </TouchableOpacity>
