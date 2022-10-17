@@ -15,6 +15,7 @@ import {
 } from 'react-native';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { useDispatch, useSelector } from 'react-redux';
+import { withNavigationFocus } from 'react-navigation';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import Constants from 'expo-constants';
 import * as ImagePicker from 'expo-image-picker';

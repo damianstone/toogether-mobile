@@ -290,7 +290,7 @@ export const createUserProfile = (
 
       const { data } = await axios({
         method: 'POST',
-        url: `${BASE_URL}/api/v1/profiles/${userData.id}/actions/create-profile/`,
+        url: `${BASE_URL}/api/v1/profiles/actions/create-profile/`,
         headers: config,
         data: {
           firstname,

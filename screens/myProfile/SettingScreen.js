@@ -12,7 +12,6 @@ import {
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { FontAwesome5 } from '@expo/vector-icons';
-import * as Font from 'expo-font';
 import { logout, userDelete } from '../../store/actions/user';
 import { SETTINGS_ACCOUNT_DATA, SETTINGS_APP_DATA } from '../../data/settings';
 import { check400Error, checkServerError } from '../../utils/errors';

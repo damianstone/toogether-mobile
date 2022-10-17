@@ -10,7 +10,7 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import Constants from 'expo-constants';
 import Colors from '../../constants/Colors';
-import { listUserPhotos } from '../../store/actions/user';
+import { listUserPhotos, getUserProfile } from '../../store/actions/user';
 
 const Avatar = (props) => {
   const BASE_URL = Constants.manifest.extra.LOCAL_URL;
@@ -21,6 +21,7 @@ const Avatar = (props) => {
   useEffect(() => {
     if (!data) {
       dispatch(listUserPhotos());
+      dispatch(getUserProfile());
     }
   }, []);
 

@@ -3,6 +3,7 @@ import {
   View,
   Image,
   Share,
+  Text,
   Platform,
   SafeAreaView,
   Alert,
@@ -20,22 +21,13 @@ import Deck from './Deck';
 import HeaderButtom from '../../components/UI/HeaderButton';
 import ActivityModal from '../../components/UI/ActivityModal';
 import Avatar from '../../components/UI/Avatar';
-import NewMatch from '../../components/NewMatch';
 import SwipeError from '../../components/SwipeError';
-import GROUPS from '../../data/dummy-data';
 import Colors from '../../constants/Colors';
 import styles from './styles';
 
-// TODO: manage render match screen
-// TODO: manage render cards not found
-// TODO: manage render location error
-// TODO: manage render all cards swiped
-
 const SwipeScreen = (props) => {
   const dispatch = useDispatch();
-  const swipeTracker = useRef(null);
-  const [swipes, setSwipes] = useState([...GROUPS]);
-  const [showMode, setShowMode] = useState(0);
+  const [showMode, setShowMode] = useState(2);
 
   const [localLoading, setLocalLoading] = useState(false);
   const [allCardsSwiped, setAllCardsSwiped] = useState(false);
@@ -85,10 +77,10 @@ const SwipeScreen = (props) => {
   // useEffect(() => {
   //   const unsubscribe = props.navigation.addListener('didFocus', () => {
   //     console.log('RELOAD SWIPE');
-  //       reload();
+  //     reload();
   //   });
   //   return unsubscribe;
-  // }, [props.navigation]);
+  // }, [reload]);
 
   const reload = useCallback(async () => {
     setLocalLoading(true);
@@ -135,7 +127,14 @@ const SwipeScreen = (props) => {
   };
 
   const renderNewMatch = () => {
-    console.log('match');
+    // current profile
+    // matched profile
+    // if matched profile is a group, so get the group also
+    return (
+      <View>
+        <Text>Its a match</Text>
+      </View>
+    );
   };
 
   const renderAllCardSwiped = () => {
@@ -214,6 +213,7 @@ const SwipeScreen = (props) => {
               setShowMode={setShowMode}
               setAllCardsSwiped={setAllCardsSwiped}
               showMode={showMode}
+              navigation={props.navigation}
               renderNewMatch={renderNewMatch}
               showProfileHandler={showProfileHandler}
             />

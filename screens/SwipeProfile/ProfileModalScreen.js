@@ -13,10 +13,6 @@ import Loader from '../../components/UI/Loader';
 import DetailBottomSheet from '../../components/DetailBottomSheet';
 import Colors from '../../constants/Colors';
 
-// TODO: like action
-
-// TODO: solve error with block profile
-
 const ProfileModalScreen = (props) => {
   const dispatch = useDispatch();
   const BASE_URL = Constants.manifest.extra.LOCAL_URL;
@@ -31,7 +27,10 @@ const ProfileModalScreen = (props) => {
     data: blockData,
   } = blockProfileReducer;
 
-  const handleLike = () => {};
+  const handleLike = () => {
+    // TODO: send like
+    // TODO: close the modal
+  };
 
   const handleBlockProfile = () => {
     if (profile.id) {
