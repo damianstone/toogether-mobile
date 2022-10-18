@@ -4,7 +4,7 @@ import { Ionicons } from '@expo/vector-icons';
 
 import Colors from '../constants/Colors';
 
-const Info = (props) => {
+const InfoCard = (props) => {
   const { firstName, lastName, city, live_in, age, university, occupation } =
     props;
 
@@ -67,7 +67,7 @@ const Info = (props) => {
   );
 };
 
-export default Info;
+export default InfoCard;
 
 const styles = StyleSheet.create({
   cardShadow: {

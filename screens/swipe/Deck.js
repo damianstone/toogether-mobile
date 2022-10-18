@@ -1,13 +1,5 @@
-import React, { useState, useEffect, useRef } from 'react';
-import {
-  View,
-  Dimensions,
-  Modal,
-  Alert,
-  Text,
-  TouchableOpacity,
-  Button,
-} from 'react-native';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { View, Dimensions, Alert } from 'react-native';
 import Swiper from 'react-native-deck-swiper';
 import { useDispatch, useSelector } from 'react-redux';
 import tw from 'tailwind-rn';
@@ -42,10 +34,9 @@ const Deck = (props) => {
     data: likeData,
   } = likeReducer;
 
-  const [itsMatch, setItsMatch] = useState(
-    likeData?.details === Response.NEW_MATCH ||
-      likeData?.details === Response.SAME_MATCH
-  );
+  const [itsMatch, setItsMatch] = useState(false);
+
+  console.log('ITS MATCH -> ', itsMatch);
 
   useEffect(() => {
     if (likeError) {
@@ -106,6 +97,12 @@ const Deck = (props) => {
       // const prevDeckItem = swipeProfiles[index - 1];
       currentDeckIndex.current = index;
     });
+  };
+
+  const allCardsSwiped = () => {
+    if (!itsMatch) {
+      setAllCardsSwiped(true);
+    }
   };
 
   // Match actions
@@ -195,25 +192,22 @@ const Deck = (props) => {
 
   // render match
   const renderMatch = () => {
-    if (likeData) {
-      const matchData = getMatchData(likeData);
-      return (
-        <SwipeMatch
-          visible
-          title={matchData.title}
-          currentProfileImage={matchData.curretProfileImage}
-          matchedProfileImage={matchData.matchedProfileImage}
-          currentProfileName={matchData.currentProfileName}
-          matchedProfileName={matchData.matchedProfileName}
-          currentType={matchData.currentType}
-          matchedType={matchData.matchedType}
-          chatButtonText={matchData.chatButtonText}
-          chatOnPress={() => console.log('go to chat')}
-          laterOnPress={handleCloseMatch}
-        />
-      );
-    }
-    return null;
+    const matchData = getMatchData(likeData);
+    return (
+      <SwipeMatch
+        visible
+        title={matchData.title}
+        currentProfileImage={matchData.curretProfileImage}
+        matchedProfileImage={matchData.matchedProfileImage}
+        currentProfileName={matchData.currentProfileName}
+        matchedProfileName={matchData.matchedProfileName}
+        currentType={matchData.currentType}
+        matchedType={matchData.matchedType}
+        chatButtonText={matchData.chatButtonText}
+        chatOnPress={() => console.log('go to chat')}
+        laterOnPress={handleCloseMatch}
+      />
+    );
   };
 
   // render a card with the profiles (single and group)
@@ -233,63 +227,64 @@ const Deck = (props) => {
 
   return (
     <View style={{ flex: 1 }}>
-      <View style={styles.swipeContainer}>
-        <Swiper
-          containerStyle={tw('bg-transparent')}
-          cards={swipeProfiles}
-          ref={swipeRef}
-          stackSize={2}
-          cardIndex={0}
-          verticalSwipe
-          infinite={false}
-          stackAnimationFriction={10}
-          showSecondCard
-          animateCardOpacity
-          animateOverlayLabelsOpacity
-          swipeBackCard
-          overlayLabels={{
-            left: {
-              title: 'DISLIKE',
-              style: {
-                label: {
-                  textAlign: 'right',
-                  color: Colors.red,
-                  fontSize: 30,
+      {itsMatch ? (
+        renderMatch()
+      ) : (
+        <>
+          <View style={styles.swipeContainer}>
+            <Swiper
+              containerStyle={tw('bg-transparent')}
+              cards={swipeProfiles}
+              ref={swipeRef}
+              stackSize={2}
+              cardIndex={0}
+              verticalSwipe
+              infinite={false}
+              stackAnimationFriction={10}
+              showSecondCard
+              animateCardOpacity
+              animateOverlayLabelsOpacity
+              swipeBackCard
+              overlayLabels={{
+                left: {
+                  title: 'DISLIKE',
+                  style: {
+                    label: {
+                      textAlign: 'right',
+                      color: Colors.red,
+                      fontSize: 30,
+                    },
+                  },
                 },
-              },
-            },
-            right: {
-              title: 'LIKE',
-              style: {
-                label: {
-                  textAlign: 'left',
-                  color: Colors.calypso,
-                  fontSize: 30,
+                right: {
+                  title: 'LIKE',
+                  style: {
+                    label: {
+                      textAlign: 'left',
+                      color: Colors.calypso,
+                      fontSize: 30,
+                    },
+                  },
                 },
-              },
-            },
-          }}
-          onSwipedLeft={handleDislike}
-          onSwipedRight={handleLike}
-          onSwipedTop={handleLike}
-          onSwipedBottom={handleDislike}
-          renderCard={renderCard}
-          onSwipedAll={() => {
-            if (!itsMatch) {
-              setAllCardsSwiped(true);
-            }
-          }}
-        />
-      </View>
-      <View style={styles.buttonsContainer}>
-        <SwipeButtons
-          rewind
-          onLeft={onLikePressed}
-          onRight={onDislikePressed}
-          onRewind={onRewindPressed}
-        />
-      </View>
-      {itsMatch && renderMatch()}
+              }}
+              onSwipedLeft={handleDislike}
+              onSwipedRight={handleLike}
+              onSwipedTop={handleLike}
+              onSwipedBottom={handleDislike}
+              renderCard={renderCard}
+              onSwipedAll={allCardsSwiped}
+            />
+          </View>
+          <View style={styles.buttonsContainer}>
+            <SwipeButtons
+              rewind
+              onLeft={onLikePressed}
+              onRight={onDislikePressed}
+              onRewind={onRewindPressed}
+            />
+          </View>
+        </>
+      )}
     </View>
   );
 };

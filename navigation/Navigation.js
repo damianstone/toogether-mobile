@@ -27,7 +27,7 @@ import EditProfileScreen from '../screens/MyProfile/EditProfileScreen';
 
 import SwipeScreen from '../screens/Swipe/SwipeScreen';
 import ChatScreen from '../screens/ChatScreen';
-import LikesScreen from '../screens/LikesScreen';
+import LikesScreen from '../screens/Likes/LikesScreen';
 
 const defaultNavOptions = {
   headerMode: 'none',

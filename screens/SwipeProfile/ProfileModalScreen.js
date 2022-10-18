@@ -8,8 +8,6 @@ import { blockProfile } from '../../store/actions/block';
 import { checkServerError, check400Error } from '../../utils/errors';
 import * as b from '../../constants/block';
 
-import ActivityModal from '../../components/UI/ActivityModal';
-import Loader from '../../components/UI/Loader';
 import DetailBottomSheet from '../../components/DetailBottomSheet';
 import Colors from '../../constants/Colors';
 
