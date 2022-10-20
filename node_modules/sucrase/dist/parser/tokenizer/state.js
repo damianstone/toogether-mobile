@@ -18,6 +18,7 @@ var _types = require('./types');
   constructor(
      potentialArrowAt,
      noAnonFunctionType,
+     inDisallowConditionalTypesContext,
      tokensLength,
      scopesLength,
      pos,
@@ -28,33 +29,36 @@ var _types = require('./types');
      isType,
      scopeDepth,
      error,
-  ) {;this.potentialArrowAt = potentialArrowAt;this.noAnonFunctionType = noAnonFunctionType;this.tokensLength = tokensLength;this.scopesLength = scopesLength;this.pos = pos;this.type = type;this.contextualKeyword = contextualKeyword;this.start = start;this.end = end;this.isType = isType;this.scopeDepth = scopeDepth;this.error = error;}
+  ) {;this.potentialArrowAt = potentialArrowAt;this.noAnonFunctionType = noAnonFunctionType;this.inDisallowConditionalTypesContext = inDisallowConditionalTypesContext;this.tokensLength = tokensLength;this.scopesLength = scopesLength;this.pos = pos;this.type = type;this.contextualKeyword = contextualKeyword;this.start = start;this.end = end;this.isType = isType;this.scopeDepth = scopeDepth;this.error = error;}
 } exports.StateSnapshot = StateSnapshot;
 
- class State {constructor() { State.prototype.__init.call(this);State.prototype.__init2.call(this);State.prototype.__init3.call(this);State.prototype.__init4.call(this);State.prototype.__init5.call(this);State.prototype.__init6.call(this);State.prototype.__init7.call(this);State.prototype.__init8.call(this);State.prototype.__init9.call(this);State.prototype.__init10.call(this);State.prototype.__init11.call(this);State.prototype.__init12.call(this); }
+ class State {constructor() { State.prototype.__init.call(this);State.prototype.__init2.call(this);State.prototype.__init3.call(this);State.prototype.__init4.call(this);State.prototype.__init5.call(this);State.prototype.__init6.call(this);State.prototype.__init7.call(this);State.prototype.__init8.call(this);State.prototype.__init9.call(this);State.prototype.__init10.call(this);State.prototype.__init11.call(this);State.prototype.__init12.call(this);State.prototype.__init13.call(this); }
   // Used to signify the start of a potential arrow function
   __init() {this.potentialArrowAt = -1}
 
   // Used by Flow to handle an edge case involving function type parsing.
   __init2() {this.noAnonFunctionType = false}
 
+  // Used by TypeScript to handle ambiguities when parsing conditional types.
+  __init3() {this.inDisallowConditionalTypesContext = false}
+
   // Token store.
-  __init3() {this.tokens = []}
+  __init4() {this.tokens = []}
 
   // Array of all observed scopes, ordered by their ending position.
-  __init4() {this.scopes = []}
+  __init5() {this.scopes = []}
 
   // The current position of the tokenizer in the input.
-  __init5() {this.pos = 0}
+  __init6() {this.pos = 0}
 
   // Information about the current token.
-  __init6() {this.type = _types.TokenType.eof}
-  __init7() {this.contextualKeyword = _keywords.ContextualKeyword.NONE}
-  __init8() {this.start = 0}
-  __init9() {this.end = 0}
+  __init7() {this.type = _types.TokenType.eof}
+  __init8() {this.contextualKeyword = _keywords.ContextualKeyword.NONE}
+  __init9() {this.start = 0}
+  __init10() {this.end = 0}
 
-  __init10() {this.isType = false}
-  __init11() {this.scopeDepth = 0}
+  __init11() {this.isType = false}
+  __init12() {this.scopeDepth = 0}
 
   /**
    * If the parser is in an error state, then the token is always tt.eof and all functions can
@@ -64,12 +68,13 @@ var _types = require('./types');
    * backtracking without exceptions and without needing to explicitly propagate error states
    * everywhere.
    */
-  __init12() {this.error = null}
+  __init13() {this.error = null}
 
   snapshot() {
     return new StateSnapshot(
       this.potentialArrowAt,
       this.noAnonFunctionType,
+      this.inDisallowConditionalTypesContext,
       this.tokens.length,
       this.scopes.length,
       this.pos,
@@ -86,6 +91,7 @@ var _types = require('./types');
   restoreFromSnapshot(snapshot) {
     this.potentialArrowAt = snapshot.potentialArrowAt;
     this.noAnonFunctionType = snapshot.noAnonFunctionType;
+    this.inDisallowConditionalTypesContext = snapshot.inDisallowConditionalTypesContext;
     this.tokens.length = snapshot.tokensLength;
     this.scopes.length = snapshot.scopesLength;
     this.pos = snapshot.pos;

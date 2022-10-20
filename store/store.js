@@ -31,6 +31,11 @@ import {
 import {
   listSwipeReducer,
   getCurrentSwipeProfileReducer,
+  listLikesReducer,
+  likeReducer,
+  removeLikeReducer,
+  listMatchesReducer,
+  deleteMatchReducer,
 } from './reducers/swipe';
 
 // TODO: fix this error: when reload here screen change to login
@@ -65,6 +70,11 @@ const reducer = combineReducers({
   // Swipe API
   listSwipe: listSwipeReducer,
   getCurrentSwipeProfile: getCurrentSwipeProfileReducer,
+  listLikes: listLikesReducer,
+  like: likeReducer,
+  removeLike: removeLikeReducer,
+  listMatches: listMatchesReducer,
+  deleteMatch: deleteMatchReducer,
 });
 
 const initialState = {};

@@ -42,12 +42,15 @@ export default function useLinking(
         | { remove(): void }
         | undefined;
 
+      // Storing this in a local variable stops Jest from complaining about import after teardown
+      const removeEventListener = Linking.removeEventListener?.bind(Linking);
+
       return () => {
         // https://github.com/facebook/react-native/commit/6d1aca806cee86ad76de771ed3a1cc62982ebcd7
         if (subscription?.remove) {
           subscription.remove();
         } else {
-          Linking.removeEventListener('url', callback);
+          removeEventListener?.('url', callback);
         }
       };
     },
@@ -123,7 +126,7 @@ export default function useLinking(
 
       const path = extractPathFromURL(prefixesRef.current, url);
 
-      return path
+      return path !== undefined
         ? getStateFromPathRef.current(path, configRef.current)
         : undefined;
     },
@@ -189,7 +192,12 @@ export default function useLinking(
             // Ignore any errors from deep linking.
             // This could happen in case of malformed links, navigation object not being initialized etc.
             console.warn(
-              `An error occurred when trying to handle the link '${url}': ${e.message}`
+              `An error occurred when trying to handle the link '${url}': ${
+                typeof e === 'object' && e != null && 'message' in e
+                  ? // @ts-expect-error: we're already checking for this
+                    e.message
+                  : e
+              }`
             );
           }
         } else {

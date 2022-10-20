@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
-import { Entypo } from '@expo/vector-icons';
+import { Entypo, MaterialCommunityIcons } from '@expo/vector-icons';
 
 import tw from 'tailwind-rn';
 import Colors from '../constants/Colors';
@@ -9,15 +9,19 @@ const SwipeButtons = (props) => {
   return (
     <View style={[tw('flex flex-row justify-evenly pb-4'), styles.screen]}>
       <TouchableOpacity onPress={props.onLeft} style={styles.button1}>
-        <Entypo color="white" name="cross" size={22} />
+        <Entypo color="white" name="cross" size={24} />
       </TouchableOpacity>
       {props.rewind ? (
         <TouchableOpacity onPress={props.onRewind} style={styles.button3}>
-          <Entypo color="black" name="heart" size={22} />
+          <MaterialCommunityIcons
+            name="backup-restore"
+            size={24}
+            color="black"
+          />
         </TouchableOpacity>
       ) : null}
       <TouchableOpacity onPress={props.onRight} style={styles.button2}>
-        <Entypo color="white" name="heart" size={22} />
+        <Entypo color="white" name="heart" size={24} />
       </TouchableOpacity>
     </View>
   );

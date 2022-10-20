@@ -15,6 +15,7 @@ import {
 } from 'react-native';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { useDispatch, useSelector } from 'react-redux';
+import { withNavigationFocus } from 'react-navigation';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import Constants from 'expo-constants';
 import * as ImagePicker from 'expo-image-picker';
@@ -170,7 +171,7 @@ const MyProfileScreen = (props) => {
 
   // add listener to fetch the user and re fetch it
   useEffect(() => {
-    const unsubscribe = props.navigation.addListener('focus', () => {
+    const unsubscribe = props.navigation.addListener('', () => {
       loadProfile();
     });
     return unsubscribe;
@@ -418,7 +419,9 @@ MyProfileScreen.navigationOptions = (navData) => {
     headerRight: () => (
       <HeaderButtons HeaderButtonComponent={HeaderButtom}>
         <Item
-          iconName={Platform.OS === 'android' ? 'md-cart' : 'ios-arrow-back'}
+          iconName={
+            Platform.OS === 'android' ? 'settings-sharp' : 'settings-sharp'
+          }
           onPress={() => {
             // go to chat screen
             navData.navigation.navigate('Setting');
@@ -430,7 +433,9 @@ MyProfileScreen.navigationOptions = (navData) => {
     headerLeft: () => (
       <HeaderButtons HeaderButtonComponent={HeaderButtom}>
         <Item
-          iconName={Platform.OS === 'android' ? 'md-cart' : 'ios-arrow-back'}
+          iconName={
+            Platform.OS === 'android' ? 'ios-arrow-back' : 'ios-arrow-back'
+          }
           onPress={() => {
             // go to chat screen
             navData.navigation.navigate('Swipe');

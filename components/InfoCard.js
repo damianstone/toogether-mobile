@@ -4,29 +4,45 @@ import { Ionicons } from '@expo/vector-icons';
 
 import Colors from '../constants/Colors';
 
-const Info = (props) => {
-  const { firstName, lastName, city, live_in, age, university, occupation } =
-    props;
+const InfoCard = (props) => {
+  const {
+    firstName,
+    lastName,
+    city,
+    live_in,
+    age,
+    university,
+    occupation,
+    from,
+  } = props;
 
   const details = [
     {
       detail: university,
+      icon: '🎓',
       iconName: 'location',
     },
     {
       detail: occupation,
+      icon: '😎',
       iconName: 'location',
     },
     {
       detail: live_in,
+      icon: '📍',
       iconName: 'location',
     },
     {
       detail: city,
+      icon: '📍',
+      iconName: 'location',
+    },
+    {
+      detail: from,
+      icon: '🏡',
       iconName: 'location',
     },
   ];
-
   const filtered = details.filter(
     (obj) => obj.detail && obj.detail !== undefined
   );
@@ -53,13 +69,13 @@ const Info = (props) => {
       </View>
       {filtered[0] && (
         <View style={styles.infoContainer}>
-          <Ionicons color="black" name={filtered[0].iconName} size={16} />
+          <Text style={{ fontSize: 14 }}>{filtered[0].icon}</Text>
           <Text style={styles.text}>{filtered[0].detail}</Text>
         </View>
       )}
       {filtered[1] && (
         <View style={styles.infoContainer}>
-          <Ionicons color="black" name={filtered[1].iconName} size={16} />
+          <Text style={{ fontSize: 14 }}>{filtered[1].icon}</Text>
           <Text style={styles.text}>{filtered[1].detail}</Text>
         </View>
       )}
@@ -67,7 +83,7 @@ const Info = (props) => {
   );
 };
 
-export default Info;
+export default InfoCard;
 
 const styles = StyleSheet.create({
   cardShadow: {

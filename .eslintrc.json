@@ -81,7 +81,8 @@
     "no-restricted-syntax": "off",
     "react/style-prop-object": "off",
     "no-prototype-builtins": "off",
-    "no-underscore-dangle": "off"
+    "no-underscore-dangle": "off",
+    "no-case-declarations": "off"
   },
   "settings": {
     "react": {

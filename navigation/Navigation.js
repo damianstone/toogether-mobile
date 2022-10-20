@@ -4,10 +4,17 @@ import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 import { createMaterialBottomTabNavigator } from 'react-navigation-material-bottom-tabs';
 import { createStackNavigator } from 'react-navigation-stack';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
-import { AntDesign } from '@expo/vector-icons';
+import {
+  AntDesign,
+  Ionicons,
+  MaterialIcons,
+  FontAwesome5,
+  MaterialCommunityIcons,
+} from '@expo/vector-icons';
 import Colors from '../constants/Colors';
 
 import ProfileModalScreen from '../screens/SwipeProfile/ProfileModalScreen';
+import MatchScreen from '../screens/Match/MatchScreen';
 
 import StartupScreen from '../screens/StartupScreen';
 import AuthScreen from '../screens/Auth/AuthScreen';
@@ -27,7 +34,7 @@ import EditProfileScreen from '../screens/MyProfile/EditProfileScreen';
 
 import SwipeScreen from '../screens/Swipe/SwipeScreen';
 import ChatScreen from '../screens/ChatScreen';
-import LikesScreen from '../screens/LikesScreen';
+import LikesScreen from '../screens/Likes/LikesScreen';
 
 const defaultNavOptions = {
   headerMode: 'none',
@@ -141,10 +148,6 @@ const GroupNavigator = createStackNavigator(
   },
   {
     defaultNavigationOptions: defaultNavOptions,
-    transparentCard: true,
-    cardStyle: {
-      backgroundColor: 'transparent',
-    },
   }
 );
 
@@ -156,7 +159,9 @@ const tabScreenCnfig = {
     navigationOptions: {
       // poner un icono en la navbar
       tabBarIcon: (tabInfo) => {
-        return <AntDesign color={tabInfo.tintColor} name="home" size={25} />;
+        return (
+          <Ionicons name="home-outline" size={25} color={tabInfo.tintColor} />
+        );
       },
       tabBarColor: Colors.orange,
       tabBarLabel: Platform.OS === 'android' ? <Text>Swipe</Text> : 'Swipe',
@@ -177,13 +182,18 @@ const tabScreenCnfig = {
     navigationOptions: ({ navigation }) => ({
       tabBarIcon: (tabInfo) => {
         return (
-          <AntDesign color={tabInfo.tintColor} name="addusergroup" size={25} />
+          <MaterialCommunityIcons
+            name="account-group"
+            size={25}
+            color={tabInfo.tintColor}
+          />
         );
       },
       tabBarColor: Colors.orange,
       tabBarLabel: Platform.OS === 'android' ? <Text>Create group</Text> : null,
       tabBarOptions: {
         showLabel: false,
+        activeTintColor: Colors.orange,
         style: {
           backgroundColor:
             navigation.state.routes[navigation.state.index].routeName ===
@@ -200,9 +210,6 @@ const tabScreenCnfig = {
               : Colors.bg,
           statusBarStyle: Colors.bg,
         },
-        tabBarVisible:
-          navigation.state.routes[navigation.state.index].routeName !==
-          'ProfilePreview',
       },
     }),
   },
@@ -228,6 +235,7 @@ const ToogetherTab =
     : createBottomTabNavigator(tabScreenCnfig, {
         tabBarOptions: {
           showLabel: false,
+          shifting: true,
           activeTintColor: Colors.orange,
           tabStyle: {
             backgroundColor: Colors.bg,
@@ -244,6 +252,7 @@ const HomeNavigator = createStackNavigator(
   {
     Main: ToogetherTab,
     SwipeProfile: ProfileModalScreen,
+    SwipeMatch: MatchScreen,
   },
   {
     mode: 'modal',
