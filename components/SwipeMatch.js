@@ -11,7 +11,7 @@ import {
   Platform,
 } from 'react-native';
 import Constants from 'expo-constants';
-import { FontAwesome5 } from '@expo/vector-icons';
+import Ionicons from '@expo/vector-icons/Ionicons';
 import { LinearGradient } from 'expo-linear-gradient';
 
 import Colors from '../constants/Colors';
@@ -33,9 +33,9 @@ const SwipeMatch = (props) => {
     currentType,
     matchedType,
     chatButtonText,
-    chatOnPress,
-    laterOnPress,
-  } = props;
+  } = props.matchData;
+
+  console.log(currentProfileImage);
 
   return (
     <Modal transparent={false} visible={visible} animationType="fade">
@@ -64,22 +64,17 @@ const SwipeMatch = (props) => {
         <View style={styles.footerContainer}>
           <TouchableOpacity
             style={styles.chatButtonContainer}
-            onPress={chatOnPress}>
+            onPress={props.chatOnPress}>
             <Text
               style={{ color: Colors.white, fontSize: 15, fontWeight: '500' }}>
               {chatButtonText}
             </Text>
-            <FontAwesome5
-              name="chat"
-              size={18}
-              color="white"
-              type="FontAwesome5"
-            />
+            <Ionicons name="chatbubble-outline" size={20} color="white" />
           </TouchableOpacity>
           <Button
             title="Later"
             color={Platform.OS === 'ios' ? Colors.placeholder : Colors.bg}
-            onPress={laterOnPress}
+            onPress={props.laterOnPress}
           />
         </View>
       </View>

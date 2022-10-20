@@ -13,18 +13,17 @@ const StartupScreen = (props) => {
   useEffect(() => {
     const tryLogin = async () => {
       // get the user data as a promise
-      const stored = await AsyncStorage.getItem('@userData');
-      const userData = JSON.parse(stored);
+      const userData = JSON.parse(await AsyncStorage.getItem('@userData'));
 
-      // if there is no user data
-      if (!userData || !userData.has_account) {
-        props.navigation.navigate('AuthStart');
+      if (userData && userData.has_account) {
+        props.navigation.navigate('Swipe');
         return;
       }
 
-      if (userData && userData.has_account) {
-        dispatch(authenticate(userData));
-        props.navigation.navigate('Swipe');
+      // if there is no user data
+      if (!userData || !userData.has_account) {
+        console.log('NO AUTH');
+        props.navigation.navigate('AuthStart');
       }
     };
     tryLogin();

@@ -9,7 +9,6 @@ import {
 import Constants from 'expo-constants';
 import { Entypo } from '@expo/vector-icons';
 
-import InfoCard from './InfoCard';
 import Colors from '../constants/Colors';
 
 const LikeCard = (props) => {

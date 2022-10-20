@@ -23,7 +23,6 @@ import Colors from '../../constants/Colors';
 
 const LikesScreen = (props) => {
   const dispatch = useDispatch();
-  const [showMatch, setShowMatch] = useState(true);
   const [refreshing, setRefreshing] = useState(
     !!(removeLikeLoading || likeLoading)
   );
@@ -62,6 +61,17 @@ const LikesScreen = (props) => {
     dispatch(listLikes());
   }, [dispatch, likesError, removeLikeError, likeError]);
 
+  useEffect(() => {
+    if (removeLikeSuccess) {
+      dispatch({ type: w.REMOVE_LIKE_RESET });
+      dispatch(listLikes());
+    }
+    if (likeData) {
+      dispatch({ type: w.LIKE_PROFILE_RESET });
+      dispatch(listLikes());
+    }
+  }, [removeLikeSuccess, likeData]);
+
   // add listener to fetch the user and re fetch it
   useEffect(() => {
     const unsubscribe = props.navigation.addListener('didFocus', () => {
@@ -80,32 +90,32 @@ const LikesScreen = (props) => {
     setRefreshing(false);
   }, [dispatch]);
 
-  const showProfileHandler = (id) => {
-    props.navigation.navigate('Swipe', { profileId: id });
+  const showProfileHandler = (profile) => {
+    props.navigation.navigate('SwipeProfile', {
+      profile: profile,
+      isGroup: false,
+    });
   };
 
   const handleRemoveLike = async (profileId) => {
     if (profileId) {
       await dispatch(removeLike(profileId));
     }
-    if (removeLike) {
+    if (removeLikeSuccess) {
       return dispatch(listLikes());
     }
     return null;
   };
 
-  const handleLike = useCallback(
-    async (profileId) => {
-      if (profileId) {
-        await dispatch(like(profileId));
-      }
-      if (likeData) {
-        setShowMatch(true);
-      }
-      return null;
-    },
-    [dispatch, likeData?.details]
-  );
+  const handleLike = async (profileId) => {
+    if (profileId) {
+      await dispatch(like(profileId));
+    }
+    if (likeData) {
+      return dispatch(listLikes());
+    }
+    return null;
+  };
 
   const renderLikeCard = ({ item, index }) => {
     return (
@@ -115,21 +125,28 @@ const LikesScreen = (props) => {
         lastname={item.lastname}
         age={item.age}
         image={item.photos.length > 0 ? item.photos[0].image : null}
-        onShowProfile={showProfileHandler}
+        onShowProfile={() => showProfileHandler(item)}
         dislike={() => handleRemoveLike(item.id)}
         like={() => handleLike(item.id)}
       />
     );
   };
 
-  if (showMatch) {
+  const renderEmptyList = () => {
     return (
-      <View>
-        <Text>Match</Text>
-        <Button title="off" onPress={() => setShowMatch(false)} />
+      <View style={styles.emptyScreen}>
+        <Text
+          style={{
+            color: Colors.white,
+            fontSize: 20,
+            fontWeight: '500',
+            alignSelf: 'center',
+          }}>
+          No likes yet :(
+        </Text>
       </View>
     );
-  }
+  };
 
   return (
     <View style={styles.screen}>
@@ -137,7 +154,7 @@ const LikesScreen = (props) => {
         <Loader />
       ) : (
         <FlatList
-          data={likes?.results}
+          data={likes ? likes.results : []}
           horizontal={false}
           keyExtractor={(profile) => profile.id}
           numColumns={2}
@@ -149,6 +166,7 @@ const LikesScreen = (props) => {
             />
           }
           renderItem={renderLikeCard}
+          ListEmptyComponent={renderEmptyList}
         />
       )}
     </View>
@@ -174,5 +192,12 @@ const styles = StyleSheet.create({
   screen: {
     backgroundColor: Colors.bg,
     flex: 1,
+  },
+  emptyScreen: {
+    backgroundColor: Colors.bg,
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '100%',
+    height: '100%',
   },
 });

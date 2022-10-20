@@ -25,6 +25,15 @@ import SwipeError from '../../components/SwipeError';
 import Colors from '../../constants/Colors';
 import styles from './styles';
 
+/*
+showMode
+-1 = error location
+0 = not found
+1 = all cards swiped
+2 = swipe
+3= match
+*/
+
 const SwipeScreen = (props) => {
   const dispatch = useDispatch();
   const [showMode, setShowMode] = useState(2);
@@ -32,12 +41,13 @@ const SwipeScreen = (props) => {
   const [localLoading, setLocalLoading] = useState(false);
   const [allCardsSwiped, setAllCardsSwiped] = useState(false);
   const [locationError, setLocationError] = useState(false);
+  const [showMatch, setShowMatch] = useState(false);
 
   const userLocationReducer = useSelector((state) => state.userLocation);
   const {
     loading: postLocationLoading,
     error: postLocationError,
-    success: postLocationSuccess,
+    success: userProfile,
   } = userLocationReducer;
 
   const listSwipeReducer = useSelector((state) => state.listSwipe);
@@ -55,7 +65,7 @@ const SwipeScreen = (props) => {
     if (permissionGranted) {
       dispatch(userLocation());
     } else {
-      setLocationError(true);
+      setShowMode(-1);
       return Alert.alert(
         'Insufficient Permissions!',
         'You need to grant Location permissions to be able to access your location',
@@ -63,9 +73,9 @@ const SwipeScreen = (props) => {
       );
     }
     if (postLocationError) {
-      setLocationError(true);
+      setShowMode(-1);
     } else {
-      setLocationError(false);
+      setShowMode(2);
     }
     return null;
   }, [dispatch, locationError]);
@@ -74,12 +84,17 @@ const SwipeScreen = (props) => {
     dispatch(listSwipe());
   }, [dispatch]);
 
+  useEffect(() => {
+    if (swipe && swipe.results.length === 0) {
+      setShowMode(0);
+    }
+  }, [swipe?.results]);
+
   // TODO: fix render when enter the screen
 
   // add listener to fetch the user and re fetch it
   // useEffect(() => {
   //   const unsubscribe = props.navigation.addListener('didFocus', () => {
-  //     console.log('RELOAD SWIPE');
   //     reload();
   //   });
   //   return unsubscribe;
@@ -93,15 +108,23 @@ const SwipeScreen = (props) => {
     } catch (err) {
       console.log(err);
     }
-    setAllCardsSwiped(false);
     setLocalLoading(false);
+
+    if (showMode !== 3) {
+      setShowMode(2); // show profiles
+    }
   }, [dispatch]);
+
   // pasa como props al deck y del deck al swipecard
   const showProfileHandler = (profile, isGroup) => {
     props.navigation.navigate('SwipeProfile', {
       profile: profile,
       isGroup: isGroup,
     });
+  };
+
+  const showMatchHandler = () => {
+    props.navigation.navigate('SwipeMatch');
   };
 
   const onShareApp = async () => {
@@ -113,38 +136,24 @@ const SwipeScreen = (props) => {
       console.log('SHARE RESULT -> ', result);
       if (result.action === Share.sharedAction) {
         if (result.activityType) {
-          // shared with activity type of result.activityType
-          // TODO: dispatch list swipes
-          console.log('SHARE RESULT -> ', result.activityType);
+          // do something
         } else {
           // shared
         }
       } else if (result.action === Share.dismissedAction) {
         // dismissed
         // just for IOS
-        // TODO: list swipes
       }
     } catch (error) {
       alert(error.message);
     }
   };
 
-  const renderNewMatch = () => {
-    // current profile
-    // matched profile
-    // if matched profile is a group, so get the group also
-    return (
-      <View>
-        <Text>Its a match</Text>
-      </View>
-    );
-  };
-
   const renderAllCardSwiped = () => {
     return (
       <SwipeError
         imageUrl={require('../../assets/images/radar.png')}
-        title="Why not? 🤔"
+        title="All cards swiped"
         text="There seems to be no one around you using Toogether. Why not tell them to download it? ;)"
         onPress={onShareApp}
         buttonText="Share this amazing app"
@@ -158,7 +167,7 @@ const SwipeScreen = (props) => {
     return (
       <SwipeError
         imageUrl={require('../../assets/images/radar.png')}
-        title="Why not? 🤔"
+        title="No Cards found"
         text="There seems to be no one around you using Toogether. Why not tell them to download it? ;)"
         onPress={onShareApp}
         buttonText="Share this amazing app"
@@ -180,45 +189,45 @@ const SwipeScreen = (props) => {
     );
   };
 
+  if (loadingSwipe || localLoading) {
+    return (
+      <SafeAreaView style={styles.safe}>
+        <StatusBar style="light" />
+        <View style={styles.screen}>
+          <ActivityModal
+            loading
+            title="Please wait"
+            size="small"
+            activityColor="white"
+            titleColor="white"
+            activityWrapperStyle={{
+              backgroundColor: 'transparent',
+            }}
+          />
+        </View>
+      </SafeAreaView>
+    );
+  }
+
   return (
     <SafeAreaView style={styles.safe}>
       <StatusBar style="light" />
       <View style={styles.screen}>
-        {locationError && renderLocationError()}
+        {showMode === -1 && renderLocationError()}
 
-        {allCardsSwiped && renderAllCardSwiped()}
+        {showMode === 0 && renderNoCardsFound()}
 
-        {!locationError &&
+        {showMode === 1 && renderAllCardSwiped()}
+        {(showMode === 2 || showMode === 3) &&
           swipe &&
-          swipe.results.length === 0 &&
-          renderNoCardsFound()}
-
-        {loadingSwipe ||
-          (localLoading && (
-            <ActivityModal
-              loading
-              title="Please wait"
-              size="large"
-              activityColor="white"
-              titleColor="white"
-              activityWrapperStyle={{
-                backgroundColor: '#404040',
-              }}
-            />
-          ))}
-
-        {swipe &&
-          swipe.results.length > 0 &&
-          !locationError &&
-          !allCardsSwiped && (
+          swipe.results.length > 0 && (
             <Deck
               swipeProfiles={swipe.results}
               setShowMode={setShowMode}
-              setAllCardsSwiped={setAllCardsSwiped}
               showMode={showMode}
               navigation={props.navigation}
-              renderNewMatch={renderNewMatch}
               showProfileHandler={showProfileHandler}
+              showMatchHandler={showMatchHandler}
             />
           )}
       </View>
@@ -244,10 +253,13 @@ SwipeScreen.navigationOptions = (navData) => {
     headerRight: () => (
       <HeaderButtons HeaderButtonComponent={HeaderButtom}>
         <Item
-          title="Cart"
-          iconName={Platform.OS === 'android' ? 'md-cart' : 'ios-cart'}
+          title="Chat"
+          iconName={
+            Platform.OS === 'android'
+              ? 'chatbubble-outline'
+              : 'chatbubble-outline'
+          }
           onPress={() => {
-            // go to chat screen
             navData.navigation.navigate('Chat');
           }}
         />
@@ -256,4 +268,4 @@ SwipeScreen.navigationOptions = (navData) => {
   };
 };
 
-export default withNavigation(SwipeScreen);
+export default SwipeScreen;

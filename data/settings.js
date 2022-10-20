@@ -6,6 +6,7 @@ export const SETTINGS_ACCOUNT_DATA = [
       screen: 'blocked_users',
     },
     icon: 'users-slash',
+    fontawesome: true,
     title: 'Blocked users',
   },
   {
@@ -14,13 +15,14 @@ export const SETTINGS_ACCOUNT_DATA = [
       type: 'DELETE_ACCOUNT',
       action_type: 'delete',
       alert_data: {
-        title: '',
-        text: '',
-        cancelButtonText: '',
-        okButtonText: '',
+        title: 'Are you sure you want to delete your account?',
+        text: 'All your data will be deleted forever',
+        cancelButtonText: 'Keep my account',
+        okButtonText: 'Delete',
       },
     },
-    icon: 'users-slash',
+    icon: 'deleteuser',
+    antdesign: true,
     title: 'Delete account',
   },
   {
@@ -29,7 +31,8 @@ export const SETTINGS_ACCOUNT_DATA = [
       type: 'REDIRECT_TO_URL',
       url: 'https://toogether.app/',
     },
-    icon: 'users-slash',
+    icon: 'Safety',
+    antdesign: true,
     title: 'How we secure your data',
   },
 ];
@@ -40,7 +43,8 @@ export const SETTINGS_APP_DATA = [
     action: {
       type: 'SHARE_APP',
     },
-    icon: 'users-slash',
+    icon: 'share-outline',
+    ionicons: true,
     title: 'Share app',
   },
   {
@@ -49,7 +53,8 @@ export const SETTINGS_APP_DATA = [
       type: 'REDIRECT_TO_URL',
       url: 'https://toogether.app/',
     },
-    icon: 'users-slash',
+    icon: 'chat-question-outline',
+    materialcommunityicons: true,
     title: 'Frequently asked questions',
   },
   {

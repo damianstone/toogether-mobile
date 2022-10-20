@@ -10,5 +10,5 @@ npm-debug.*
 *.mobileprovision
 
 .env
-
+.node_modules
 .vscode

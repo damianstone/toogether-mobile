@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Provider } from 'react-redux';
 import {
   ActionSheetProvider,
@@ -6,60 +6,39 @@ import {
 } from '@expo/react-native-action-sheet';
 import AppLoading from 'expo-app-loading';
 import * as Font from 'expo-font';
-import { FontAwesome5 } from '@expo/vector-icons';
+import * as SplashScreen from 'expo-splash-screen';
+import Entypo from '@expo/vector-icons/Entypo';
+import Ionicons from '@expo/vector-icons/Ionicons';
 
 import ToogetherNavigation from './navigation/NavigationContainer';
 import store from './store/store';
-import 'react-native-gesture-handler';
 
-function cacheFonts(fonts) {
-  return fonts.map((font) => Font.loadAsync(font));
-}
+// TODO: manage splash screen and
 
 // FETCH FONTS
-const fetchFonts = () => {
-  return Font.loadAsync({
+const fetchFonts = async () => {
+  const loadedFonts = await Font.loadAsync({
     'poppins-regular': require('./assets/fonts/Poppins-Regular.ttf'),
     'poppins-bold': require('./assets/fonts/Poppins-Bold.ttf'),
+    ...Ionicons.font,
+    ...Entypo.font,
   });
+  return loadedFonts;
 };
 
 const App = () => {
   const [fontLoaded, setFontLoaded] = useState(false);
-  const [appIsReady, setAppIsReady] = useState(false);
-
-  // Load any resources or data that you need prior to rendering the app
-  useEffect(() => {
-    async function loadResourcesAndDataAsync() {
-      try {
-        const fontAssets = cacheFonts([FontAwesome5.font]);
-
-        await Promise.all([...fontAssets]);
-      } catch (e) {
-        // You might want to provide this error information to an error reporting service
-        // eslint-disable-next-line no-console
-        console.warn(e);
-      } finally {
-        setAppIsReady(true);
-      }
-    }
-
-    loadResourcesAndDataAsync();
-  }, []);
-
-  if (!appIsReady) {
-    return null;
-  }
 
   if (!fontLoaded) {
     return (
       <AppLoading
-        // eslint-disable-next-line no-console
+        startAsync={fetchFonts}
         onError={(err) => console.warn(err)}
         onFinish={() => {
           setFontLoaded(true);
+          SplashScreen.hideAsync();
         }}
-        startAsync={fetchFonts}
+        autoHideSplash
       />
     );
   }

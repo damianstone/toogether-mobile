@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { View, Dimensions, Alert } from 'react-native';
+import { View, Dimensions, Alert, Text } from 'react-native';
 import Swiper from 'react-native-deck-swiper';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useDispatch, useSelector } from 'react-redux';
 import tw from 'tailwind-rn';
 import { like } from '../../store/actions/swipe';
@@ -9,20 +10,29 @@ import SwipeCard from '../../components/SwipeCard';
 import SwipeButtons from '../../components/SwipeButtons';
 import SwipeMatch from '../../components/SwipeMatch';
 import Colors from '../../constants/Colors';
-import * as Response from '../../constants/responses/match';
+import * as r from '../../constants/responses/match';
 import * as w from '../../constants/swipe';
 import styles from './styles';
 
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
-// TODO: solver render match
+// TODO: error: cuando cambio el estado a showMatch true no aparece el pop y tengo que hacer un manual reload para que funcione
 
 const Deck = (props) => {
   const dispatch = useDispatch();
   const swipeRef = useRef();
   const currentDeckIndex = useRef(0);
-  const { swipeProfiles, setAllCardsSwiped, showProfileHandler } = props;
+  const [userData, setUserData] = useState({});
+  const [showMatch, setShowMatch] = useState(false);
+
+  const {
+    swipeProfiles,
+    showProfileHandler,
+    showMatchHandler,
+    setShowMode,
+    showMode,
+  } = props;
 
   const userGetProfile = useSelector((state) => state.userGetProfile);
   const { data: userProfile } = userGetProfile;
@@ -34,27 +44,45 @@ const Deck = (props) => {
     data: likeData,
   } = likeReducer;
 
-  const [itsMatch, setItsMatch] = useState(false);
+  const getAsyncData = async () => {
+    try {
+      const user = JSON.parse(await AsyncStorage.getItem('@userData'));
 
-  console.log('ITS MATCH -> ', itsMatch);
+      if (user !== null) {
+        setUserData(user);
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  useEffect(() => {
+    getAsyncData();
+  }, []);
 
   useEffect(() => {
     if (likeError) {
       Alert.alert('Like error');
       dispatch({ type: w.LIKE_PROFILE_RESET });
     }
-    if (likeData) {
-      if (
-        likeData.details === Response.NEW_MATCH ||
-        likeData.details === Response.SAME_MATCH
-      ) {
-        setItsMatch(true);
-      } else {
-        // if there is not a match, just reset
-        dispatch({ type: w.LIKE_PROFILE_RESET });
-      }
+  }, [dispatch, likeError]);
+
+  useEffect(() => {
+    if (
+      likeData?.details === r.NEW_MATCH ||
+      likeData?.details === r.SAME_MATCH
+    ) {
+      // setShowMode(3);
+      console.log('USER DATA -> ', userData);
+      props.navigation.navigate('SwipeMatch', {
+        likeData: likeData,
+        userData: userData,
+      });
+    } else {
+      dispatch({ type: w.LIKE_PROFILE_RESET });
+      setShowMode(2);
     }
-  }, [likeError]);
+  }, [dispatch, likeData?.details, likeData]);
 
   const getRandomMember = (members) => {
     return members[Math.floor(Math.random() * members.length)];
@@ -70,9 +98,19 @@ const Deck = (props) => {
       const randomMember = getRandomMember(likedProfile.members);
       // console.log('RANDOM MEMBER -> ', randomMember);
       await dispatch(like(randomMember.id));
+      console.log('LIKE DATA -> ', likeData, likeLoading);
     } else {
       // console.log('LIKED PROFILE -> ', likedProfile);
       await dispatch(like(likedProfile.id));
+      console.log('LIKE DATA -> ', likeData, likeLoading);
+    }
+
+    if (
+      likeData?.details === r.NEW_MATCH ||
+      likeData?.details === r.SAME_MATCH
+    ) {
+      setShowMode(3);
+      // return showMatchHandler();
     }
 
     currentDeckIndex.current = index;
@@ -100,14 +138,14 @@ const Deck = (props) => {
   };
 
   const allCardsSwiped = () => {
-    if (!itsMatch) {
-      setAllCardsSwiped(true);
+    if (!likeData && !likeLoading) {
+      setShowMode(1);
     }
   };
-
+  // -------------------------------------MATCH SECTION ----------------------------------
   // Match actions
   const handleCloseMatch = () => {
-    setItsMatch(false);
+    setShowMode(2);
     dispatch({ type: w.LIKE_PROFILE_RESET });
   };
 
@@ -127,22 +165,22 @@ const Deck = (props) => {
 
   const getMatchedType = (type) => {
     switch (type) {
-      case Response.NEITHER:
+      case r.NEITHER:
         return {
           current: 'Profile',
           matched: 'Profile',
         };
-      case Response.BOTH:
+      case r.BOTH:
         return {
           current: 'Group',
           matched: 'Group',
         };
-      case Response.LIKED:
+      case r.LIKED:
         return {
           current: 'Profile',
           matched: 'Group',
         };
-      case Response.CURRENT:
+      case r.CURRENT:
         return {
           current: 'Group',
           matched: 'Profile',
@@ -156,12 +194,12 @@ const Deck = (props) => {
   };
 
   const getMatchData = (data) => {
-    const matchedProfile = getMatchedProfile(data.match_data, userProfile);
-    const currentProfile = getCurrentProfile(data.match_data, userProfile);
-    const matchType = getMatchedType(data.group_match);
+    const matchedProfile = getMatchedProfile(data?.match_data, userProfile);
+    const currentProfile = getCurrentProfile(data?.match_data, userProfile);
+    const matchType = getMatchedType(data?.group_match);
 
     switch (data.details) {
-      case Response.NEW_MATCH:
+      case r.NEW_MATCH:
         return {
           matchId: data.match_data.id,
           title: 'NEW MATCH!!',
@@ -173,7 +211,7 @@ const Deck = (props) => {
           matchedType: matchType.matched,
           chatButtonText: `Send message to ${matchedProfile.firstname}`,
         };
-      case Response.SAME_MATCH:
+      case r.SAME_MATCH:
         return {
           matchId: data.match_data.id,
           title: 'MATCH!!',
@@ -192,10 +230,13 @@ const Deck = (props) => {
 
   // render match
   const renderMatch = () => {
+    if (!likeData) {
+      return null;
+    }
     const matchData = getMatchData(likeData);
     return (
       <SwipeMatch
-        visible
+        visible={showMode === 3}
         title={matchData.title}
         currentProfileImage={matchData.curretProfileImage}
         matchedProfileImage={matchData.matchedProfileImage}
@@ -227,64 +268,58 @@ const Deck = (props) => {
 
   return (
     <View style={{ flex: 1 }}>
-      {itsMatch ? (
-        renderMatch()
-      ) : (
-        <>
-          <View style={styles.swipeContainer}>
-            <Swiper
-              containerStyle={tw('bg-transparent')}
-              cards={swipeProfiles}
-              ref={swipeRef}
-              stackSize={2}
-              cardIndex={0}
-              verticalSwipe
-              infinite={false}
-              stackAnimationFriction={10}
-              showSecondCard
-              animateCardOpacity
-              animateOverlayLabelsOpacity
-              swipeBackCard
-              overlayLabels={{
-                left: {
-                  title: 'DISLIKE',
-                  style: {
-                    label: {
-                      textAlign: 'right',
-                      color: Colors.red,
-                      fontSize: 30,
-                    },
-                  },
+      <View style={styles.swipeContainer}>
+        <Swiper
+          containerStyle={tw('bg-transparent')}
+          cards={swipeProfiles}
+          ref={swipeRef}
+          stackSize={2}
+          cardIndex={0}
+          verticalSwipe
+          infinite={false}
+          stackAnimationFriction={10}
+          showSecondCard
+          animateCardOpacity
+          animateOverlayLabelsOpacity
+          swipeBackCard
+          overlayLabels={{
+            left: {
+              title: 'DISLIKE',
+              style: {
+                label: {
+                  textAlign: 'right',
+                  color: Colors.red,
+                  fontSize: 30,
                 },
-                right: {
-                  title: 'LIKE',
-                  style: {
-                    label: {
-                      textAlign: 'left',
-                      color: Colors.calypso,
-                      fontSize: 30,
-                    },
-                  },
+              },
+            },
+            right: {
+              title: 'LIKE',
+              style: {
+                label: {
+                  textAlign: 'left',
+                  color: Colors.calypso,
+                  fontSize: 30,
                 },
-              }}
-              onSwipedLeft={handleDislike}
-              onSwipedRight={handleLike}
-              onSwipedTop={handleLike}
-              onSwipedBottom={handleDislike}
-              renderCard={renderCard}
-              onSwipedAll={allCardsSwiped}
-            />
-          </View>
-          <View style={styles.buttonsContainer}>
-            <SwipeButtons
-              rewind
-              onLeft={onLikePressed}
-              onRight={onDislikePressed}
-              onRewind={onRewindPressed}
-            />
-          </View>
-        </>
-      )}
+              },
+            },
+          }}
+          onSwipedLeft={handleDislike}
+          onSwipedRight={handleLike}
+          onSwipedTop={handleLike}
+          onSwipedBottom={handleDislike}
+          renderCard={renderCard}
+          onSwipedAll={allCardsSwiped}
+        />
+      </View>
+      <View style={styles.buttonsContainer}>
+        <SwipeButtons
+          rewind
+          onLeft={onLikePressed}
+          onRight={onDislikePressed}
+          onRewind={onRewindPressed}
+        />
+      </View>
     </View>
   );
 };

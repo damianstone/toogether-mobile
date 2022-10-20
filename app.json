@@ -6,9 +6,9 @@
     "orientation": "portrait",
     "icon": "",
     "splash": {
-      "image": "",
+      "image": "./assets/images/logo-2.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#1A1936"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
