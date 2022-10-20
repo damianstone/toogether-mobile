@@ -38,6 +38,7 @@ const SwipeScreen = (props) => {
   const dispatch = useDispatch();
   const [showMode, setShowMode] = useState(2);
   const [localLoading, setLocalLoading] = useState(false);
+  const permissionGranted = verifyLocationPermissions();
 
   const userLocationReducer = useSelector((state) => state.userLocation);
   const {
@@ -54,12 +55,11 @@ const SwipeScreen = (props) => {
   } = listSwipeReducer;
 
   useEffect(() => {
-    const permissionGranted = verifyLocationPermissions();
     if (permissionGranted) {
       dispatch(userLocation());
     } else {
       setShowMode(-1);
-      return Alert.alert(
+      Alert.alert(
         'Insufficient Permissions!',
         'You need to grant Location permissions to be able to access your location',
         [{ text: 'Okay', onPress: () => verifyLocationPermissions() }]
@@ -71,7 +71,7 @@ const SwipeScreen = (props) => {
       setShowMode(2);
     }
     return null;
-  }, [dispatch, postLocationError]);
+  }, [dispatch]);
 
   useEffect(() => {
     dispatch(listSwipe());
@@ -85,7 +85,7 @@ const SwipeScreen = (props) => {
 
   // TODO: fix render when enter the screen
 
-  // add listener to fetch the user and re fetch it
+  //add listener to fetch the user and re fetch it
   // useEffect(() => {
   //   const unsubscribe = props.navigation.addListener('didFocus', () => {
   //     reload();
@@ -211,6 +211,7 @@ const SwipeScreen = (props) => {
         {showMode === 0 && renderNoCardsFound()}
 
         {showMode === 1 && renderAllCardSwiped()}
+
         {(showMode === 2 || showMode === 3) &&
           swipe &&
           swipe.results.length > 0 && (

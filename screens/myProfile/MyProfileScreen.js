@@ -170,12 +170,12 @@ const MyProfileScreen = (props) => {
   }, [dispatch]);
 
   // add listener to fetch the user and re fetch it
-  useEffect(() => {
-    const unsubscribe = props.navigation.addListener('didFocus', () => {
-      loadProfile();
-    });
-    return unsubscribe;
-  }, [loadProfile]);
+  // useEffect(() => {
+  //   const unsubscribe = props.navigation.addListener('didFocus', () => {
+  //     loadProfile();
+  //   });
+  //   return unsubscribe;
+  // }, [loadProfile]);
 
   const handleAddPhoto = async (photo_id, isUpdate) => {
     const hasPermissions = await verifyPermissions();

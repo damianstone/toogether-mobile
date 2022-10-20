@@ -133,8 +133,8 @@ const ChatScreen = (props) => {
   };
 
   const getInitials = (firstname, lastname) => {
-    const first = firstname ? firstname.charAt(0).toUpperCase : 'N';
-    const second = lastname ? lastname.charAt(0).toUpperCase : 'N';
+    const first = firstname ? firstname.charAt(0).toUpperCase() : 'N';
+    const second = lastname ? lastname.charAt(0).toUpperCase() : 'N';
     return first + second;
   };
 
