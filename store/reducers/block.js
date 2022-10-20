@@ -42,7 +42,7 @@ export const blockProfileReducer = (state = {}, action) => {
   }
 };
 
-export const disblockProfileReducer = (state = {}, action) => {
+export const unBlockProfileReducer = (state = {}, action) => {
   switch (action.type) {
     case b.DISBLOCK_PROFILE_REQUEST:
       return {

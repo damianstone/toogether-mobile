@@ -99,15 +99,15 @@ export const CREATE_PROFILE_INPUTS = [
     items: [
       {
         label: 'Male',
-        value: 'male',
+        value: 'M',
       },
       {
         label: 'Female',
-        value: 'female',
+        value: 'W',
       },
       {
         label: 'Chair',
-        value: 'chair',
+        value: 'X',
       },
     ],
   },
@@ -133,15 +133,15 @@ export const CREATE_PROFILE_INPUTS = [
     items: [
       {
         label: 'Men',
-        value: 'men',
+        value: 'M',
       },
       {
         label: 'Women',
-        value: 'women',
+        value: 'W',
       },
       {
         label: 'Both',
-        value: 'both',
+        value: 'X',
       },
     ],
   },
@@ -323,15 +323,15 @@ export const UPDATE_PROFILE_INPUTS = [
     items: [
       {
         label: 'Male',
-        value: 'male',
+        value: 'M',
       },
       {
         label: 'Female',
-        value: 'female',
+        value: 'W',
       },
       {
         label: 'Chair',
-        value: 'chair',
+        value: 'X',
       },
     ],
   },
@@ -357,15 +357,15 @@ export const UPDATE_PROFILE_INPUTS = [
     items: [
       {
         label: 'Men',
-        value: 'men',
+        value: 'M',
       },
       {
         label: 'Women',
-        value: 'women',
+        value: 'W',
       },
       {
         label: 'Both',
-        value: 'both',
+        value: 'X',
       },
     ],
   },

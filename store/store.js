@@ -17,7 +17,7 @@ import {
 import {
   listBlockedProfilesReducer,
   blockProfileReducer,
-  disblockProfileReducer,
+  unBlockProfileReducer,
 } from './reducers/block';
 import {
   listGroupReducer,
@@ -58,7 +58,7 @@ const reducer = combineReducers({
   // Block API
   listBlockedProfiles: listBlockedProfilesReducer,
   blockProfile: blockProfileReducer,
-  disblockProfileReducer: disblockProfileReducer,
+  unBlockProfile: unBlockProfileReducer,
   // Group API
   listGroup: listGroupReducer,
   getGroup: getGroupReducer,

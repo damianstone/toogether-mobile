@@ -14,6 +14,8 @@ import Constants from 'expo-constants';
 import Colors from '../constants/Colors';
 import InfoCard from './InfoCard';
 
+// TODO: what happened if the user dont have a photo ?
+
 const SwipeCard = (props) => {
   const BASE_URL = Constants.manifest.extra.LOCAL_URL;
 
@@ -121,8 +123,18 @@ const SwipeCard = (props) => {
               imageStyle={{ ...imageStyle }}
               key={props.profile.id}
               resizeMode="cover"
-              source={{ uri: `${BASE_URL}${props.profile.photos[0].image}` }} // just get the first photo of every profile uri: `http://127.0.0.1:8000${profile.photo}`
+              source={{ uri: `${BASE_URL}${props.profile.photos[0]?.image}` }} // just get the first photo of every profile uri: `http://127.0.0.1:8000${profile.photo}`
               style={styles.image}>
+              {!props.profile.photos[0] && (
+                <View
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    backgroundColor: Colors.blue,
+                  }}>
+                  <Text>No photo</Text>
+                </View>
+              )}
               <InfoCard
                 firstName={props.profile.firstname}
                 lastName={props.profile.lastname}

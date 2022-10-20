@@ -39,8 +39,10 @@ export const userLocation = () => {
       await AsyncStorage.setItem(
         '@userData',
         JSON.stringify({
+          id: data.id,
           token: data.token,
           access_token: data.access,
+          refresh_token: data.refresh,
           has_account: data.has_account,
         })
       );
@@ -245,12 +247,15 @@ export const getUserProfile = (profile_id) => {
       dispatch({ type: c.USER_GET_PROFILE_REQUEST });
 
       let id;
+
       const userData = JSON.parse(await AsyncStorage.getItem('@userData'));
-      if (profile_id) {
+
+      if (profile_id !== undefined) {
         id = profile_id;
       } else {
         id = userData.id;
       }
+
       const config = {
         'Content-Type': 'application/json',
         Accept: 'application/json',
@@ -266,6 +271,7 @@ export const getUserProfile = (profile_id) => {
       await AsyncStorage.setItem(
         '@userData',
         JSON.stringify({
+          ...userData,
           token: data.token,
           access_token: data.access,
           has_account: data.has_account,

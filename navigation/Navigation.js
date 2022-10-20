@@ -35,6 +35,7 @@ import EditProfileScreen from '../screens/MyProfile/EditProfileScreen';
 import SwipeScreen from '../screens/Swipe/SwipeScreen';
 import ChatScreen from '../screens/ChatScreen';
 import LikesScreen from '../screens/Likes/LikesScreen';
+import BlockProfilesScreen from '../screens/BlockProfiles/BlockProfilesScreen';
 
 const defaultNavOptions = {
   headerMode: 'none',
@@ -89,11 +90,14 @@ const MyProfileNavigator = createStackNavigator(
       },
     },
     Preview: ProfilePreviewNavigator,
+    EditProfile: {
+      screen: EditProfileScreen,
+    },
     Setting: {
       screen: SettingScreen,
     },
-    EditProfile: {
-      screen: EditProfileScreen,
+    Blocked: {
+      screen: BlockProfilesScreen,
     },
   },
   {

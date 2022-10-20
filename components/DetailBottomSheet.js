@@ -128,7 +128,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     backgroundColor: Colors.white,
     padding: 20,
-    borderRadius: 20,
+    borderRadius: 10,
     minHeight: '30%',
     maxHeight: '40%',
     shadowColor: '#000',

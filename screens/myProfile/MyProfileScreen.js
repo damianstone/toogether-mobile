@@ -40,15 +40,15 @@ import styles from './styles';
 const BASE_PHOTOS = [
   {
     id: 1,
-    text: 'Add photo',
+    text: 'Add 📸',
   },
   {
     id: 2,
-    text: 'Add photo',
+    text: 'Add 📸',
   },
   {
     id: 3,
-    text: 'Add photo',
+    text: 'Add 📸',
   },
   {
     id: 4,
@@ -170,12 +170,12 @@ const MyProfileScreen = (props) => {
   }, [dispatch]);
 
   // add listener to fetch the user and re fetch it
-  useEffect(() => {
-    const unsubscribe = props.navigation.addListener('', () => {
-      loadProfile();
-    });
-    return unsubscribe;
-  }, [loadProfile]);
+  // useEffect(() => {
+  //   const unsubscribe = props.navigation.addListener('didFocus', () => {
+  //     loadProfile();
+  //   });
+  //   return unsubscribe;
+  // }, [loadProfile]);
 
   const handleAddPhoto = async (photo_id, isUpdate) => {
     const hasPermissions = await verifyPermissions();

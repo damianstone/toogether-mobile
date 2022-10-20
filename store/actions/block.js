@@ -70,7 +70,7 @@ export const blockProfile = (id) => {
   };
 };
 
-export const disblockProfile = (id) => {
+export const unBlockProfile = (id) => {
   return async (dispatch) => {
     try {
       dispatch({ type: b.DISBLOCK_PROFILE_REQUEST });
@@ -85,7 +85,7 @@ export const disblockProfile = (id) => {
 
       const { data } = await axios({
         method: 'POST',
-        url: `${BASE_URL}/api/v1/profiles/${id}/actions/block-profile/`,
+        url: `${BASE_URL}/api/v1/profiles/${id}/actions/disblock-profile/`,
         headers: config,
       });
 
