@@ -40,15 +40,15 @@ import styles from './styles';
 const BASE_PHOTOS = [
   {
     id: 1,
-    text: 'Add photo',
+    text: 'Add 📸',
   },
   {
     id: 2,
-    text: 'Add photo',
+    text: 'Add 📸',
   },
   {
     id: 3,
-    text: 'Add photo',
+    text: 'Add 📸',
   },
   {
     id: 4,
@@ -171,7 +171,7 @@ const MyProfileScreen = (props) => {
 
   // add listener to fetch the user and re fetch it
   useEffect(() => {
-    const unsubscribe = props.navigation.addListener('', () => {
+    const unsubscribe = props.navigation.addListener('didFocus', () => {
       loadProfile();
     });
     return unsubscribe;

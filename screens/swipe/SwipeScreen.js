@@ -65,13 +65,13 @@ const SwipeScreen = (props) => {
         [{ text: 'Okay', onPress: () => verifyLocationPermissions() }]
       );
     }
-    if (postLocationError || errorSwipe) {
+    if (postLocationError) {
       setShowMode(-1);
     } else {
       setShowMode(2);
     }
     return null;
-  }, [dispatch, postLocationError, errorSwipe]);
+  }, [dispatch, postLocationError]);
 
   useEffect(() => {
     dispatch(listSwipe());
@@ -218,6 +218,7 @@ const SwipeScreen = (props) => {
               swipeProfiles={swipe.results}
               setShowMode={setShowMode}
               showMode={showMode}
+              renderAllCardSwiped={renderAllCardSwiped}
               navigation={props.navigation}
               showProfileHandler={showProfileHandler}
               showMatchHandler={showMatchHandler}

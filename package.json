@@ -33,6 +33,7 @@
     "expo-clipboard": "^2.1.0",
     "expo-constants": "~13.0.1",
     "expo-file-system": "^14.1.0",
+    "expo-font": "~10.0.4",
     "expo-google-app-auth": "~8.3.0",
     "expo-image-picker": "~12.0.1",
     "expo-linear-gradient": "~11.0.3",
@@ -69,8 +70,7 @@
     "react-redux": "^7.2.8",
     "redux": "^4.2.0",
     "redux-thunk": "^2.4.1",
-    "tailwind-rn": "^3.0.1",
-    "expo-font": "~10.0.4"
+    "tailwind-rn": "^3.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",

@@ -127,7 +127,7 @@ const SettingScreen = (props) => {
   }, []);
 
   const navigateToScreen = (screen) => {
-    props.navigate(screen);
+    props.navigation.navigate(screen);
   };
 
   const checkAction = (action) => {

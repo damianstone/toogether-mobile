@@ -3,7 +3,7 @@ export const SETTINGS_ACCOUNT_DATA = [
     id: 'blocked-users',
     action: {
       type: 'NAVIGATE_TO_SCREEN',
-      screen: 'blocked_users',
+      screen: 'Blocked',
     },
     icon: 'user-x',
     feather: true,
