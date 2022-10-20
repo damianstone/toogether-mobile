@@ -769,10 +769,20 @@ function flowParseTypeAnnotatableIdentifier() {
     flowParseInterface();
     _index.popTypeContext.call(void 0, oldIsType);
     return true;
-  } else {
-    return false;
+  } else if (_util.isContextual.call(void 0, _keywords.ContextualKeyword._enum)) {
+    flowParseEnumDeclaration();
+    return true;
   }
+  return false;
 } exports.flowTryParseStatement = flowTryParseStatement;
+
+ function flowTryParseExportDefaultExpression() {
+  if (_util.isContextual.call(void 0, _keywords.ContextualKeyword._enum)) {
+    flowParseEnumDeclaration();
+    return true;
+  }
+  return false;
+} exports.flowTryParseExportDefaultExpression = flowTryParseExportDefaultExpression;
 
 // declares, interfaces and type aliases
  function flowParseIdentifierStatement(contextualKeyword) {
@@ -811,7 +821,8 @@ function flowParseTypeAnnotatableIdentifier() {
   return (
     _util.isContextual.call(void 0, _keywords.ContextualKeyword._type) ||
     _util.isContextual.call(void 0, _keywords.ContextualKeyword._interface) ||
-    _util.isContextual.call(void 0, _keywords.ContextualKeyword._opaque)
+    _util.isContextual.call(void 0, _keywords.ContextualKeyword._opaque) ||
+    _util.isContextual.call(void 0, _keywords.ContextualKeyword._enum)
   );
 } exports.flowShouldParseExportDeclaration = flowShouldParseExportDeclaration;
 
@@ -820,7 +831,8 @@ function flowParseTypeAnnotatableIdentifier() {
     _index.match.call(void 0, _types.TokenType.name) &&
     (_base.state.contextualKeyword === _keywords.ContextualKeyword._type ||
       _base.state.contextualKeyword === _keywords.ContextualKeyword._interface ||
-      _base.state.contextualKeyword === _keywords.ContextualKeyword._opaque)
+      _base.state.contextualKeyword === _keywords.ContextualKeyword._opaque ||
+      _base.state.contextualKeyword === _keywords.ContextualKeyword._enum)
   );
 } exports.flowShouldDisallowExportDefaultSpecifier = flowShouldDisallowExportDefaultSpecifier;
 
@@ -933,9 +945,11 @@ function flowParseTypeAnnotatableIdentifier() {
       // `import {type as foo`
       _expression.parseIdentifier.call(void 0, );
     }
-  } else if (isTypeKeyword && (_index.match.call(void 0, _types.TokenType.name) || !!(_base.state.type & _types.TokenType.IS_KEYWORD))) {
-    // `import {type foo`
-    _expression.parseIdentifier.call(void 0, );
+  } else {
+    if (isTypeKeyword && (_index.match.call(void 0, _types.TokenType.name) || !!(_base.state.type & _types.TokenType.IS_KEYWORD))) {
+      // `import {type foo`
+      _expression.parseIdentifier.call(void 0, );
+    }
     if (_util.eatContextual.call(void 0, _keywords.ContextualKeyword._as)) {
       _expression.parseIdentifier.call(void 0, );
     }
@@ -1052,4 +1066,40 @@ function parseAsyncArrowWithTypeParameters() {
   }
   _expression.parseArrowExpression.call(void 0, startTokenIndex);
   return true;
+}
+
+function flowParseEnumDeclaration() {
+  _util.expectContextual.call(void 0, _keywords.ContextualKeyword._enum);
+  _base.state.tokens[_base.state.tokens.length - 1].type = _types.TokenType._enum;
+  _expression.parseIdentifier.call(void 0, );
+  flowParseEnumBody();
+}
+
+function flowParseEnumBody() {
+  if (_util.eatContextual.call(void 0, _keywords.ContextualKeyword._of)) {
+    _index.next.call(void 0, );
+  }
+  _util.expect.call(void 0, _types.TokenType.braceL);
+  flowParseEnumMembers();
+  _util.expect.call(void 0, _types.TokenType.braceR);
+}
+
+function flowParseEnumMembers() {
+  while (!_index.match.call(void 0, _types.TokenType.braceR) && !_base.state.error) {
+    if (_index.eat.call(void 0, _types.TokenType.ellipsis)) {
+      break;
+    }
+    flowParseEnumMember();
+    if (!_index.match.call(void 0, _types.TokenType.braceR)) {
+      _util.expect.call(void 0, _types.TokenType.comma);
+    }
+  }
+}
+
+function flowParseEnumMember() {
+  _expression.parseIdentifier.call(void 0, );
+  if (_index.eat.call(void 0, _types.TokenType.eq)) {
+    // Flow enum values are always just one token (a string, number, or boolean literal).
+    _index.next.call(void 0, );
+  }
 }

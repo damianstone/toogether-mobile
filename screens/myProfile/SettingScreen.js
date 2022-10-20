@@ -9,11 +9,18 @@ import {
   View,
   Alert,
   Linking,
+  Share,
   StyleSheet,
 } from 'react-native';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { useDispatch, useSelector } from 'react-redux';
-import { FontAwesome5, Ionicons, AntDesign } from '@expo/vector-icons';
+import {
+  FontAwesome5,
+  Ionicons,
+  AntDesign,
+  Feather,
+  MaterialCommunityIcons,
+} from '@expo/vector-icons';
 import { logout, userDelete } from '../../store/actions/user';
 import { SETTINGS_ACCOUNT_DATA, SETTINGS_APP_DATA } from '../../data/settings';
 import { check400Error, checkServerError } from '../../utils/errors';
@@ -89,6 +96,27 @@ const SettingScreen = (props) => {
     ]);
   };
 
+  const shareApp = async () => {
+    try {
+      const result = await Share.share({
+        message:
+          'Toogether App | The app to have fun and meet other students, download it using the following link ;) URL',
+      });
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+          // do something
+        } else {
+          // shared
+        }
+      } else if (result.action === Share.dismissedAction) {
+        // dismissed
+        // just for IOS
+      }
+    } catch (error) {
+      alert(error.message);
+    }
+  };
+
   const handleOpenLink = useCallback(async (url) => {
     const supported = await Linking.canOpenURL(url);
     if (supported) {
@@ -116,6 +144,8 @@ const SettingScreen = (props) => {
         );
       case 'REDIRECT_TO_URL':
         return handleOpenLink(action.url);
+      case 'SHARE_APP':
+        return shareApp();
       default:
         return null;
     }
@@ -148,7 +178,25 @@ const SettingScreen = (props) => {
               onPress={() => checkAction(setting.action)}
               style={styles.settingView}>
               <View style={styles.settingIcon}>
-                <FontAwesome5 name={setting.icon} size={25} color="white" />
+                {setting.ionicons && (
+                  <Ionicons name={setting.icon} size={25} color="white" />
+                )}
+                {setting.fontawesome && (
+                  <FontAwesome5 name={setting.icon} size={25} color="white" />
+                )}
+                {setting.antdesign && (
+                  <AntDesign name={setting.icon} size={25} color="white" />
+                )}
+                {setting.feather && (
+                  <Feather name={setting.icon} size={25} color="white" />
+                )}
+                {setting.materialcommunityicons && (
+                  <MaterialCommunityIcons
+                    name={setting.icon}
+                    size={25}
+                    color="white"
+                  />
+                )}
               </View>
               <View style={styles.settingTextView}>
                 <Text style={styles.settingText}>{setting.title}</Text>
@@ -163,18 +211,37 @@ const SettingScreen = (props) => {
               onPress={() => checkAction(setting.action)}
               style={styles.settingView}>
               <View style={styles.settingIcon}>
-                <FontAwesome5
-                  name={setting.icon}
-                  size={25}
-                  color="white"
-                  type="FontAwesome5"
-                />
+                {setting.ionicons && (
+                  <Ionicons name={setting.icon} size={25} color="white" />
+                )}
+                {setting.fontawesome && (
+                  <FontAwesome5 name={setting.icon} size={25} color="white" />
+                )}
+                {setting.antdesign && (
+                  <AntDesign name={setting.icon} size={25} color="white" />
+                )}
+                {setting.feather && (
+                  <Feather name={setting.icon} size={25} color="white" />
+                )}
+                {setting.materialcommunityicons && (
+                  <MaterialCommunityIcons
+                    name={setting.icon}
+                    size={25}
+                    color="white"
+                  />
+                )}
               </View>
               <View style={styles.settingTextView}>
                 <Text style={styles.settingText}>{setting.title}</Text>
               </View>
             </TouchableOpacity>
           ))}
+          <View style={styles.line} />
+          <View style={{ width: '60%', padding: 10 }}>
+            <Text style={{ color: Colors.white, width: '60%' }}>
+              Version: 1.0.0
+            </Text>
+          </View>
           <View style={styles.buttonView}>
             <AuthButton
               text="Logout"
@@ -229,7 +296,7 @@ const styles = StyleSheet.create({
     marginVertical: 9,
   },
   settingTitleText: {
-    fontSize: 25,
+    fontSize: 20,
     color: Colors.placeholder,
   },
   settingView: {
@@ -250,8 +317,13 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
   },
   settingText: {
-    fontSize: 20,
+    fontSize: 18,
     color: Colors.white,
+  },
+  line: {
+    borderBottomColor: Colors.placeholder,
+    borderBottomWidth: 0.5,
+    margin: 10,
   },
   buttonView: {
     marginBottom: '10%',

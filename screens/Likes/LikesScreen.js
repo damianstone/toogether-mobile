@@ -48,6 +48,7 @@ const LikesScreen = (props) => {
     data: likeData,
   } = likeReducer;
 
+  // TODO: reset after error
   useEffect(() => {
     if (likesError) {
       checkServerError(likesError);

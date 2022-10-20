@@ -9,6 +9,10 @@ npm-debug.*
 *.key
 *.mobileprovision
 
+# Node
+node_modules
+package-lock.json
+
 .env
 .node_modules
 .vscode

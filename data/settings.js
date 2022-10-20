@@ -5,8 +5,8 @@ export const SETTINGS_ACCOUNT_DATA = [
       type: 'NAVIGATE_TO_SCREEN',
       screen: 'blocked_users',
     },
-    icon: 'users-slash',
-    fontawesome: true,
+    icon: 'user-x',
+    feather: true,
     title: 'Blocked users',
   },
   {
@@ -31,9 +31,9 @@ export const SETTINGS_ACCOUNT_DATA = [
       type: 'REDIRECT_TO_URL',
       url: 'https://toogether.app/',
     },
-    icon: 'Safety',
-    antdesign: true,
-    title: 'How we secure your data',
+    icon: 'lock-closed-outline',
+    ionicons: true,
+    title: 'Privacy',
   },
 ];
 
@@ -55,7 +55,7 @@ export const SETTINGS_APP_DATA = [
     },
     icon: 'chat-question-outline',
     materialcommunityicons: true,
-    title: 'Frequently asked questions',
+    title: 'FAQ',
   },
   {
     id: 'terms-of-use',
@@ -63,7 +63,8 @@ export const SETTINGS_APP_DATA = [
       type: 'REDIRECT_TO_URL',
       url: 'https://toogether.app/',
     },
-    icon: 'users-slash',
+    icon: 'warning',
+    antdesign: true,
     title: 'Terms of use',
   },
   {
@@ -72,7 +73,8 @@ export const SETTINGS_APP_DATA = [
       type: 'REDIRECT_TO_URL',
       url: 'https://toogether.app/',
     },
-    icon: 'users-slash',
+    icon: 'team',
+    antdesign: true,
     title: 'Community guidelines',
   },
   {
@@ -81,7 +83,8 @@ export const SETTINGS_APP_DATA = [
       type: 'REDIRECT_TO_URL',
       url: 'https://toogether.app/',
     },
-    icon: 'users-slash',
+    icon: 'Safety',
+    antdesign: true,
     title: 'Safety tips',
   },
   {
@@ -90,8 +93,9 @@ export const SETTINGS_APP_DATA = [
       type: 'REDIRECT_TO_URL',
       url: 'https://toogether.app/',
     },
-    icon: 'users-slash',
-    title: 'About us',
+    icon: 'alert-circle',
+    feather: true,
+    title: 'About',
   },
   {
     id: 'contact-us',
@@ -99,15 +103,8 @@ export const SETTINGS_APP_DATA = [
       type: 'REDIRECT_TO_URL',
       url: 'https://toogether.app/',
     },
-    icon: 'users-slash',
-    title: 'Contact us',
-  },
-  {
-    id: 'version',
-    action: {
-      type: null,
-    },
-    icon: 'users-slash',
-    title: 'Version: 1.0.0',
+    icon: 'grid',
+    feather: true,
+    title: 'Contact',
   },
 ];

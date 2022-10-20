@@ -17,14 +17,15 @@ const StartupScreen = (props) => {
 
       if (userData && userData.has_account) {
         props.navigation.navigate('Swipe');
-        return;
-      }
-
-      // if there is no user data
-      if (!userData || !userData.has_account) {
-        console.log('NO AUTH');
+      } else {
         props.navigation.navigate('AuthStart');
       }
+
+      // // if there is no user data
+      // if (!userData || !userData.has_account) {
+      //   console.log('NO AUTH');
+      //   props.navigation.navigate('AuthStart');
+      // }
     };
     tryLogin();
   }, []);

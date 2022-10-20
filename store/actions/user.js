@@ -36,6 +36,15 @@ export const userLocation = () => {
         },
       });
 
+      await AsyncStorage.setItem(
+        '@userData',
+        JSON.stringify({
+          token: data.token,
+          access_token: data.access,
+          has_account: data.has_account,
+        })
+      );
+
       dispatch({
         type: c.USER_LOCATION_SUCCESS,
         payload: data,
@@ -253,6 +262,15 @@ export const getUserProfile = (profile_id) => {
         url: `${BASE_URL}/api/v1/profiles/${id}/`,
         headers: config,
       });
+
+      await AsyncStorage.setItem(
+        '@userData',
+        JSON.stringify({
+          token: data.token,
+          access_token: data.access,
+          has_account: data.has_account,
+        })
+      );
 
       dispatch({
         type: c.USER_GET_PROFILE_SUCCESS,

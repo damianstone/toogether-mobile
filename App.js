@@ -10,18 +10,16 @@ import * as SplashScreen from 'expo-splash-screen';
 import Entypo from '@expo/vector-icons/Entypo';
 import Ionicons from '@expo/vector-icons/Ionicons';
 
-import ToogetherNavigation from './navigation/NavigationContainer';
+import ToogetherNavigation from './navigation/Navigation';
 import store from './store/store';
 
-// TODO: manage splash screen and
+SplashScreen.preventAutoHideAsync();
 
 // FETCH FONTS
 const fetchFonts = async () => {
   const loadedFonts = await Font.loadAsync({
     'poppins-regular': require('./assets/fonts/Poppins-Regular.ttf'),
     'poppins-bold': require('./assets/fonts/Poppins-Bold.ttf'),
-    ...Ionicons.font,
-    ...Entypo.font,
   });
   return loadedFonts;
 };
@@ -29,15 +27,21 @@ const fetchFonts = async () => {
 const App = () => {
   const [fontLoaded, setFontLoaded] = useState(false);
 
+  const stopSplash = async () => {
+    try {
+      await SplashScreen.hideAsync();
+      setFontLoaded(true);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   if (!fontLoaded) {
     return (
       <AppLoading
         startAsync={fetchFonts}
         onError={(err) => console.warn(err)}
-        onFinish={() => {
-          setFontLoaded(true);
-          SplashScreen.hideAsync();
-        }}
+        onFinish={stopSplash}
         autoHideSplash
       />
     );

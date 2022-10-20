@@ -4,7 +4,7 @@
 [![Codecov](https://img.shields.io/codecov/c/gh/codingjerk/appdirsjs)](https://codecov.io/gh/codingjerk/appdirsjs)
 [![npm](https://img.shields.io/npm/v/appdirsjs)](https://www.npmjs.com/package/appdirsjs)
 [![npm bundle size](https://img.shields.io/bundlephobia/min/appdirsjs)](https://www.npmjs.com/package/appdirsjs)
-[![GitHub](https://img.shields.io/github/license/codingjerk/appdirsjs)](https://github.com/codingjerk/appdirsjs/blob/master/LICENSE.md)
+[![GitHub](https://img.shields.io/badge/license-MIT-blue)](https://github.com/codingjerk/appdirsjs/blob/master/_LICENSE.md)
 
 A node.js library to get paths to directories to store configs, caches and data according to OS standarts.
 

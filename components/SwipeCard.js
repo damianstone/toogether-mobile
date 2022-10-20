@@ -4,6 +4,7 @@ import {
   ImageBackground,
   StyleSheet,
   Text,
+  Image,
   TouchableOpacity,
   View,
 } from 'react-native';
@@ -100,13 +101,17 @@ const SwipeCard = (props) => {
                     lastName={profile.lastname}
                     city={profile.city}
                     live_in={profile.live_in}
+                    from={props.nationality}
                     age={profile.age}
                     university={profile.university}
                   />
                   <TouchableOpacity
                     onPress={() => props.showProfileHandler(profile, true)}
                     style={styles.arrowContainer}>
-                    <Text>A</Text>
+                    <Image
+                      source={require('../assets/images/white-arrow-up.png')}
+                      style={{ width: '100%', height: '100%' }}
+                    />
                   </TouchableOpacity>
                 </ImageBackground>
               );
@@ -123,13 +128,17 @@ const SwipeCard = (props) => {
                 lastName={props.profile.lastname}
                 city={props.profile.city}
                 live_in={props.profile.live_in}
+                from={props.nationality}
                 age={props.profile.age}
                 university={props.profile.university}
               />
               <TouchableOpacity
                 onPress={() => props.showProfileHandler(props.profile, false)}
                 style={styles.arrowContainer}>
-                <Text>A</Text>
+                <Image
+                  source={require('../assets/images/white-arrow-up.png')}
+                  style={{ width: '100%', height: '100%' }}
+                />
               </TouchableOpacity>
             </ImageBackground>
           )}
@@ -172,7 +181,7 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
     borderRadius: 100,
-    backgroundColor: Colors.orange,
+
     justifyContent: 'center',
     alignItems: 'center',
     alignSelf: 'flex-end',

@@ -143,113 +143,113 @@ const Deck = (props) => {
     }
   };
   // -------------------------------------MATCH SECTION ----------------------------------
-  // Match actions
-  const handleCloseMatch = () => {
-    setShowMode(2);
-    dispatch({ type: w.LIKE_PROFILE_RESET });
-  };
+  // // Match actions
+  // const handleCloseMatch = () => {
+  //   setShowMode(2);
+  //   dispatch({ type: w.LIKE_PROFILE_RESET });
+  // };
 
-  const getCurrentProfile = (matchData, currentProfile) => {
-    if (matchData?.profile1.id === currentProfile?.id) {
-      return matchData.profile1;
-    }
-    return matchData?.profile2;
-  };
+  // const getCurrentProfile = (matchData, currentProfile) => {
+  //   if (matchData?.profile1.id === currentProfile?.id) {
+  //     return matchData.profile1;
+  //   }
+  //   return matchData?.profile2;
+  // };
 
-  const getMatchedProfile = (matchData, currentProfile) => {
-    if (matchData?.profile1.id === currentProfile?.id) {
-      return matchData.profile2;
-    }
-    return matchData?.profile1;
-  };
+  // const getMatchedProfile = (matchData, currentProfile) => {
+  //   if (matchData?.profile1.id === currentProfile?.id) {
+  //     return matchData.profile2;
+  //   }
+  //   return matchData?.profile1;
+  // };
 
-  const getMatchedType = (type) => {
-    switch (type) {
-      case r.NEITHER:
-        return {
-          current: 'Profile',
-          matched: 'Profile',
-        };
-      case r.BOTH:
-        return {
-          current: 'Group',
-          matched: 'Group',
-        };
-      case r.LIKED:
-        return {
-          current: 'Profile',
-          matched: 'Group',
-        };
-      case r.CURRENT:
-        return {
-          current: 'Group',
-          matched: 'Profile',
-        };
-      default:
-        return {
-          current: 'Profile',
-          matched: 'Profile',
-        };
-    }
-  };
+  // const getMatchedType = (type) => {
+  //   switch (type) {
+  //     case r.NEITHER:
+  //       return {
+  //         current: 'Profile',
+  //         matched: 'Profile',
+  //       };
+  //     case r.BOTH:
+  //       return {
+  //         current: 'Group',
+  //         matched: 'Group',
+  //       };
+  //     case r.LIKED:
+  //       return {
+  //         current: 'Profile',
+  //         matched: 'Group',
+  //       };
+  //     case r.CURRENT:
+  //       return {
+  //         current: 'Group',
+  //         matched: 'Profile',
+  //       };
+  //     default:
+  //       return {
+  //         current: 'Profile',
+  //         matched: 'Profile',
+  //       };
+  //   }
+  // };
 
-  const getMatchData = (data) => {
-    const matchedProfile = getMatchedProfile(data?.match_data, userProfile);
-    const currentProfile = getCurrentProfile(data?.match_data, userProfile);
-    const matchType = getMatchedType(data?.group_match);
+  // const getMatchData = (data) => {
+  //   const matchedProfile = getMatchedProfile(data?.match_data, userProfile);
+  //   const currentProfile = getCurrentProfile(data?.match_data, userProfile);
+  //   const matchType = getMatchedType(data?.group_match);
 
-    switch (data.details) {
-      case r.NEW_MATCH:
-        return {
-          matchId: data.match_data.id,
-          title: 'NEW MATCH!!',
-          curretProfileImage: currentProfile.photos[0].image,
-          matchedProfileImage: matchedProfile.photos[0].image,
-          currentProfileName: currentProfile.firstname,
-          matchedProfileName: matchedProfile.firstname,
-          currentType: matchType.current,
-          matchedType: matchType.matched,
-          chatButtonText: `Send message to ${matchedProfile.firstname}`,
-        };
-      case r.SAME_MATCH:
-        return {
-          matchId: data.match_data.id,
-          title: 'MATCH!!',
-          curretProfileImage: currentProfile.photos[0].image,
-          matchedProfileImage: matchedProfile.photos[0].image,
-          currentProfileName: currentProfile.firstname,
-          matchedProfileName: matchedProfile.firstname,
-          currentType: matchType.current,
-          matchedType: matchType.matched,
-          chatButtonText: `Send message to ${matchedProfile.firstname}`,
-        };
-      default:
-        return null;
-    }
-  };
+  //   switch (data.details) {
+  //     case r.NEW_MATCH:
+  //       return {
+  //         matchId: data.match_data.id,
+  //         title: 'NEW MATCH!!',
+  //         curretProfileImage: currentProfile.photos[0].image,
+  //         matchedProfileImage: matchedProfile.photos[0].image,
+  //         currentProfileName: currentProfile.firstname,
+  //         matchedProfileName: matchedProfile.firstname,
+  //         currentType: matchType.current,
+  //         matchedType: matchType.matched,
+  //         chatButtonText: `Send message to ${matchedProfile.firstname}`,
+  //       };
+  //     case r.SAME_MATCH:
+  //       return {
+  //         matchId: data.match_data.id,
+  //         title: 'MATCH!!',
+  //         curretProfileImage: currentProfile.photos[0].image,
+  //         matchedProfileImage: matchedProfile.photos[0].image,
+  //         currentProfileName: currentProfile.firstname,
+  //         matchedProfileName: matchedProfile.firstname,
+  //         currentType: matchType.current,
+  //         matchedType: matchType.matched,
+  //         chatButtonText: `Send message to ${matchedProfile.firstname}`,
+  //       };
+  //     default:
+  //       return null;
+  //   }
+  // };
 
-  // render match
-  const renderMatch = () => {
-    if (!likeData) {
-      return null;
-    }
-    const matchData = getMatchData(likeData);
-    return (
-      <SwipeMatch
-        visible={showMode === 3}
-        title={matchData.title}
-        currentProfileImage={matchData.curretProfileImage}
-        matchedProfileImage={matchData.matchedProfileImage}
-        currentProfileName={matchData.currentProfileName}
-        matchedProfileName={matchData.matchedProfileName}
-        currentType={matchData.currentType}
-        matchedType={matchData.matchedType}
-        chatButtonText={matchData.chatButtonText}
-        chatOnPress={() => console.log('go to chat')}
-        laterOnPress={handleCloseMatch}
-      />
-    );
-  };
+  // // render match
+  // const renderMatch = () => {
+  //   if (!likeData) {
+  //     return null;
+  //   }
+  //   const matchData = getMatchData(likeData);
+  //   return (
+  //     <SwipeMatch
+  //       visible={showMode === 3}
+  //       title={matchData.title}
+  //       currentProfileImage={matchData.curretProfileImage}
+  //       matchedProfileImage={matchData.matchedProfileImage}
+  //       currentProfileName={matchData.currentProfileName}
+  //       matchedProfileName={matchData.matchedProfileName}
+  //       currentType={matchData.currentType}
+  //       matchedType={matchData.matchedType}
+  //       chatButtonText={matchData.chatButtonText}
+  //       chatOnPress={() => console.log('go to chat')}
+  //       laterOnPress={handleCloseMatch}
+  //     />
+  //   );
+  // };
 
   // render a card with the profiles (single and group)
   const renderCard = (profile) => {

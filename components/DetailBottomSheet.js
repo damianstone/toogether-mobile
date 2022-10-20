@@ -1,5 +1,12 @@
 import React, { useEffect } from 'react';
-import { ScrollView, StyleSheet, Text, View, Button } from 'react-native';
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+  Button,
+  Image,
+} from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { Ionicons } from '@expo/vector-icons';
 import Colors from '../constants/Colors';
@@ -22,22 +29,27 @@ const DetailBottomSheet = (props) => {
   const details = [
     {
       detail: university,
+      icon: '🎓',
       iconName: 'location',
     },
     {
       detail: occupation,
+      icon: '😎',
       iconName: 'location',
     },
     {
       detail: live_in,
+      icon: '📍',
       iconName: 'location',
     },
     {
       detail: city,
+      icon: '📍',
       iconName: 'location',
     },
     {
       detail: from,
+      icon: '🏡',
       iconName: 'location',
     },
   ];
@@ -62,14 +74,17 @@ const DetailBottomSheet = (props) => {
           )}
         </View>
         <TouchableOpacity onPress={props.onClose} style={styles.closeContainer}>
-          <Text>C</Text>
+          <Image
+            source={require('../assets/images/red-arrow-down.png')}
+            style={{ width: '100%', height: '100%' }}
+          />
         </TouchableOpacity>
       </View>
 
       {filtered &&
         filtered.map((obj) => (
           <View style={styles.infoWrapper} key={obj.detail}>
-            <Ionicons color="black" name={obj.iconName} size={16} />
+            <Text style={{ fontSize: 17 }}>{obj.icon}</Text>
             <Text style={styles.text}>{obj.detail}</Text>
           </View>
         ))}
@@ -136,13 +151,11 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
   },
   closeContainer: {
-    backgroundColor: Colors.orange,
     borderRadius: 100,
     height: 40,
     width: 40,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 10,
   },
   nameText: {
     fontSize: 25,

@@ -37,11 +37,7 @@ showMode
 const SwipeScreen = (props) => {
   const dispatch = useDispatch();
   const [showMode, setShowMode] = useState(2);
-
   const [localLoading, setLocalLoading] = useState(false);
-  const [allCardsSwiped, setAllCardsSwiped] = useState(false);
-  const [locationError, setLocationError] = useState(false);
-  const [showMatch, setShowMatch] = useState(false);
 
   const userLocationReducer = useSelector((state) => state.userLocation);
   const {
@@ -57,9 +53,6 @@ const SwipeScreen = (props) => {
     data: swipe,
   } = listSwipeReducer;
 
-  const likeReducer = useSelector((state) => state.like);
-  const { data: likeData } = likeReducer;
-
   useEffect(() => {
     const permissionGranted = verifyLocationPermissions();
     if (permissionGranted) {
@@ -72,13 +65,13 @@ const SwipeScreen = (props) => {
         [{ text: 'Okay', onPress: () => verifyLocationPermissions() }]
       );
     }
-    if (postLocationError) {
+    if (postLocationError || errorSwipe) {
       setShowMode(-1);
     } else {
       setShowMode(2);
     }
     return null;
-  }, [dispatch, locationError]);
+  }, [dispatch, postLocationError, errorSwipe]);
 
   useEffect(() => {
     dispatch(listSwipe());

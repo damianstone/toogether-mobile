@@ -1,6 +1,6 @@
 {
   "name": "appdirsjs",
-  "version": "1.2.6",
+  "version": "1.2.7",
   "description": "OS-dependent application paths for cache, data and config directories",
   "license": "MIT",
   "main": "dist/index.js",

@@ -7,7 +7,6 @@ function _defineProperties(target, props) {
     Object.defineProperty(target, descriptor.key, descriptor);
   }
 }
-
 function _createClass(Constructor, protoProps, staticProps) {
   if (protoProps) _defineProperties(Constructor.prototype, protoProps);
   if (staticProps) _defineProperties(Constructor, staticProps);
@@ -16,5 +15,4 @@ function _createClass(Constructor, protoProps, staticProps) {
   });
   return Constructor;
 }
-
 module.exports = _createClass, module.exports.__esModule = true, module.exports["default"] = module.exports;
