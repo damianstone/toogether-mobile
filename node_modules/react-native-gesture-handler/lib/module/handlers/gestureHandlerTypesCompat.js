@@ -1,2 +1,0 @@
-
-//# sourceMappingURL=gestureHandlerTypesCompat.js.map
