@@ -35,6 +35,8 @@ showMode
 */
 
 const SwipeScreen = (props) => {
+  const topProfile = props.navigation.getParam('topProfile');
+
   const dispatch = useDispatch();
   const [showMode, setShowMode] = useState(2);
   const [localLoading, setLocalLoading] = useState(false);
@@ -217,6 +219,7 @@ const SwipeScreen = (props) => {
           swipe.results.length > 0 && (
             <Deck
               swipeProfiles={swipe.results}
+              topProfile={topProfile}
               setShowMode={setShowMode}
               showMode={showMode}
               renderAllCardSwiped={renderAllCardSwiped}
