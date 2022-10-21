@@ -30,6 +30,7 @@ const SwipeCard = (props) => {
       borderRadius: 20,
       justifyContent: 'center',
       alignItems: 'center',
+      backgroundColor: Colors.placeholder,
     };
     imageStyle = {
       borderRadius: 20,
@@ -51,6 +52,13 @@ const SwipeCard = (props) => {
       height: '100%',
     };
   }
+
+  const checkPhoto = (profile) => {
+    if (profile.photos.length > 0) {
+      return { uri: `${BASE_URL}${profile.photos[0]?.image}` };
+    }
+    return require('../assets/images/placeholder-profile.png');
+  };
 
   return (
     <View style={styles.screen}>
@@ -96,7 +104,7 @@ const SwipeCard = (props) => {
                   key={profile.id}
                   imageStyle={{ ...imageStyle }}
                   resizeMode="cover"
-                  source={{ uri: `${BASE_URL}${profile.photos[0].image}` }}
+                  source={checkPhoto(profile)}
                   style={styles.image}>
                   <InfoCard
                     firstName={profile.firstname}
@@ -123,18 +131,8 @@ const SwipeCard = (props) => {
               imageStyle={{ ...imageStyle }}
               key={props.profile.id}
               resizeMode="cover"
-              source={{ uri: `${BASE_URL}${props.profile.photos[0]?.image}` }} // just get the first photo of every profile uri: `http://127.0.0.1:8000${profile.photo}`
+              source={checkPhoto(props.profile)}
               style={styles.image}>
-              {!props.profile.photos[0] && (
-                <View
-                  style={{
-                    width: '100%',
-                    height: '100%',
-                    backgroundColor: Colors.blue,
-                  }}>
-                  <Text>No photo</Text>
-                </View>
-              )}
               <InfoCard
                 firstName={props.profile.firstname}
                 lastName={props.profile.lastname}
