@@ -3,6 +3,7 @@ import {
   ImageBackground,
   StyleSheet,
   Text,
+  Dimensions,
   TouchableOpacity,
   View,
 } from 'react-native';
@@ -10,6 +11,9 @@ import Constants from 'expo-constants';
 import { Entypo } from '@expo/vector-icons';
 
 import Colors from '../constants/Colors';
+
+const SCREEN_HEIGHT = Dimensions.get('window').height;
+const SCREEN_WIDTH = Dimensions.get('window').width;
 
 const LikeCard = (props) => {
   const BASE_URL = Constants.manifest.extra.LOCAL_URL;
@@ -25,6 +29,7 @@ const LikeCard = (props) => {
   } = props;
 
   let cardType;
+  let imageContainer;
   if (isGroup) {
     cardType = {
       // position: 'absolute',
@@ -33,6 +38,14 @@ const LikeCard = (props) => {
       borderRadius: 15,
       backgroundColor: Colors.orange,
     };
+
+    imageContainer = {
+      width: '100%',
+      height: '92%',
+      justifyContent: 'space-between',
+      alignItems: 'flex-end',
+      flexDirection: 'row',
+    };
   } else {
     cardType = {
       position: 'absolute',
@@ -40,6 +53,13 @@ const LikeCard = (props) => {
       height: '100%',
       borderRadius: 15,
       backgroundColor: Colors.placeholder,
+    };
+    imageContainer = {
+      width: '100%',
+      height: '100%',
+      justifyContent: 'space-between',
+      alignItems: 'flex-end',
+      flexDirection: 'row',
     };
   }
 
@@ -78,7 +98,7 @@ const LikeCard = (props) => {
               imageStyle={styles.imageStyle}
               resizeMode="cover"
               source={{ uri: `${BASE_URL}${image}` }}
-              style={styles.image}>
+              style={{ ...imageContainer }}>
               <View style={styles.infoCard}>
                 <Text style={{ color: Colors.black, fontSize: 10 }}>
                   {getCardInfo()}
@@ -122,6 +142,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     alignItems: 'center',
     maxHeight: 200,
+    minHeight: 200,
     margin: 15,
   },
   groupName: {
@@ -151,11 +172,12 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 9,
-    fontWeight: 'bold',
+    fontWeight: '600',
     color: Colors.white,
   },
   touch: {
-    height: 200,
+    height: '100%',
+    justifyContent: 'flex-end',
   },
   infoCard: {
     backgroundColor: Colors.white,
