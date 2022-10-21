@@ -20,15 +20,11 @@ const SCREEN_WIDTH = Dimensions.get('window').width;
 //reload para que funcione
 
 const Deck = (props) => {
+  const { swipeProfiles, showProfileHandler, setShowMode, topProfile } = props;
   const dispatch = useDispatch();
   const swipeRef = useRef();
   const currentDeckIndex = useRef(0);
   const [userData, setUserData] = useState({});
-
-  const { swipeProfiles, showProfileHandler, setShowMode } = props;
-
-  const userGetProfile = useSelector((state) => state.userGetProfile);
-  const { data: userProfile } = userGetProfile;
 
   const likeReducer = useSelector((state) => state.like);
   const {
@@ -123,6 +119,26 @@ const Deck = (props) => {
     setShowMode(1);
   };
 
+  const swapElement = (from, to, arr) => {
+    const newArr = [...arr];
+
+    const item = newArr.splice(from, 1)[0];
+    newArr.splice(to, 0, item);
+
+    return newArr;
+  };
+
+  const putOnTopCard = (topCard, swipes) => {
+    // get the index of the topCard and change it to the top
+    const toIndex = 0;
+    const fromIndex = swipes.findIndex((elem) => elem.id === topCard.id);
+    if (fromIndex !== -1) {
+      const newSwipes = swapElement(fromIndex, toIndex, swipes);
+      return newSwipes;
+    }
+    return [topCard, ...swipes];
+  };
+
   // render a card with the profiles (single and group)
   const renderCard = (profile) => {
     if (typeof profile === 'object') {
@@ -143,8 +159,11 @@ const Deck = (props) => {
       <View style={styles.swipeContainer}>
         <Swiper
           containerStyle={tw('bg-transparent')}
-          cards={swipeProfiles}
+          cards={
+            topProfile ? putOnTopCard(topProfile, swipeProfiles) : swipeProfiles
+          }
           ref={swipeRef}
+          renderCard={renderCard}
           stackSize={2}
           cardIndex={0}
           verticalSwipe
@@ -180,7 +199,6 @@ const Deck = (props) => {
           onSwipedRight={handleLike}
           onSwipedTop={handleLike}
           onSwipedBottom={handleDislike}
-          renderCard={renderCard}
           onSwipedAll={allCardsSwiped}
         />
       </View>

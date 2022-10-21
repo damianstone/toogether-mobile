@@ -115,7 +115,27 @@ const LikesScreen = (props) => {
     return null;
   };
 
+  const getRandomMember = (members) => {
+    return members[Math.floor(Math.random() * members.length)];
+  };
+
   const renderLikeCard = ({ item, index }) => {
+    if (item.hasOwnProperty('members')) {
+      const member = getRandomMember(item.members);
+      return (
+        <LikeCard
+          key={member.id}
+          isGroup
+          firstname={member.firstname}
+          lastname={member.lastname}
+          age={member.age}
+          image={member.photos.length > 0 ? member.photos[0].image : null}
+          onShowProfile={() => showProfileHandler(member)}
+          dislike={() => handleRemoveLike(member.id)}
+          like={() => handleLike(member.id)}
+        />
+      );
+    }
     return (
       <LikeCard
         key={item.id}
@@ -123,7 +143,9 @@ const LikesScreen = (props) => {
         lastname={item.lastname}
         age={item.age}
         image={item.photos.length > 0 ? item.photos[0].image : null}
-        onShowProfile={() => showProfileHandler(item)}
+        onShowProfile={() =>
+          props.navigation.push('Swipe', { topProfile: item })
+        }
         dislike={() => handleRemoveLike(item.id)}
         like={() => handleLike(item.id)}
       />

@@ -31,6 +31,7 @@ const LikeCard = (props) => {
       width: '100%',
       height: '100%',
       borderRadius: 15,
+      backgroundColor: Colors.orange,
     };
   } else {
     cardType = {
@@ -83,19 +84,12 @@ const LikeCard = (props) => {
                   {getCardInfo()}
                 </Text>
               </View>
-              <View
-                style={{
-                  flexDirection: 'column',
-                  marginVertical: 5,
-                  marginHorizontal: 3,
-                  height: '40%',
-                  justifyContent: 'space-around',
-                }}>
+              <View style={styles.buttonsContainer}>
                 <TouchableOpacity onPress={dislike} style={styles.dislike}>
                   <Entypo color="white" name="cross" size={15} />
                 </TouchableOpacity>
                 <TouchableOpacity onPress={like} style={styles.like}>
-                  <Entypo color="white" name="cross" size={15} />
+                  <Entypo color="white" name="heart" size={15} />
                 </TouchableOpacity>
               </View>
             </ImageBackground>
@@ -127,11 +121,11 @@ const styles = StyleSheet.create({
     flex: 0.5,
     justifyContent: 'flex-start',
     alignItems: 'center',
-    height: 200,
+    maxHeight: 200,
     margin: 15,
   },
   groupName: {
-    borderRadius: 30,
+    borderRadius: 10,
     justifyContent: 'center',
     alignItems: 'center',
     marginVertical: 2,
@@ -181,6 +175,14 @@ const styles = StyleSheet.create({
     marginVertical: 7,
     marginHorizontal: 3,
     flexDirection: 'column',
+    justifyContent: 'space-around',
+  },
+
+  buttonsContainer: {
+    flexDirection: 'column',
+    marginVertical: 5,
+    marginHorizontal: 3,
+    height: '40%',
     justifyContent: 'space-around',
   },
 
