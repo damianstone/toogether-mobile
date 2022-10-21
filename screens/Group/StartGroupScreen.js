@@ -76,7 +76,6 @@ const StartGroupScreen = (props) => {
   }, [dispatch, dataCreate, errorCreate, storedGroupData]);
 
   const handleCreateGroup = () => {
-    // TODO: use replace instead of navigate
     dispatch(createGroup());
   };
 

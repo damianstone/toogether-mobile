@@ -35,7 +35,6 @@ const MatchScreen = (props) => {
     props.navigation.goBack(null);
   };
 
-  // TODO: fix return the current
   const getCurrentProfile = (matchData) => {
     if (matchData.profile1.id === userData.id) {
       return matchData.profile1;

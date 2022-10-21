@@ -58,7 +58,6 @@ const SettingScreen = (props) => {
       dispatch(logout());
       props.navigation.navigate('AuthStart');
     } catch (error) {
-      // TODO: check errors
       if (error) {
         if (error?.response?.status === 400) {
           check400Error(error);

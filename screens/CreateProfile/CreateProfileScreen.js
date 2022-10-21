@@ -136,7 +136,6 @@ const CreateProfileScreen = (props) => {
 
   // SAVE USER DATA
   const createUserProfileHandler = () => {
-    // TODO: prevent infinite call to the backend
     dispatch(
       createUserProfile(
         inputValues.firstname,

@@ -161,8 +161,6 @@ export const logout = () => {
   return async (dispatch) => {
     try {
       await AsyncStorage.removeItem('@userData');
-
-      // TODO: update the logout state so then in the startup screen we can check if logout = true and return the authScreen
       dispatch({ type: c.USER_LOGIN_RESET });
       dispatch({ type: c.USER_LIST_PHOTOS_RESET });
       dispatch({ type: c.USER_GET_PROFILE_RESET });

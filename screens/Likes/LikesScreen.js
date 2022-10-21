@@ -17,10 +17,6 @@ import Avatar from '../../components/UI/Avatar';
 import Loader from '../../components/UI/Loader';
 import Colors from '../../constants/Colors';
 
-// TODO: give life from the this screen
-// TODO: render match
-// TODO: display likes as a group
-
 const LikesScreen = (props) => {
   const dispatch = useDispatch();
   const [refreshing, setRefreshing] = useState(
@@ -48,16 +44,17 @@ const LikesScreen = (props) => {
     data: likeData,
   } = likeReducer;
 
-  // TODO: reset after error
   useEffect(() => {
     if (likesError) {
       checkServerError(likesError);
     }
     if (removeLikeError) {
       checkServerError(removeLikeError);
+      dispatch({ type: w.REMOVE_LIKE_RESET });
     }
     if (likeError) {
       checkServerError(likeError);
+      dispatch({ type: w.LIKE_PROFILE_RESET });
     }
     dispatch(listLikes());
   }, [dispatch, likesError, removeLikeError, likeError]);

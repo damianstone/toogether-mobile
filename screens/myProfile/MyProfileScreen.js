@@ -137,7 +137,6 @@ const MyProfileScreen = (props) => {
       });
     }
 
-    // TODO: delete this after
     if (dataAddPhoto) {
       Alert.alert('Photo added', 'well done', {
         text: 'Ok',

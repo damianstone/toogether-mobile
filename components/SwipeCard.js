@@ -14,8 +14,6 @@ import Constants from 'expo-constants';
 import Colors from '../constants/Colors';
 import InfoCard from './InfoCard';
 
-// TODO: what happened if the user dont have a photo ?
-
 const SwipeCard = (props) => {
   const BASE_URL = Constants.manifest.extra.LOCAL_URL;
 

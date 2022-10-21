@@ -38,8 +38,6 @@ import {
   deleteMatchReducer,
 } from './reducers/swipe';
 
-// TODO: fix this error: when reload here screen change to login
-
 const reducer = combineReducers({
   // profile API
   userLocation: userLocationReducer,
