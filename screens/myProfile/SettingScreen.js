@@ -1,5 +1,3 @@
-/* eslint-disable no-fallthrough */
-/* eslint-disable prettier/prettier */
 import React, { useState, useEffect, useReducer, useCallback } from 'react';
 import {
   ScrollView,
