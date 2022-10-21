@@ -110,8 +110,8 @@ const ProfileModalScreen = (props) => {
               }}
             />
           }>
-          {profile.photos.map((photo) => {
-            return (
+          {profile.photos.length > 0 ? (
+            profile.photos.map((photo) => (
               <ImageBackground
                 key={profile.id}
                 style={styles.image}
@@ -119,8 +119,16 @@ const ProfileModalScreen = (props) => {
                 source={{ uri: `${BASE_URL}${photo.image}` }}
                 resizeMode="cover"
               />
-            );
-          })}
+            ))
+          ) : (
+            <ImageBackground
+              key={profile.id}
+              style={styles.image}
+              imageStyle={styles.imageStyle}
+              source={require('../../assets/images/placeholder-profile.png')}
+              resizeMode="cover"
+            />
+          )}
         </Swiper>
         <DetailBottomSheet
           onClose={() => props.navigation.goBack()}
