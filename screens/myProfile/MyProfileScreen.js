@@ -65,7 +65,7 @@ const BASE_PHOTOS = [
 ];
 
 const MyProfileScreen = (props) => {
-  const BASE_URL = Constants.manifest.extra.LOCAL_URL;
+  const BASE_URL = Constants.manifest.extra.BUCKET_URL;
   const dispatch = useDispatch();
   const { showActionSheetWithOptions } = useActionSheet();
   const [refreshing, setRefreshing] = useState(false);
@@ -260,7 +260,7 @@ const MyProfileScreen = (props) => {
         ) : (
           <Image
             source={{
-              uri: `${BASE_URL}${photo.image}`,
+              uri: `${photo.image}`,
             }}
             style={{
               width: '100%',
@@ -294,7 +294,7 @@ const MyProfileScreen = (props) => {
               {photos && Object.values(photos).length > 0 && (
                 <Image
                   source={{
-                    uri: `${BASE_URL}${Object.values(photos)[0].image}`,
+                    uri: `${Object.values(photos)[0].image}`,
                   }}
                   style={styles.image}
                 />

@@ -16,7 +16,7 @@ const SCREEN_HEIGHT = Dimensions.get('window').height;
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
 const LikeCard = (props) => {
-  const BASE_URL = Constants.manifest.extra.LOCAL_URL;
+  const BASE_URL = Constants.manifest.extra.BUCKET_URL;
   const {
     isGroup,
     firstname,
@@ -97,7 +97,7 @@ const LikeCard = (props) => {
             <ImageBackground
               imageStyle={styles.imageStyle}
               resizeMode="cover"
-              source={{ uri: `${BASE_URL}${image}` }}
+              source={{ uri: `${image}` }}
               style={{ ...imageContainer }}>
               <View style={styles.infoCard}>
                 <Text style={{ color: Colors.black, fontSize: 10 }}>

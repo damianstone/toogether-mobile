@@ -4,7 +4,7 @@ import Constants from 'expo-constants';
 import Colors from '../constants/Colors';
 
 const MemberAvatar = (props) => {
-  const BASE_URL = Constants.manifest.extra.LOCAL_URL;
+  const BASE_URL = Constants.manifest.extra.BUCKET_URL;
 
   const getInitials = (firstname, lastname) => {
     const first = firstname ? firstname.charAt(0).toUpperCase() : 'N';
@@ -16,7 +16,7 @@ const MemberAvatar = (props) => {
     <TouchableOpacity onPress={props.onPress} style={styles.imgContainer}>
       {props.photos && props.photos.length >= 1 && (
         <Image
-          source={{ uri: `${BASE_URL}${props.photos[0].image}` }}
+          source={{ uri: `${props.photos[0].image}` }}
           style={styles.img}
         />
       )}

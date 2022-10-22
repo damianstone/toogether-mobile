@@ -21,7 +21,7 @@ const SCREEN_HEIGHT = Dimensions.get('window').height;
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
 const SwipeMatch = (props) => {
-  const BASE_URL = Constants.manifest.extra.LOCAL_URL;
+  const BASE_URL = Constants.manifest.extra.BUCKET_URL;
 
   const {
     visible,
@@ -46,7 +46,7 @@ const SwipeMatch = (props) => {
         <View style={styles.profilesContainer}>
           <View style={styles.imageContainer}>
             <Image
-              source={{ uri: `${BASE_URL}${currentProfileImage}` }}
+              source={{ uri: `${currentProfileImage}` }}
               style={styles.image}
             />
             <Text style={styles.profileName}>{currentProfileName}</Text>
@@ -54,7 +54,7 @@ const SwipeMatch = (props) => {
           </View>
           <View style={styles.imageContainer}>
             <Image
-              source={{ uri: `${BASE_URL}${matchedProfileImage}` }}
+              source={{ uri: `${matchedProfileImage}` }}
               style={styles.image}
             />
             <Text style={styles.profileName}>{matchedProfileName}</Text>

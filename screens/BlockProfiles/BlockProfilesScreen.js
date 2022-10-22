@@ -101,7 +101,7 @@ const BlockProfilesScreen = (props) => {
             {item.photos.length > 0 ? (
               <View style={styles.imageContainer}>
                 <Image
-                  source={{ uri: `${BASE_URL}${item.photos[0].image}` }}
+                  source={{ uri: `${item.photos[0].image}` }}
                   style={{ width: '100%', height: '100%', borderRadius: 100 }}
                 />
               </View>
