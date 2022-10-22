@@ -13,7 +13,7 @@ import Colors from '../../constants/Colors';
 import { listUserPhotos, getUserProfile } from '../../store/actions/user';
 
 const Avatar = (props) => {
-  const BASE_URL = Constants.manifest.extra.LOCAL_URL;
+  const BASE_URL = Constants.manifest.extra.BUCKET_URL;
   const dispatch = useDispatch();
   const userPhotos = useSelector((state) => state.userListPhotos);
   const { loading, error, data } = userPhotos;
@@ -30,7 +30,7 @@ const Avatar = (props) => {
       {loading && <ActivityIndicator />}
       {data && Object.values(data).length > 0 && (
         <Image
-          source={{ uri: `${BASE_URL}${Object.values(data)[0].image}` }}
+          source={{ uri: `${Object.values(data)[0].image}` }}
           style={styles.img}
         />
       )}

@@ -15,7 +15,7 @@ import Colors from '../constants/Colors';
 import InfoCard from './InfoCard';
 
 const SwipeCard = (props) => {
-  const BASE_URL = Constants.manifest.extra.LOCAL_URL;
+  const BASE_URL = Constants.manifest.extra.BUCKET_URL;
 
   let cardType;
   let imageStyle;
@@ -53,7 +53,7 @@ const SwipeCard = (props) => {
 
   const checkPhoto = (profile) => {
     if (profile.photos.length > 0) {
-      return { uri: `${BASE_URL}${profile.photos[0]?.image}` };
+      return { uri: `${profile.photos[0]?.image}` };
     }
     return require('../assets/images/placeholder-profile.png');
   };

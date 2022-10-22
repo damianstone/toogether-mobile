@@ -20,7 +20,7 @@ import InfoCard from '../../components/InfoCard';
 import Colors from '../../constants/Colors';
 
 const ProfilePreviewScreen = (props) => {
-  const BASE_URL = Constants.manifest.extra.LOCAL_URL;
+  const BASE_URL = Constants.manifest.extra.BUCKET_URL;
   const dispatch = useDispatch();
 
   const currentProfileId = useSelector((state) => state.userGetProfile.data.id);
@@ -146,7 +146,7 @@ const ProfilePreviewScreen = (props) => {
                   key={profile.id}
                   imageStyle={{ ...imageStyle, ...styles.card }}
                   resizeMode="cover"
-                  source={{ uri: `${BASE_URL}${profile.photos[0].image}` }}
+                  source={{ uri: `${profile.photos[0].image}` }}
                   style={styles.image}>
                   <InfoCard
                     firstName={profile.firstname}
@@ -171,7 +171,7 @@ const ProfilePreviewScreen = (props) => {
               imageStyle={{ ...imageStyle, ...styles.card }}
               key={swipeProfile.id}
               resizeMode="cover"
-              source={{ uri: `${BASE_URL}${swipeProfile.photos[0].image}` }} // just get the first photo of every profile uri: `http://127.0.0.1:8000${profile.photo}`
+              source={{ uri: `${swipeProfile.photos[0].image}` }} // just get the first photo of every profile uri: `http://127.0.0.1:8000${profile.photo}`
               style={styles.image}>
               <InfoCard
                 firstName={swipeProfile.firstname}

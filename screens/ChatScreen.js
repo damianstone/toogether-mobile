@@ -157,7 +157,7 @@ const ChatScreen = (props) => {
         {loadingDeleteMatch && <ActivityIndicator />}
         {matchedProfile && matchedProfile.photos.length > 0 && (
           <Image
-            source={{ uri: `${BASE_URL}${matchedProfile.photos[0].image}` }}
+            source={{ uri: `${matchedProfile.photos[0].image}` }}
             style={styles.img}
           />
         )}

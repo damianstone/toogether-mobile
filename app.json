@@ -40,7 +40,8 @@
       "MESSAGE_SENDER_ID": "17321266316",
       "APP_ID": "1:17321266316:web:e3dac382e8fb4714307fa9",
       "MEASUREMENT_ID": "G-9SQ0M3WKQW",
-      "LOCAL_URL": "http://127.0.0.1:8000"
+      "LOCAL_URL": "http://127.0.0.1:8000",
+      "BUCKET_URL": "https://toogether-images.s3.eu-west-2.amazonaws.com"
     }
   }
 }

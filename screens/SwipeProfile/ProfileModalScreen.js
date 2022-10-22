@@ -116,7 +116,7 @@ const ProfileModalScreen = (props) => {
                 key={profile.id}
                 style={styles.image}
                 imageStyle={styles.imageStyle}
-                source={{ uri: `${BASE_URL}${photo.image}` }}
+                source={{ uri: `${photo.image}` }}
                 resizeMode="cover"
               />
             ))
