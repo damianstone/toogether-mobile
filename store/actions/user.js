@@ -93,8 +93,6 @@ export const userRegister = (email, password, repeated_password) => {
         JSON.stringify({
           id: data.id,
           token: data.token,
-          access_token: data.access.token,
-          refresh_token: data.refresh,
           has_account: data.has_account,
         })
       );
@@ -104,7 +102,6 @@ export const userRegister = (email, password, repeated_password) => {
         payload: data,
       });
     } catch (error) {
-      console.log('ERROR ACTION');
       dispatch({
         type: c.USER_REGISTER_FAIL,
         payload: error,

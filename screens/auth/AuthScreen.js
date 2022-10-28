@@ -4,6 +4,7 @@ import {
   Button,
   Text,
   ScrollView,
+  Alert,
   Platform,
   ActivityIndicator,
   KeyboardAvoidingView,
@@ -69,7 +70,6 @@ const AuthStartScreen = (props) => {
   const {
     loading: registerLoading,
     data: registerData,
-    success: registerSuccess,
     error: registerError,
   } = userRegisterReducer;
 
@@ -89,13 +89,16 @@ const AuthStartScreen = (props) => {
       } else {
         checkServerError(registerError);
       }
+      dispatch({ type: c.USER_REGISTER_RESET });
     }
 
-    if (register && registerSuccess) {
+    if (registerData) {
       props.navigation.navigate('Success', { register: register });
+      dispatch({ type: c.USER_REGISTER_RESET });
     }
+
     dispatch({ type: c.USER_REGISTER_RESET });
-  }, [register, registerError, registerSuccess]);
+  }, [registerData, registerError]);
 
   // LOGIN
   useEffect(() => {
@@ -103,17 +106,26 @@ const AuthStartScreen = (props) => {
     if (loginError) {
       if (loginError?.response?.status === 400) {
         check400Error(loginError);
+      } else if (loginError?.response?.status === 401) {
+        Alert.alert(
+          'Login Failed',
+          'Your email or password is incorred. Please try again',
+          [{ text: 'OK' }]
+        );
       } else {
         checkServerError(loginError);
       }
+      dispatch({ type: c.USER_LOGIN_RESET });
     }
 
     if (loginSuccess && loginData.has_account) {
       props.navigation.navigate('Swipe');
+      dispatch({ type: c.USER_LOGIN_RESET });
     }
 
     if (loginSuccess && !loginData.has_account) {
       props.navigation.navigate('Success', { register: register });
+      dispatch({ type: c.USER_LOGIN_RESET });
     }
 
     dispatch({ type: c.USER_LOGIN_RESET });
