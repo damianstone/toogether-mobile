@@ -21,6 +21,7 @@ import Constants from 'expo-constants';
 import * as ImagePicker from 'expo-image-picker';
 import { LinearGradient } from 'expo-linear-gradient';
 import { MaterialIcons } from '@expo/vector-icons';
+import { useNetInfo } from '@react-native-community/netinfo';
 
 import HeaderButtom from '../../components/UI/HeaderButton';
 import Loader from '../../components/UI/Loader';
@@ -36,6 +37,8 @@ import {
 import { checkServerError, check400Error } from '../../utils/errors';
 import { verifyPermissions } from '../../utils/permissions';
 import styles from './styles';
+
+// TODO: remove toogether premium section
 
 const BASE_PHOTOS = [
   {
@@ -67,6 +70,7 @@ const BASE_PHOTOS = [
 const MyProfileScreen = (props) => {
   const BASE_URL = Constants.manifest.extra.BUCKET_URL;
   const dispatch = useDispatch();
+  const netInfo = useNetInfo();
   const { showActionSheetWithOptions } = useActionSheet();
   const [refreshing, setRefreshing] = useState(false);
   const [photoId, setPhotoId] = useState('');
@@ -168,14 +172,6 @@ const MyProfileScreen = (props) => {
     setRefreshing(false);
   }, [dispatch]);
 
-  // add listener to fetch the user and re fetch it
-  // useEffect(() => {
-  //   const unsubscribe = props.navigation.addListener('didFocus', () => {
-  //     loadProfile();
-  //   });
-  //   return unsubscribe;
-  // }, [loadProfile]);
-
   const handleAddPhoto = async (photo_id, isUpdate) => {
     const hasPermissions = await verifyPermissions();
     if (!hasPermissions) {
@@ -233,8 +229,129 @@ const MyProfileScreen = (props) => {
     }
   }, []);
 
+  const getInitials = (firstname, lastname) => {
+    const first = firstname ? firstname.charAt(0).toUpperCase() : 'N';
+    const second = lastname ? lastname.charAt(0).toUpperCase() : 'N';
+    return first + second;
+  };
+
   const handleNavigate = (screen) => {
     props.navigation.navigate(screen);
+  };
+
+  const renderHeaderComponent = () => {
+    return (
+      <View style={styles.MainContainer}>
+        <TouchableOpacity
+          style={styles.profilePictureContainer}
+          onPress={handleOpenPreview}>
+          {photos && Object.values(photos).length > 0 && (
+            <Image
+              source={{
+                uri: `${Object.values(photos)[0].image}`,
+              }}
+              style={styles.image}
+            />
+          )}
+          {!photos ||
+            (Object.values(photos).length === 0 && (
+              <View style={styles.avatar_view}>
+                <Text style={styles.avatar_initials}>
+                  {getInitials(userProfile.firstname, userProfile.lastname)}
+                </Text>
+              </View>
+            ))}
+          {!netInfo.isConnected ||
+            (!userProfile && (
+              <View
+                style={{
+                  backgroundColor: Colors.placeholder,
+                  width: 150,
+                  height: 150,
+                  borderRadius: 100,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}>
+                <Loader />
+              </View>
+            ))}
+        </TouchableOpacity>
+        <View style={styles.nameView}>
+          {userProfile && (
+            <>
+              <Text style={styles.name}>
+                {`${userProfile.firstname} ${userProfile.lastname}`}
+              </Text>
+              <TouchableOpacity onPress={() => handleNavigate('EditProfile')}>
+                <MaterialIcons name="edit" size={20} color="white" />
+              </TouchableOpacity>
+            </>
+          )}
+        </View>
+        <View style={styles.counterContainer}>
+          <View style={styles.counterView}>
+            <Text style={styles.likesNumber}>100</Text>
+            <Text style={styles.counterText}>Likes</Text>
+          </View>
+          <View style={styles.counterView}>
+            <Text style={styles.matchesNumber}>320</Text>
+            <Text style={styles.counterText}>matches</Text>
+          </View>
+        </View>
+        <View style={styles.myphotosView}>
+          <View style={styles.itemView}>
+            <Text style={styles.photoTitleLabel}>My Photos</Text>
+          </View>
+          <FlatList
+            style={styles.flatlist_photos_style}
+            contentContainerStyle={styles.flatlist_photos_container_style}
+            data={BASE_PHOTOS}
+            horizontal={false}
+            keyExtractor={(photo) => photo.id}
+            nestedScrollEnabled
+            numColumns={3}
+            refreshControl={
+              <RefreshControl
+                refreshing={refreshing}
+                onRefresh={loadProfile}
+                tintColor={Colors.white}
+              />
+            }
+            renderItem={({ item, index }) =>
+              photos && photos[index] ? (
+                renderPhoto(photos[index], item.id)
+              ) : (
+                <TouchableOpacity
+                  key={item.id}
+                  onPress={() => {
+                    handleAddPhoto();
+                    setPhotoId(item.id);
+                  }}
+                  style={{
+                    ...styles.myphotosItemView,
+                    backgroundColor: Colors.bgCard,
+                  }}>
+                  <View
+                    style={{
+                      width: '100%',
+                      height: '100%',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }}>
+                    {loadingAddPhoto && item.id === photoId ? (
+                      <Loader size="small" />
+                    ) : (
+                      <Text style={{ color: Colors.white }}>Add photo</Text>
+                    )}
+                  </View>
+                </TouchableOpacity>
+              )
+            }
+            scrollEnabled={false}
+          />
+        </View>
+      </View>
+    );
   };
 
   const renderPhoto = (photo) => {
@@ -276,136 +393,58 @@ const MyProfileScreen = (props) => {
   return (
     <View style={styles.MainContainer}>
       <SafeAreaView style={styles.safeAreaContainer}>
-        <View style={styles.MainContainer}>
-          <ScrollView
-            style={styles.body}
+        <View style={styles.myphotosView}>
+          <View style={styles.itemView}>
+            <Text style={styles.photoTitleLabel}>My Photos</Text>
+          </View>
+          <FlatList
+            style={styles.flatlist_photos_style}
+            contentContainerStyle={styles.flatlist_photos_container_style}
+            data={BASE_PHOTOS}
+            horizontal={false}
+            keyExtractor={(photo) => photo.id}
             nestedScrollEnabled
-            contentContainerStyle={styles.scroll_container_style}
+            numColumns={3}
             refreshControl={
               <RefreshControl
                 refreshing={refreshing}
                 onRefresh={loadProfile}
                 tintColor={Colors.white}
               />
-            }>
-            <TouchableOpacity
-              style={styles.profilePictureContainer}
-              onPress={handleOpenPreview}>
-              {photos && Object.values(photos).length > 0 && (
-                <Image
-                  source={{
-                    uri: `${Object.values(photos)[0].image}`,
+            }
+            ListHeaderComponent={renderHeaderComponent}
+            renderItem={({ item, index }) =>
+              photos && photos[index] ? (
+                renderPhoto(photos[index], item.id)
+              ) : (
+                <TouchableOpacity
+                  key={item.id}
+                  onPress={() => {
+                    handleAddPhoto();
+                    setPhotoId(item.id);
                   }}
-                  style={styles.image}
-                />
-              )}
-              {!photos ||
-                (Object.values(photos).length === 0 && (
-                  <View style={styles.avatar_view}>
-                    <Text style={styles.avatar_initials}>DS</Text>
+                  style={{
+                    ...styles.myphotosItemView,
+                    backgroundColor: Colors.bgCard,
+                  }}>
+                  <View
+                    style={{
+                      width: '100%',
+                      height: '100%',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }}>
+                    {loadingAddPhoto && item.id === photoId ? (
+                      <Loader size="small" />
+                    ) : (
+                      <Text style={{ color: Colors.white }}>Add photo</Text>
+                    )}
                   </View>
-                ))}
-            </TouchableOpacity>
-            <View style={styles.nameView}>
-              {userProfile && (
-                <>
-                  <Text style={styles.name}>
-                    {`${userProfile.firstname} ${userProfile.lastname}`}
-                  </Text>
-                  <TouchableOpacity
-                    onPress={() => handleNavigate('EditProfile')}>
-                    <MaterialIcons name="edit" size={20} color="white" />
-                  </TouchableOpacity>
-                </>
-              )}
-            </View>
-            <View style={styles.counterContainer}>
-              <View style={styles.counterView}>
-                <Text style={styles.likesNumber}>100</Text>
-                <Text style={styles.counterText}>Likes</Text>
-              </View>
-              <View style={styles.counterView}>
-                <Text style={styles.matchesNumber}>320</Text>
-                <Text style={styles.counterText}>matches</Text>
-              </View>
-            </View>
-            <View style={styles.myphotosView}>
-              <View style={styles.itemView}>
-                <Text style={styles.photoTitleLabel}>My Photos</Text>
-              </View>
-              <FlatList
-                style={styles.flatlist_photos_style}
-                contentContainerStyle={styles.flatlist_photos_container_style}
-                data={BASE_PHOTOS}
-                horizontal={false}
-                keyExtractor={(photo) => photo.id}
-                nestedScrollEnabled
-                numColumns={3}
-                renderItem={({ item, index }) =>
-                  photos && photos[index] ? (
-                    renderPhoto(photos[index], item.id)
-                  ) : (
-                    <TouchableOpacity
-                      key={item.id}
-                      onPress={() => {
-                        handleAddPhoto();
-                        setPhotoId(item.id);
-                      }}
-                      style={{
-                        ...styles.myphotosItemView,
-                        backgroundColor: Colors.bgCard,
-                      }}>
-                      <View
-                        style={{
-                          width: '100%',
-                          height: '100%',
-                          justifyContent: 'center',
-                          alignItems: 'center',
-                        }}>
-                        {loadingAddPhoto && item.id === photoId ? (
-                          <Loader size="small" />
-                        ) : (
-                          <Text style={{ color: Colors.white }}>Add photo</Text>
-                        )}
-                      </View>
-                    </TouchableOpacity>
-                  )
-                }
-                scrollEnabled={false}
-              />
-            </View>
-
-            {/* TOOGETHER PRO */}
-            <View style={styles.circle}>
-              <LinearGradient
-                colors={['#ED665A', '#CF2A6E', '#BA007C']}
-                style={styles.linearCircle}
-              />
-              <View style={{ alignItems: 'center' }}>
-                <View style={styles.logoContainer}>
-                  <Image
-                    source={require('../../assets/images/logo-2.png')}
-                    style={styles.logo}
-                  />
-                </View>
-                <Text style={styles.proText}>
-                  Enjoy unlimited likes and say goodbye to ads
-                </Text>
-                <View style={styles.buttonPremiumContainer}>
-                  <TouchableOpacity
-                    onPress={() => handleOpenLink('https://toogether.app/')}
-                    style={styles.buttonPremiumView}>
-                    <LinearGradient
-                      // Background Linear Gradient
-                      colors={['#ED665A', '#CF2A6E', '#BA007C']}
-                      style={styles.linearGradientButton}
-                    />
-                    <Text style={styles.buttonText}>Buy Toogether Premium</Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
-            </View>
-          </ScrollView>
+                </TouchableOpacity>
+              )
+            }
+            scrollEnabled={false}
+          />
         </View>
       </SafeAreaView>
     </View>

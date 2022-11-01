@@ -45,6 +45,10 @@ const LikesScreen = (props) => {
   } = likeReducer;
 
   useEffect(() => {
+    dispatch(listLikes());
+  }, [])
+
+  useEffect(() => {
     if (likesError) {
       checkServerError(likesError);
     }
@@ -56,8 +60,7 @@ const LikesScreen = (props) => {
       checkServerError(likeError);
       dispatch({ type: w.LIKE_PROFILE_RESET });
     }
-    dispatch(listLikes());
-  }, [dispatch, likesError, removeLikeError, likeError]);
+  }, [dispatch, removeLikeError, likeError, likes]);
 
   useEffect(() => {
     if (removeLikeSuccess) {
@@ -68,7 +71,7 @@ const LikesScreen = (props) => {
       dispatch({ type: w.LIKE_PROFILE_RESET });
       dispatch(listLikes());
     }
-  }, [removeLikeSuccess, likeData]);
+  }, [removeLikeSuccess]);
 
   // add listener to fetch the user and re fetch it
   useEffect(() => {
@@ -88,12 +91,12 @@ const LikesScreen = (props) => {
     setRefreshing(false);
   }, [dispatch]);
 
-  const showProfileHandler = (profile) => {
-    props.navigation.navigate('SwipeProfile', {
-      profile: profile,
-      isGroup: false,
-    });
-  };
+  // const showProfileHandler = (profile) => {
+  //   props.navigation.navigate('SwipeProfile', {
+  //     profile: profile,
+  //     isGroup: false,
+  //   });
+  // };
 
   const handleRemoveLike = async (profileId) => {
     if (profileId) {

@@ -9,6 +9,7 @@ export default StyleSheet.create({
   MainContainer: {
     flex: 1,
     backgroundColor: Colors.bg,
+    justifyContent: 'space-around',
   },
   safeAreaContainer: {
     flex: 1,
