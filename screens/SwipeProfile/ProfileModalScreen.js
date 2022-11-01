@@ -80,7 +80,7 @@ const ProfileModalScreen = (props) => {
   }
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 1, backgroundColor: Colors.bgCard }}>
       <>
         <Swiper
           style={styles.wrapper}
