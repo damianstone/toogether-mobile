@@ -46,12 +46,9 @@ const LikesScreen = (props) => {
 
   useEffect(() => {
     dispatch(listLikes());
-  }, [])
+  }, []);
 
   useEffect(() => {
-    if (likesError) {
-      checkServerError(likesError);
-    }
     if (removeLikeError) {
       checkServerError(removeLikeError);
       dispatch({ type: w.REMOVE_LIKE_RESET });
@@ -173,6 +170,7 @@ const LikesScreen = (props) => {
       </View>
     );
   };
+
 
   return (
     <View style={styles.screen}>

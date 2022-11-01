@@ -16,6 +16,7 @@ import { getCurrentSwipeProfile } from '../../store/actions/swipe';
 
 import ActivityModal from '../../components/UI/ActivityModal';
 import HeaderButtom from '../../components/UI/HeaderButton';
+import Loader from '../../components/UI/Loader';
 import InfoCard from '../../components/InfoCard';
 import Colors from '../../constants/Colors';
 
@@ -23,11 +24,14 @@ const ProfilePreviewScreen = (props) => {
   const BASE_URL = Constants.manifest.extra.BUCKET_URL;
   const dispatch = useDispatch();
 
-  const currentProfileId = useSelector((state) => state.userGetProfile.data.id);
+  const currentProfileId = useSelector(
+    (state) => state.userGetProfile?.data?.id
+  );
 
   const currentSwipeProfile = useSelector(
     (state) => state.getCurrentSwipeProfile
   );
+
   const {
     loading: loadingSwipeProfile,
     error: errorSwipeProfile,
@@ -47,7 +51,7 @@ const ProfilePreviewScreen = (props) => {
         },
       ]);
     }
-  }, [errorSwipeProfile]);
+  }, []);
 
   const showProfile = (profile, isGroup) => {
     props.navigation.navigate('Profile', {
@@ -100,6 +104,26 @@ const ProfilePreviewScreen = (props) => {
         backgroundColor: Colors.bg,
       }}
     />;
+  }
+
+  if (!currentProfileId) {
+    return (
+      <View style={styles.screen}>
+        <View
+          style={{
+            position: 'absolute',
+            width: '95%',
+            height: '80%',
+            borderRadius: 20,
+            justifyContent: 'center',
+            alignItems: 'center',
+            backgroundColor: Colors.bgCard,
+            opacity: 0.5,
+          }}>
+          <Loader />
+        </View>
+      </View>
+    );
   }
 
   return (
@@ -200,7 +224,9 @@ ProfilePreviewScreen.navigationOptions = (navData) => {
     headerLeft: () => (
       <HeaderButtons HeaderButtonComponent={HeaderButtom}>
         <Item
-          iconName={Platform.OS === 'android' ? 'md-cart' : 'ios-arrow-back'}
+          iconName={
+            Platform.OS === 'android' ? 'ios-arrow-back' : 'ios-arrow-back'
+          }
           onPress={() => {
             // go to chat screen
             navData.navigation.navigate('MyProfile');
@@ -209,7 +235,6 @@ ProfilePreviewScreen.navigationOptions = (navData) => {
         />
       </HeaderButtons>
     ),
-    tabBarVisible: false,
   };
 };
 

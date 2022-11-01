@@ -285,7 +285,7 @@ const MyProfileScreen = (props) => {
               {typeof userProfile === 'undefined' && (
                 <View
                   style={{
-                    backgroundColor: Colors.placeholder,
+                    backgroundColor: Colors.bgCard,
                     opacity: 0.5,
                     width: 150,
                     height: 150,

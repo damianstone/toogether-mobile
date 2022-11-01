@@ -72,6 +72,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   error_avatar_view: {
+    backgroundColor: Colors.bgCard,
+    opacity: 0.5,
     width: '100%',
     height: '100%',
     justifyContent: 'center',
