@@ -328,11 +328,19 @@ const MyProfileScreen = (props) => {
             </View>
             <View style={styles.counterContainer}>
               <View style={styles.counterView}>
-                <Text style={styles.likesNumber}>100</Text>
+                <Text style={styles.likesNumber}>
+                  {typeof userProfile !== 'undefined'
+                    ? userProfile?.total_likes
+                    : ''}
+                </Text>
                 <Text style={styles.counterText}>Likes</Text>
               </View>
               <View style={styles.counterView}>
-                <Text style={styles.matchesNumber}>320</Text>
+                <Text style={styles.matchesNumber}>
+                  {typeof userProfile !== 'undefined'
+                    ? userProfile.total_matches
+                    : ''}
+                </Text>
                 <Text style={styles.counterText}>matches</Text>
               </View>
             </View>
@@ -423,7 +431,7 @@ const MyProfileScreen = (props) => {
 
               <View
                 style={{
-                  marginTop: 20,
+                  marginTop: 2,
                   marginBottom: 35,
                   padding: 10,
                 }}>

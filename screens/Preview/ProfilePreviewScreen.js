@@ -5,6 +5,7 @@ import {
   Text,
   Alert,
   Platform,
+  Image,
   TouchableOpacity,
   View,
 } from 'react-native';
@@ -182,9 +183,12 @@ const ProfilePreviewScreen = (props) => {
                   />
                   {profile.id === currentProfileId && (
                     <TouchableOpacity
-                      onPress={() => showProfile(profile, true)}
+                      onPress={() => showProfile(swipeProfile, true)}
                       style={styles.arrowContainer}>
-                      <Text>A</Text>
+                      <Image
+                        source={require('../../assets/images/white-arrow-up.png')}
+                        style={{ width: '100%', height: '100%' }}
+                      />
                     </TouchableOpacity>
                   )}
                 </ImageBackground>
@@ -208,7 +212,10 @@ const ProfilePreviewScreen = (props) => {
               <TouchableOpacity
                 onPress={() => showProfile(swipeProfile, false)}
                 style={styles.arrowContainer}>
-                <Text>A</Text>
+                <Image
+                  source={require('../../assets/images/white-arrow-up.png')}
+                  style={{ width: '100%', height: '100%' }}
+                />
               </TouchableOpacity>
             </ImageBackground>
           )}
@@ -274,7 +281,7 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
     borderRadius: 100,
-    backgroundColor: Colors.orange,
+
     justifyContent: 'center',
     alignItems: 'center',
     alignSelf: 'flex-end',
