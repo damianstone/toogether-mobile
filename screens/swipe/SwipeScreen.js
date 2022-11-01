@@ -26,12 +26,12 @@ import Colors from '../../constants/Colors';
 import styles from './styles';
 
 /*
-showMode
--1 = error location
-0 = not found
-1 = all cards swiped
-2 = swipe
-3= match
+  showMode
+  -1 = error location
+  0 = not found
+  1 = all cards swiped
+  2 = swipe
+  3= match
 */
 
 const SwipeScreen = (props) => {
@@ -57,6 +57,10 @@ const SwipeScreen = (props) => {
   } = listSwipeReducer;
 
   useEffect(() => {
+    dispatch(listSwipe());
+  }, [dispatch]);
+
+  useEffect(() => {
     if (permissionGranted) {
       dispatch(userLocation());
     } else {
@@ -67,17 +71,16 @@ const SwipeScreen = (props) => {
         [{ text: 'Okay', onPress: () => verifyLocationPermissions() }]
       );
     }
+    return null;
+  }, [dispatch]);
+
+  useEffect(() => {
     if (postLocationError) {
       setShowMode(-1);
     } else {
       setShowMode(2);
     }
-    return null;
-  }, [dispatch]);
-
-  useEffect(() => {
-    dispatch(listSwipe());
-  }, [dispatch]);
+  }, [dispatch, postLocationError]);
 
   useEffect(() => {
     if (swipe && swipe.results.length === 0) {
@@ -128,7 +131,6 @@ const SwipeScreen = (props) => {
         message:
           'Toogether App | The app to have fun and meet other students, download it using the following link ;) URL',
       });
-      console.log('SHARE RESULT -> ', result);
       if (result.action === Share.sharedAction) {
         if (result.activityType) {
           // do something

@@ -13,7 +13,6 @@ export default StyleSheet.create({
   safeAreaContainer: {
     flex: 1,
     backgroundColor: Colors.bg,
-    position: 'absolute',
   },
   body: {
     width: '100%',
@@ -190,54 +189,29 @@ export default StyleSheet.create({
 
   /* ----------------------- TOOGETHER PREMIUM-----------------------  */
   circle: {
-    marginTop: 20,
     width: '100%',
-    height: '100%',
-    alignSelf: 'center',
+    alignSelf: 'flex-end',
     alignItems: 'center',
-    transform: [{ scaleX: 1 }],
+    flexDirection: 'column',
+    justifyContent: 'space-between'
   },
   linearCircle: {
     position: 'absolute',
     width: '100%',
     height: '100%',
-    borderRadius: 20,
+    borderRadius: 10,
     transform: [{ scaleX: 1 }],
   },
   logoContainer: {
-    marginVertical: 10,
-    marginTop: 20,
     alignItems: 'center',
     justifyContent: 'center',
-    width: '100%',
+    height: 25,
+    width: 120,
   },
   logo: {
     alignSelf: 'center',
-    width: 150,
-    height: 40,
-    resizeMode: 'stretch',
-  },
-  proText: {
-    color: Colors.white,
-    fontSize: 15,
-    lineHeight: 20,
-    marginBottom: 10,
-    fontWeight: '600',
-  },
-  buttonPremiumContainer: {
-    marginTop: 15,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginVertical: 20,
-  },
-  buttonPremiumView: {
-    overflow: 'hidden',
-    padding: 5,
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: 40,
-    width: 250,
-    borderRadius: 20,
+    width: '100%',
+    height: '100%',
   },
   /* ----------------------- EDIT PROFILE SCREEN -----------------------  */
 

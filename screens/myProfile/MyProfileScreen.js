@@ -20,7 +20,8 @@ import { useActionSheet } from '@expo/react-native-action-sheet';
 import Constants from 'expo-constants';
 import * as ImagePicker from 'expo-image-picker';
 import { LinearGradient } from 'expo-linear-gradient';
-import { MaterialIcons } from '@expo/vector-icons';
+import { MaterialIcons, Feather } from '@expo/vector-icons';
+import { useNetInfo } from '@react-native-community/netinfo';
 
 import HeaderButtom from '../../components/UI/HeaderButton';
 import Loader from '../../components/UI/Loader';
@@ -67,6 +68,7 @@ const BASE_PHOTOS = [
 const MyProfileScreen = (props) => {
   const BASE_URL = Constants.manifest.extra.BUCKET_URL;
   const dispatch = useDispatch();
+  const netInfo = useNetInfo();
   const { showActionSheetWithOptions } = useActionSheet();
   const [refreshing, setRefreshing] = useState(false);
   const [photoId, setPhotoId] = useState('');
@@ -168,14 +170,6 @@ const MyProfileScreen = (props) => {
     setRefreshing(false);
   }, [dispatch]);
 
-  // add listener to fetch the user and re fetch it
-  // useEffect(() => {
-  //   const unsubscribe = props.navigation.addListener('didFocus', () => {
-  //     loadProfile();
-  //   });
-  //   return unsubscribe;
-  // }, [loadProfile]);
-
   const handleAddPhoto = async (photo_id, isUpdate) => {
     const hasPermissions = await verifyPermissions();
     if (!hasPermissions) {
@@ -224,14 +218,11 @@ const MyProfileScreen = (props) => {
     props.navigation.navigate('Preview');
   };
 
-  const handleOpenLink = useCallback(async (url) => {
-    const supported = await Linking.canOpenURL(url);
-    if (supported) {
-      await Linking.openURL(url);
-    } else {
-      Alert.alert(`Don't know how to open this URL: ${url}`);
-    }
-  }, []);
+  const getInitials = (firstname, lastname) => {
+    const first = firstname ? firstname.charAt(0).toUpperCase() : 'N';
+    const second = lastname ? lastname.charAt(0).toUpperCase() : 'N';
+    return first + second;
+  };
 
   const handleNavigate = (screen) => {
     props.navigation.navigate(screen);
@@ -291,6 +282,20 @@ const MyProfileScreen = (props) => {
             <TouchableOpacity
               style={styles.profilePictureContainer}
               onPress={handleOpenPreview}>
+              {typeof userProfile === 'undefined' && (
+                <View
+                  style={{
+                    backgroundColor: Colors.bgCard,
+                    opacity: 0.5,
+                    width: 150,
+                    height: 150,
+                    borderRadius: 100,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}>
+                  <Loader />
+                </View>
+              )}
               {photos && Object.values(photos).length > 0 && (
                 <Image
                   source={{
@@ -302,7 +307,9 @@ const MyProfileScreen = (props) => {
               {!photos ||
                 (Object.values(photos).length === 0 && (
                   <View style={styles.avatar_view}>
-                    <Text style={styles.avatar_initials}>DS</Text>
+                    <Text style={styles.avatar_initials}>
+                      {getInitials(userProfile.firstname, userProfile.lastname)}
+                    </Text>
                   </View>
                 ))}
             </TouchableOpacity>
@@ -365,7 +372,9 @@ const MyProfileScreen = (props) => {
                         {loadingAddPhoto && item.id === photoId ? (
                           <Loader size="small" />
                         ) : (
-                          <Text style={{ color: Colors.white }}>Add photo</Text>
+                          <Text style={{ color: Colors.white }}>
+                            Add Photo 📸
+                          </Text>
                         )}
                       </View>
                     </TouchableOpacity>
@@ -375,33 +384,54 @@ const MyProfileScreen = (props) => {
               />
             </View>
 
-            {/* TOOGETHER PRO */}
             <View style={styles.circle}>
-              <LinearGradient
-                colors={['#ED665A', '#CF2A6E', '#BA007C']}
-                style={styles.linearCircle}
-              />
-              <View style={{ alignItems: 'center' }}>
+              <TouchableOpacity
+                onPress={handleOpenPreview}
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  width: '70%',
+                  alignItems: 'center',
+                  borderRadius: 10,
+                  padding: 7,
+                }}>
+                <LinearGradient
+                  colors={['#ED665A', '#CF2A6E', '#BA007C']}
+                  style={styles.linearCircle}
+                />
+                <View style={{ padding: 10 }}>
+                  <Text
+                    style={{
+                      color: Colors.white,
+                      fontSize: 20,
+                      fontWeight: '500',
+                    }}>
+                    Profile Preview
+                  </Text>
+                </View>
+                <View
+                  style={{
+                    borderRadius: 100,
+                    padding: 3,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    marginHorizontal: 10,
+                  }}>
+                  <Feather name="arrow-right" size={35} color={Colors.white} />
+                </View>
+              </TouchableOpacity>
+
+              <View
+                style={{
+                  marginTop: 20,
+                  marginBottom: 35,
+                  padding: 10,
+                }}>
                 <View style={styles.logoContainer}>
                   <Image
                     source={require('../../assets/images/logo-2.png')}
                     style={styles.logo}
                   />
-                </View>
-                <Text style={styles.proText}>
-                  Enjoy unlimited likes and say goodbye to ads
-                </Text>
-                <View style={styles.buttonPremiumContainer}>
-                  <TouchableOpacity
-                    onPress={() => handleOpenLink('https://toogether.app/')}
-                    style={styles.buttonPremiumView}>
-                    <LinearGradient
-                      // Background Linear Gradient
-                      colors={['#ED665A', '#CF2A6E', '#BA007C']}
-                      style={styles.linearGradientButton}
-                    />
-                    <Text style={styles.buttonText}>Buy Toogether Premium</Text>
-                  </TouchableOpacity>
                 </View>
               </View>
             </View>
