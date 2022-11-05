@@ -1,10 +1,16 @@
 {
   "expo": {
-    "name": "toogether",
-    "slug": "toogether",
+    "name": "Toogether",
+    "description": "Making university life more fun",
+    "slug": "toogether-app",
+    "privacy": "public",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "",
+    "icon": "./assets/images/toogether-icon.png",
+    "platforms": [
+      "ios",
+      "android"
+    ],
     "splash": {
       "image": "./assets/images/logo-2.png",
       "resizeMode": "contain",
@@ -18,16 +24,25 @@
       "assetExts": ["png", "js", "jpg", "tts"]
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": false,
+      "bundleIdentifier": "https://toogether.app/",
+      "buildNumber": "1.0.0"
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "",
+        "foregroundImage": "./assets/images/toogether-icon.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "permissions": [
+        "ACCESS_FINE_LOCATION",
+        "CAMERA",
+        "WRITE_EXTERNAL_STORAGE"
+      ],
+      "package": "https://toogether.app/",
+      "versionCode": 1
     },
     "web": {
-      "favicon": ""
+      "favicon": "./assets/images/toogether-icon.png"
     },
     "extra": {
       "IOS_KEY": "17321266316-ogt2q8acjpv6vvfg4kh9joi7oipk3lo4.apps.googleusercontent.com",
@@ -40,7 +55,7 @@
       "MESSAGE_SENDER_ID": "17321266316",
       "APP_ID": "1:17321266316:web:e3dac382e8fb4714307fa9",
       "MEASUREMENT_ID": "G-9SQ0M3WKQW",
-      "LOCAL_URL": "http://127.0.0.1:8000",
+      "LOCAL_URL": "https://mobile-api.toogether.app",
       "BUCKET_URL": "https://toogether-images.s3.eu-west-2.amazonaws.com"
     }
   }
