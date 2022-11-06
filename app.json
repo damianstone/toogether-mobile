@@ -25,7 +25,7 @@
     },
     "ios": {
       "supportsTablet": false,
-      "bundleIdentifier": "https://toogether.app/",
+      "bundleIdentifier": "toogether.app",
       "buildNumber": "1.0.0"
     },
     "android": {
@@ -38,7 +38,7 @@
         "CAMERA",
         "WRITE_EXTERNAL_STORAGE"
       ],
-      "package": "https://toogether.app/",
+      "package": "toogether.app",
       "versionCode": 1
     },
     "web": {
