@@ -66,7 +66,6 @@ const BASE_PHOTOS = [
 ];
 
 const MyProfileScreen = (props) => {
-  const BASE_URL = Constants.manifest.extra.BUCKET_URL;
   const dispatch = useDispatch();
   const netInfo = useNetInfo();
   const { showActionSheetWithOptions } = useActionSheet();

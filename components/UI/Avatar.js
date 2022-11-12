@@ -15,7 +15,6 @@ import { listUserPhotos, getUserProfile } from '../../store/actions/user';
 import Loader from './Loader';
 
 const Avatar = (props) => {
-  const BASE_URL = Constants.manifest.extra.BUCKET_URL;
   const dispatch = useDispatch();
   const [error, setError] = useState(false);
 

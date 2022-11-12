@@ -15,7 +15,6 @@ import Colors from '../constants/Colors';
 import InfoCard from './InfoCard';
 
 const SwipeCard = (props) => {
-  const BASE_URL = Constants.manifest.extra.BUCKET_URL;
 
   let cardType;
   let imageStyle;

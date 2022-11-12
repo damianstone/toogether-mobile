@@ -22,7 +22,6 @@ import InfoCard from '../../components/InfoCard';
 import Colors from '../../constants/Colors';
 
 const ProfilePreviewScreen = (props) => {
-  const BASE_URL = Constants.manifest.extra.BUCKET_URL;
   const dispatch = useDispatch();
 
   const currentProfileId = useSelector(
