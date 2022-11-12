@@ -17,7 +17,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useDispatch, useSelector } from 'react-redux';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import { NavigationActions, StackActions } from 'react-navigation';
-import Constants from 'expo-constants';
 import {
   getGroup,
   leaveGroup,
@@ -37,7 +36,6 @@ import ClipBoard from '../../components/UI/ClipBoard';
 import MemberAvatar from '../../components/MemberAvatar';
 
 const GroupScreen = (props) => {
-  const BASE_URL = Constants.manifest.extra.LOCAL_URL;
   const [storedGroupData, setStoredGroupData] = useState();
   const [storedProfileData, setStoredProfileData] = useState();
   const [isOwner, setIsOwner] = useState(false);

@@ -13,14 +13,12 @@ import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { useDispatch, useSelector } from 'react-redux';
 import { listBlockedProfiles, unBlockProfile } from '../../store/actions/block';
 import { checkServerError } from '../../utils/errors';
-import Constants from 'expo-constants';
 
 import HeaderButtom from '../../components/UI/HeaderButton';
 import Colors from '../../constants/Colors';
 import * as b from '../../constants/block';
 
 const BlockProfilesScreen = (props) => {
-  const BASE_URL = Constants.manifest.extra.LOCAL_URL;
   const dispatch = useDispatch();
   const [refreshing, setRefreshing] = useState();
 

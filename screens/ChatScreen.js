@@ -11,7 +11,6 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import Constants from 'expo-constants';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import { useDispatch, useSelector } from 'react-redux';
 import { listMatches, deleteMatch } from '../store/actions/swipe';
@@ -22,7 +21,6 @@ import Loader from '../components/UI/Loader';
 import Colors from '../constants/Colors';
 
 const ChatScreen = (props) => {
-  const BASE_URL = Constants.manifest.extra.LOCAL_URL;
   const { showActionSheetWithOptions } = useActionSheet();
   const dispatch = useDispatch();
 
