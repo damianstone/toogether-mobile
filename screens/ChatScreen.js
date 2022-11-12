@@ -130,10 +130,9 @@ const ChatScreen = (props) => {
     );
   };
 
-  const getInitials = (firstname, lastname) => {
-    const first = firstname ? firstname.charAt(0).toUpperCase() : 'N';
-    const second = lastname ? lastname.charAt(0).toUpperCase() : 'N';
-    return first + second;
+  const getInitials = (name) => {
+    const first = name ? name.charAt(0).toUpperCase() : 'N';
+    return first;
   };
 
   const getMatchedProfile = (match) => {
@@ -163,7 +162,7 @@ const ChatScreen = (props) => {
           (matchedProfile.photos.length === 0 && (
             <View style={styles.avatar_view}>
               <Text style={styles.avatar_initials}>
-                {getInitials(matchedProfile.firstname, matchedProfile.lastname)}
+                {getInitials(matchedProfile.name)}
               </Text>
             </View>
           ))}

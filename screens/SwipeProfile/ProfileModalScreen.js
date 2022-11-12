@@ -134,8 +134,7 @@ const ProfileModalScreen = (props) => {
           openAlert={openAlert}
           isGroup={isGroup}
           preview={preview}
-          firstname={profile.firstname}
-          lastname={profile.lastname}
+          name={profile.name}
           age={profile.age}
           city={profile.city}
           live_in={profile.live_in}

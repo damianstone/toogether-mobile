@@ -4,11 +4,9 @@ import Constants from 'expo-constants';
 import Colors from '../constants/Colors';
 
 const MemberAvatar = (props) => {
-
-  const getInitials = (firstname, lastname) => {
-    const first = firstname ? firstname.charAt(0).toUpperCase() : 'N';
-    const second = lastname ? lastname.charAt(0).toUpperCase() : 'N';
-    return first + second;
+  const getInitials = (name) => {
+    const first = name ? name.charAt(0).toUpperCase() : 'N';
+    return first;
   };
 
   return (
@@ -23,7 +21,7 @@ const MemberAvatar = (props) => {
         (props.photos.length === 0 && (
           <View style={styles.avatar_view}>
             <Text style={styles.avatar_initials}>
-              {getInitials(props.firstname, props.lastname)}
+              {getInitials(props.name)}
             </Text>
           </View>
         ))}

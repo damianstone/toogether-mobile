@@ -5,16 +5,7 @@ import { Ionicons } from '@expo/vector-icons';
 import Colors from '../constants/Colors';
 
 const InfoCard = (props) => {
-  const {
-    firstName,
-    lastName,
-    city,
-    live_in,
-    age,
-    university,
-    occupation,
-    from,
-  } = props;
+  const { name, city, live_in, age, university, occupation, from } = props;
 
   const details = [
     {
@@ -65,7 +56,7 @@ const InfoCard = (props) => {
   return (
     <View style={{ ...styles.cardShadow, ...cardShadow }}>
       <View style={styles.textContainer}>
-        <Text style={styles.name}>{`${firstName} ${lastName}, ${age}`}</Text>
+        <Text style={styles.name}>{`${name}, ${age}`}</Text>
       </View>
       {filtered[0] && (
         <View style={styles.infoContainer}>

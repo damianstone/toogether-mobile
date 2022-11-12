@@ -217,10 +217,9 @@ const MyProfileScreen = (props) => {
     props.navigation.navigate('Preview');
   };
 
-  const getInitials = (firstname, lastname) => {
-    const first = firstname ? firstname.charAt(0).toUpperCase() : 'N';
-    const second = lastname ? lastname.charAt(0).toUpperCase() : 'N';
-    return first + second;
+  const getInitials = (name) => {
+    const first = name ? name.charAt(0).toUpperCase() : 'N';
+    return first;
   };
 
   const handleNavigate = (screen) => {
@@ -307,7 +306,7 @@ const MyProfileScreen = (props) => {
                 (Object.values(photos).length === 0 && (
                   <View style={styles.avatar_view}>
                     <Text style={styles.avatar_initials}>
-                      {getInitials(userProfile.firstname, userProfile.lastname)}
+                      {getInitials(userProfile.name)}
                     </Text>
                   </View>
                 ))}
@@ -315,9 +314,7 @@ const MyProfileScreen = (props) => {
             <View style={styles.nameView}>
               {userProfile && (
                 <>
-                  <Text style={styles.name}>
-                    {`${userProfile.firstname} ${userProfile.lastname}`}
-                  </Text>
+                  <Text style={styles.name}>{`${userProfile.name}`}</Text>
                   <TouchableOpacity
                     onPress={() => handleNavigate('EditProfile')}>
                     <MaterialIcons name="edit" size={20} color="white" />

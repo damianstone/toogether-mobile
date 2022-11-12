@@ -126,8 +126,7 @@ const LikesScreen = (props) => {
         <LikeCard
           key={member.id}
           isGroup
-          firstname={member.firstname}
-          lastname={member.lastname}
+          name={member.name}
           age={member.age}
           image={member.photos.length > 0 ? member.photos[0].image : null}
           onShowProfile={() =>
@@ -142,8 +141,7 @@ const LikesScreen = (props) => {
     return (
       <LikeCard
         key={item.id}
-        firstname={item.firstname}
-        lastname={item.lastname}
+        name={item.name}
         age={item.age}
         image={item.photos.length > 0 ? item.photos[0].image : null}
         onShowProfile={() =>

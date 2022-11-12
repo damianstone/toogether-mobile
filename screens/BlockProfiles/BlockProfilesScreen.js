@@ -83,15 +83,12 @@ const BlockProfilesScreen = (props) => {
     }
   };
 
-  const getInitials = (firstname, lastname) => {
-    const first = firstname ? firstname.charAt(0).toUpperCase() : 'N';
-    const second = lastname ? lastname.charAt(0).toUpperCase() : 'N';
-    console.log(first, second);
-    return first + second;
+  const getInitials = (name) => {
+    const first = name ? name.charAt(0).toUpperCase() : 'N';
+    return first;
   };
 
   const renderBlockedProfile = ({ item }) => {
-    console.log(item);
     return (
       <>
         <View style={styles.blockContainer}>
@@ -106,14 +103,11 @@ const BlockProfilesScreen = (props) => {
             ) : (
               <View style={styles.noPhotoContainer}>
                 <Text style={{ color: Colors.white, fontSize: 10 }}>
-                  {getInitials(item.firstname, item.lastname)}
+                  {getInitials(item.name)}
                 </Text>
               </View>
             )}
-            <Text
-              style={
-                styles.nameText
-              }>{`${item.firstname} ${item.lastname}`}</Text>
+            <Text style={styles.nameText}>{`${item.name}`}</Text>
           </View>
           <TouchableOpacity
             onPress={() => handleUnblock(item.id)}

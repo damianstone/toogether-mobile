@@ -15,10 +15,7 @@ const App = (props) => {
     <View style={styles.screen}>
       <BottomSheet ref={bottomSheetRef} index={1} snapPoints={snapPoints}>
         <View style={styles.container1}>
-          <Text
-            style={
-              styles.nameText
-            }>{`${props.name} ${props.lastname}, ${props.age}`}</Text>
+          <Text style={styles.nameText}>{`${props.name}, ${props.age}`}</Text>
           <TouchableOpacity
             onPress={props.onClose}
             style={styles.closeContainer}>

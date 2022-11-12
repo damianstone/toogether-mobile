@@ -182,6 +182,7 @@ const SwipeScreen = (props) => {
         text="In order to render profiles and groups around you, we need your location ;)"
         onPress={verifyLocationPermissions}
         buttonText="Enable location service"
+        reload
       />
     );
   };
