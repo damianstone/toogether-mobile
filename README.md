@@ -52,6 +52,14 @@ If the workflow fails, it will not be possible to merge neither with staging nor
 
 # Deployment
 
+## Deploy to expo
+```bash
+expo publish --release-channel develop
+expo publish --release-channel rocket
+```
+
+## Deploy to Test Flight
+
 ### Build
 
 `Dev`
