@@ -2,8 +2,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import Constants from 'expo-constants';
 import * as w from '../../constants/swipe';
+import getEnvVars from '../../environment';
 
-const BASE_URL = Constants.manifest.extra.LOCAL_URL;
+const { API_URL: BASE_URL } = getEnvVars();
 
 // -------------------------------- SWIPE CARDS --------------------------------
 export const listSwipe = () => {

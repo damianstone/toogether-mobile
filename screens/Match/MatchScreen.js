@@ -1,18 +1,14 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { View, Modal, Text, StyleSheet, Button } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useState, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import Constants from 'expo-constants';
 
 import * as r from '../../constants/responses/match';
 import * as w from '../../constants/swipe';
 import SwipeMatch from '../../components/SwipeMatch';
-import Colors from '../../constants/Colors';
 
 const MatchScreen = (props) => {
   const dispatch = useDispatch();
   const [userData, setUserData] = useState({});
-  const BASE_URL = Constants.manifest.extra.LOCAL_URL;
   const likeData = props.navigation.getParam('likeData');
 
   const getAsyncData = async () => {
