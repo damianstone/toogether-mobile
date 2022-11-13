@@ -7,8 +7,6 @@ import { createBottomTabNavigator } from 'react-navigation-tabs';
 import {
   AntDesign,
   Ionicons,
-  MaterialIcons,
-  FontAwesome5,
   MaterialCommunityIcons,
 } from '@expo/vector-icons';
 import Colors from '../constants/Colors';
@@ -36,6 +34,7 @@ import SwipeScreen from '../screens/Swipe/SwipeScreen';
 import ChatScreen from '../screens/ChatScreen';
 import LikesScreen from '../screens/Likes/LikesScreen';
 import BlockProfilesScreen from '../screens/BlockProfiles/BlockProfilesScreen';
+import InstagramScreen from '../screens/CreateProfile/InstagramScreen';
 
 const defaultNavOptions = {
   headerMode: 'none',
@@ -53,6 +52,7 @@ const AuthNavigator = createStackNavigator(
   {
     AuthStart: AuthStartScreen,
     Auth: AuthScreen,
+    Instagram: InstagramScreen,
     Create: CreateProfileScreen,
     AddPhoto: AddProfilePhotoScreen,
     Success: AuthSucess,

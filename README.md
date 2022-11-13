@@ -48,3 +48,26 @@ Basic PR structure:
 
 When a PR is made to either `staging` or `production`, a github action will be triggered in which code formatting and unittests are run.
 If the workflow fails, it will not be possible to merge neither with staging nor master.
+
+
+# Deployment
+
+## Deploy to expo
+```bash
+expo publish --release-channel develop
+expo publish --release-channel rocket
+```
+
+## Deploy to Test Flight
+
+### Build
+
+`Dev`
+```bash
+expo build:ios --release-channel develop
+```
+
+`Production`
+```bash
+expo build:ios --release-channel rocket
+```

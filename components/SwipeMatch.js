@@ -21,7 +21,6 @@ const SCREEN_HEIGHT = Dimensions.get('window').height;
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
 const SwipeMatch = (props) => {
-  const BASE_URL = Constants.manifest.extra.BUCKET_URL;
 
   const {
     visible,
@@ -104,7 +103,7 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   imageContainer: {
-    width: '40%',
+    width: 150,
     height: 150,
     justifyContent: 'center',
     alignItems: 'center',

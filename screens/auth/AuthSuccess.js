@@ -35,15 +35,15 @@ const AuthSucess = (props) => {
         <TouchableOpacity
           style={styles.touchable}
           onPress={() => {
-            props.navigation.navigate('Create');
+            props.navigation.navigate('Instagram');
           }}
         >
           <Button
             onPress={() => {
-              props.navigation.navigate('Create');
+              props.navigation.navigate('Instagram');
             }}
             color={Colors.white}
-            title="Continuar"
+            title="Continue"
           />
         </TouchableOpacity>
       </View>

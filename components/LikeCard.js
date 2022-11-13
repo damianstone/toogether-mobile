@@ -16,17 +16,7 @@ const SCREEN_HEIGHT = Dimensions.get('window').height;
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
 const LikeCard = (props) => {
-  const BASE_URL = Constants.manifest.extra.BUCKET_URL;
-  const {
-    isGroup,
-    firstname,
-    lastname,
-    age,
-    image,
-    onShowProfile,
-    dislike,
-    like,
-  } = props;
+  const { isGroup, name, age, image, onShowProfile, dislike, like } = props;
 
   let cardType;
   let imageContainer;
@@ -63,16 +53,15 @@ const LikeCard = (props) => {
     };
   }
 
-  const getInitials = (firstname, lastname) => {
-    const first = firstname ? firstname.charAt(0).toUpperCase() : 'N';
-    const second = lastname ? lastname.charAt(0).toUpperCase() : 'N';
-    return first + second;
+  const getInitials = (name) => {
+    const first = name ? name.charAt(0).toUpperCase() : 'N';
+    return first;
   };
 
   const getCardInfo = () => {
-    let n = firstname;
+    let n = name;
     let a = age;
-    if (!firstname || firstname === null) {
+    if (!name || name === null) {
       n = 'Toogether User';
     }
     if (!age || age === null) {
@@ -116,7 +105,7 @@ const LikeCard = (props) => {
           ) : (
             <View style={styles.initialsView}>
               <Text style={{ color: Colors.black, fontSize: 30 }}>
-                {getInitials(firstname, lastname)}
+                {getInitials(name)}
               </Text>
               <View>
                 <TouchableOpacity onPress={dislike} style={styles.dislike}>

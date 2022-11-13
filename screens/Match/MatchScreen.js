@@ -1,18 +1,14 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { View, Modal, Text, StyleSheet, Button } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useState, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import Constants from 'expo-constants';
 
 import * as r from '../../constants/responses/match';
 import * as w from '../../constants/swipe';
 import SwipeMatch from '../../components/SwipeMatch';
-import Colors from '../../constants/Colors';
 
 const MatchScreen = (props) => {
   const dispatch = useDispatch();
   const [userData, setUserData] = useState({});
-  const BASE_URL = Constants.manifest.extra.LOCAL_URL;
   const likeData = props.navigation.getParam('likeData');
 
   const getAsyncData = async () => {
@@ -93,11 +89,11 @@ const MatchScreen = (props) => {
           title: 'NEW MATCH!!',
           currentProfileImage: currentProfile.photos[0].image,
           matchedProfileImage: matchedProfile.photos[0].image,
-          currentProfileName: currentProfile.firstname,
-          matchedProfileName: matchedProfile.firstname,
+          currentProfileName: currentProfile.name,
+          matchedProfileName: matchedProfile.name,
           currentType: matchType.current,
           matchedType: matchType.matched,
-          chatButtonText: `Send message to ${matchedProfile.firstname}`,
+          chatButtonText: `Send message to ${matchedProfile.name}`,
         };
       case r.SAME_MATCH:
         return {
@@ -105,11 +101,11 @@ const MatchScreen = (props) => {
           title: 'MATCH!!',
           currentProfileImage: currentProfile.photos[0].image,
           matchedProfileImage: matchedProfile.photos[0].image,
-          currentProfileName: currentProfile.firstname,
-          matchedProfileName: matchedProfile.firstname,
+          currentProfileName: currentProfile.name,
+          matchedProfileName: matchedProfile.name,
           currentType: matchType.current,
           matchedType: matchType.matched,
-          chatButtonText: `Send message to ${matchedProfile.firstname}`,
+          chatButtonText: `Send message to ${matchedProfile.name}`,
         };
       default:
         return null;
@@ -119,7 +115,7 @@ const MatchScreen = (props) => {
   return (
     <SwipeMatch
       matchData={getMatchData(likeData)}
-      chatOnPress={() => console.log('chat')}
+      chatOnPress={() => props.navigation.navigate('Chat')}
       laterOnPress={handleCloseMatch}
     />
   );

@@ -17,7 +17,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useDispatch, useSelector } from 'react-redux';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import { NavigationActions, StackActions } from 'react-navigation';
-import Constants from 'expo-constants';
 import {
   getGroup,
   leaveGroup,
@@ -37,7 +36,6 @@ import ClipBoard from '../../components/UI/ClipBoard';
 import MemberAvatar from '../../components/MemberAvatar';
 
 const GroupScreen = (props) => {
-  const BASE_URL = Constants.manifest.extra.LOCAL_URL;
   const [storedGroupData, setStoredGroupData] = useState();
   const [storedProfileData, setStoredProfileData] = useState();
   const [isOwner, setIsOwner] = useState(false);
@@ -268,7 +266,7 @@ const GroupScreen = (props) => {
     }
   };
 
-  const handleOpenActionSheet = (member_id, member_firstname) => {
+  const handleOpenActionSheet = (member_id, member_name) => {
     // Same interface as https://facebook.github.io/react-native/docs/actionsheetios.html
     const options = ['Remove member', 'Cancel'];
     const destructiveButtonIndex = 0;
@@ -283,7 +281,7 @@ const GroupScreen = (props) => {
       (buttonIndex) => {
         if (buttonIndex === 0) {
           Alert.alert(
-            `Are you sure you want to remove ${member_firstname}`,
+            `Are you sure you want to remove ${member_name}`,
             'This action is irreversible',
             [
               {
@@ -304,15 +302,14 @@ const GroupScreen = (props) => {
     );
   };
 
-  const getInitials = (firstname, lastname) => {
-    const first = firstname ? firstname.charAt(0).toUpperCase() : 'N';
-    const second = lastname ? lastname.charAt(0).toUpperCase() : 'N';
-    return first + second;
+  const getInitials = (name) => {
+    const first = name ? name.charAt(0).toUpperCase() : 'N';
+    return first;
   };
 
-  const getFirstName = (firstname) => {
-    if (firstname) {
-      return firstname;
+  const getName = (name) => {
+    if (name) {
+      return name;
     }
     return 'Null';
   };
@@ -329,16 +326,13 @@ const GroupScreen = (props) => {
     return (
       <View style={styles.flatlist_item_container}>
         <MemberAvatar
-          firstname={item.firstname}
-          lastname={item.lastname}
+          name={item.name}
           photos={item.photos}
           onPress={() =>
-            isOwner ? handleOpenActionSheet(item.id, item.firstname) : null
+            isOwner ? handleOpenActionSheet(item.id, item.name) : null
           }
         />
-        <Text style={styles.firstname_text}>
-          {getFirstName(item.firstname)}
-        </Text>
+        <Text style={styles.name_text}>{getName(item.name)}</Text>
       </View>
     );
   };
@@ -370,15 +364,13 @@ const GroupScreen = (props) => {
             (group?.owner.photos.length === 0 && (
               <View style={styles.avatar_view}>
                 <Text style={styles.avatar_initials}>
-                  {getInitials(group.owner.firstname, group.owner.lastname)}
+                  {getInitials(group.owner.name)}
                 </Text>
               </View>
             ))}
           <View style={styles.nameView}>
             {group?.owner && (
-              <Text style={styles.name}>
-                {`${group.owner.firstname}'s group`}
-              </Text>
+              <Text style={styles.name}>{`${group.owner.name}'s group`}</Text>
             )}
           </View>
         </View>
@@ -516,7 +508,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     alignItems: 'center',
   },
-  firstname_text: {
+  name_text: {
     padding: 5,
     width: '100%',
     textAlign: 'center',

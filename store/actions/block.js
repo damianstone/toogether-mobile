@@ -3,8 +3,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import Constants from 'expo-constants';
 import * as b from '../../constants/block';
+import getEnvVars from '../../environment';
 
-const BASE_URL = Constants.manifest.extra.LOCAL_URL;
+const { API_URL: BASE_URL } = getEnvVars();
 
 export const listBlockedProfiles = () => {
   return async (dispatch) => {

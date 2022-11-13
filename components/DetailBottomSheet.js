@@ -15,8 +15,7 @@ import BottomSheet from './BottomSheet';
 
 const DetailBottomSheet = (props) => {
   const {
-    firstname,
-    lastname,
+    name,
     age,
     city,
     live_in,
@@ -66,9 +65,7 @@ const DetailBottomSheet = (props) => {
       showsHorizontalScrollIndicator={false}>
       <View style={styles.container1}>
         <View style={styles.nameTextContainer}>
-          <Text style={styles.nameText}>
-            {`${firstname} ${lastname}, ${age}`}
-          </Text>
+          <Text style={styles.nameText}>{`${name}, ${age}`}</Text>
           {props.isGroup && (
             <Text style={styles.toogetherGroupText}>Toogether group</Text>
           )}

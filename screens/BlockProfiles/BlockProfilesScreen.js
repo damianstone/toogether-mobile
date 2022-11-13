@@ -13,14 +13,12 @@ import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { useDispatch, useSelector } from 'react-redux';
 import { listBlockedProfiles, unBlockProfile } from '../../store/actions/block';
 import { checkServerError } from '../../utils/errors';
-import Constants from 'expo-constants';
 
 import HeaderButtom from '../../components/UI/HeaderButton';
 import Colors from '../../constants/Colors';
 import * as b from '../../constants/block';
 
 const BlockProfilesScreen = (props) => {
-  const BASE_URL = Constants.manifest.extra.LOCAL_URL;
   const dispatch = useDispatch();
   const [refreshing, setRefreshing] = useState();
 
@@ -85,15 +83,12 @@ const BlockProfilesScreen = (props) => {
     }
   };
 
-  const getInitials = (firstname, lastname) => {
-    const first = firstname ? firstname.charAt(0).toUpperCase() : 'N';
-    const second = lastname ? lastname.charAt(0).toUpperCase() : 'N';
-    console.log(first, second);
-    return first + second;
+  const getInitials = (name) => {
+    const first = name ? name.charAt(0).toUpperCase() : 'N';
+    return first;
   };
 
   const renderBlockedProfile = ({ item }) => {
-    console.log(item);
     return (
       <>
         <View style={styles.blockContainer}>
@@ -108,14 +103,11 @@ const BlockProfilesScreen = (props) => {
             ) : (
               <View style={styles.noPhotoContainer}>
                 <Text style={{ color: Colors.white, fontSize: 10 }}>
-                  {getInitials(item.firstname, item.lastname)}
+                  {getInitials(item.name)}
                 </Text>
               </View>
             )}
-            <Text
-              style={
-                styles.nameText
-              }>{`${item.firstname} ${item.lastname}`}</Text>
+            <Text style={styles.nameText}>{`${item.name}`}</Text>
           </View>
           <TouchableOpacity
             onPress={() => handleUnblock(item.id)}

@@ -15,8 +15,6 @@ import Colors from '../constants/Colors';
 import InfoCard from './InfoCard';
 
 const SwipeCard = (props) => {
-  const BASE_URL = Constants.manifest.extra.BUCKET_URL;
-
   let cardType;
   let imageStyle;
   // if the profiles array > 1
@@ -105,8 +103,7 @@ const SwipeCard = (props) => {
                   source={checkPhoto(profile)}
                   style={styles.image}>
                   <InfoCard
-                    firstName={profile.firstname}
-                    lastName={profile.lastname}
+                    name={profile.name}
                     city={profile.city}
                     live_in={profile.live_in}
                     from={props.nationality}
@@ -132,8 +129,7 @@ const SwipeCard = (props) => {
               source={checkPhoto(props.profile)}
               style={styles.image}>
               <InfoCard
-                firstName={props.profile.firstname}
-                lastName={props.profile.lastname}
+                name={props.profile.name}
                 city={props.profile.city}
                 live_in={props.profile.live_in}
                 from={props.nationality}

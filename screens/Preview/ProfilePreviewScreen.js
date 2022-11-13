@@ -22,7 +22,6 @@ import InfoCard from '../../components/InfoCard';
 import Colors from '../../constants/Colors';
 
 const ProfilePreviewScreen = (props) => {
-  const BASE_URL = Constants.manifest.extra.BUCKET_URL;
   const dispatch = useDispatch();
 
   const currentProfileId = useSelector(
@@ -174,8 +173,7 @@ const ProfilePreviewScreen = (props) => {
                   source={{ uri: `${profile.photos[0].image}` }}
                   style={styles.image}>
                   <InfoCard
-                    firstName={profile.firstname}
-                    lastName={profile.lastname}
+                    name={profile.name}
                     city={profile.city}
                     live_in={profile.live_in}
                     age={profile.age}
@@ -202,8 +200,7 @@ const ProfilePreviewScreen = (props) => {
               source={{ uri: `${swipeProfile.photos[0].image}` }} // just get the first photo of every profile uri: `http://127.0.0.1:8000${profile.photo}`
               style={styles.image}>
               <InfoCard
-                firstName={swipeProfile.firstname}
-                lastName={swipeProfile.lastname}
+                name={swipeProfile.name}
                 city={swipeProfile.city}
                 live_in={swipeProfile.live_in}
                 age={swipeProfile.age}

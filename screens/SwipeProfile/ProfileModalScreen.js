@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, ImageBackground, Alert } from 'react-native';
 import { withNavigationFocus } from 'react-navigation';
 import Swiper from 'react-native-swiper';
-import Constants from 'expo-constants';
 import { useDispatch, useSelector } from 'react-redux';
 import { blockProfile } from '../../store/actions/block';
 import { checkServerError, check400Error } from '../../utils/errors';
@@ -13,7 +12,6 @@ import Colors from '../../constants/Colors';
 
 const ProfileModalScreen = (props) => {
   const dispatch = useDispatch();
-  const BASE_URL = Constants.manifest.extra.LOCAL_URL;
   const profile = props.navigation.getParam('profile');
   const isGroup = props.navigation.getParam('isGroup');
   const preview = props.navigation.getParam('preview');
@@ -136,8 +134,7 @@ const ProfileModalScreen = (props) => {
           openAlert={openAlert}
           isGroup={isGroup}
           preview={preview}
-          firstname={profile.firstname}
-          lastname={profile.lastname}
+          name={profile.name}
           age={profile.age}
           city={profile.city}
           live_in={profile.live_in}
