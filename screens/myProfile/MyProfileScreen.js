@@ -306,15 +306,15 @@ const MyProfileScreen = (props) => {
                 (Object.values(photos).length === 0 && (
                   <View style={styles.avatar_view}>
                     <Text style={styles.avatar_initials}>
-                      {getInitials(userProfile.name)}
+                      {userProfile?.name ? getInitials(userProfile.name) : 'N'}
                     </Text>
                   </View>
                 ))}
             </TouchableOpacity>
             <View style={styles.nameView}>
-              {userProfile && (
+              {userProfile && userProfile.name && (
                 <>
-                  <Text style={styles.name}>{`${userProfile.name}`}</Text>
+                  <Text style={styles.name}>{userProfile.name}</Text>
                   <TouchableOpacity
                     onPress={() => handleNavigate('EditProfile')}>
                     <MaterialIcons name="edit" size={20} color="white" />

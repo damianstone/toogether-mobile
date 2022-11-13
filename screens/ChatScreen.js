@@ -3,6 +3,7 @@ import {
   Text,
   View,
   Image,
+  Linking,
   FlatList,
   RefreshControl,
   Button,
@@ -11,12 +12,16 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import { useDispatch, useSelector } from 'react-redux';
 import { listMatches, deleteMatch } from '../store/actions/swipe';
-import { checkServerError } from '../utils/errors';
+import { checkServerError, check400Error } from '../utils/errors';
+import { Feather } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
 
 import * as w from '../constants/swipe';
+import HeaderButtom from '../components/UI/HeaderButton';
 import Loader from '../components/UI/Loader';
 import Colors from '../constants/Colors';
 
@@ -69,6 +74,9 @@ const ChatScreen = (props) => {
     }
 
     if (errorDeleteMatch) {
+      if (errorDeleteMatch?.response?.status === 400) {
+        check400Error(errorDeleteMatch);
+      }
       checkServerError(errorDeleteMatch);
     }
   }, [errorDeleteMatch, errorListMatches]);
@@ -90,11 +98,31 @@ const ChatScreen = (props) => {
     setRefreshing(false);
   }, [dispatch]);
 
-  const handleChat = (matchId) => {
-    console.log('OPEN CHAT');
+  const handleInstagram = useCallback(async (instagram) => {
+    if (!instagram || typeof instagram === 'undefined') {
+      return;
+    }
+
+    const url = `https://www.instagram.com/${instagram}/`;
+
+    const supported = await Linking.canOpenURL(url);
+    if (supported) {
+      await Linking.openURL(url);
+    } else {
+      Alert.alert(`Don't know how to open this URL: ${url}`);
+    }
+  }, []);
+
+  const handleShowProfile = (profile, isGroup) => {
+    props.navigation.navigate('SwipeProfile', {
+      profile: profile,
+      isGroup: isGroup,
+    });
   };
 
   const handleDeleteMatch = async (matchId) => {
+    console.log('MATCH ID -> ', matchId);
+
     if (matchId) {
       await dispatch(deleteMatch(matchId));
     }
@@ -106,9 +134,9 @@ const ChatScreen = (props) => {
     return null;
   };
 
-  const onOpenActionSheet = (matchId) => {
+  const onOpenActionSheet = (matchedProfile, matchId) => {
     // Same interface as https://facebook.github.io/react-native/docs/actionsheetios.html
-    const options = ['Chat', 'Remove match', 'Cancel'];
+    const options = ['Send message', 'Remove match', 'Cancel'];
     const destructiveButtonIndex = 2;
     const cancelButtonIndex = 3;
 
@@ -120,7 +148,7 @@ const ChatScreen = (props) => {
       },
       (buttonIndex) => {
         if (buttonIndex === 0) {
-          handleChat(matchId);
+          handleInstagram(matchedProfile.instagram);
         }
         if (buttonIndex === 1) {
           handleDeleteMatch(matchId);
@@ -144,42 +172,85 @@ const ChatScreen = (props) => {
 
   const renderMatch = ({ item, index }) => {
     if (!userData?.id) {
-      return <Text>Problem</Text>;
+      return;
     }
+
     const matchedProfile = getMatchedProfile(item);
+
     return (
-      <TouchableOpacity
-        onPress={() => onOpenActionSheet(item.id)}
-        style={styles.imgContainer}>
-        {loadingDeleteMatch && <ActivityIndicator />}
-        {matchedProfile && matchedProfile.photos.length > 0 && (
-          <Image
-            source={{ uri: `${matchedProfile.photos[0].image}` }}
-            style={styles.img}
-          />
-        )}
-        {!matchedProfile ||
-          (matchedProfile.photos.length === 0 && (
-            <View style={styles.avatar_view}>
-              <Text style={styles.avatar_initials}>
+      <View style={styles.matchContainer}>
+        <View style={styles.rowContainer}>
+          {matchedProfile.photos.length > 0 ? (
+            <TouchableOpacity
+              style={styles.imageContainer}
+              onPress={() => handleShowProfile(matchedProfile, false)}>
+              <Image
+                source={{ uri: `${matchedProfile.photos[0].image}` }}
+                style={styles.img}
+              />
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity
+              style={styles.noPhotoContainer}
+              onPress={() => handleShowProfile(matchedProfile, false)}>
+              <Text style={{ color: Colors.white, fontSize: 10 }}>
                 {getInitials(matchedProfile.name)}
               </Text>
-            </View>
-          ))}
-      </TouchableOpacity>
+            </TouchableOpacity>
+          )}
+
+          <TouchableOpacity
+            onPress={() => onOpenActionSheet(matchedProfile, item.id)}
+            style={styles.cardContainer}>
+            <Text style={styles.instagramText}>
+              {matchedProfile.instagram
+                ? `@ ${matchedProfile.instagram}`
+                : 'No account found'}
+            </Text>
+            {matchedProfile.instagram ? (
+              <TouchableOpacity
+                onPress={() => handleInstagram(matchedProfile.instagram)}
+                style={styles.sendButtonContainer}>
+                <Image
+                  source={require('../assets/images/send-button.png')}
+                  style={styles.img}
+                />
+              </TouchableOpacity>
+            ) : null}
+          </TouchableOpacity>
+        </View>
+      </View>
     );
   };
 
   const renderEmptyMatches = () => {
-    return <Text style={{ color: Colors.white }}>EMPTY</Text>;
+    return (
+      <View
+        style={{
+          backgroundColor: Colors.bg,
+          justifyContent: 'center',
+          alignItems: 'center',
+          width: '100%',
+          height: '100%',
+          textAlign: 'center',
+        }}>
+        <View style={{ width: 200, height: 200 }}>
+          <Image
+            source={require('../assets/images/no-chats.png')}
+            style={{ resizeMode: 'contain', flex: 1, aspectRatio: 1 }}
+          />
+        </View>
+        <Text style={{ color: Colors.white, fontSize: 15 }}>
+          No chats yet ;(
+        </Text>
+      </View>
+    );
   };
 
   return (
     <View style={{ backgroundColor: Colors.bg, flex: 1 }}>
-      <Text>New Matchs</Text>
       <FlatList
         data={matches?.data}
-        horizontal
         keyExtractor={(match) => match.id}
         scrollEnabled
         refreshControl={
@@ -189,26 +260,113 @@ const ChatScreen = (props) => {
             tintColor={Colors.white}
           />
         }
+        contentContainerStyle={{ flexGrow: 1 }}
         renderItem={renderMatch}
         ListEmptyComponent={renderEmptyMatches}
       />
+      <View
+        style={{
+          flex: 1,
+          justifyContent: 'flex-end',
+          marginBottom: 36,
+          alignItems: 'center',
+        }}>
+        <Text style={{ color: Colors.white }}>
+          Toogether chat in the next update
+        </Text>
+      </View>
     </View>
   );
+};
+
+ChatScreen.navigationOptions = (navData) => {
+  return {
+    headerTitle: 'Chats',
+    headerLeft: () => (
+      <HeaderButtons HeaderButtonComponent={HeaderButtom}>
+        <Item
+          iconName={
+            Platform.OS === 'android' ? 'ios-arrow-back' : 'ios-arrow-back'
+          }
+          onPress={() => {
+            // go to chat screen
+            navData.navigation.navigate('Swipe');
+          }}
+          title="Back arrow"
+        />
+      </HeaderButtons>
+    ),
+  };
 };
 
 export default ChatScreen;
 
 const styles = StyleSheet.create({
-  imgContainer: {
-    width: 50,
-    height: 50,
-    overflow: 'hidden',
-    marginLeft: 10,
-    borderRadius: 100,
+  matchContainer: {
+    width: '95%',
+    paddingVertical: 10,
+    justifyContent: 'center',
+    flexDirection: 'row',
   },
+
+  rowContainer: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    width: '80%',
+  },
+
+  imageContainer: {
+    width: 60,
+    height: 60,
+    borderRadius: 100,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 20,
+  },
+
   img: {
     width: '100%',
     height: '100%',
+    borderRadius: 100,
+  },
+
+  noPhotoContainer: {
+    width: 45,
+    height: 45,
+    borderRadius: 100,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: Colors.orange,
+    marginRight: 20,
+  },
+
+  cardContainer: {
+    flexDirection: 'row',
+    backgroundColor: Colors.bgCard,
+    height: 45,
+    padding: 10,
+    width: '85%',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    borderRadius: 10,
+  },
+
+  instagramText: {
+    color: Colors.white,
+    fontSize: 17,
+    fontWeight: '500',
+    letterSpacing: 1,
+  },
+
+  sendButtonContainer: {
+    backgroundColor: Colors.orange,
+    width: 35,
+    height: 35,
+    borderRadius: 100,
+    justifyContent: 'center',
+    alignItems: 'center',
+    textAlign: 'center',
   },
 
   avatar_view: {

@@ -105,6 +105,12 @@ const InstagramScreen = (props) => {
     console.log(formIsValid);
     if (formIsValid) {
       dispatch(updateUserProfile(inputValues));
+    } else {
+      Alert.alert(
+        'Please enter you Instagram account',
+        'Soon there will a chat build in the app ',
+        [{ text: 'OK' }]
+      );
     }
   };
 

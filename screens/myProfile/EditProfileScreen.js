@@ -136,6 +136,7 @@ const EditProfileScreen = (props) => {
       city: false,
       university: false,
       description: false,
+      instagram: false,
     },
     formIsValid: false,
   });

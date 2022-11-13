@@ -115,7 +115,7 @@ const MatchScreen = (props) => {
   return (
     <SwipeMatch
       matchData={getMatchData(likeData)}
-      chatOnPress={() => console.log('chat')}
+      chatOnPress={() => props.navigation.navigate('Chat')}
       laterOnPress={handleCloseMatch}
     />
   );

@@ -84,9 +84,10 @@ const SwipeScreen = (props) => {
 
   useEffect(() => {
     if (swipe && swipe.results.length === 0) {
+      console.log(swipe.results);
       setShowMode(0);
     }
-  }, [swipe?.results]);
+  }, []);
 
   // TODO: fix render when enter the screen
 
