@@ -3,6 +3,7 @@ import {
   FlatList,
   StyleSheet,
   View,
+  Image,
   RefreshControl,
   Text,
   Button,
@@ -126,8 +127,7 @@ const LikesScreen = (props) => {
         <LikeCard
           key={member.id}
           isGroup
-          firstname={member.firstname}
-          lastname={member.lastname}
+          name={member.name}
           age={member.age}
           image={member.photos.length > 0 ? member.photos[0].image : null}
           onShowProfile={() =>
@@ -142,8 +142,7 @@ const LikesScreen = (props) => {
     return (
       <LikeCard
         key={item.id}
-        firstname={item.firstname}
-        lastname={item.lastname}
+        name={item.name}
         age={item.age}
         image={item.photos.length > 0 ? item.photos[0].image : null}
         onShowProfile={() =>
@@ -157,20 +156,27 @@ const LikesScreen = (props) => {
 
   const renderEmptyList = () => {
     return (
-      <View style={styles.emptyScreen}>
-        <Text
-          style={{
-            color: Colors.white,
-            fontSize: 20,
-            fontWeight: '500',
-            alignSelf: 'center',
-          }}>
+      <View
+        style={{
+          backgroundColor: Colors.bg,
+          justifyContent: 'center',
+          alignItems: 'center',
+          width: '100%',
+          height: '100%',
+          textAlign: 'center',
+        }}>
+        <View style={{ width: 200, height: 200 }}>
+          <Image
+            source={require('../../assets/images/no-likes.png')}
+            style={{ resizeMode: 'contain', flex: 1, aspectRatio: 1 }}
+          />
+        </View>
+        <Text style={{ color: Colors.white, fontSize: 15 }}>
           No likes yet :(
         </Text>
       </View>
     );
   };
-
 
   return (
     <View style={styles.screen}>
@@ -189,6 +195,7 @@ const LikesScreen = (props) => {
               tintColor={Colors.white}
             />
           }
+          contentContainerStyle={{ flexGrow: 1 }}
           renderItem={renderLikeCard}
           ListEmptyComponent={renderEmptyList}
         />

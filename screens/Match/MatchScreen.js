@@ -89,11 +89,11 @@ const MatchScreen = (props) => {
           title: 'NEW MATCH!!',
           currentProfileImage: currentProfile.photos[0].image,
           matchedProfileImage: matchedProfile.photos[0].image,
-          currentProfileName: currentProfile.firstname,
-          matchedProfileName: matchedProfile.firstname,
+          currentProfileName: currentProfile.name,
+          matchedProfileName: matchedProfile.name,
           currentType: matchType.current,
           matchedType: matchType.matched,
-          chatButtonText: `Send message to ${matchedProfile.firstname}`,
+          chatButtonText: `Send message to ${matchedProfile.name}`,
         };
       case r.SAME_MATCH:
         return {
@@ -101,11 +101,11 @@ const MatchScreen = (props) => {
           title: 'MATCH!!',
           currentProfileImage: currentProfile.photos[0].image,
           matchedProfileImage: matchedProfile.photos[0].image,
-          currentProfileName: currentProfile.firstname,
-          matchedProfileName: matchedProfile.firstname,
+          currentProfileName: currentProfile.name,
+          matchedProfileName: matchedProfile.name,
           currentType: matchType.current,
           matchedType: matchType.matched,
-          chatButtonText: `Send message to ${matchedProfile.firstname}`,
+          chatButtonText: `Send message to ${matchedProfile.name}`,
         };
       default:
         return null;
@@ -115,7 +115,7 @@ const MatchScreen = (props) => {
   return (
     <SwipeMatch
       matchData={getMatchData(likeData)}
-      chatOnPress={() => console.log('chat')}
+      chatOnPress={() => props.navigation.navigate('Chat')}
       laterOnPress={handleCloseMatch}
     />
   );

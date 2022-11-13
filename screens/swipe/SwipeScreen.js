@@ -84,9 +84,10 @@ const SwipeScreen = (props) => {
 
   useEffect(() => {
     if (swipe && swipe.results.length === 0) {
+      console.log(swipe.results);
       setShowMode(0);
     }
-  }, [swipe?.results]);
+  }, []);
 
   // TODO: fix render when enter the screen
 
@@ -182,6 +183,7 @@ const SwipeScreen = (props) => {
         text="In order to render profiles and groups around you, we need your location ;)"
         onPress={verifyLocationPermissions}
         buttonText="Enable location service"
+        reload
       />
     );
   };

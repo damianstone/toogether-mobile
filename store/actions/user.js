@@ -136,8 +136,6 @@ export const userLogin = (email, password) => {
         JSON.stringify({
           id: data.id,
           token: data.token,
-          access_token: data.access,
-          refresh_token: data.refresh,
           has_account: data.has_account,
         })
       );
@@ -288,8 +286,7 @@ export const getUserProfile = (profile_id) => {
 };
 
 export const createUserProfile = (
-  firstname,
-  lastname,
+  name,
   birthdate,
   gender,
   show_me,
@@ -313,8 +310,7 @@ export const createUserProfile = (
         url: `${BASE_URL}/api/v1/profiles/actions/create-profile/`,
         headers: config,
         data: {
-          firstname,
-          lastname,
+          name,
           birthdate,
           gender,
           show_me,

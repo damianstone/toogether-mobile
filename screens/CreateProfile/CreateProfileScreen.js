@@ -56,8 +56,7 @@ const CreateProfileScreen = (props) => {
   const [formState, dispatchFormState] = useReducer(formReducer, {
     inputValues: {
       img: '',
-      firstname: '',
-      lastname: '',
+      name: '',
       birthdate: '',
       gender: '',
       show_me: '',
@@ -66,8 +65,7 @@ const CreateProfileScreen = (props) => {
     },
     inputValidities: {
       img: true,
-      firstname: false,
-      lastname: false,
+      name: false,
       birthdate: false,
       gender: false,
       show_me: false,
@@ -138,8 +136,7 @@ const CreateProfileScreen = (props) => {
   const createUserProfileHandler = () => {
     dispatch(
       createUserProfile(
-        inputValues.firstname,
-        inputValues.lastname,
+        inputValues.name,
         inputValues.birthdate,
         inputValues.gender,
         inputValues.show_me,
