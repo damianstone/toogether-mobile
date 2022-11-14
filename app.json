@@ -3,7 +3,7 @@
     "name": "Toogether",
     "description": "Making university life more fun",
     "slug": "toogether-app",
-    "owner": "toogether",
+    "owner": "damian_stone",
     "privacy": "public",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -20,9 +20,16 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "packagerOpts": {
-      "assetExts": ["png", "js", "jpg", "tts"]
+      "assetExts": [
+        "png",
+        "js",
+        "jpg",
+        "tts"
+      ]
     },
     "ios": {
       "supportsTablet": false,
@@ -44,6 +51,11 @@
     },
     "web": {
       "favicon": "./assets/images/toogether-icon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "1bbdaff3-3c02-445d-97e6-bc150d65197e"
+      }
     }
   }
 }
