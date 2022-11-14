@@ -241,7 +241,7 @@ const AuthStartScreen = (props) => {
             )}
             <Button
               style={styles.auth_text_button}
-              color={Platform.OS === 'ios' ? Colors.white : Colors.bgCard}
+              color={Platform.OS === 'ios' ? Colors.bgCard : Colors.bgCard}
               title={
                 register
                   ? 'You already have an account?'

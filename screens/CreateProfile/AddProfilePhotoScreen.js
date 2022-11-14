@@ -5,6 +5,7 @@ import {
   View,
   Button,
   ActivityIndicator,
+  Platform,
   ScrollView,
   Alert,
 } from 'react-native';
@@ -134,7 +135,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.bg,
   },
   auth_text_view: {
-    marginTop: 80,
+    marginTop: Platform.OS === 'ios' ? 80 : 40,
     marginBottom: 5,
   },
   titleContainer: {
