@@ -94,7 +94,7 @@ const styles = StyleSheet.create({
   },
 
   logoContainer: {
-    marginTop: 80,
+    marginTop: 40,
     alignItems: 'center',
     width: '100%',
   },

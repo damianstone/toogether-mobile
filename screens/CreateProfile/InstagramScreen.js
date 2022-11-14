@@ -6,7 +6,9 @@ import {
   Image,
   Button,
   Alert,
+  ScrollView,
   TouchableOpacity,
+  KeyboardAvoidingView,
 } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { useDispatch, useSelector } from 'react-redux';
@@ -115,24 +117,25 @@ const InstagramScreen = (props) => {
   };
 
   return (
-    <View style={styles.screen}>
+    <ScrollView
+      contentContainerStyle={styles.screen}
+      style={{ backgroundColor: Colors.bg }}>
       <StatusBar style="light" />
-
-      <View style={styles.container}>
-        <Text style={styles.mainText}>Connecting with students</Text>
+      <KeyboardAvoidingView behavior="position">
         <View style={styles.container}>
-          <Text style={styles.text}>
-            We use instagram for connecting you with other people
-          </Text>
+          <Text style={styles.mainText}>Connecting with students</Text>
+          <View style={styles.container}>
+            <Text style={styles.text}>
+              We use instagram for connecting you with other people
+            </Text>
 
-          <View style={styles.imageContainer}>
-            <Image
-              source={require('../../assets/images/ig-logo.png')}
-              style={styles.image}
-            />
-          </View>
+            <View style={styles.imageContainer}>
+              <Image
+                source={require('../../assets/images/ig-logo.png')}
+                style={styles.image}
+              />
+            </View>
 
-          <View>
             <Input
               labelStyle={styles.label}
               inputStyle={styles.inputStyle}
@@ -153,7 +156,7 @@ const InstagramScreen = (props) => {
             />
           </View>
         </View>
-      </View>
+      </KeyboardAvoidingView>
 
       <View style={styles.buttonContainer}>
         {loadingUpdate ? (
@@ -168,7 +171,7 @@ const InstagramScreen = (props) => {
           </TouchableOpacity>
         )}
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
