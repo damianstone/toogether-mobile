@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native';
 import Colors from '../../constants/Colors';
+import { Platform } from 'react-native';
 
 // ---------------------- AUTH SCREEN -----------------------
 
@@ -34,7 +35,7 @@ export default StyleSheet.create({
   },
 
   auth_text_view: {
-    marginTop: 80,
+    marginTop: Platform.OS === 'ios' ? 80 : 40,
     padding: 15,
     minHeight: '30%',
   },
@@ -86,6 +87,6 @@ export default StyleSheet.create({
 
   auth_text_button: {
     color: '#4A4A4A',
-    fontSize: 15,
+    fontSize: Platform.OS === 'ios' ? 15 : 10,
   },
 });

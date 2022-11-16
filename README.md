@@ -44,10 +44,10 @@ yarn test
 
 Basic PR structure:
 
-`your-branch` -> `develop` -> `staging` -> `production`
+`your-branch` -> `develop` -> `rocket`
 
-When a PR is made to either `staging` or `production`, a github action will be triggered in which code formatting and unittests are run.
-If the workflow fails, it will not be possible to merge neither with staging nor master.
+When a PR is made to either `develop` or `rocket`, a github action will be triggered in which code formatting and unittests are run.
+If the workflow fails, it will not be possible to merge them.
 
 
 # Deployment
@@ -58,16 +58,17 @@ expo publish --release-channel develop
 expo publish --release-channel rocket
 ```
 
-## Deploy to Test Flight
+## Deploy to the AppStore and Test Flight
+Before make sure you have installed globally EAS-CLI 
+For this, you can run 
 
-### Build
-
-`Dev`
 ```bash
-expo build:ios --release-channel develop
+npm install -g eas-cli
 ```
 
 `Production`
 ```bash
 expo build:ios --release-channel rocket
+eas submit --platform ios --url url-of-the-buil-in-expo
 ```
+## Deploy to Google Playground

@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Platform } from 'react-native';
 import {
   borderRightColor,
   borderTopColor,
@@ -28,7 +28,7 @@ export default StyleSheet.create({
     overflow: 'hidden',
   },
   auth_text_view: {
-    marginTop: 80,
+    marginTop: Platform.OS === 'ios' ? 80 : 40,
     marginBottom: 20,
   },
   contentContainer: {
