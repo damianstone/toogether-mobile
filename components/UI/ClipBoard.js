@@ -4,13 +4,38 @@ import {
   Text,
   TouchableOpacity,
   View,
+  Share,
   Platform,
 } from 'react-native';
 import { Feather } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 import * as Clipboard from 'expo-clipboard';
 import Colors from '../../constants/Colors';
 
 const ClipBoard = (props) => {
+
+
+  const handleShareUrl = async (groupUrl) => {
+    try {
+      const result = await Share.share({
+        message:
+          `Join to my group at Toogether app using the following link: ${groupUrl}`,
+      });
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+          // do something
+        } else {
+          // shared
+        }
+      } else if (result.action === Share.dismissedAction) {
+        // dismissed
+        // just for IOS
+      }
+    } catch (error) {
+      alert(error.message);
+    }
+  };
+
   const copyToClipboard = (text) => {
     Clipboard.setString(text);
   };
@@ -18,6 +43,8 @@ const ClipBoard = (props) => {
   const removeHttp = (url) => {
     return url.replace(/^https?:\/\//, '');
   };
+
+  console.log('URL TEXT ', props.text);
 
   return (
     <View
@@ -29,7 +56,7 @@ const ClipBoard = (props) => {
       <TouchableOpacity
         style={styles.clipboard_icon}
         onPress={() => copyToClipboard(props.text)}>
-        <Feather name="copy" size={24} color="white" />
+        <Ionicons name="ios-share-outline" size={24} color="white" />
       </TouchableOpacity>
     </View>
   );

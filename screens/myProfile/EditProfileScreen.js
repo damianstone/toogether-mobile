@@ -197,7 +197,7 @@ const EditProfileScreen = (props) => {
   if (loadingUpdate || loadingProfile) {
     return (
       <View style={styles.loadingScreen}>
-        <ActivityIndicator color={Colors.orange} size="large" />
+        <ActivityIndicator color={Colors.white} size="large" />
       </View>
     );
   }
