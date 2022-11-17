@@ -13,13 +13,15 @@ import * as Clipboard from 'expo-clipboard';
 import Colors from '../../constants/Colors';
 
 const ClipBoard = (props) => {
-
-
   const handleShareUrl = async (groupUrl) => {
     try {
       const result = await Share.share({
-        message:
-          `Join to my group at Toogether app using the following link: ${groupUrl}`,
+        message: `Join to my group on Toogether app using the following link: ${groupUrl}
+          \n How to join a group using the link? 🤔
+          \n Open the app -> Group -> Join a group -> paste the link 
+          \n Don't have Toogether yet? 👀
+          \n Download it here ;) https://toogether.app/
+          `,
       });
       if (result.action === Share.sharedAction) {
         if (result.activityType) {
@@ -55,7 +57,7 @@ const ClipBoard = (props) => {
       <Text style={styles.clipboard_button_text}>{removeHttp(props.text)}</Text>
       <TouchableOpacity
         style={styles.clipboard_icon}
-        onPress={() => copyToClipboard(props.text)}>
+        onPress={() => handleShareUrl(props.text)}>
         <Ionicons name="ios-share-outline" size={24} color="white" />
       </TouchableOpacity>
     </View>
