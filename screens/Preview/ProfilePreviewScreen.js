@@ -71,6 +71,7 @@ const ProfilePreviewScreen = (props) => {
       borderRadius: 20,
       justifyContent: 'center',
       alignItems: 'center',
+      backgroundColor: Colors.bgCard,
     };
     imageStyle = {
       borderRadius: 20,
@@ -128,8 +129,6 @@ const ProfilePreviewScreen = (props) => {
     //render the current profile first
     const orderedMembers = putOnTopCard(currentProfileId, swipeProfile.members);
 
-    console.log('ORDERED MEMBERS -> ', orderedMembers);
-
     return orderedMembers.map((profile) => {
       return (
         <ImageBackground
@@ -160,7 +159,7 @@ const ProfilePreviewScreen = (props) => {
     });
   };
 
-  if (loadingSwipeProfile || !swipeProfile) {
+  if (loadingSwipeProfile) {
     <ActivityModal
       loading
       title="Please wait"
@@ -229,8 +228,9 @@ const ProfilePreviewScreen = (props) => {
           showsButtons
           buttonWrapperStyle={{ color: Colors.placeholder }}
           style={styles.wrapper}>
-          {swipeProfile?.members && renderGroupProfile()}
-          {swipeProfile && !swipeProfile.members && (
+          {swipeProfile && swipeProfile.members ? (
+            renderGroupProfile()
+          ) : swipeProfile ? (
             <ImageBackground
               imageStyle={{ ...imageStyle, ...styles.card }}
               key={swipeProfile.id}
@@ -249,10 +249,15 @@ const ProfilePreviewScreen = (props) => {
                 style={styles.arrowContainer}>
                 <Image
                   source={require('../../assets/images/white-arrow-up.png')}
-                  style={{ width: '100%', height: '100%' }}
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                  }}
                 />
               </TouchableOpacity>
             </ImageBackground>
+          ) : (
+            <Loader />
           )}
         </Swiper>
       </View>

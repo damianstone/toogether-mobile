@@ -85,7 +85,7 @@ const ChatScreen = (props) => {
     const unsubscribe = props.navigation.addListener('didFocus', () => {
       reload();
     });
-    return unsubscribe;
+    return () => unsubscribe;
   }, [reload]);
 
   const reload = useCallback(async () => {
@@ -323,6 +323,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 20,
+    backgroundColor: Colors.bgCard,
   },
 
   img: {

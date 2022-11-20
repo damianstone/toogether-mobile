@@ -34,20 +34,25 @@ const Avatar = (props) => {
 
   return (
     <TouchableOpacity onPress={props.onPress} style={styles.imgContainer}>
-      {loading && <ActivityIndicator />}
+      {loading ||
+        (typeof fetchError != 'undefined' && (
+          <View style={styles.error_avatar_view}>
+            <Loader />
+          </View>
+        ))}
       {data && data.photos.length > 0 && (
-        <Image source={{ uri: `${data.photos[0].image}` }} style={styles.img} />
+        <View style={styles.avatar_view}>
+          <Image
+            source={{ uri: `${data.photos[0].image}` }}
+            style={styles.img}
+          />
+        </View>
       )}
       {data?.photos?.length === 0 && (
         <View style={styles.avatar_view}>
           <Text style={styles.avatar_initials}>
             {getInitials(data.firstname)}
           </Text>
-        </View>
-      )}
-      {typeof fetchError === 'undefined' && (
-        <View style={styles.error_avatar_view}>
-          <Loader />
         </View>
       )}
     </TouchableOpacity>
@@ -67,10 +72,11 @@ const styles = StyleSheet.create({
   img: {
     width: '100%',
     height: '100%',
+    backgroundColor: Colors.bgCard,
   },
 
   avatar_view: {
-    backgroundColor: Colors.orange,
+    backgroundColor: Colors.bgCard,
     width: '100%',
     height: '100%',
     justifyContent: 'center',

@@ -76,7 +76,7 @@ const LikesScreen = (props) => {
     const unsubscribe = props.navigation.addListener('didFocus', () => {
       reload();
     });
-    return unsubscribe;
+    return () => unsubscribe;
   }, [reload]);
 
   const reload = useCallback(async () => {
