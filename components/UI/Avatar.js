@@ -51,7 +51,7 @@ const Avatar = (props) => {
       {data?.photos?.length === 0 && (
         <View style={styles.avatar_view}>
           <Text style={styles.avatar_initials}>
-            {getInitials(data.firstname)}
+            {getInitials(data.name)}
           </Text>
         </View>
       )}
@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
   },
 
   avatar_view: {
-    backgroundColor: Colors.bgCard,
+    backgroundColor: Colors.orange,
     width: '100%',
     height: '100%',
     justifyContent: 'center',
