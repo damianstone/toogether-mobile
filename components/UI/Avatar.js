@@ -27,19 +27,25 @@ const Avatar = (props) => {
     }
   }, []);
 
+  const getInitials = (name) => {
+    const first = name ? name.charAt(0).toUpperCase() : 'N';
+    return first;
+  };
+
   return (
     <TouchableOpacity onPress={props.onPress} style={styles.imgContainer}>
       {loading && <ActivityIndicator />}
       {data && data.photos.length > 0 && (
         <Image source={{ uri: `${data.photos[0].image}` }} style={styles.img} />
       )}
-      {data === undefined ||
-        (data?.photos.length === 0 && (
-          <View style={styles.avatar_view}>
-            <Text style={styles.avatar_initials}>DS</Text>
-          </View>
-        ))}
-      {typeof fetchError != 'undefined' && (
+      {data?.photos?.length === 0 && (
+        <View style={styles.avatar_view}>
+          <Text style={styles.avatar_initials}>
+            {getInitials(data.firstname)}
+          </Text>
+        </View>
+      )}
+      {typeof fetchError === 'undefined' && (
         <View style={styles.error_avatar_view}>
           <Loader />
         </View>

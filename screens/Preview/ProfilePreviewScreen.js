@@ -47,11 +47,11 @@ const ProfilePreviewScreen = (props) => {
       Alert.alert(`Someting went wrong`, 'Your profile could not be loaded', [
         {
           text: 'OK',
-          onPress: () => dispatch(getCurrentSwipeProfile()),
+          onPress: () => props.navigation.navigate('MyProfile'),
         },
       ]);
     }
-  }, []);
+  }, [errorSwipeProfile]);
 
   const showProfile = (profile, isGroup) => {
     props.navigation.navigate('Profile', {
@@ -93,6 +93,13 @@ const ProfilePreviewScreen = (props) => {
     };
   }
 
+  const checkPhoto = (profile) => {
+    if (profile?.photos?.length > 0) {
+      return { uri: `${profile.photos[0]?.image}` };
+    }
+    return require('../../assets/images/placeholder-profile.png');
+  };
+
   // sawp the positions of elements
   const swapElement = (from, to, arr) => {
     const newArr = [...arr];
@@ -118,9 +125,10 @@ const ProfilePreviewScreen = (props) => {
   };
 
   const renderGroupProfile = () => {
-
     //render the current profile first
     const orderedMembers = putOnTopCard(currentProfileId, swipeProfile.members);
+
+    console.log('ORDERED MEMBERS -> ', orderedMembers);
 
     return orderedMembers.map((profile) => {
       return (
@@ -128,7 +136,7 @@ const ProfilePreviewScreen = (props) => {
           key={profile.id}
           imageStyle={{ ...imageStyle, ...styles.card }}
           resizeMode="cover"
-          source={{ uri: `${profile.photos[0].image}` }}
+          source={checkPhoto(profile)}
           style={styles.image}>
           <InfoCard
             name={profile.name}
@@ -152,7 +160,7 @@ const ProfilePreviewScreen = (props) => {
     });
   };
 
-  if (loadingSwipeProfile) {
+  if (loadingSwipeProfile || !swipeProfile) {
     <ActivityModal
       loading
       title="Please wait"
@@ -222,13 +230,12 @@ const ProfilePreviewScreen = (props) => {
           buttonWrapperStyle={{ color: Colors.placeholder }}
           style={styles.wrapper}>
           {swipeProfile?.members && renderGroupProfile()}
-
           {swipeProfile && !swipeProfile.members && (
             <ImageBackground
               imageStyle={{ ...imageStyle, ...styles.card }}
               key={swipeProfile.id}
               resizeMode="cover"
-              source={{ uri: `${swipeProfile.photos[0].image}` }}
+              source={checkPhoto(swipeProfile)}
               style={styles.image}>
               <InfoCard
                 name={swipeProfile.name}

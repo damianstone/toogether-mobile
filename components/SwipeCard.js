@@ -13,7 +13,7 @@ import Constants from 'expo-constants';
 
 import Colors from '../constants/Colors';
 import InfoCard from './InfoCard';
-
+ 
 const SwipeCard = (props) => {
   let cardType;
   let imageStyle;
