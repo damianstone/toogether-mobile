@@ -93,6 +93,65 @@ const ProfilePreviewScreen = (props) => {
     };
   }
 
+  // sawp the positions of elements
+  const swapElement = (from, to, arr) => {
+    const newArr = [...arr];
+
+    const item = newArr.splice(from, 1)[0];
+    newArr.splice(to, 0, item);
+
+    return newArr;
+  };
+
+  const putOnTopCard = (topCardId, members) => {
+    // get the index of the topCard and change it to the top
+    const toIndex = 0;
+    const fromIndex = members.findIndex((elem) => elem.id === topCardId);
+
+    // if the profile exists in members, return the new ordered array
+    if (fromIndex !== -1) {
+      const newSwipes = swapElement(fromIndex, toIndex, members);
+      return newSwipes;
+    }
+
+    return false;
+  };
+
+  const renderGroupProfile = () => {
+
+    //render the current profile first
+    const orderedMembers = putOnTopCard(currentProfileId, swipeProfile.members);
+
+    return orderedMembers.map((profile) => {
+      return (
+        <ImageBackground
+          key={profile.id}
+          imageStyle={{ ...imageStyle, ...styles.card }}
+          resizeMode="cover"
+          source={{ uri: `${profile.photos[0].image}` }}
+          style={styles.image}>
+          <InfoCard
+            name={profile.name}
+            city={profile.city}
+            live_in={profile.live_in}
+            age={profile.age}
+            university={profile.university}
+          />
+          {profile.id === currentProfileId && (
+            <TouchableOpacity
+              onPress={() => showProfile(profile, true)}
+              style={styles.arrowContainer}>
+              <Image
+                source={require('../../assets/images/white-arrow-up.png')}
+                style={{ width: '100%', height: '100%' }}
+              />
+            </TouchableOpacity>
+          )}
+        </ImageBackground>
+      );
+    });
+  };
+
   if (loadingSwipeProfile) {
     <ActivityModal
       loading
@@ -162,42 +221,14 @@ const ProfilePreviewScreen = (props) => {
           showsButtons
           buttonWrapperStyle={{ color: Colors.placeholder }}
           style={styles.wrapper}>
-          {swipeProfile &&
-            swipeProfile.members &&
-            swipeProfile.members.map((profile) => {
-              return (
-                <ImageBackground
-                  key={profile.id}
-                  imageStyle={{ ...imageStyle, ...styles.card }}
-                  resizeMode="cover"
-                  source={{ uri: `${profile.photos[0].image}` }}
-                  style={styles.image}>
-                  <InfoCard
-                    name={profile.name}
-                    city={profile.city}
-                    live_in={profile.live_in}
-                    age={profile.age}
-                    university={profile.university}
-                  />
-                  {profile.id === currentProfileId && (
-                    <TouchableOpacity
-                      onPress={() => showProfile(swipeProfile, true)}
-                      style={styles.arrowContainer}>
-                      <Image
-                        source={require('../../assets/images/white-arrow-up.png')}
-                        style={{ width: '100%', height: '100%' }}
-                      />
-                    </TouchableOpacity>
-                  )}
-                </ImageBackground>
-              );
-            })}
+          {swipeProfile?.members && renderGroupProfile()}
+
           {swipeProfile && !swipeProfile.members && (
             <ImageBackground
               imageStyle={{ ...imageStyle, ...styles.card }}
               key={swipeProfile.id}
               resizeMode="cover"
-              source={{ uri: `${swipeProfile.photos[0].image}` }} // just get the first photo of every profile uri: `http://127.0.0.1:8000${profile.photo}`
+              source={{ uri: `${swipeProfile.photos[0].image}` }}
               style={styles.image}>
               <InfoCard
                 name={swipeProfile.name}

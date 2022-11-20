@@ -119,6 +119,7 @@ const Deck = (props) => {
     setShowMode(1);
   };
 
+  // sawp the positions of elements 
   const swapElement = (from, to, arr) => {
     const newArr = [...arr];
 

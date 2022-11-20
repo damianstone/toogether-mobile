@@ -16,6 +16,8 @@ const ProfileModalScreen = (props) => {
   const isGroup = props.navigation.getParam('isGroup');
   const preview = props.navigation.getParam('preview');
 
+  console.log('PROFILE MODAL -> ', profile, isGroup, preview);
+
   const blockProfileReducer = useSelector((state) => state.blockProfile);
   const {
     loading: blockLoading,
@@ -26,6 +28,10 @@ const ProfileModalScreen = (props) => {
   const handleLike = () => {
     // TODO: send like
     // TODO: close the modal
+  };
+
+  const handleDislike = () => {
+    props.navigation.goBack();
   };
 
   const handleBlockProfile = () => {
@@ -108,7 +114,7 @@ const ProfileModalScreen = (props) => {
               }}
             />
           }>
-          {profile.photos.length > 0 ? (
+          {profile?.photos?.length > 0 ? (
             profile.photos.map((photo) => (
               <ImageBackground
                 key={profile.id}
@@ -129,7 +135,7 @@ const ProfileModalScreen = (props) => {
           )}
         </Swiper>
         <DetailBottomSheet
-          onClose={() => props.navigation.goBack()}
+          onClose={handleDislike}
           handleLike={handleLike}
           openAlert={openAlert}
           isGroup={isGroup}
