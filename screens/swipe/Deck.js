@@ -142,6 +142,7 @@ const Deck = (props) => {
 
   // render a card with the profiles (single and group)
   const renderCard = (profile) => {
+    console.log("profile", profile?.id)
     if (typeof profile === 'object') {
       return (
         <SwipeCard

@@ -4,6 +4,7 @@ import { ActivityIndicator, StyleSheet, View } from 'react-native';
 import { useDispatch } from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { authenticate } from '../store/actions/user';
+import ActivityModal from '../components/UI/ActivityModal';
 import Colors from '../constants/Colors';
 
 const jwt_decode = require('jwt-decode');
@@ -32,7 +33,16 @@ const StartupScreen = (props) => {
 
   return (
     <View style={styles.screen}>
-      <ActivityIndicator color={Colors.orange} size="large" />
+      <ActivityModal
+        loading
+        title="Loading"
+        size="small"
+        activityColor="white"
+        titleColor="white"
+        activityWrapperStyle={{
+          backgroundColor: 'transparent',
+        }}
+      />
     </View>
   );
 };

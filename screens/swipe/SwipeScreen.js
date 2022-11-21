@@ -9,10 +9,11 @@ import {
   Alert,
 } from 'react-native';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
-import { withNavigation } from 'react-navigation';
+import { withNavigation, withNavigationFocus } from 'react-navigation';
 import { StatusBar } from 'expo-status-bar';
 import { useSelector, useDispatch } from 'react-redux';
 import { verifyLocationPermissions } from '../../utils/permissions';
+import { exist, getShowMode } from '../../utils/checks';
 import { userLocation } from '../../store/actions/user';
 import { listSwipe } from '../../store/actions/swipe';
 import * as b from '../../constants/block';
@@ -74,25 +75,23 @@ const SwipeScreen = (props) => {
   }, [dispatch]);
 
   useEffect(() => {
-    if (postLocationError) {
-      setShowMode(-1);
-    } else {
-      setShowMode(2);
-    }
-  }, [dispatch, postLocationError]);
-
-  useEffect(() => {
-    if (swipe && swipe.results.length === 0) {
-      console.log(swipe.results);
-      setShowMode(0);
-    }
-  }, []);
+    setShowMode(
+      getShowMode(
+        showMode,
+        swipe,
+        errorSwipe,
+        topProfile,
+        postLocationError,
+        permissionGranted
+      )
+    );
+  }, [dispatch, errorSwipe, postLocationError]);
 
   // TODO: fix render when enter the screen
 
-  //add listener to fetch the user and re fetch it
+  // add listener to fetch the user and re fetch it
   // useEffect(() => {
-  //   const unsubscribe = props.navigation.addListener('didFocus', () => {
+  //   const unsubscribe = props.navigation.addListener('focus', () => {
   //     reload();
   //   });
   //   return unsubscribe;
@@ -108,9 +107,19 @@ const SwipeScreen = (props) => {
     }
     setLocalLoading(false);
 
-    if (showMode !== 3) {
-      setShowMode(2); // show profiles
-    }
+    // reset the top profile so dont show it over and over
+    props.navigation.setParams({ topProfile: null });
+
+    setShowMode(
+      getShowMode(
+        showMode,
+        swipe,
+        errorSwipe,
+        null,
+        postLocationError,
+        permissionGranted
+      )
+    );
   }, [dispatch]);
 
   // pasa como props al deck y del deck al swipecard
@@ -183,6 +192,7 @@ const SwipeScreen = (props) => {
         onPress={verifyLocationPermissions}
         buttonText="Enable location service"
         reload
+        onReload={reload}
       />
     );
   };
@@ -194,7 +204,7 @@ const SwipeScreen = (props) => {
         <View style={styles.screen}>
           <ActivityModal
             loading
-            title="Please wait"
+            title="Loading"
             size="small"
             activityColor="white"
             titleColor="white"
@@ -207,6 +217,9 @@ const SwipeScreen = (props) => {
     );
   }
 
+  console.log(showMode);
+  console.log(swipe?.results, topProfile?.id);
+
   return (
     <SafeAreaView style={styles.safe}>
       <StatusBar style="light" />
@@ -217,20 +230,18 @@ const SwipeScreen = (props) => {
 
         {showMode === 1 && renderAllCardSwiped()}
 
-        {(showMode === 2 || showMode === 3) &&
-          swipe &&
-          swipe.results.length > 0 && (
-            <Deck
-              swipeProfiles={swipe.results}
-              topProfile={topProfile}
-              setShowMode={setShowMode}
-              showMode={showMode}
-              renderAllCardSwiped={renderAllCardSwiped}
-              navigation={props.navigation}
-              showProfileHandler={showProfileHandler}
-              showMatchHandler={showMatchHandler}
-            />
-          )}
+        {(showMode === 2 || showMode === 3) && swipe?.results && (
+          <Deck
+            swipeProfiles={swipe.results}
+            topProfile={topProfile}
+            setShowMode={setShowMode}
+            showMode={showMode}
+            renderAllCardSwiped={renderAllCardSwiped}
+            navigation={props.navigation}
+            showProfileHandler={showProfileHandler}
+            showMatchHandler={showMatchHandler}
+          />
+        )}
       </View>
     </SafeAreaView>
   );
