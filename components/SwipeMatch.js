@@ -5,6 +5,7 @@ import {
   Modal,
   Image,
   Button,
+  Alert,
   StyleSheet,
   TouchableOpacity,
   Dimensions,
@@ -21,7 +22,6 @@ const SCREEN_HEIGHT = Dimensions.get('window').height;
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
 const SwipeMatch = (props) => {
-
   const {
     visible,
     title,
@@ -31,10 +31,25 @@ const SwipeMatch = (props) => {
     matchedProfileName,
     currentType,
     matchedType,
+    matchedInstagram,
     chatButtonText,
   } = props.matchData;
 
-  console.log(currentProfileImage);
+  const handleSendMessage = useCallback(async () => {
+    if (!matchedInstagram || typeof matchedInstagram === 'undefined') {
+      props.chatOnPress()
+      return;
+    }
+
+    const url = `https://www.instagram.com/${matchedInstagram}/`;
+
+    const supported = await Linking.canOpenURL(url);
+    if (supported) {
+      await Linking.openURL(url);
+    } else {
+      Alert.alert(`Don't know how to open this URL: ${url}`);
+    }
+  }, []);
 
   return (
     <Modal transparent={false} visible={visible} animationType="fade">
@@ -63,7 +78,7 @@ const SwipeMatch = (props) => {
         <View style={styles.footerContainer}>
           <TouchableOpacity
             style={styles.chatButtonContainer}
-            onPress={props.chatOnPress}>
+            onPress={handleSendMessage}>
             <Text
               style={{ color: Colors.white, fontSize: 15, fontWeight: '500' }}>
               {chatButtonText}

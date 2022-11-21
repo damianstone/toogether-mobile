@@ -82,9 +82,9 @@ const Deck = (props) => {
     if ('members' in likedProfile) {
       // its a group profile
       const randomMember = getRandomMember(likedProfile.members);
-      // console.log('RANDOM MEMBER -> ', randomMember);
+      console.log('RANDOM MEMBER -> ', randomMember);
       await dispatch(like(randomMember.id));
-      console.log('LIKE DATA -> ', likeData, likeLoading);
+      console.log('LIKE DATA GROUP -> ', likeData, likeLoading);
     } else {
       // console.log('LIKED PROFILE -> ', likedProfile);
       await dispatch(like(likedProfile.id));

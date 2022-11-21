@@ -193,19 +193,20 @@ const AuthStartScreen = (props) => {
             <AuthInput
               id="email"
               label="Email"
+              textContentType="emailAddress"
               keyboardType="email-address"
               required
               autoComplete="email"
               autoCapitalize="none"
               errorText="Enter your email"
-              placeholder="hello@example@gmail.com"
+              placeholder="hello@gmail.com"
               placeholderTextColor="#D8D8D8"
               autoCorrect={false}
               onInputChange={inputChangeHandler}
             />
             <AuthInput
               secureTextEntry
-              textContentType="password"
+              textContentType="new-password"
               id="password"
               label="Password"
               keyboardType="default"
@@ -218,7 +219,7 @@ const AuthStartScreen = (props) => {
             {register && (
               <AuthInput
                 secureTextEntry
-                textContentType="password"
+                textContentType="new-password"
                 required
                 autoCapitalize="none"
                 id="repeated_password"

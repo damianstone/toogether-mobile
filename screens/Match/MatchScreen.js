@@ -26,6 +26,7 @@ const MatchScreen = (props) => {
   useEffect(() => {
     getAsyncData();
   }, []);
+
   const handleCloseMatch = () => {
     dispatch({ type: w.LIKE_PROFILE_RESET });
     props.navigation.goBack(null);
@@ -80,8 +81,6 @@ const MatchScreen = (props) => {
     const currentProfile = getCurrentProfile(data?.match_data);
     const matchType = getMatchedType(data?.group_match);
 
-    console.log('CURRENT -> ', currentProfile);
-
     switch (data.details) {
       case r.NEW_MATCH:
         return {
@@ -93,6 +92,7 @@ const MatchScreen = (props) => {
           matchedProfileName: matchedProfile.name,
           currentType: matchType.current,
           matchedType: matchType.matched,
+          matchedInstagram: matchedProfile.instagram,
           chatButtonText: `Send message to ${matchedProfile.name}`,
         };
       case r.SAME_MATCH:
@@ -105,6 +105,7 @@ const MatchScreen = (props) => {
           matchedProfileName: matchedProfile.name,
           currentType: matchType.current,
           matchedType: matchType.matched,
+          matchedInstagram: matchedProfile.instagram,
           chatButtonText: `Send message to ${matchedProfile.name}`,
         };
       default:

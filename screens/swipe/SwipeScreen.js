@@ -71,7 +71,6 @@ const SwipeScreen = (props) => {
         [{ text: 'Okay', onPress: () => verifyLocationPermissions() }]
       );
     }
-    return null;
   }, [dispatch]);
 
   useEffect(() => {
@@ -188,7 +187,7 @@ const SwipeScreen = (props) => {
     );
   };
 
-  if (loadingSwipe || localLoading) {
+  if (loadingSwipe || localLoading || postLocationLoading) {
     return (
       <SafeAreaView style={styles.safe}>
         <StatusBar style="light" />
