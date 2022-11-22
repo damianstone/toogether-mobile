@@ -59,7 +59,7 @@ const SwipeScreen = (props) => {
 
   useEffect(() => {
     dispatch(listSwipe());
-  }, [dispatch]);
+  }, []);
 
   useEffect(() => {
     if (permissionGranted) {
@@ -85,7 +85,7 @@ const SwipeScreen = (props) => {
         permissionGranted
       )
     );
-  }, [dispatch, errorSwipe, postLocationError]);
+  }, [swipe, errorSwipe, topProfile, postLocationError]);
 
   // TODO: fix render when enter the screen
 
@@ -105,10 +105,12 @@ const SwipeScreen = (props) => {
     } catch (err) {
       console.log(err);
     }
-    setLocalLoading(false);
 
     // reset the top profile so dont show it over and over
     props.navigation.setParams({ topProfile: null });
+
+    // TODO: why here swipe and loading swipe is undefined
+    console.log(swipe, loadingSwipe);
 
     setShowMode(
       getShowMode(
@@ -120,6 +122,8 @@ const SwipeScreen = (props) => {
         permissionGranted
       )
     );
+
+    setLocalLoading(false);
   }, [dispatch]);
 
   // pasa como props al deck y del deck al swipecard
@@ -217,8 +221,12 @@ const SwipeScreen = (props) => {
     );
   }
 
-  console.log(showMode);
-  console.log(swipe?.results, topProfile?.id);
+  console.log('show mode -> ', showMode);
+  console.log(
+    'swipe length and top profile -> ',
+    swipe?.results.length,
+    topProfile?.id
+  );
 
   return (
     <SafeAreaView style={styles.safe}>

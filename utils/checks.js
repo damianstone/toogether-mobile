@@ -27,6 +27,7 @@ export const exist = (value) => {
 
   return the number of the show mode
 */
+
 export const getShowMode = (
   currentShowMode,
   swipe,
