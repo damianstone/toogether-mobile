@@ -11,8 +11,10 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import { listLikes, removeLike, like } from '../../store/actions/swipe';
 import { checkServerError } from '../../utils/errors';
+import { exist, isMatch, alreadyMatched } from '../../utils/checks';
 
 import * as w from '../../constants/swipe';
+import * as r from '../../constants/responses/match';
 import LikeCard from '../../components/LikeCard';
 import Avatar from '../../components/UI/Avatar';
 import Loader from '../../components/UI/Loader';
@@ -58,18 +60,26 @@ const LikesScreen = (props) => {
       checkServerError(likeError);
       dispatch({ type: w.LIKE_PROFILE_RESET });
     }
-  }, [dispatch, removeLikeError, likeError, likes]);
+  }, [dispatch, removeLikeError, likeError]);
 
   useEffect(() => {
     if (removeLikeSuccess) {
       dispatch({ type: w.REMOVE_LIKE_RESET });
       dispatch(listLikes());
     }
-    if (likeData) {
+  }, [dispatch, removeLikeSuccess]);
+
+  useEffect(() => {
+    if (isMatch(likeData)) {
+      props.navigation.navigate('SwipeMatch', {
+        likeData: likeData,
+      });
+    } else if (alreadyMatched(likeData)) {
+      return props.navigation.navigate('Chat');
+    } else {
       dispatch({ type: w.LIKE_PROFILE_RESET });
-      dispatch(listLikes());
     }
-  }, [removeLikeSuccess]);
+  }, [dispatch, likeData?.details]);
 
   // add listener to fetch the user and re fetch it
   useEffect(() => {
@@ -96,10 +106,15 @@ const LikesScreen = (props) => {
   //   });
   // };
 
-  const handleRemoveLike = async (profileId) => {
+  const handleRemoveLike = async (profileId, alreadyMatched) => {
     if (profileId) {
       await dispatch(removeLike(profileId));
     }
+
+    if (removeLikeSuccess && alreadyMatched) {
+      props.navigation.navigate('Chat');
+    }
+
     if (removeLikeSuccess) {
       return dispatch(listLikes());
     }
@@ -111,6 +126,10 @@ const LikesScreen = (props) => {
       await dispatch(like(profileId));
     }
     if (likeData) {
+      console.log('like data success');
+      if (alreadyMatched(likeData)) {
+        handleRemoveLike(profileId, true);
+      }
       return dispatch(listLikes());
     }
     return null;

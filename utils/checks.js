@@ -1,3 +1,5 @@
+import * as r from '../constants/responses/match';
+
 export const exist = (value) => {
   if (!value) {
     return false;
@@ -50,4 +52,18 @@ export const getShowMode = (
     return 2;
   }
   return currentShowMode;
+};
+
+export const isMatch = (likeData) => {
+  if (likeData?.details === r.NEW_MATCH || likeData?.details === r.SAME_MATCH) {
+    return true;
+  }
+  return false;
+};
+
+export const alreadyMatched = (likeData) => {
+  if (likeData?.details === r.ALREADY_MATCHED) {
+    return true;
+  }
+  return false;
 };

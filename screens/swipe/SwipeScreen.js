@@ -109,9 +109,6 @@ const SwipeScreen = (props) => {
     // reset the top profile so dont show it over and over
     props.navigation.setParams({ topProfile: null });
 
-    // TODO: why here swipe and loading swipe is undefined
-    console.log(swipe, loadingSwipe);
-
     setShowMode(
       getShowMode(
         showMode,
@@ -220,13 +217,6 @@ const SwipeScreen = (props) => {
       </SafeAreaView>
     );
   }
-
-  console.log('show mode -> ', showMode);
-  console.log(
-    'swipe length and top profile -> ',
-    swipe?.results.length,
-    topProfile?.id
-  );
 
   return (
     <SafeAreaView style={styles.safe}>

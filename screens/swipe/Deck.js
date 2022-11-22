@@ -74,6 +74,7 @@ const Deck = (props) => {
     return members[Math.floor(Math.random() * members.length)];
   };
 
+  // TODO: handle like when is a top card
   // Swiper actions
   const handleLike = async (index) => {
     // liked profile can be a group or a single member

@@ -16,8 +16,6 @@ const ProfileModalScreen = (props) => {
   const isGroup = props.navigation.getParam('isGroup');
   const preview = props.navigation.getParam('preview');
 
-  console.log('PROFILE MODAL -> ', profile, isGroup, preview);
-
   const blockProfileReducer = useSelector((state) => state.blockProfile);
   const {
     loading: blockLoading,
