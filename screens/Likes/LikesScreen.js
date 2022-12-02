@@ -14,7 +14,6 @@ import { checkServerError } from '../../utils/errors';
 import { exist, isMatch, alreadyMatched } from '../../utils/checks';
 
 import * as w from '../../constants/swipe';
-import * as r from '../../constants/responses/match';
 import LikeCard from '../../components/LikeCard';
 import Avatar from '../../components/UI/Avatar';
 import Loader from '../../components/UI/Loader';
