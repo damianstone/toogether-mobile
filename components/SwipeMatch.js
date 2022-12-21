@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import {
   Text,
   View,
@@ -6,14 +6,14 @@ import {
   Image,
   Button,
   Alert,
+  Linking,
   StyleSheet,
   TouchableOpacity,
   Dimensions,
   Platform,
 } from 'react-native';
-import Constants from 'expo-constants';
+import { exist } from '../utils/checks';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { LinearGradient } from 'expo-linear-gradient';
 
 import Colors from '../constants/Colors';
 import GradientText from './UI/GradientText';
@@ -35,15 +35,19 @@ const SwipeMatch = (props) => {
     chatButtonText,
   } = props.matchData;
 
+  // if the matched profile does not have instagram, then go to the chat page
+  // if not open the matched profile instagram
   const handleSendMessage = useCallback(async () => {
-    if (!matchedInstagram || typeof matchedInstagram === 'undefined') {
-      props.chatOnPress()
+    console.log("instagram -> ", matchedInstagram)
+
+    if (!exist(matchedInstagram)) {
+      props.chatOnPress();
       return;
     }
 
     const url = `https://www.instagram.com/${matchedInstagram}/`;
-
     const supported = await Linking.canOpenURL(url);
+
     if (supported) {
       await Linking.openURL(url);
     } else {
@@ -59,18 +63,32 @@ const SwipeMatch = (props) => {
         </View>
         <View style={styles.profilesContainer}>
           <View style={styles.imageContainer}>
-            <Image
-              source={{ uri: `${currentProfileImage}` }}
-              style={styles.image}
-            />
+            {currentProfileImage ? (
+              <Image
+                source={{ uri: `${currentProfileImage}` }}
+                style={styles.image}
+              />
+            ) : (
+              <Image
+                source={require('../assets/images/placeholder-profile.png')}
+                style={styles.image}
+              />
+            )}
             <Text style={styles.profileName}>{currentProfileName}</Text>
             <Text style={styles.subtitle}>{currentType}</Text>
           </View>
           <View style={styles.imageContainer}>
-            <Image
-              source={{ uri: `${matchedProfileImage}` }}
-              style={styles.image}
-            />
+            {matchedProfileImage ? (
+              <Image
+                source={{ uri: `${matchedProfileImage}` }}
+                style={styles.image}
+              />
+            ) : (
+              <Image
+                source={require('../assets/images/placeholder-profile.png')}
+                style={styles.image}
+              />
+            )}
             <Text style={styles.profileName}>{matchedProfileName}</Text>
             <Text style={styles.subtitle}>{matchedType}</Text>
           </View>
@@ -127,7 +145,7 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     borderRadius: 100,
-    backgroundColor: Colors.orange,
+    backgroundColor: Colors.bgCard,
     marginBottom: 10,
   },
   profileName: {

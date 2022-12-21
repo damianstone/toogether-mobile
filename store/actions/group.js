@@ -112,6 +112,14 @@ export const createGroup = () => {
   };
 };
 
+export const resetData = async () => {
+  try {
+    await AsyncStorage.removeItem('@groupData');
+  } catch(error) {
+    console.log(error)
+  }
+}
+
 export const deleteGroup = (group_id) => {
   return async (dispatch) => {
     try {

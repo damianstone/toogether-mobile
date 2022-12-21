@@ -91,7 +91,7 @@ const GroupScreen = (props) => {
       group_id: null,
     },
   });
-
+ 
   const getAsyncData = async () => {
     let group;
     let profile;
@@ -225,7 +225,7 @@ const GroupScreen = (props) => {
           text: 'Cancel',
         },
         {
-          text: 'Leave',
+          text: 'Delete',
           onPress: () => {
             if (isOwner && storedGroupData?.id) {
               dispatch(deleteGroup(storedGroupData.id));

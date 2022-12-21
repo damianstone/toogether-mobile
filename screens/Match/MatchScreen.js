@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { exist } from '../../utils/checks';
 
 import * as r from '../../constants/responses/match';
 import * as w from '../../constants/swipe';
@@ -39,11 +40,21 @@ const MatchScreen = (props) => {
     return matchData?.profile2;
   };
 
+  // TODO: fix waiting for user data
+  // el problem es que cuando se llama esta funcion, userData aun no exist entonces puede devolver 
+  // el current profile como matched profile
   const getMatchedProfile = (matchData) => {
     if (matchData.profile1.id === userData.id) {
       return matchData.profile2;
     }
     return matchData?.profile1;
+  };
+
+  const getProfileImage = (profile) => {
+    if(exist(profile.photos[0])) {
+      return profile.photos[0].image
+    }
+    return null;
   };
 
   const getMatchedType = (type) => {
@@ -78,6 +89,7 @@ const MatchScreen = (props) => {
 
   const getMatchData = (data) => {
     const matchedProfile = getMatchedProfile(data?.match_data);
+    console.log(matchedProfile)
     const currentProfile = getCurrentProfile(data?.match_data);
     const matchType = getMatchedType(data?.group_match);
 
@@ -86,8 +98,8 @@ const MatchScreen = (props) => {
         return {
           matchId: data.match_data.id,
           title: 'NEW MATCH!!',
-          currentProfileImage: currentProfile.photos[0].image,
-          matchedProfileImage: matchedProfile.photos[0].image,
+          currentProfileImage: getProfileImage(currentProfile),
+          matchedProfileImage: getProfileImage(matchedProfile),
           currentProfileName: currentProfile.name,
           matchedProfileName: matchedProfile.name,
           currentType: matchType.current,
@@ -99,8 +111,8 @@ const MatchScreen = (props) => {
         return {
           matchId: data.match_data.id,
           title: 'MATCH!!',
-          currentProfileImage: currentProfile.photos[0].image,
-          matchedProfileImage: matchedProfile.photos[0].image,
+          currentProfileImage: getProfileImage(currentProfile),
+          matchedProfileImage: getProfileImage(matchedProfile),
           currentProfileName: currentProfile.name,
           matchedProfileName: matchedProfile.name,
           currentType: matchType.current,
