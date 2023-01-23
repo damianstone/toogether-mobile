@@ -1,9 +1,8 @@
-import React, { useEffect, useState, useRef, useCallback } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import {
   View,
   Image,
   Share,
-  Text,
   Platform,
   SafeAreaView,
   Alert,
@@ -16,7 +15,6 @@ import { verifyLocationPermissions } from '../../utils/permissions';
 import { exist, getShowMode } from '../../utils/checks';
 import { userLocation } from '../../store/actions/user';
 import { listSwipe } from '../../store/actions/swipe';
-import * as b from '../../constants/block';
 
 import Deck from './Deck';
 import HeaderButtom from '../../components/UI/HeaderButton';
@@ -109,6 +107,7 @@ const SwipeScreen = (props) => {
     // reset the top profile so dont show it over and over
     props.navigation.setParams({ topProfile: null });
 
+    // function that determine which screen (show mode) we should show
     setShowMode(
       getShowMode(
         showMode,

@@ -117,11 +117,11 @@ const ChatScreen = (props) => {
     props.navigation.navigate('SwipeProfile', {
       profile: profile,
       isGroup: isGroup,
+      preview: true,
     });
   };
 
   const handleDeleteMatch = async (matchId) => {
-    console.log('MATCH ID -> ', matchId);
 
     if (matchId) {
       await dispatch(deleteMatch(matchId));
@@ -193,7 +193,7 @@ const ChatScreen = (props) => {
             <TouchableOpacity
               style={styles.noPhotoContainer}
               onPress={() => handleShowProfile(matchedProfile, false)}>
-              <Text style={{ color: Colors.white, fontSize: 10 }}>
+              <Text style={{ color: Colors.white, fontSize: 20 }}>
                 {getInitials(matchedProfile.name)}
               </Text>
             </TouchableOpacity>
@@ -272,7 +272,7 @@ const ChatScreen = (props) => {
           alignItems: 'center',
         }}>
         <Text style={{ color: Colors.white }}>
-          Toogether chat in the next update
+          Real-time chat in the next update
         </Text>
       </View>
     </View>
@@ -333,8 +333,8 @@ const styles = StyleSheet.create({
   },
 
   noPhotoContainer: {
-    width: 45,
-    height: 45,
+    width: 60,
+    height: 60,
     borderRadius: 100,
     justifyContent: 'center',
     alignItems: 'center',

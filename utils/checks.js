@@ -19,7 +19,7 @@ export const exist = (value) => {
   return true;
 };
 
-/*
+/* 
   showModes
   -1 = error location
   0 = not found
