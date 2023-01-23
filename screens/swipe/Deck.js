@@ -25,6 +25,7 @@ const Deck = (props) => {
   const swipeRef = useRef();
   const currentDeckIndex = useRef(0);
   const [userData, setUserData] = useState({});
+  const [swipeCards, setSwipeCards] = useState([...swipeProfiles]);
 
   const likeReducer = useSelector((state) => state.like);
   const {
@@ -74,22 +75,17 @@ const Deck = (props) => {
     return members[Math.floor(Math.random() * members.length)];
   };
 
-  // TODO: handle like when is a top card
   // Swiper actions
   const handleLike = async (index) => {
     // liked profile can be a group or a single member
-    const likedProfile = swipeProfiles[index];
+    const likedProfile = swipeCards[index];
 
     if ('members' in likedProfile) {
       // its a group profile
       const randomMember = getRandomMember(likedProfile.members);
-      console.log('RANDOM MEMBER -> ', randomMember);
       await dispatch(like(randomMember.id));
-      console.log('LIKE DATA GROUP -> ', likeData, likeLoading);
     } else {
-      // console.log('LIKED PROFILE -> ', likedProfile);
       await dispatch(like(likedProfile.id));
-      console.log('LIKE DATA -> ', likeData, likeLoading);
     }
 
     currentDeckIndex.current = index;
@@ -120,7 +116,7 @@ const Deck = (props) => {
     setShowMode(1);
   };
 
-  // sawp the positions of elements 
+  // sawp the positions of elements
   const swapElement = (from, to, arr) => {
     const newArr = [...arr];
 
@@ -130,15 +126,20 @@ const Deck = (props) => {
     return newArr;
   };
 
-  const putOnTopCard = (topCard, swipes) => {
+  const putOnTopCard = (topCard, swipeCards) => {
     // get the index of the topCard and change it to the top
     const toIndex = 0;
-    const fromIndex = swipes.findIndex((elem) => elem.id === topCard.id);
+    const fromIndex = swipeCards.findIndex((elem) => elem.id === topCard.id);
+
+    // if the profile is already in the fetched swipes, then we need to swap positions
     if (fromIndex !== -1) {
-      const newSwipes = swapElement(fromIndex, toIndex, swipes);
+      const newSwipes = swapElement(fromIndex, toIndex, swipeCards);
       return newSwipes;
     }
-    return [topCard, ...swipes];
+
+    setSwipeCards([topCard, ...swipeCards]);
+
+    return [topCard, ...swipeCards];
   };
 
   // render a card with the profiles (single and group)
@@ -161,9 +162,7 @@ const Deck = (props) => {
       <View style={styles.swipeContainer}>
         <Swiper
           containerStyle={tw('bg-transparent')}
-          cards={
-            topProfile ? putOnTopCard(topProfile, swipeProfiles) : swipeProfiles
-          }
+          cards={topProfile ? putOnTopCard(topProfile, swipeCards) : swipeCards}
           ref={swipeRef}
           renderCard={renderCard}
           stackSize={2}
