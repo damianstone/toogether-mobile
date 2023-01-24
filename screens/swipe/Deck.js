@@ -116,7 +116,7 @@ const Deck = (props) => {
     setShowMode(1);
   };
 
-  // sawp the positions of elements
+  // Handle put card on the top of the stack
   const swapElement = (from, to, arr) => {
     const newArr = [...arr];
 

@@ -23,6 +23,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import * as w from '../constants/swipe';
 import HeaderButtom from '../components/UI/HeaderButton';
 import Loader from '../components/UI/Loader';
+import ChatAvatar from '../components/ChatAvatar';
 import Colors from '../constants/Colors';
 
 const ChatScreen = (props) => {
@@ -122,7 +123,6 @@ const ChatScreen = (props) => {
   };
 
   const handleDeleteMatch = async (matchId) => {
-
     if (matchId) {
       await dispatch(deleteMatch(matchId));
     }
@@ -158,11 +158,6 @@ const ChatScreen = (props) => {
     );
   };
 
-  const getInitials = (name) => {
-    const first = name ? name.charAt(0).toUpperCase() : 'N';
-    return first;
-  };
-
   const getMatchedProfile = (match) => {
     if (match?.profile1.id === userData?.id) {
       return match.profile2;
@@ -177,28 +172,24 @@ const ChatScreen = (props) => {
 
     const matchedProfile = getMatchedProfile(item);
 
+    // TODO: show the matched profile as a group with a circle indicating the number of members
+
     return (
       <View style={styles.matchContainer}>
         <View style={styles.rowContainer}>
-          {matchedProfile.photos.length > 0 ? (
-            <TouchableOpacity
-              style={styles.imageContainer}
-              onPress={() => handleShowProfile(matchedProfile, false)}>
-              <Image
-                source={{ uri: `${matchedProfile.photos[0].image}` }}
-                style={styles.img}
-              />
-            </TouchableOpacity>
-          ) : (
-            <TouchableOpacity
-              style={styles.noPhotoContainer}
-              onPress={() => handleShowProfile(matchedProfile, false)}>
-              <Text style={{ color: Colors.white, fontSize: 20 }}>
-                {getInitials(matchedProfile.name)}
-              </Text>
-            </TouchableOpacity>
-          )}
-
+          <ChatAvatar
+            onShowProfile={() => handleShowProfile(matchedProfile, false)}
+            matchedProfile={matchedProfile}
+            isInGroup={matchedProfile.is_in_group}
+            matchedProfileHasPhoto={
+              matchedProfile.photos.length > 0 ? true : false
+            }
+            matchedProfilePhoto={
+              matchedProfile.photos.length > 0
+                ? matchedProfile.photos[0].image
+                : null
+            }
+          />
           <TouchableOpacity
             onPress={() => onOpenActionSheet(matchedProfile, item.id)}
             style={styles.cardContainer}>
@@ -316,32 +307,6 @@ const styles = StyleSheet.create({
     width: '80%',
   },
 
-  imageContainer: {
-    width: 60,
-    height: 60,
-    borderRadius: 100,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginRight: 20,
-    backgroundColor: Colors.bgCard,
-  },
-
-  img: {
-    width: '100%',
-    height: '100%',
-    borderRadius: 100,
-  },
-
-  noPhotoContainer: {
-    width: 60,
-    height: 60,
-    borderRadius: 100,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: Colors.orange,
-    marginRight: 20,
-  },
-
   cardContainer: {
     flexDirection: 'row',
     backgroundColor: Colors.bgCard,
@@ -370,6 +335,12 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 
+  img: {
+    width: '100%',
+    height: '100%',
+    borderRadius: 100,
+  },
+
   avatar_view: {
     backgroundColor: Colors.orange,
     width: '100%',
@@ -377,6 +348,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+
   avatar_initials: {
     color: Colors.white,
     fontSize: 18,
