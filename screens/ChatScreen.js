@@ -100,16 +100,13 @@ const ChatScreen = (props) => {
     }
   }, []);
 
-  const handleShowProfile = (profile, isGroup) => {
-    // props.navigation.navigate('SwipeProfile', {
-    //   profile: profile,
-    //   isGroup: isGroup,
-    //   preview: true,
-    // });
+  const handleShowProfile = (profile, isInGroup) => {
+    // TODO: pass the proper params
+    // * matched profile
+    // * is in group
     props.navigation.navigate('SwipeProfile', {
       profile: profile,
-      isGroup: isGroup,
-      preview: true,
+      isInGroup: isInGroup,
     });
   };
 
@@ -151,13 +148,15 @@ const ChatScreen = (props) => {
 
   const renderMatch = ({ item, index }) => {
     const matched_data = item.matched_data;
-    const matchedProfile = item.matched_data.matched_profile
+    const matchedProfile = item.matched_data.matched_profile;
 
     return (
       <View style={styles.matchContainer}>
         <View style={styles.rowContainer}>
           <ChatAvatar
-            onShowProfile={() => handleShowProfile(matchedProfile, false)}
+            onShowProfile={() =>
+              handleShowProfile(matchedProfile, matched_data.is_group_match)
+            }
             matchedProfile={matchedProfile}
             matchedData={matched_data}
             isInGroup={matched_data.is_group_match}

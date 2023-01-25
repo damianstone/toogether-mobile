@@ -30,7 +30,7 @@ import {
 } from './reducers/group';
 import {
   listSwipeReducer,
-  getCurrentSwipeProfileReducer,
+  getSwipeProfileReducer,
   listLikesReducer,
   likeReducer,
   removeLikeReducer,
@@ -67,7 +67,7 @@ const reducer = combineReducers({
   removeMember: removeMemberReducer,
   // Swipe API
   listSwipe: listSwipeReducer,
-  getCurrentSwipeProfile: getCurrentSwipeProfileReducer,
+  getSwipeProfile: getSwipeProfileReducer,
   listLikes: listLikesReducer,
   like: likeReducer,
   removeLike: removeLikeReducer,

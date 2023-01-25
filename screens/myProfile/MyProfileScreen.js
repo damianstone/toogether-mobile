@@ -214,7 +214,13 @@ const MyProfileScreen = (props) => {
   };
 
   const handleOpenPreview = () => {
-    props.navigation.navigate('SwipeProfile');
+    // TODO: pass the proper params
+    // * the user profile
+    // * is in group
+    props.navigation.navigate('SwipeProfile', {
+      profile: userProfile,
+      isInGroup: userProfile.is_in_group,
+    });
   };
 
   const getInitials = (name) => {

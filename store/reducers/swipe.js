@@ -19,18 +19,21 @@ export const listSwipeReducer = (state = {}, action) => {
   }
 };
 
-export const getCurrentSwipeProfileReducer = (state = {}, action) => {
+export const getSwipeProfileReducer = (state = {}, action) => {
   switch (action.type) {
-    case w.GET_CURRENT_SWIPE_PROFILE_REQUEST:
+    case w.GET_SWIPE_PROFILE_REQUEST:
       return { loading: true };
 
-    case w.GET_CURRENT_SWIPE_PROFILE_SUCCESS:
+    case w.GET_SWIPE_PROFILE_SUCCESS:
       return {
         data: { ...action.payload },
       };
 
-    case w.GET_CURRENT_SWIPE_PROFILE_FAIL:
+    case w.GET_SWIPE_PROFILE_FAIL:
       return { loading: false, error: action.payload };
+
+    case w.GET_SWIPE_PROFILE_RESET:
+      return {};
 
     default:
       return state;

@@ -13,13 +13,14 @@ import Swiper from 'react-native-swiper';
 import Constants from 'expo-constants';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { useDispatch, useSelector } from 'react-redux';
-import { getCurrentSwipeProfile } from '../../store/actions/swipe';
+import { getSwipeProfile } from '../../store/actions/swipe';
 
 import ActivityModal from '../../components/UI/ActivityModal';
 import HeaderButtom from '../../components/UI/HeaderButton';
 import Loader from '../../components/UI/Loader';
 import InfoCard from '../../components/InfoCard';
 import Colors from '../../constants/Colors';
+import * as w from '../../constants/swipe';
 
 /* 
 
@@ -35,14 +36,10 @@ import Colors from '../../constants/Colors';
 
 const SwipeProfileScreen = (props) => {
   const dispatch = useDispatch();
+  const mainProfile = props.navigation.getParam('profile');
+  const isInGroup = props.navigation.getParam('isInGroup');
 
-  const currentProfileId = useSelector(
-    (state) => state.userGetProfile?.data?.id
-  );
-
-  const currentSwipeProfile = useSelector(
-    (state) => state.getCurrentSwipeProfile
-  );
+  const currentSwipeProfile = useSelector((state) => state.getSwipeProfile);
 
   const {
     loading: loadingSwipeProfile,
@@ -51,7 +48,9 @@ const SwipeProfileScreen = (props) => {
   } = currentSwipeProfile;
 
   useEffect(() => {
-    dispatch(getCurrentSwipeProfile());
+    if (isInGroup) {
+      dispatch(getSwipeProfile(mainProfile.id));
+    }
   }, [dispatch]);
 
   useEffect(() => {
@@ -59,11 +58,15 @@ const SwipeProfileScreen = (props) => {
       Alert.alert(`Someting went wrong`, 'Your profile could not be loaded', [
         {
           text: 'OK',
-          onPress: () => props.navigation.navigate('MyProfile'),
+          onPress: () => {
+            // TODO: reset state
+            dispatch({ type: w.GET_SWIPE_PROFILE_RESET });
+            props.navigation.goBack();
+          },
         },
       ]);
     }
-  }, [errorSwipeProfile]);
+  }, [dispatch, errorSwipeProfile]);
 
   const showProfile = (profile, isGroup) => {
     props.navigation.navigate('Profile', {
@@ -73,6 +76,8 @@ const SwipeProfileScreen = (props) => {
     });
   };
 
+
+  // TODO: fix little circules 
   let cardType;
   let imageStyle;
   if (swipeProfile && !swipeProfile.members) {
@@ -139,8 +144,9 @@ const SwipeProfileScreen = (props) => {
 
   const renderGroupProfile = () => {
     //render the current profile first
-    const orderedMembers = putOnTopCard(currentProfileId, swipeProfile.members);
-
+    const orderedMembers = putOnTopCard(mainProfile.id, swipeProfile.members);
+    console.log("ORDERER MEMBERS -> ", orderedMembers)
+    
     return orderedMembers.map((profile) => {
       return (
         <ImageBackground
@@ -156,7 +162,7 @@ const SwipeProfileScreen = (props) => {
             age={profile.age}
             university={profile.university}
           />
-          {profile.id === currentProfileId && (
+          {profile.id === mainProfile.id && (
             <TouchableOpacity
               onPress={() => showProfile(profile, true)}
               style={styles.arrowContainer}>
@@ -184,7 +190,7 @@ const SwipeProfileScreen = (props) => {
     />;
   }
 
-  if (!currentProfileId) {
+  if (!mainProfile.id) {
     return (
       <View style={styles.screen}>
         <View
@@ -207,7 +213,7 @@ const SwipeProfileScreen = (props) => {
   return (
     <View style={styles.screen}>
       <View style={{ ...cardType, marginTop: 20 }}>
-        {swipeProfile && swipeProfile.members && (
+        {swipeProfile && isInGroup && (
           <View style={styles.groupName}>
             <Text style={styles.text}>Toogether group</Text>
           </View>
@@ -240,7 +246,7 @@ const SwipeProfileScreen = (props) => {
           showsButtons
           buttonWrapperStyle={{ color: Colors.placeholder }}
           style={styles.wrapper}>
-          {swipeProfile && swipeProfile.members ? (
+          {swipeProfile && isInGroup ? (
             renderGroupProfile()
           ) : swipeProfile ? (
             <ImageBackground
