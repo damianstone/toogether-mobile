@@ -21,6 +21,18 @@ import Loader from '../../components/UI/Loader';
 import InfoCard from '../../components/InfoCard';
 import Colors from '../../constants/Colors';
 
+/* 
+
+    What we need
+    * receive the profile we want to show (my profile or matched profile) as a param
+    * receive if the profile is in group as a param
+    * not in group: display the profile using the params data
+    * is in group: fetch the group profile passing the profile id as a url param
+    * the backend should return "main profile" and the group
+
+
+*/
+
 const SwipeProfileScreen = (props) => {
   const dispatch = useDispatch();
 
@@ -65,13 +77,13 @@ const SwipeProfileScreen = (props) => {
   let imageStyle;
   if (swipeProfile && !swipeProfile.members) {
     cardType = {
+      backgroundColor: Colors.bgCard,
       position: 'absolute',
       width: '95%',
       height: '80%',
       borderRadius: 20,
       justifyContent: 'center',
       alignItems: 'center',
-      backgroundColor: Colors.bgCard,
     };
     imageStyle = {
       borderRadius: 20,
@@ -194,7 +206,7 @@ const SwipeProfileScreen = (props) => {
 
   return (
     <View style={styles.screen}>
-      <View style={{ ...cardType }}>
+      <View style={{ ...cardType, marginTop: 20 }}>
         {swipeProfile && swipeProfile.members && (
           <View style={styles.groupName}>
             <Text style={styles.text}>Toogether group</Text>
@@ -274,8 +286,7 @@ SwipeProfileScreen.navigationOptions = (navData) => {
             Platform.OS === 'android' ? 'ios-arrow-back' : 'ios-arrow-back'
           }
           onPress={() => {
-            // go to chat screen
-            navData.navigation.navigate('MyProfile');
+            navData.navigation.pop();
           }}
           title="Back arrow"
         />

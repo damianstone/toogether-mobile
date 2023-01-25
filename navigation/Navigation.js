@@ -64,13 +64,21 @@ const AuthNavigator = createStackNavigator(
   }
 );
 
-
 const MyProfileNavigator = createStackNavigator(
   {
     MyProfile: {
       screen: MyProfileScreen,
       navigationOptions: {
         gestureDirection: 'horizontal-inverted',
+      },
+    },
+    SwipeProfile: {
+      screen: SwipeProfileScreen,
+      navigationOptions: { // get rid the header so then the modal can be displayed with full height
+        ...defaultNavOptions,
+        title: "Profile Preview",
+        gestureDirection: 'horizontal',
+        headerMode: 'none',
       },
     },
     EditProfile: {
@@ -88,10 +96,10 @@ const MyProfileNavigator = createStackNavigator(
   }
 );
 
+// we wrap the my profile navigator with the modal we want to display as full screen
 const MyProfileNavigatorWithModal = createStackNavigator(
   {
     MyProfile: MyProfileNavigator,
-    SwipeProfile: SwipeProfileScreen,
     Profile: ProfileScreen,
   },
   {
@@ -103,6 +111,14 @@ const MyProfileNavigatorWithModal = createStackNavigator(
 const ChatNavigator = createStackNavigator(
   {
     Chat: ChatScreen,
+    SwipeProfile: {
+      screen: SwipeProfileScreen,
+      navigationOptions: { // get rid the header so then the modal can be displayed with full height
+        ...defaultNavOptions,
+        gestureDirection: 'horizontal',
+        title: null,
+      },
+    },
   },
   {
     defaultNavigationOptions: defaultNavOptions,
@@ -112,7 +128,6 @@ const ChatNavigator = createStackNavigator(
 const MatchNavigator = createStackNavigator(
   {
     Chat: ChatNavigator,
-    SwipeProfile: SwipeProfileScreen,
     Profile: ProfileScreen,
   },
   {
