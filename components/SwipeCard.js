@@ -17,6 +17,7 @@ import InfoCard from './InfoCard';
 const SwipeCard = (props) => {
   let cardType;
   let imageStyle;
+
   // if the profiles array > 1
   if (!props.isGroup) {
     cardType = {
@@ -28,6 +29,7 @@ const SwipeCard = (props) => {
       alignItems: 'center',
       backgroundColor: Colors.placeholder,
     };
+    
     imageStyle = {
       borderRadius: 20,
       height: '100%',
@@ -42,6 +44,7 @@ const SwipeCard = (props) => {
       alignItems: 'center',
       backgroundColor: Colors.orange,
     };
+
     imageStyle = {
       borderBottomRightRadius: 20,
       borderBottomLeftRadius: 20,

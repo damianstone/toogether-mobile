@@ -50,22 +50,8 @@ const ChatScreen = (props) => {
   const [refreshing, setRefreshing] = useState(
     !!(loadingListMatches || loadingDeleteMatch)
   );
-  const [userData, setUserData] = useState({});
-
-  const getAsyncData = async () => {
-    try {
-      const user = JSON.parse(await AsyncStorage.getItem('@userData'));
-
-      if (user !== null) {
-        setUserData(user);
-      }
-    } catch (e) {
-      console.log(e);
-    }
-  };
 
   useEffect(() => {
-    getAsyncData();
     dispatch(listMatches());
   }, []);
 
@@ -158,19 +144,8 @@ const ChatScreen = (props) => {
     );
   };
 
-  const getMatchedProfile = (match) => {
-    if (match?.profile1.id === userData?.id) {
-      return match.profile2;
-    }
-    return match?.profile1;
-  };
-
   const renderMatch = ({ item, index }) => {
-    if (!userData?.id) {
-      return;
-    }
-
-    const matchedProfile = getMatchedProfile(item);
+    const matchedProfile = item.matched_data.matched_profile
 
     // TODO: show the matched profile as a group with a circle indicating the number of members
 
