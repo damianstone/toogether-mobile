@@ -12,6 +12,7 @@ import Colors from '../constants/Colors';
 const ChatAvatar = (props) => {
   const {
     isInGroup,
+    matchedData,
     matchedProfile,
     matchedProfileHasPhoto,
     matchedProfilePhoto,
@@ -29,14 +30,16 @@ const ChatAvatar = (props) => {
           source={{ uri: `${matchedProfilePhoto}` }}
           imageStyle={styles.img}
           style={
-            matchedProfile.is_in_group
-              ? styles.groupImageContainer
-              : styles.singleImageContainer
+            isInGroup ? styles.groupImageContainer : styles.singleImageContainer
           }
           onPress={props.onShowProfile}>
-          <View style={styles.counterCircle}>
-            <Text style={styles.counterCircleText}>+5</Text>
-          </View>
+          {isInGroup ? (
+            <View style={styles.counterCircle}>
+              <Text style={styles.counterCircleText}>
+                {matchedData.members_count}+
+              </Text>
+            </View>
+          ) : null}
         </ImageBackground>
       </TouchableOpacity>
     );

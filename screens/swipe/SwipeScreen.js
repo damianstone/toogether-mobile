@@ -269,7 +269,7 @@ SwipeScreen.navigationOptions = (navData) => {
               : 'chatbubble-outline'
           }
           onPress={() => {
-            navData.navigation.navigate('Chat');
+            navData.navigation.navigate('Match');
           }}
         />
       </HeaderButtons>

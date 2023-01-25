@@ -101,6 +101,11 @@ const ChatScreen = (props) => {
   }, []);
 
   const handleShowProfile = (profile, isGroup) => {
+    // props.navigation.navigate('SwipeProfile', {
+    //   profile: profile,
+    //   isGroup: isGroup,
+    //   preview: true,
+    // });
     props.navigation.navigate('SwipeProfile', {
       profile: profile,
       isGroup: isGroup,
@@ -145,9 +150,8 @@ const ChatScreen = (props) => {
   };
 
   const renderMatch = ({ item, index }) => {
+    const matched_data = item.matched_data;
     const matchedProfile = item.matched_data.matched_profile
-
-    // TODO: show the matched profile as a group with a circle indicating the number of members
 
     return (
       <View style={styles.matchContainer}>
@@ -155,7 +159,8 @@ const ChatScreen = (props) => {
           <ChatAvatar
             onShowProfile={() => handleShowProfile(matchedProfile, false)}
             matchedProfile={matchedProfile}
-            isInGroup={matchedProfile.is_in_group}
+            matchedData={matched_data}
+            isInGroup={matched_data.is_group_match}
             matchedProfileHasPhoto={
               matchedProfile.photos.length > 0 ? true : false
             }

@@ -21,7 +21,7 @@ import Loader from '../../components/UI/Loader';
 import InfoCard from '../../components/InfoCard';
 import Colors from '../../constants/Colors';
 
-const ProfilePreviewScreen = (props) => {
+const SwipeProfileScreen = (props) => {
   const dispatch = useDispatch();
 
   const currentProfileId = useSelector(
@@ -265,9 +265,8 @@ const ProfilePreviewScreen = (props) => {
   );
 };
 
-ProfilePreviewScreen.navigationOptions = (navData) => {
+SwipeProfileScreen.navigationOptions = (navData) => {
   return {
-    headerTitle: 'Profile Preview',
     headerLeft: () => (
       <HeaderButtons HeaderButtonComponent={HeaderButtom}>
         <Item
@@ -285,7 +284,7 @@ ProfilePreviewScreen.navigationOptions = (navData) => {
   };
 };
 
-export default ProfilePreviewScreen;
+export default SwipeProfileScreen;
 
 const styles = StyleSheet.create({
   screen: {

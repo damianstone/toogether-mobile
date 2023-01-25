@@ -10,7 +10,7 @@ import * as b from '../../constants/block';
 import DetailBottomSheet from '../../components/DetailBottomSheet';
 import Colors from '../../constants/Colors';
 
-const ProfileModalScreen = (props) => {
+const ProfileScreen = (props) => {
   const dispatch = useDispatch();
   const profile = props.navigation.getParam('profile');
   const isGroup = props.navigation.getParam('isGroup');
@@ -37,7 +37,7 @@ const ProfileModalScreen = (props) => {
       dispatch(blockProfile(profile.id));
     }
   };
-
+ 
   const openAlert = () => {
     Alert.alert(
       'Do you want to block this profile?',
@@ -151,7 +151,7 @@ const ProfileModalScreen = (props) => {
   );
 };
 
-export default ProfileModalScreen;
+export default ProfileScreen;
 
 const styles = StyleSheet.create({
   image: {

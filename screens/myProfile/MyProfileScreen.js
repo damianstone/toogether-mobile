@@ -214,7 +214,7 @@ const MyProfileScreen = (props) => {
   };
 
   const handleOpenPreview = () => {
-    props.navigation.navigate('Preview');
+    props.navigation.navigate('SwipeProfile');
   };
 
   const getInitials = (name) => {

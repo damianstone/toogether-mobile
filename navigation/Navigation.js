@@ -11,7 +11,8 @@ import {
 } from '@expo/vector-icons';
 import Colors from '../constants/Colors';
 
-import ProfileModalScreen from '../screens/SwipeProfile/ProfileModalScreen';
+import SwipeProfileScreen from '../screens/SwipeProfile/SwipeProfileScreen';
+import ProfileScreen from '../screens/SwipeProfile/ProfileScreen';
 import MatchScreen from '../screens/Match/MatchScreen';
 
 import StartupScreen from '../screens/StartupScreen';
@@ -26,7 +27,6 @@ import JoinGroupScreen from '../screens/Group/JoinGroupScreen';
 import GroupScreen from '../screens/Group/GroupScreen';
 
 import MyProfileScreen from '../screens/MyProfile/MyProfileScreen';
-import ProfilePreviewScreen from '../screens/Preview/ProfilePreviewScreen';
 import SettingScreen from '../screens/MyProfile/SettingScreen';
 import EditProfileScreen from '../screens/MyProfile/EditProfileScreen';
 
@@ -64,22 +64,6 @@ const AuthNavigator = createStackNavigator(
   }
 );
 
-const ProfilePreviewNavigator = createStackNavigator(
-  {
-    ProfilePreview: {
-      screen: ProfilePreviewScreen,
-      navigationOptions: {
-        headerTitle: 'Profile Preview',
-      },
-    },
-    Profile: ProfileModalScreen,
-  },
-  {
-    mode: 'modal',
-    headerMode: 'none',
-    tabBarVisible: false,
-  }
-);
 
 const MyProfileNavigator = createStackNavigator(
   {
@@ -89,7 +73,6 @@ const MyProfileNavigator = createStackNavigator(
         gestureDirection: 'horizontal-inverted',
       },
     },
-    Preview: ProfilePreviewNavigator,
     EditProfile: {
       screen: EditProfileScreen,
     },
@@ -105,12 +88,36 @@ const MyProfileNavigator = createStackNavigator(
   }
 );
 
+const MyProfileNavigatorWithModal = createStackNavigator(
+  {
+    MyProfile: MyProfileNavigator,
+    SwipeProfile: SwipeProfileScreen,
+    Profile: ProfileScreen,
+  },
+  {
+    mode: 'modal',
+    headerMode: 'none',
+  }
+);
+
 const ChatNavigator = createStackNavigator(
   {
     Chat: ChatScreen,
   },
   {
     defaultNavigationOptions: defaultNavOptions,
+  }
+);
+
+const MatchNavigator = createStackNavigator(
+  {
+    Chat: ChatNavigator,
+    SwipeProfile: SwipeProfileScreen,
+    Profile: ProfileScreen,
+  },
+  {
+    mode: 'modal',
+    headerMode: 'none',
   }
 );
 
@@ -255,7 +262,7 @@ const ToogetherTab =
 const HomeNavigator = createStackNavigator(
   {
     Main: ToogetherTab,
-    SwipeProfile: ProfileModalScreen,
+    SwipeProfile: ProfileScreen,
     SwipeMatch: MatchScreen,
   },
   {
@@ -267,9 +274,9 @@ const HomeNavigator = createStackNavigator(
 const AppNavigator = createStackNavigator(
   {
     Swipe: HomeNavigator,
-    Chat: ChatNavigator,
+    Match: MatchNavigator,
     Group: GroupNavigator,
-    MyProfile: MyProfileNavigator,
+    MyProfile: MyProfileNavigatorWithModal,
   },
   {
     headerMode: 'none',
