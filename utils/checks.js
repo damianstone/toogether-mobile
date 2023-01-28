@@ -67,3 +67,13 @@ export const alreadyMatched = (likeData) => {
   }
   return false;
 };
+
+export const checkMemberInGroup = (memberId, groupMembers) => {
+  const fromIndex = groupMembers.findIndex((elem) => elem.id === memberId);
+
+  if (fromIndex !== -1) {
+    return true;
+  }
+
+  return false;
+};

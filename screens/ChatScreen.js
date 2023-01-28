@@ -104,10 +104,12 @@ const ChatScreen = (props) => {
     // TODO: pass the proper params
     // * matched profile
     // * is in group
-    props.navigation.navigate('SwipeProfile', {
-      profile: profile,
-      isInGroup: isInGroup,
-    });
+    if (profile) {
+      props.navigation.navigate('SwipeProfile', {
+        mainProfileId: profile.id,
+        isInGroup: isInGroup,
+      });
+    }
   };
 
   const handleDeleteMatch = async (matchId) => {

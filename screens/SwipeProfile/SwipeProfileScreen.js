@@ -13,6 +13,7 @@ import Swiper from 'react-native-swiper';
 import Constants from 'expo-constants';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { useDispatch, useSelector } from 'react-redux';
+import { checkMemberInGroup } from '../../utils/checks';
 import { getSwipeProfile } from '../../store/actions/swipe';
 
 import ActivityModal from '../../components/UI/ActivityModal';
@@ -22,21 +23,11 @@ import InfoCard from '../../components/InfoCard';
 import Colors from '../../constants/Colors';
 import * as w from '../../constants/swipe';
 
-/* 
-
-    What we need
-    * receive the profile we want to show (my profile or matched profile) as a param
-    * receive if the profile is in group as a param
-    * not in group: display the profile using the params data
-    * is in group: fetch the group profile passing the profile id as a url param
-    * the backend should return "main profile" and the group
-
-
-*/
+// TODO: manage errors 
 
 const SwipeProfileScreen = (props) => {
   const dispatch = useDispatch();
-  const mainProfile = props.navigation.getParam('profile');
+  const mainProfileId = props.navigation.getParam('mainProfileId');
   const isInGroup = props.navigation.getParam('isInGroup');
 
   const currentSwipeProfile = useSelector((state) => state.getSwipeProfile);
@@ -48,10 +39,8 @@ const SwipeProfileScreen = (props) => {
   } = currentSwipeProfile;
 
   useEffect(() => {
-    if (isInGroup) {
-      dispatch(getSwipeProfile(mainProfile.id));
-    }
-  }, [dispatch]);
+    dispatch(getSwipeProfile(mainProfileId));
+  }, []);
 
   useEffect(() => {
     if (errorSwipeProfile) {
@@ -59,7 +48,6 @@ const SwipeProfileScreen = (props) => {
         {
           text: 'OK',
           onPress: () => {
-            // TODO: reset state
             dispatch({ type: w.GET_SWIPE_PROFILE_RESET });
             props.navigation.goBack();
           },
@@ -76,8 +64,7 @@ const SwipeProfileScreen = (props) => {
     });
   };
 
-
-  // TODO: fix little circules 
+  // TODO: fix little circles
   let cardType;
   let imageStyle;
   if (swipeProfile && !swipeProfile.members) {
@@ -129,6 +116,7 @@ const SwipeProfileScreen = (props) => {
   };
 
   const putOnTopCard = (topCardId, members) => {
+    console.log(topCardId, members);
     // get the index of the topCard and change it to the top
     const toIndex = 0;
     const fromIndex = members.findIndex((elem) => elem.id === topCardId);
@@ -143,10 +131,17 @@ const SwipeProfileScreen = (props) => {
   };
 
   const renderGroupProfile = () => {
-    //render the current profile first
-    const orderedMembers = putOnTopCard(mainProfile.id, swipeProfile.members);
-    console.log("ORDERER MEMBERS -> ", orderedMembers)
-    
+    const memberInGroup = checkMemberInGroup(
+      mainProfileId,
+      swipeProfile.members
+    );
+
+    if (!memberInGroup) {
+      return <Loader />;
+    }
+
+    const orderedMembers = putOnTopCard(mainProfileId, swipeProfile.members);
+
     return orderedMembers.map((profile) => {
       return (
         <ImageBackground
@@ -162,7 +157,7 @@ const SwipeProfileScreen = (props) => {
             age={profile.age}
             university={profile.university}
           />
-          {profile.id === mainProfile.id && (
+          {profile.id === mainProfileId && (
             <TouchableOpacity
               onPress={() => showProfile(profile, true)}
               style={styles.arrowContainer}>
@@ -190,7 +185,7 @@ const SwipeProfileScreen = (props) => {
     />;
   }
 
-  if (!mainProfile.id) {
+  if (!mainProfileId) {
     return (
       <View style={styles.screen}>
         <View

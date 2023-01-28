@@ -30,6 +30,7 @@ const AuthStartScreen = (props) => {
     props.navigation.navigate('Auth', { register: false });
   };
 
+
   return (
     <View style={styles.screen}>
       <StatusBar style="light" />
