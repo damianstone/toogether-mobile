@@ -17,7 +17,14 @@ import InfoCard from './InfoCard';
 // TODO: clear props
 
 const SwipeCard = (props) => {
-  const { isGroup, profile, members } = props;
+  const {
+    isGroup,
+    profile,
+    members,
+    showProfileHandler, // function to open the open
+    showProfileRestricted, // restriction to open a specific profile
+    allowedProfileId, // specific profile that can be open
+  } = props;
 
   let cardType;
   let imageStyle;
@@ -116,14 +123,16 @@ const SwipeCard = (props) => {
                     age={profile.age}
                     university={profile.university}
                   />
-                  <TouchableOpacity
-                    onPress={() => props.showProfileHandler(profile, true)}
-                    style={styles.arrowContainer}>
-                    <Image
-                      source={require('../assets/images/white-arrow-up.png')}
-                      style={{ width: '100%', height: '100%' }}
-                    />
-                  </TouchableOpacity>
+                  {allowedProfileId === profile.id && (
+                    <TouchableOpacity
+                      onPress={() => showProfileHandler(profile, true)}
+                      style={styles.arrowContainer}>
+                      <Image
+                        source={require('../assets/images/white-arrow-up.png')}
+                        style={{ width: '100%', height: '100%' }}
+                      />
+                    </TouchableOpacity>
+                  )}
                 </ImageBackground>
               );
             })
@@ -143,7 +152,7 @@ const SwipeCard = (props) => {
                 university={profile.university}
               />
               <TouchableOpacity
-                onPress={() => props.showProfileHandler(profile, false)}
+                onPress={() => showProfileHandler(profile, false)}
                 style={styles.arrowContainer}>
                 <Image
                   source={require('../assets/images/white-arrow-up.png')}

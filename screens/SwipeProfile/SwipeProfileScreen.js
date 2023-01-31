@@ -15,11 +15,13 @@ import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { useDispatch, useSelector } from 'react-redux';
 import { checkMemberInGroup } from '../../utils/checks';
 import { getSwipeProfile } from '../../store/actions/swipe';
+import { exist } from '../../utils/checks';
 
 import ActivityModal from '../../components/UI/ActivityModal';
 import HeaderButtom from '../../components/UI/HeaderButton';
 import Loader from '../../components/UI/Loader';
 import InfoCard from '../../components/InfoCard';
+import SwipeCard from '../../components/SwipeCard';
 import Colors from '../../constants/Colors';
 import * as w from '../../constants/swipe';
 
@@ -57,55 +59,16 @@ const SwipeProfileScreen = (props) => {
   }, [dispatch, errorSwipeProfile]);
 
   const showProfile = (profile, isGroup) => {
-    props.navigation.navigate('Profile', {
-      profile: profile,
-      isGroup: isGroup,
-      preview: true,
-    });
-  };
-
-  // TODO: fix little circles
-  let cardType;
-  let imageStyle;
-  if (swipeProfile && !swipeProfile.members) {
-    cardType = {
-      backgroundColor: Colors.bgCard,
-      position: 'absolute',
-      width: '95%',
-      height: '80%',
-      borderRadius: 20,
-      justifyContent: 'center',
-      alignItems: 'center',
-    };
-    imageStyle = {
-      borderRadius: 20,
-      height: '100%',
-    };
-  } else {
-    cardType = {
-      position: 'absolute',
-      width: '95%',
-      height: '80%',
-      borderRadius: 20,
-      justifyContent: 'center',
-      alignItems: 'center',
-      backgroundColor: Colors.orange,
-    };
-    imageStyle = {
-      borderBottomRightRadius: 20,
-      borderBottomLeftRadius: 20,
-      height: '100%',
-    };
-  }
-
-  const checkPhoto = (profile) => {
-    if (profile?.photos?.length > 0) {
-      return { uri: `${profile.photos[0]?.image}` };
+    if (profile.id === mainProfileId) {
+      props.navigation.navigate('Profile', {
+        profile: profile,
+        isGroup: isGroup,
+        preview: true,
+      });
     }
-    return require('../../assets/images/placeholder-profile.png');
   };
 
-  // sawp the positions of elements
+  // swap the positions of elements
   const swapElement = (from, to, arr) => {
     const newArr = [...arr];
 
@@ -116,7 +79,6 @@ const SwipeProfileScreen = (props) => {
   };
 
   const putOnTopCard = (topCardId, members) => {
-    console.log(topCardId, members);
     // get the index of the topCard and change it to the top
     const toIndex = 0;
     const fromIndex = members.findIndex((elem) => elem.id === topCardId);
@@ -130,46 +92,9 @@ const SwipeProfileScreen = (props) => {
     return false;
   };
 
-  const renderGroupProfile = () => {
-    const memberInGroup = checkMemberInGroup(
-      mainProfileId,
-      swipeProfile.members
-    );
-
-    if (!memberInGroup) {
-      return <Loader />;
-    }
-
+  const getOrderedMembers = () => {
     const orderedMembers = putOnTopCard(mainProfileId, swipeProfile.members);
-
-    return orderedMembers.map((profile) => {
-      return (
-        <ImageBackground
-          key={profile.id}
-          imageStyle={{ ...imageStyle, ...styles.card }}
-          resizeMode="cover"
-          source={checkPhoto(profile)}
-          style={styles.image}>
-          <InfoCard
-            name={profile.name}
-            city={profile.city}
-            live_in={profile.live_in}
-            age={profile.age}
-            university={profile.university}
-          />
-          {profile.id === mainProfileId && (
-            <TouchableOpacity
-              onPress={() => showProfile(profile, true)}
-              style={styles.arrowContainer}>
-              <Image
-                source={require('../../assets/images/white-arrow-up.png')}
-                style={{ width: '100%', height: '100%' }}
-              />
-            </TouchableOpacity>
-          )}
-        </ImageBackground>
-      );
-    });
+    return orderedMembers;
   };
 
   if (loadingSwipeProfile) {
@@ -207,73 +132,21 @@ const SwipeProfileScreen = (props) => {
 
   return (
     <View style={styles.screen}>
-      <View style={{ ...cardType, marginTop: 20 }}>
-        {swipeProfile && isInGroup && (
-          <View style={styles.groupName}>
-            <Text style={styles.text}>Toogether group</Text>
-          </View>
+      <View style={{ width: '95%', height: '105%', padding: 15 }}>
+        {exist(swipeProfile) &&
+        checkMemberInGroup(mainProfileId, swipeProfile.members) ? (
+          <SwipeCard
+            key={swipeProfile.id}
+            isGroup={isInGroup}
+            members={exist(swipeProfile.members) ? getOrderedMembers() : null}
+            profile={swipeProfile}
+            showProfileHandler={showProfile}
+            showProfileRestricted={true}
+            allowedProfileId={mainProfileId}
+          />
+        ) : (
+          <Loader />
         )}
-        <Swiper
-          activeDot={
-            <View
-              style={{
-                backgroundColor: Colors.orange,
-                width: 8,
-                height: 8,
-                borderRadius: 4,
-                margin: 4,
-              }}
-            />
-          }
-          dot={
-            <View
-              style={{
-                backgroundColor: 'rgba(0,0,0,.2)',
-                width: 8,
-                height: 8,
-                borderRadius: 4,
-                margin: 4,
-              }}
-            />
-          }
-          paginationStyle={{ top: 5, bottom: null }}
-          loop={false}
-          removeClippedSubviews={false}
-          showsButtons
-          buttonWrapperStyle={{ color: Colors.placeholder }}
-          style={styles.wrapper}>
-          {swipeProfile && isInGroup ? (
-            renderGroupProfile()
-          ) : swipeProfile ? (
-            <ImageBackground
-              imageStyle={{ ...imageStyle, ...styles.card }}
-              key={swipeProfile.id}
-              resizeMode="cover"
-              source={checkPhoto(swipeProfile)}
-              style={styles.image}>
-              <InfoCard
-                name={swipeProfile.name}
-                city={swipeProfile.city}
-                live_in={swipeProfile.live_in}
-                age={swipeProfile.age}
-                university={swipeProfile.university}
-              />
-              <TouchableOpacity
-                onPress={() => showProfile(swipeProfile, false)}
-                style={styles.arrowContainer}>
-                <Image
-                  source={require('../../assets/images/white-arrow-up.png')}
-                  style={{
-                    width: '100%',
-                    height: '100%',
-                  }}
-                />
-              </TouchableOpacity>
-            </ImageBackground>
-          ) : (
-            <Loader />
-          )}
-        </Swiper>
       </View>
     </View>
   );
