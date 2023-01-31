@@ -23,7 +23,7 @@ import InfoCard from '../../components/InfoCard';
 import Colors from '../../constants/Colors';
 import * as w from '../../constants/swipe';
 
-// TODO: manage errors 
+// TODO: manage errors
 
 const SwipeProfileScreen = (props) => {
   const dispatch = useDispatch();
@@ -236,6 +236,7 @@ const SwipeProfileScreen = (props) => {
               }}
             />
           }
+          paginationStyle={{ top: 5, bottom: null }}
           loop={false}
           removeClippedSubviews={false}
           showsButtons
@@ -307,7 +308,9 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
   },
-  card: {},
+  card: {
+    flex: 1,
+  },
   groupName: {
     borderRadius: 20,
     justifyContent: 'center',
