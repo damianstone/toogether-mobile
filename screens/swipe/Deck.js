@@ -5,6 +5,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useDispatch, useSelector } from 'react-redux';
 import tw from 'tailwind-rn';
 import { like } from '../../store/actions/swipe';
+import { exist } from '../../utils/checks';
 
 import SwipeCard from '../../components/SwipeCard';
 import SwipeButtons from '../../components/SwipeButtons';
@@ -144,11 +145,12 @@ const Deck = (props) => {
 
   // render a card with the profiles (single and group)
   const renderCard = (profile) => {
-    if (typeof profile === 'object') {
+    if (exist(profile)) {
       return (
         <SwipeCard
           key={profile.id}
-          isGroup={profile.hasOwnProperty('members')}
+          isGroup={exist(profile.members)}
+          members={exist(profile.members) ? profile.members : null}
           profile={profile}
           showProfileHandler={showProfileHandler}
         />

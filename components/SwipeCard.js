@@ -13,13 +13,16 @@ import Constants from 'expo-constants';
 
 import Colors from '../constants/Colors';
 import InfoCard from './InfoCard';
- 
+
+// TODO: clear props
+
 const SwipeCard = (props) => {
+  const { isGroup, profile, members } = props;
+
   let cardType;
   let imageStyle;
-
   // if the profiles array > 1
-  if (!props.isGroup) {
+  if (!isGroup) {
     cardType = {
       position: 'absolute',
       width: '107%',
@@ -29,7 +32,7 @@ const SwipeCard = (props) => {
       alignItems: 'center',
       backgroundColor: Colors.placeholder,
     };
-    
+
     imageStyle = {
       borderRadius: 20,
       height: '100%',
@@ -62,7 +65,7 @@ const SwipeCard = (props) => {
   return (
     <View style={styles.screen}>
       <View style={{ ...cardType }}>
-        {props.isGroup && (
+        {isGroup && (
           <View style={styles.groupName}>
             <Text style={styles.text}>Toogether group</Text>
           </View>
@@ -96,8 +99,8 @@ const SwipeCard = (props) => {
           showsButtons
           buttonWrapperStyle={{ color: Colors.placeholder }}
           style={styles.wrapper}>
-          {props.isGroup ? (
-            props.profile.members.map((profile) => {
+          {isGroup ? (
+            members.map((profile) => {
               return (
                 <ImageBackground
                   key={profile.id}
@@ -109,7 +112,7 @@ const SwipeCard = (props) => {
                     name={profile.name}
                     city={profile.city}
                     live_in={profile.live_in}
-                    from={props.nationality}
+                    from={profile.nationality}
                     age={profile.age}
                     university={profile.university}
                   />
@@ -127,20 +130,20 @@ const SwipeCard = (props) => {
           ) : (
             <ImageBackground
               imageStyle={{ ...imageStyle }}
-              key={props.profile.id}
+              key={profile.id}
               resizeMode="cover"
-              source={checkPhoto(props.profile)}
+              source={checkPhoto(profile)}
               style={styles.image}>
               <InfoCard
-                name={props.profile.name}
-                city={props.profile.city}
-                live_in={props.profile.live_in}
-                from={props.nationality}
-                age={props.profile.age}
-                university={props.profile.university}
+                name={profile.name}
+                city={profile.city}
+                live_in={profile.live_in}
+                from={profile.nationality}
+                age={profile.age}
+                university={profile.university}
               />
               <TouchableOpacity
-                onPress={() => props.showProfileHandler(props.profile, false)}
+                onPress={() => props.showProfileHandler(profile, false)}
                 style={styles.arrowContainer}>
                 <Image
                   source={require('../assets/images/white-arrow-up.png')}
