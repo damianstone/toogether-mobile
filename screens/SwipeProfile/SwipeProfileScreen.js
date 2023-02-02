@@ -1,16 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import {
-  ImageBackground,
-  StyleSheet,
-  Text,
-  Alert,
-  Platform,
-  Image,
-  TouchableOpacity,
-  View,
-} from 'react-native';
-import Swiper from 'react-native-swiper';
-import Constants from 'expo-constants';
+import React, { useEffect } from 'react';
+import { StyleSheet, Alert, Platform, View } from 'react-native';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { useDispatch, useSelector } from 'react-redux';
 import { checkMemberInGroup } from '../../utils/checks';
@@ -20,7 +9,6 @@ import { exist } from '../../utils/checks';
 import ActivityModal from '../../components/UI/ActivityModal';
 import HeaderButtom from '../../components/UI/HeaderButton';
 import Loader from '../../components/UI/Loader';
-import InfoCard from '../../components/InfoCard';
 import SwipeCard from '../../components/SwipeCard';
 import Colors from '../../constants/Colors';
 import * as w from '../../constants/swipe';

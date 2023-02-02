@@ -35,14 +35,17 @@ const SwipeMatch = (props) => {
     chatButtonText,
   } = props.matchData;
 
+  const { chatOnPress, laterOnPress } = props;
+
   // if the matched profile does not have instagram, then go to the chat page
   // if not open the matched profile instagram
   const handleSendMessage = useCallback(async () => {
-    console.log("instagram -> ", matchedInstagram)
+    console.log('instagram -> ', matchedInstagram);
+    console.log(exist(matchedInstagram));
 
     if (!exist(matchedInstagram)) {
-      props.chatOnPress();
-      return;
+      console.log("exed")
+      return chatOnPress();
     }
 
     const url = `https://www.instagram.com/${matchedInstagram}/`;
@@ -106,7 +109,7 @@ const SwipeMatch = (props) => {
           <Button
             title="Later"
             color={Platform.OS === 'ios' ? Colors.placeholder : Colors.bg}
-            onPress={props.laterOnPress}
+            onPress={laterOnPress}
           />
         </View>
       </View>

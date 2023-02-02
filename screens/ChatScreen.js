@@ -6,23 +6,17 @@ import {
   Linking,
   FlatList,
   RefreshControl,
-  Button,
   StyleSheet,
   TouchableOpacity,
-  ActivityIndicator,
 } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import { useDispatch, useSelector } from 'react-redux';
 import { listMatches, deleteMatch } from '../store/actions/swipe';
 import { checkServerError, check400Error } from '../utils/errors';
-import { Feather } from '@expo/vector-icons';
-import { LinearGradient } from 'expo-linear-gradient';
 
 import * as w from '../constants/swipe';
 import HeaderButtom from '../components/UI/HeaderButton';
-import Loader from '../components/UI/Loader';
 import ChatAvatar from '../components/ChatAvatar';
 import Colors from '../constants/Colors';
 
@@ -101,9 +95,6 @@ const ChatScreen = (props) => {
   }, []);
 
   const handleShowProfile = (profile, isInGroup) => {
-    // TODO: pass the proper params
-    // * matched profile
-    // * is in group
     if (profile) {
       props.navigation.navigate('SwipeProfile', {
         mainProfileId: profile.id,
@@ -149,7 +140,7 @@ const ChatScreen = (props) => {
   };
 
   const renderMatch = ({ item, index }) => {
-    const matched_data = item.matched_data;
+    const matchedData = item.matched_data;
     const matchedProfile = item.matched_data.matched_profile;
 
     return (
@@ -157,11 +148,11 @@ const ChatScreen = (props) => {
         <View style={styles.rowContainer}>
           <ChatAvatar
             onShowProfile={() =>
-              handleShowProfile(matchedProfile, matched_data.is_group_match)
+              handleShowProfile(matchedProfile, matchedData.is_group_match)
             }
             matchedProfile={matchedProfile}
-            matchedData={matched_data}
-            isInGroup={matched_data.is_group_match}
+            matchedData={matchedData}
+            isInGroup={matchedData.is_group_match}
             matchedProfileHasPhoto={
               matchedProfile.photos.length > 0 ? true : false
             }

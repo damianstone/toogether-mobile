@@ -9,50 +9,21 @@ import SwipeMatch from '../../components/SwipeMatch';
 
 const MatchScreen = (props) => {
   const dispatch = useDispatch();
-  const [userData, setUserData] = useState({});
   const likeData = props.navigation.getParam('likeData');
 
-  const getAsyncData = async () => {
-    try {
-      const user = JSON.parse(await AsyncStorage.getItem('@userData'));
-
-      if (user !== null) {
-        setUserData(user);
-      }
-    } catch (e) {
-      console.log(e);
-    }
+  const handleGoToMatches = () => {
+    props.navigation.goBack(null);
+    props.navigation.navigate('Chat');
   };
-
-  useEffect(() => {
-    getAsyncData();
-  }, []);
 
   const handleCloseMatch = () => {
     dispatch({ type: w.LIKE_PROFILE_RESET });
     props.navigation.goBack(null);
   };
 
-  const getCurrentProfile = (matchData) => {
-    if (matchData.profile1.id === userData.id) {
-      return matchData.profile1;
-    }
-    return matchData?.profile2;
-  };
-
-  // TODO: fix waiting for user data
-  // el problem es que cuando se llama esta funcion, userData aun no exist entonces puede devolver 
-  // el current profile como matched profile
-  const getMatchedProfile = (matchData) => {
-    if (matchData.profile1.id === userData.id) {
-      return matchData.profile2;
-    }
-    return matchData?.profile1;
-  };
-
   const getProfileImage = (profile) => {
-    if(exist(profile.photos[0])) {
-      return profile.photos[0].image
+    if (exist(profile.photos[0])) {
+      return profile.photos[0].image;
     }
     return null;
   };
@@ -88,9 +59,8 @@ const MatchScreen = (props) => {
   };
 
   const getMatchData = (data) => {
-    const matchedProfile = getMatchedProfile(data?.match_data);
-    console.log(matchedProfile)
-    const currentProfile = getCurrentProfile(data?.match_data);
+    const matchedProfile = data?.match_data.matched_data.matched_profile;
+    const currentProfile = data?.match_data.current_profile;
     const matchType = getMatchedType(data?.group_match);
 
     switch (data.details) {
@@ -128,7 +98,7 @@ const MatchScreen = (props) => {
   return (
     <SwipeMatch
       matchData={getMatchData(likeData)}
-      chatOnPress={() => props.navigation.navigate('Chat')}
+      chatOnPress={handleGoToMatches}
       laterOnPress={handleCloseMatch}
     />
   );
