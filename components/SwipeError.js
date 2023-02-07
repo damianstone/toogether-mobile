@@ -28,7 +28,8 @@ const SwipeError = (props) => {
               color: Colors.placeholder,
               fontSize: 15,
               textAlign: 'center',
-            }}>
+            }}
+          >
             {props.text}
           </Text>
         </View>

@@ -37,7 +37,7 @@ const ProfileScreen = (props) => {
       dispatch(blockProfile(profile.id));
     }
   };
- 
+
   const openAlert = () => {
     Alert.alert(
       'Do you want to block this profile?',
@@ -111,7 +111,8 @@ const ProfileScreen = (props) => {
                 margin: 4,
               }}
             />
-          }>
+          }
+        >
           {profile?.photos?.length > 0 ? (
             profile.photos.map((photo) => (
               <ImageBackground

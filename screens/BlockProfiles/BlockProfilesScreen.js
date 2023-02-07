@@ -111,7 +111,8 @@ const BlockProfilesScreen = (props) => {
           </View>
           <TouchableOpacity
             onPress={() => handleUnblock(item.id)}
-            style={styles.buttonContainer}>
+            style={styles.buttonContainer}
+          >
             <Text style={{ color: Colors.white, fontSize: 12 }}>Unblock</Text>
           </TouchableOpacity>
         </View>
@@ -130,7 +131,8 @@ const BlockProfilesScreen = (props) => {
           width: '100%',
           height: '100%',
           textAlign: 'center',
-        }}>
+        }}
+      >
         <View style={{ width: 130, height: 130 }}>
           <Image
             source={require('../../assets/images/empty-blocked-screen.png')}

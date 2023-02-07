@@ -32,7 +32,8 @@ const ChatAvatar = (props) => {
           style={
             isInGroup ? styles.groupImageContainer : styles.singleImageContainer
           }
-          onPress={props.onShowProfile}>
+          onPress={props.onShowProfile}
+        >
           {isInGroup ? (
             <View style={styles.counterCircle}>
               <Text style={styles.counterCircleText}>
@@ -48,7 +49,8 @@ const ChatAvatar = (props) => {
   return (
     <TouchableOpacity
       style={styles.noPhotoContainer}
-      onPress={props.onShowProfile}>
+      onPress={props.onShowProfile}
+    >
       <Text style={{ color: Colors.white, fontSize: 20 }}>
         {getInitials(matchedProfile.name)}
       </Text>

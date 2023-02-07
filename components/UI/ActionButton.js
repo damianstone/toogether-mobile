@@ -9,7 +9,8 @@ const AuthButton = (props) => {
         ...styles.action_button_container,
         backgroundColor: props.backgroundColor,
       }}
-      onPress={props.onPress}>
+      onPress={props.onPress}
+    >
       <Text style={styles.action_button_text}>{props.text}</Text>
     </TouchableOpacity>
   );

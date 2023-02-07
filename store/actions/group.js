@@ -7,7 +7,6 @@ import getEnvVars from '../../environment';
 
 const { API_URL: BASE_URL } = getEnvVars();
 
-
 export const listGroup = () => {
   return async (dispatch) => {
     try {
@@ -115,10 +114,10 @@ export const createGroup = () => {
 export const resetData = async () => {
   try {
     await AsyncStorage.removeItem('@groupData');
-  } catch(error) {
-    console.log(error)
+  } catch (error) {
+    console.log(error);
   }
-}
+};
 
 export const deleteGroup = (group_id) => {
   return async (dispatch) => {

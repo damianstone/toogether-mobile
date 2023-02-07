@@ -173,7 +173,8 @@ const SettingScreen = (props) => {
           {SETTINGS_ACCOUNT_DATA.map((setting) => (
             <TouchableOpacity
               onPress={() => checkAction(setting.action)}
-              style={styles.settingView}>
+              style={styles.settingView}
+            >
               <View style={styles.settingIcon}>
                 {setting.ionicons && (
                   <Ionicons name={setting.icon} size={25} color="white" />
@@ -206,7 +207,8 @@ const SettingScreen = (props) => {
           {SETTINGS_APP_DATA.map((setting) => (
             <TouchableOpacity
               onPress={() => checkAction(setting.action)}
-              style={styles.settingView}>
+              style={styles.settingView}
+            >
               <View style={styles.settingIcon}>
                 {setting.ionicons && (
                   <Ionicons name={setting.icon} size={25} color="white" />

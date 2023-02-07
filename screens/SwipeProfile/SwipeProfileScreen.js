@@ -2,9 +2,8 @@ import React, { useEffect } from 'react';
 import { StyleSheet, Alert, Platform, View } from 'react-native';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { useDispatch, useSelector } from 'react-redux';
-import { checkMemberInGroup } from '../../utils/checks';
+import { checkMemberInGroup, exist } from '../../utils/checks';
 import { getSwipeProfile } from '../../store/actions/swipe';
-import { exist, sameId } from '../../utils/checks';
 
 import ActivityModal from '../../components/UI/ActivityModal';
 import HeaderButtom from '../../components/UI/HeaderButton';
@@ -56,7 +55,6 @@ const SwipeProfileScreen = (props) => {
       });
     }
   };
-
 
   // TODO: fix this when swipe profile is a single profile and then want to show a group
   const checksBeforeRender = () => {
@@ -125,7 +123,8 @@ const SwipeProfileScreen = (props) => {
             alignItems: 'center',
             backgroundColor: Colors.bgCard,
             opacity: 0.5,
-          }}>
+          }}
+        >
           <Loader />
         </View>
       </View>
@@ -152,7 +151,7 @@ const SwipeProfileScreen = (props) => {
             members={exist(swipeProfile.members) ? getOrderedMembers() : null}
             profile={swipeProfile}
             showProfileHandler={showProfile}
-            showProfileRestricted={true}
+            showProfileRestricted
             allowedProfileId={mainProfileId}
           />
         ) : (

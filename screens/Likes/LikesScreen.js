@@ -182,7 +182,8 @@ const LikesScreen = (props) => {
           width: '100%',
           height: '100%',
           textAlign: 'center',
-        }}>
+        }}
+      >
         <View style={{ width: 200, height: 200 }}>
           <Image
             source={require('../../assets/images/no-likes.png')}

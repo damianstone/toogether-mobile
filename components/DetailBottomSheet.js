@@ -62,7 +62,8 @@ const DetailBottomSheet = (props) => {
       style={styles.screen}
       contentContainerStyle={styles.scrollview}
       showsVerticalScrollIndicator={false}
-      showsHorizontalScrollIndicator={false}>
+      showsHorizontalScrollIndicator={false}
+    >
       <View style={styles.container1}>
         <View style={styles.nameTextContainer}>
           <Text style={styles.nameText}>{`${name}, ${age}`}</Text>

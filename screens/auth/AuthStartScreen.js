@@ -30,13 +30,13 @@ const AuthStartScreen = (props) => {
     props.navigation.navigate('Auth', { register: false });
   };
 
-
   return (
     <View style={styles.screen}>
       <StatusBar style="light" />
       <ScrollView
         style={styles.scrollview_style}
-        contentContainerStyle={styles.scrollview_content_container}>
+        contentContainerStyle={styles.scrollview_content_container}
+      >
         <View style={styles.logoContainer}>
           <Image
             source={require('../../assets/images/logo-2.png')}

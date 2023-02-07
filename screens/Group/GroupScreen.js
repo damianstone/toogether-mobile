@@ -91,7 +91,7 @@ const GroupScreen = (props) => {
       group_id: null,
     },
   });
- 
+
   const getAsyncData = async () => {
     let group;
     let profile;
@@ -348,7 +348,8 @@ const GroupScreen = (props) => {
           onRefresh={loadGroup}
           tintColor={Colors.white}
         />
-      }>
+      }
+    >
       <View style={{ ...styles.action_view, ...HEIGHT_ACTION_CONTAINER }}>
         <View style={styles.profile_photo_container}>
           {!group && <Loader />}

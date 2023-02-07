@@ -3,10 +3,12 @@ import {
   Text,
   View,
   Image,
+  Alert,
   Linking,
   FlatList,
   RefreshControl,
   StyleSheet,
+  Platform,
   TouchableOpacity,
 } from 'react-native';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
@@ -38,9 +40,6 @@ const ChatScreen = (props) => {
     data: matchDeleted,
   } = deleteMatchReducer;
 
-  const [loading, setLoading] = useState(
-    !!(loadingListMatches || loadingDeleteMatch)
-  );
   const [refreshing, setRefreshing] = useState(
     !!(loadingListMatches || loadingDeleteMatch)
   );
@@ -95,7 +94,7 @@ const ChatScreen = (props) => {
   }, []);
 
   const handleShowProfile = (profile, isInGroup) => {
-    console.log("chat screen ->", isInGroup)
+    console.log('chat screen ->', isInGroup);
     if (profile) {
       props.navigation.navigate('SwipeProfile', {
         mainProfileId: profile.id,
@@ -154,9 +153,7 @@ const ChatScreen = (props) => {
             matchedProfile={matchedProfile}
             matchedData={matchedData}
             isInGroup={matchedData.is_group_match}
-            matchedProfileHasPhoto={
-              matchedProfile.photos.length > 0 ? true : false
-            }
+            matchedProfileHasPhoto={matchedProfile.photos.length > 0}
             matchedProfilePhoto={
               matchedProfile.photos.length > 0
                 ? matchedProfile.photos[0].image

@@ -87,7 +87,8 @@ const LikeCard = (props) => {
               imageStyle={styles.imageStyle}
               resizeMode="cover"
               source={{ uri: `${image}` }}
-              style={{ ...imageContainer }}>
+              style={{ ...imageContainer }}
+            >
               <View style={styles.infoCard}>
                 <Text style={{ color: Colors.black, fontSize: 10 }}>
                   {getCardInfo()}
@@ -107,7 +108,8 @@ const LikeCard = (props) => {
               imageStyle={styles.imageStyle}
               resizeMode="cover"
               source={require('../assets/images/placeholder-profile.png')}
-              style={{ ...imageContainer }}>
+              style={{ ...imageContainer }}
+            >
               <View style={styles.infoCard}>
                 <Text style={{ color: Colors.black, fontSize: 10 }}>
                   {getCardInfo()}

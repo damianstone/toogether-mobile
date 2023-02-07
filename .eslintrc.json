@@ -27,7 +27,7 @@
     "prettier/prettier": [
       "warn",
       {
-        "endOfLine": "auto"
+        "endOfLine": "off"
       }
     ],
     "import-helpers/order-imports": "off",

@@ -53,11 +53,13 @@ const ClipBoard = (props) => {
       style={{
         ...styles.clipboard_button_container,
         backgroundColor: props.backgroundColor,
-      }}>
+      }}
+    >
       <Text style={styles.clipboard_button_text}>{removeHttp(props.text)}</Text>
       <TouchableOpacity
         style={styles.clipboard_icon}
-        onPress={() => handleShareUrl(props.text)}>
+        onPress={() => handleShareUrl(props.text)}
+      >
         <Ionicons name="ios-share-outline" size={24} color="white" />
       </TouchableOpacity>
     </View>

@@ -74,9 +74,10 @@ const MyProfileNavigator = createStackNavigator(
     },
     SwipeProfile: {
       screen: SwipeProfileScreen,
-      navigationOptions: { // get rid the header so then the modal can be displayed with full height
+      navigationOptions: {
+        // get rid the header so then the modal can be displayed with full height
         ...defaultNavOptions,
-        title: "Profile Preview",
+        title: 'Profile Preview',
         gestureDirection: 'horizontal',
         headerMode: 'none',
       },
@@ -113,7 +114,8 @@ const ChatNavigator = createStackNavigator(
     Chat: ChatScreen,
     SwipeProfile: {
       screen: SwipeProfileScreen,
-      navigationOptions: { // get rid the header so then the modal can be displayed with full height
+      navigationOptions: {
+        // get rid the header so then the modal can be displayed with full height
         ...defaultNavOptions,
         gestureDirection: 'horizontal',
         title: null,

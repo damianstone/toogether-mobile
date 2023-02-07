@@ -18,7 +18,8 @@ const App = (props) => {
           <Text style={styles.nameText}>{`${props.name}, ${props.age}`}</Text>
           <TouchableOpacity
             onPress={props.onClose}
-            style={styles.closeContainer}>
+            style={styles.closeContainer}
+          >
             <Text>C</Text>
           </TouchableOpacity>
         </View>

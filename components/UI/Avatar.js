@@ -50,9 +50,7 @@ const Avatar = (props) => {
       )}
       {data?.photos?.length === 0 && (
         <View style={styles.avatar_view}>
-          <Text style={styles.avatar_initials}>
-            {getInitials(data.name)}
-          </Text>
+          <Text style={styles.avatar_initials}>{getInitials(data.name)}</Text>
         </View>
       )}
     </TouchableOpacity>

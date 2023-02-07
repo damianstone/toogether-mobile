@@ -37,15 +37,20 @@ export const getShowMode = (
 ) => {
   if (currentShowMode === 3) {
     return 3;
-  } else if (!permissionGranted) {
+  }
+  if (!permissionGranted) {
     return -1;
-  } else if (postLocationError && !exist(swipe)) {
+  }
+  if (postLocationError && !exist(swipe)) {
     return -1;
-  } else if (!exist(swipe) || errorSwipe) {
+  }
+  if (!exist(swipe) || errorSwipe) {
     return 0;
-  } else if (swipe?.results.length === 0 && !exist(topProfile)) {
+  }
+  if (swipe?.results.length === 0 && !exist(topProfile)) {
     return 0;
-  } else if (swipe?.results.length > 0 || exist(topProfile)) {
+  }
+  if (swipe?.results.length > 0 || exist(topProfile)) {
     return 2;
   }
   return currentShowMode;
