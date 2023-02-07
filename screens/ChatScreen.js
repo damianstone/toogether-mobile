@@ -95,6 +95,7 @@ const ChatScreen = (props) => {
   }, []);
 
   const handleShowProfile = (profile, isInGroup) => {
+    console.log("chat screen ->", isInGroup)
     if (profile) {
       props.navigation.navigate('SwipeProfile', {
         mainProfileId: profile.id,

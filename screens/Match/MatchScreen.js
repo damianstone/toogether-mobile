@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { exist } from '../../utils/checks';
 
 import * as r from '../../constants/responses/match';
 import * as w from '../../constants/swipe';
 import SwipeMatch from '../../components/SwipeMatch';
+
+// TODO: fix buttons
 
 const MatchScreen = (props) => {
   const dispatch = useDispatch();
