@@ -73,20 +73,12 @@ export const alreadyMatched = (likeData) => {
 export const checkMemberInGroup = (memberId, groupMembers) => {
   // if its not a group profile, then its fine, we dont need to check this problem
   if (!exist(groupMembers)) {
-    return true;
+    return false;
   }
 
   const fromIndex = groupMembers.findIndex((elem) => elem.id === memberId);
 
   if (fromIndex !== -1) {
-    return true;
-  }
-
-  return false;
-};
-
-export const sameId = (id1, id2) => {
-  if (id1 === id2) {
     return true;
   }
 

@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { StyleSheet, Alert, Platform, View } from 'react-native';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { useDispatch, useSelector } from 'react-redux';
-import { checkMemberInGroup, exist } from '../../utils/checks';
+import { exist, checkMemberInGroup } from '../../utils/checks';
 import { getSwipeProfile } from '../../store/actions/swipe';
 
 import ActivityModal from '../../components/UI/ActivityModal';
@@ -13,7 +13,6 @@ import Colors from '../../constants/Colors';
 import * as w from '../../constants/swipe';
 
 // TODO: manage errors
-// * when I open this screen with another profile that can be not in group the swipeProfile reducer is still with the information of the last profile, explain me what and where is my error?
 
 const SwipeProfileScreen = (props) => {
   const dispatch = useDispatch();
@@ -28,9 +27,10 @@ const SwipeProfileScreen = (props) => {
     data: swipeProfile,
   } = currentSwipeProfile;
 
+  // how can I render something if and only if this is already executed
   useEffect(() => {
     dispatch(getSwipeProfile(mainProfileId));
-  }, []);
+  }, [mainProfileId]);
 
   useEffect(() => {
     if (errorSwipeProfile) {
@@ -54,18 +54,6 @@ const SwipeProfileScreen = (props) => {
         preview: true,
       });
     }
-  };
-
-  // TODO: fix this when swipe profile is a single profile and then want to show a group
-  const checksBeforeRender = () => {
-    if (
-      // check same id as the one passed on the params
-      exist(swipeProfile) && // just to check if the swipe profile is already there and the fetching was completed
-      checkMemberInGroup(mainProfileId, swipeProfile?.members) // in case of a group profile, then check if the mainID is in the members
-    ) {
-      return true;
-    }
-    return false;
   };
 
   // swap the positions of elements
@@ -97,6 +85,27 @@ const SwipeProfileScreen = (props) => {
     return orderedMembers;
   };
 
+  // To prevent rendering the old state profile
+  const checksBeforeRender = () => {
+    if (!swipeProfile) {
+      return false;
+    }
+
+    if (swipeProfile.id === mainProfileId) {
+      return true;
+    }
+
+    if (
+      isInGroup &&
+      swipeProfile.members &&
+      checkMemberInGroup(mainProfileId, swipeProfile.members)
+    ) {
+      return true;
+    }
+
+    return false;
+  };
+
   if (loadingSwipeProfile) {
     <ActivityModal
       loading
@@ -123,23 +132,12 @@ const SwipeProfileScreen = (props) => {
             alignItems: 'center',
             backgroundColor: Colors.bgCard,
             opacity: 0.5,
-          }}
-        >
+          }}>
           <Loader />
         </View>
       </View>
     );
   }
-
-  console.log(
-    'SWIPE PROFILE SCREEN IFNROMATION -> ',
-    'is in group',
-    isInGroup,
-    'have members',
-    exist(swipeProfile?.members),
-    'swipeProfile state',
-    swipeProfile
-  );
 
   return (
     <View style={styles.screen}>
