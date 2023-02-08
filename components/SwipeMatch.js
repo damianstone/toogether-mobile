@@ -37,14 +37,8 @@ const SwipeMatch = (props) => {
 
   const { chatOnPress, laterOnPress } = props;
 
-  // if the matched profile does not have instagram, then go to the chat page
-  // if not open the matched profile instagram
   const handleSendMessage = useCallback(async () => {
-    console.log('instagram -> ', matchedInstagram);
-    console.log(exist(matchedInstagram));
-
     if (!exist(matchedInstagram)) {
-      console.log('exed');
       return chatOnPress();
     }
 

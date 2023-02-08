@@ -17,7 +17,7 @@ import styles from './styles';
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
-// error: cuando cambio el estado a showMatch true no aparece el pop y tengo que hacer un manual
+// TODO: error: cuando cambio el estado a showMatch true no aparece el pop y tengo que hacer un manual
 //reload para que funcione
 
 const Deck = (props) => {
@@ -76,7 +76,7 @@ const Deck = (props) => {
     return members[Math.floor(Math.random() * members.length)];
   };
 
-  // Swiper actions
+  // * Swiper actions
   const handleLike = async (index) => {
     // liked profile can be a group or a single member
     const likedProfile = swipeCards[index];
@@ -96,7 +96,7 @@ const Deck = (props) => {
     currentDeckIndex.current = index;
   };
 
-  // Buttons actions
+  // * Buttons actions
   const onLikePressed = () => {
     // swipeLeft() function activates the onLike function
     swipeRef.current.swipeLeft();
@@ -117,7 +117,7 @@ const Deck = (props) => {
     setShowMode(1);
   };
 
-  // Handle put card on the top of the stack
+  // * Handle put card on the top of the stack
   const swapElement = (from, to, arr) => {
     const newArr = [...arr];
 

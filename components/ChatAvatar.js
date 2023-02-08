@@ -16,6 +16,7 @@ const ChatAvatar = (props) => {
     matchedProfile,
     matchedProfileHasPhoto,
     matchedProfilePhoto,
+    onShowProfile,
   } = props;
 
   const getInitials = (name) => {
@@ -25,14 +26,14 @@ const ChatAvatar = (props) => {
 
   if (matchedProfileHasPhoto) {
     return (
-      <TouchableOpacity onPress={props.onShowProfile}>
+      <TouchableOpacity onPress={onShowProfile}>
         <ImageBackground
           source={{ uri: `${matchedProfilePhoto}` }}
           imageStyle={styles.img}
           style={
             isInGroup ? styles.groupImageContainer : styles.singleImageContainer
           }
-          onPress={props.onShowProfile}
+          onPress={onShowProfile}
         >
           {isInGroup ? (
             <View style={styles.counterCircle}>

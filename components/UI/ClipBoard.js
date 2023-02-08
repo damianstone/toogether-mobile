@@ -1,18 +1,12 @@
 import React from 'react';
-import {
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-  Share,
-  Platform,
-} from 'react-native';
-import { Feather } from '@expo/vector-icons';
+import { StyleSheet, Text, TouchableOpacity, View, Share } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import * as Clipboard from 'expo-clipboard';
 import Colors from '../../constants/Colors';
 
 const ClipBoard = (props) => {
+  const { text, backgroundColor } = props;
+
   const handleShareUrl = async (groupUrl) => {
     try {
       const result = await Share.share({
@@ -38,27 +32,21 @@ const ClipBoard = (props) => {
     }
   };
 
-  const copyToClipboard = (text) => {
-    Clipboard.setString(text);
-  };
-
   const removeHttp = (url) => {
     return url.replace(/^https?:\/\//, '');
   };
-
-  console.log('URL TEXT ', props.text);
 
   return (
     <View
       style={{
         ...styles.clipboard_button_container,
-        backgroundColor: props.backgroundColor,
+        backgroundColor: backgroundColor,
       }}
     >
-      <Text style={styles.clipboard_button_text}>{removeHttp(props.text)}</Text>
+      <Text style={styles.clipboard_button_text}>{removeHttp(text)}</Text>
       <TouchableOpacity
         style={styles.clipboard_icon}
-        onPress={() => handleShareUrl(props.text)}
+        onPress={() => handleShareUrl(text)}
       >
         <Ionicons name="ios-share-outline" size={24} color="white" />
       </TouchableOpacity>

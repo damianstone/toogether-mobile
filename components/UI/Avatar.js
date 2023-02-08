@@ -1,22 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import {
-  ActivityIndicator,
-  Image,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import React, { useEffect } from 'react';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import Constants from 'expo-constants';
 import Colors from '../../constants/Colors';
-import { listUserPhotos, getUserProfile } from '../../store/actions/user';
+import { getUserProfile } from '../../store/actions/user';
 
 import Loader from './Loader';
 
 const Avatar = (props) => {
+  const { onPress } = props;
   const dispatch = useDispatch();
-  const [error, setError] = useState(false);
 
   const userProfile = useSelector((state) => state.userGetProfile);
   const { loading, error: fetchError, data } = userProfile;
@@ -33,7 +25,7 @@ const Avatar = (props) => {
   };
 
   return (
-    <TouchableOpacity onPress={props.onPress} style={styles.imgContainer}>
+    <TouchableOpacity onPress={onPress} style={styles.imgContainer}>
       {loading ||
         (typeof fetchError != 'undefined' && (
           <View style={styles.error_avatar_view}>

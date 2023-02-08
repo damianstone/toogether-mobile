@@ -28,7 +28,6 @@ const SwipeCard = (props) => {
 
   let cardType;
   let imageStyle;
-  // if the profiles array > 1
   if (!isGroup) {
     cardType = {
       position: 'absolute',

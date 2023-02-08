@@ -10,40 +10,22 @@ import {
 import Colors from '../constants/Colors';
 
 const SwipeError = (props) => {
-  const { imageUrl, title, text, onPress, buttonText } = props;
+  const { imageUrl, title, text, onPress, onReload, buttonText, reload } =
+    props;
 
   return (
     <View style={styles.screen}>
-      <Image
-        style={{ width: '80%', height: '55%', alignSelf: 'center' }}
-        source={imageUrl}
-      />
+      <Image style={styles.img} source={imageUrl} />
       <View style={styles.bottomContainer}>
         <View style={styles.textContainer}>
-          <Text style={{ color: Colors.white, fontSize: 30, marginBottom: 10 }}>
-            {title}
-          </Text>
-          <Text
-            style={{
-              color: Colors.placeholder,
-              fontSize: 15,
-              textAlign: 'center',
-            }}
-          >
-            {props.text}
-          </Text>
+          <Text style={styles.title}>{title}</Text>
+          <Text style={styles.text}>{text}</Text>
         </View>
         <TouchableOpacity onPress={onPress} style={styles.buttonContainer}>
-          <Text style={{ color: Colors.white, fontSize: 15 }}>
-            {buttonText}
-          </Text>
+          <Text style={styles.buttonText}>{buttonText}</Text>
         </TouchableOpacity>
-        {props.reload && (
-          <Button
-            title="Reload"
-            color={Colors.white}
-            onPress={props.onReload}
-          />
+        {reload && (
+          <Button title="Reload" color={Colors.white} onPress={onReload} />
         )}
       </View>
     </View>
@@ -60,6 +42,17 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+
+  img: {
+    width: '80%',
+    height: '55%',
+    alignSelf: 'center',
+  },
+  title: {
+    color: Colors.white,
+    fontSize: 30,
+    marginBottom: 10,
+  },
   bottomContainer: {
     width: '80%',
     height: '35%',
@@ -71,6 +64,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  text: {
+    color: Colors.placeholder,
+    fontSize: 15,
+    textAlign: 'center',
+  },
   buttonContainer: {
     width: '60%',
     height: 40,
@@ -79,5 +77,9 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     justifyContent: 'center',
     marginBottom: 10,
+  },
+  buttonText: {
+    color: Colors.white,
+    fontSize: 15,
   },
 });

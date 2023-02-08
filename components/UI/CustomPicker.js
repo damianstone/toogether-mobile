@@ -1,29 +1,22 @@
-import React, { useEffect, useState, useRef } from 'react';
-import {
-  StyleSheet,
-  Text,
-  View,
-  ScrollView,
-  TouchableOpacity,
-  Button,
-} from 'react-native';
+import React from 'react';
+import { StyleSheet, Text, View } from 'react-native';
 import RNPickerSelect from 'react-native-picker-select';
 
 import Colors from '../../constants/Colors';
 
 const CustomPicker = (props) => {
+  const { label, initialValue, onInputChange, items, itemKey } = props;
+
   return (
     <View style={styles.formControl}>
-      <Text style={{ ...styles.label, ...props.labelStyle }}>
-        {props.label}
-      </Text>
+      <Text style={{ ...styles.label, ...props.labelStyle }}>{label}</Text>
       <View style={styles.scroll}>
         <RNPickerSelect
           {...props}
-          placeholder={props.initialValue}
-          onValueChange={props.onInputChange}
-          items={props.items}
-          itemKey={props.itemKey}
+          placeholder={initialValue}
+          onValueChange={onInputChange}
+          items={items}
+          itemKey={itemKey}
           onUpArrow={() => {
             console.log('up');
           }}
