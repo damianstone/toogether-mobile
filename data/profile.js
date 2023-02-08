@@ -87,7 +87,7 @@ export const CREATE_PROFILE_INPUTS = [
         value: 'W',
       },
       {
-        label: 'Chair',
+        label: 'Non-binary',
         value: 'X',
       },
     ],
@@ -121,7 +121,7 @@ export const CREATE_PROFILE_INPUTS = [
         value: 'W',
       },
       {
-        label: 'Both',
+        label: 'Everyone',
         value: 'X',
       },
     ],
@@ -311,7 +311,7 @@ export const UPDATE_PROFILE_INPUTS = [
         value: 'W',
       },
       {
-        label: 'Chair',
+        label: 'Non-binary',
         value: 'X',
       },
     ],
@@ -345,7 +345,7 @@ export const UPDATE_PROFILE_INPUTS = [
         value: 'W',
       },
       {
-        label: 'Both',
+        label: 'Everyone',
         value: 'X',
       },
     ],

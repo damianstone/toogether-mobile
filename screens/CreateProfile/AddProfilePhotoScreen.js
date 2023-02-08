@@ -88,12 +88,13 @@ const AddProfilePhotoScreen = (props) => {
       style={styles.scroll}
       contentContainerStyle={styles.screen}
       showsVerticalScrollIndicator={false}
-      showsHorizontalScrollIndicator={false}>
+      showsHorizontalScrollIndicator={false}
+    >
       <StatusBar style="light" />
       <View style={styles.auth_text_view}>
         <View style={authStyles.default.auth_text_container}>
           <Text style={authStyles.default.auth_text_big}>
-            Let&aposs upload your first photo
+            Lets upload your first photo
           </Text>
         </View>
         <View style={authStyles.default.auth_text_container}>

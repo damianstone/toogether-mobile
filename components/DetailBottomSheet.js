@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import {
   ScrollView,
   StyleSheet,
@@ -8,10 +8,8 @@ import {
   Image,
 } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { Ionicons } from '@expo/vector-icons';
 import Colors from '../constants/Colors';
 import SwipeButtons from './SwipeButtons';
-import BottomSheet from './BottomSheet';
 
 const DetailBottomSheet = (props) => {
   const {
@@ -62,7 +60,8 @@ const DetailBottomSheet = (props) => {
       style={styles.screen}
       contentContainerStyle={styles.scrollview}
       showsVerticalScrollIndicator={false}
-      showsHorizontalScrollIndicator={false}>
+      showsHorizontalScrollIndicator={false}
+    >
       <View style={styles.container1}>
         <View style={styles.nameTextContainer}>
           <Text style={styles.nameText}>{`${name}, ${age}`}</Text>

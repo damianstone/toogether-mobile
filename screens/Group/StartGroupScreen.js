@@ -13,7 +13,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { StackActions } from 'react-navigation';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { createGroup } from '../../store/actions/group';
+import { createGroup, resetData } from '../../store/actions/group';
 import { check400Error, checkServerError } from '../../utils/errors';
 
 import AuthButton from '../../components/UI/AuthButton';
@@ -22,6 +22,8 @@ import Colors from '../../constants/Colors';
 import * as g from '../../constants/group';
 
 const StartGroupScreen = (props) => {
+  const group_id = props.navigation.getParam('group_id');
+
   const [storedGroupData, setStoredGroupData] = useState();
   const dispatch = useDispatch();
   const createGroupReducer = useSelector((state) => state.createGroup);
@@ -55,6 +57,12 @@ const StartGroupScreen = (props) => {
   useEffect(() => {
     getAsyncData();
   }, []);
+
+  useEffect(() => {
+    if (group_id === null) {
+      resetData();
+    }
+  });
 
   useEffect(() => {
     if (storedGroupData) {
@@ -96,7 +104,8 @@ const StartGroupScreen = (props) => {
       <StatusBar style="light" />
       <ScrollView
         style={styles.scrollview_style}
-        contentContainerStyle={styles.scrollview_content_container}>
+        contentContainerStyle={styles.scrollview_content_container}
+      >
         <View>
           <View style={styles.imageContainer}>
             <Image

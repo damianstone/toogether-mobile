@@ -1,18 +1,35 @@
 import React from 'react';
-import {
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-  Platform,
-} from 'react-native';
-import { Feather } from '@expo/vector-icons';
+import { StyleSheet, Text, TouchableOpacity, View, Share } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import * as Clipboard from 'expo-clipboard';
 import Colors from '../../constants/Colors';
 
 const ClipBoard = (props) => {
-  const copyToClipboard = (text) => {
-    Clipboard.setString(text);
+  const { text, backgroundColor } = props;
+
+  const handleShareUrl = async (groupUrl) => {
+    try {
+      const result = await Share.share({
+        message: `Join to my group on Toogether app using the following link: ${groupUrl}
+          \n How to join a group using the link? 🤔
+          \n Open the app -> Group -> Join a group -> paste the link 
+          \n Don't have Toogether yet? 👀
+          \n Download it here ;) https://toogether.app/
+          `,
+      });
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+          // do something
+        } else {
+          // shared
+        }
+      } else if (result.action === Share.dismissedAction) {
+        // dismissed
+        // just for IOS
+      }
+    } catch (error) {
+      alert(error.message);
+    }
   };
 
   const removeHttp = (url) => {
@@ -23,13 +40,15 @@ const ClipBoard = (props) => {
     <View
       style={{
         ...styles.clipboard_button_container,
-        backgroundColor: props.backgroundColor,
-      }}>
-      <Text style={styles.clipboard_button_text}>{removeHttp(props.text)}</Text>
+        backgroundColor: backgroundColor,
+      }}
+    >
+      <Text style={styles.clipboard_button_text}>{removeHttp(text)}</Text>
       <TouchableOpacity
         style={styles.clipboard_icon}
-        onPress={() => copyToClipboard(props.text)}>
-        <Feather name="copy" size={24} color="white" />
+        onPress={() => handleShareUrl(text)}
+      >
+        <Ionicons name="ios-share-outline" size={24} color="white" />
       </TouchableOpacity>
     </View>
   );

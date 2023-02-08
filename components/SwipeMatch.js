@@ -1,18 +1,19 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import {
   Text,
   View,
   Modal,
   Image,
   Button,
+  Alert,
+  Linking,
   StyleSheet,
   TouchableOpacity,
   Dimensions,
   Platform,
 } from 'react-native';
-import Constants from 'expo-constants';
+import { exist } from '../utils/checks';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { LinearGradient } from 'expo-linear-gradient';
 
 import Colors from '../constants/Colors';
 import GradientText from './UI/GradientText';
@@ -21,7 +22,6 @@ const SCREEN_HEIGHT = Dimensions.get('window').height;
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
 const SwipeMatch = (props) => {
-
   const {
     visible,
     title,
@@ -31,10 +31,26 @@ const SwipeMatch = (props) => {
     matchedProfileName,
     currentType,
     matchedType,
+    matchedInstagram,
     chatButtonText,
   } = props.matchData;
 
-  console.log(currentProfileImage);
+  const { chatOnPress, laterOnPress } = props;
+
+  const handleSendMessage = useCallback(async () => {
+    if (!exist(matchedInstagram)) {
+      return chatOnPress();
+    }
+
+    const url = `https://www.instagram.com/${matchedInstagram}/`;
+    const supported = await Linking.canOpenURL(url);
+
+    if (supported) {
+      await Linking.openURL(url);
+    } else {
+      Alert.alert(`Don't know how to open this URL: ${url}`);
+    }
+  }, []);
 
   return (
     <Modal transparent={false} visible={visible} animationType="fade">
@@ -44,18 +60,32 @@ const SwipeMatch = (props) => {
         </View>
         <View style={styles.profilesContainer}>
           <View style={styles.imageContainer}>
-            <Image
-              source={{ uri: `${currentProfileImage}` }}
-              style={styles.image}
-            />
+            {currentProfileImage ? (
+              <Image
+                source={{ uri: `${currentProfileImage}` }}
+                style={styles.image}
+              />
+            ) : (
+              <Image
+                source={require('../assets/images/placeholder-profile.png')}
+                style={styles.image}
+              />
+            )}
             <Text style={styles.profileName}>{currentProfileName}</Text>
             <Text style={styles.subtitle}>{currentType}</Text>
           </View>
           <View style={styles.imageContainer}>
-            <Image
-              source={{ uri: `${matchedProfileImage}` }}
-              style={styles.image}
-            />
+            {matchedProfileImage ? (
+              <Image
+                source={{ uri: `${matchedProfileImage}` }}
+                style={styles.image}
+              />
+            ) : (
+              <Image
+                source={require('../assets/images/placeholder-profile.png')}
+                style={styles.image}
+              />
+            )}
             <Text style={styles.profileName}>{matchedProfileName}</Text>
             <Text style={styles.subtitle}>{matchedType}</Text>
           </View>
@@ -63,9 +93,11 @@ const SwipeMatch = (props) => {
         <View style={styles.footerContainer}>
           <TouchableOpacity
             style={styles.chatButtonContainer}
-            onPress={props.chatOnPress}>
+            onPress={handleSendMessage}
+          >
             <Text
-              style={{ color: Colors.white, fontSize: 15, fontWeight: '500' }}>
+              style={{ color: Colors.white, fontSize: 15, fontWeight: '500' }}
+            >
               {chatButtonText}
             </Text>
             <Ionicons name="chatbubble-outline" size={20} color="white" />
@@ -73,7 +105,7 @@ const SwipeMatch = (props) => {
           <Button
             title="Later"
             color={Platform.OS === 'ios' ? Colors.placeholder : Colors.bg}
-            onPress={props.laterOnPress}
+            onPress={laterOnPress}
           />
         </View>
       </View>
@@ -112,7 +144,7 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     borderRadius: 100,
-    backgroundColor: Colors.orange,
+    backgroundColor: Colors.bgCard,
     marginBottom: 10,
   },
   profileName: {

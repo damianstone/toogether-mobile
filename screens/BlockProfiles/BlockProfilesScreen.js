@@ -61,7 +61,7 @@ const BlockProfilesScreen = (props) => {
     const unsubscribe = props.navigation.addListener('didFocus', () => {
       reload();
     });
-    return unsubscribe;
+    return () => unsubscribe;
   }, [reload]);
 
   const reload = useCallback(async () => {
@@ -111,12 +111,38 @@ const BlockProfilesScreen = (props) => {
           </View>
           <TouchableOpacity
             onPress={() => handleUnblock(item.id)}
-            style={styles.buttonContainer}>
+            style={styles.buttonContainer}
+          >
             <Text style={{ color: Colors.white, fontSize: 12 }}>Unblock</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.line} />
       </>
+    );
+  };
+
+  const renderEmptyList = () => {
+    return (
+      <View
+        style={{
+          backgroundColor: Colors.bg,
+          justifyContent: 'center',
+          alignItems: 'center',
+          width: '100%',
+          height: '100%',
+          textAlign: 'center',
+        }}
+      >
+        <View style={{ width: 130, height: 130 }}>
+          <Image
+            source={require('../../assets/images/empty-blocked-screen.png')}
+            style={{ resizeMode: 'contain', flex: 1, aspectRatio: 1 }}
+          />
+        </View>
+        <Text style={{ color: Colors.white, fontSize: 15 }}>
+          {`You haven’t blocked any user`}
+        </Text>
+      </View>
     );
   };
 
@@ -133,7 +159,9 @@ const BlockProfilesScreen = (props) => {
             tintColor={Colors.white}
           />
         }
+        contentContainerStyle={{ flexGrow: 1 }}
         renderItem={renderBlockedProfile}
+        ListEmptyComponent={renderEmptyList}
       />
     </View>
   );

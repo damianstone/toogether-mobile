@@ -35,20 +35,19 @@ const AuthStartScreen = (props) => {
       <StatusBar style="light" />
       <ScrollView
         style={styles.scrollview_style}
-        contentContainerStyle={styles.scrollview_content_container}>
-        <View>
-          <View style={styles.logoContainer}>
-            <Image
-              source={require('../../assets/images/logo-2.png')}
-              style={styles.logo}
-            />
-          </View>
-          <View style={styles.imageContainer}>
-            <Image
-              source={require('../../assets/images/radar.png')}
-              style={styles.image}
-            />
-          </View>
+        contentContainerStyle={styles.scrollview_content_container}
+      >
+        <View style={styles.logoContainer}>
+          <Image
+            source={require('../../assets/images/logo-2.png')}
+            style={styles.logo}
+          />
+        </View>
+        <View style={styles.imageContainer}>
+          <Image
+            source={require('../../assets/images/radar.png')}
+            style={styles.image}
+          />
         </View>
         <View style={styles.buttonsContainer}>
           <Button
@@ -69,7 +68,8 @@ const styles = StyleSheet.create({
   screen: {
     backgroundColor: Colors.bg,
     flex: 1,
-    justifyContent: 'space-around',
+    justifyContent: 'center',
+    flexDirection: 'column',
     height: '100%',
   },
 
@@ -88,13 +88,13 @@ const styles = StyleSheet.create({
   },
 
   scrollview_style: {
-    flexGrow: 0,
+    flexGrow: 1,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
   },
 
   logoContainer: {
-    marginTop: 40,
+    marginTop: 80,
     alignItems: 'center',
     width: '100%',
   },
@@ -114,7 +114,7 @@ const styles = StyleSheet.create({
 
   image: {
     width: '100%',
-    height: 400,
+    height: 450,
   },
 
   buttonsContainer: {

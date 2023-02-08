@@ -93,11 +93,11 @@ const SettingScreen = (props) => {
     ]);
   };
 
-  const shareApp = async () => {
+  const onShareApp = async () => {
     try {
       const result = await Share.share({
         message:
-          'Toogether App | The app to have fun and meet other students, download it using the following link ;) URL',
+          'Toogether App 🎉 | Find parties around you and meet other students, download it here ;) https://toogether.app/',
       });
       if (result.action === Share.sharedAction) {
         if (result.activityType) {
@@ -142,7 +142,7 @@ const SettingScreen = (props) => {
       case 'REDIRECT_TO_URL':
         return handleOpenLink(action.url);
       case 'SHARE_APP':
-        return shareApp();
+        return onShareApp();
       default:
         return null;
     }
@@ -173,7 +173,8 @@ const SettingScreen = (props) => {
           {SETTINGS_ACCOUNT_DATA.map((setting) => (
             <TouchableOpacity
               onPress={() => checkAction(setting.action)}
-              style={styles.settingView}>
+              style={styles.settingView}
+            >
               <View style={styles.settingIcon}>
                 {setting.ionicons && (
                   <Ionicons name={setting.icon} size={25} color="white" />
@@ -206,7 +207,8 @@ const SettingScreen = (props) => {
           {SETTINGS_APP_DATA.map((setting) => (
             <TouchableOpacity
               onPress={() => checkAction(setting.action)}
-              style={styles.settingView}>
+              style={styles.settingView}
+            >
               <View style={styles.settingIcon}>
                 {setting.ionicons && (
                   <Ionicons name={setting.icon} size={25} color="white" />

@@ -1,22 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import {
-  ActivityIndicator,
-  Image,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import React, { useEffect } from 'react';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import Constants from 'expo-constants';
 import Colors from '../../constants/Colors';
-import { listUserPhotos, getUserProfile } from '../../store/actions/user';
+import { getUserProfile } from '../../store/actions/user';
 
 import Loader from './Loader';
 
 const Avatar = (props) => {
+  const { onPress } = props;
   const dispatch = useDispatch();
-  const [error, setError] = useState(false);
 
   const userProfile = useSelector((state) => state.userGetProfile);
   const { loading, error: fetchError, data } = userProfile;
@@ -27,21 +19,30 @@ const Avatar = (props) => {
     }
   }, []);
 
+  const getInitials = (name) => {
+    const first = name ? name.charAt(0).toUpperCase() : 'N';
+    return first;
+  };
+
   return (
-    <TouchableOpacity onPress={props.onPress} style={styles.imgContainer}>
-      {loading && <ActivityIndicator />}
-      {data && data.photos.length > 0 && (
-        <Image source={{ uri: `${data.photos[0].image}` }} style={styles.img} />
-      )}
-      {data === undefined ||
-        (data?.photos.length === 0 && (
-          <View style={styles.avatar_view}>
-            <Text style={styles.avatar_initials}>DS</Text>
+    <TouchableOpacity onPress={onPress} style={styles.imgContainer}>
+      {loading ||
+        (typeof fetchError != 'undefined' && (
+          <View style={styles.error_avatar_view}>
+            <Loader />
           </View>
         ))}
-      {typeof fetchError != 'undefined' && (
-        <View style={styles.error_avatar_view}>
-          <Loader />
+      {data && data.photos.length > 0 && (
+        <View style={styles.avatar_view}>
+          <Image
+            source={{ uri: `${data.photos[0].image}` }}
+            style={styles.img}
+          />
+        </View>
+      )}
+      {data?.photos?.length === 0 && (
+        <View style={styles.avatar_view}>
+          <Text style={styles.avatar_initials}>{getInitials(data.name)}</Text>
         </View>
       )}
     </TouchableOpacity>
@@ -61,6 +62,7 @@ const styles = StyleSheet.create({
   img: {
     width: '100%',
     height: '100%',
+    backgroundColor: Colors.bgCard,
   },
 
   avatar_view: {

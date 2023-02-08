@@ -133,7 +133,8 @@ const JoinGroupScreen = (props) => {
         <ScrollView
           style={styles.scrollview_style}
           contentContainerStyle={styles.scrollview_content_container}
-          automaticallyAdjustKeyboardInsets>
+          automaticallyAdjustKeyboardInsets
+        >
           <View style={styles.imageContainer}>
             <Image
               source={require('../../assets/images/hand_join.png')}

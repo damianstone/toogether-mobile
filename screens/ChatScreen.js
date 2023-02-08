@@ -3,26 +3,23 @@ import {
   Text,
   View,
   Image,
+  Alert,
   Linking,
   FlatList,
   RefreshControl,
-  Button,
   StyleSheet,
+  Platform,
   TouchableOpacity,
-  ActivityIndicator,
 } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import { useDispatch, useSelector } from 'react-redux';
 import { listMatches, deleteMatch } from '../store/actions/swipe';
 import { checkServerError, check400Error } from '../utils/errors';
-import { Feather } from '@expo/vector-icons';
-import { LinearGradient } from 'expo-linear-gradient';
 
 import * as w from '../constants/swipe';
 import HeaderButtom from '../components/UI/HeaderButton';
-import Loader from '../components/UI/Loader';
+import ChatAvatar from '../components/ChatAvatar';
 import Colors from '../constants/Colors';
 
 const ChatScreen = (props) => {
@@ -43,28 +40,11 @@ const ChatScreen = (props) => {
     data: matchDeleted,
   } = deleteMatchReducer;
 
-  const [loading, setLoading] = useState(
-    !!(loadingListMatches || loadingDeleteMatch)
-  );
   const [refreshing, setRefreshing] = useState(
     !!(loadingListMatches || loadingDeleteMatch)
   );
-  const [userData, setUserData] = useState({});
-
-  const getAsyncData = async () => {
-    try {
-      const user = JSON.parse(await AsyncStorage.getItem('@userData'));
-
-      if (user !== null) {
-        setUserData(user);
-      }
-    } catch (e) {
-      console.log(e);
-    }
-  };
 
   useEffect(() => {
-    getAsyncData();
     dispatch(listMatches());
   }, []);
 
@@ -85,7 +65,7 @@ const ChatScreen = (props) => {
     const unsubscribe = props.navigation.addListener('didFocus', () => {
       reload();
     });
-    return unsubscribe;
+    return () => unsubscribe;
   }, [reload]);
 
   const reload = useCallback(async () => {
@@ -113,16 +93,17 @@ const ChatScreen = (props) => {
     }
   }, []);
 
-  const handleShowProfile = (profile, isGroup) => {
-    props.navigation.navigate('SwipeProfile', {
-      profile: profile,
-      isGroup: isGroup,
-    });
+  const handleShowProfile = (profile, isInGroup) => {
+    console.log('chat screen ->', isInGroup);
+    if (profile) {
+      props.navigation.navigate('SwipeProfile', {
+        mainProfileId: profile.id,
+        isInGroup: isInGroup,
+      });
+    }
   };
 
   const handleDeleteMatch = async (matchId) => {
-    console.log('MATCH ID -> ', matchId);
-
     if (matchId) {
       await dispatch(deleteMatch(matchId));
     }
@@ -158,50 +139,31 @@ const ChatScreen = (props) => {
     );
   };
 
-  const getInitials = (name) => {
-    const first = name ? name.charAt(0).toUpperCase() : 'N';
-    return first;
-  };
-
-  const getMatchedProfile = (match) => {
-    if (match?.profile1.id === userData?.id) {
-      return match.profile2;
-    }
-    return match?.profile1;
-  };
-
   const renderMatch = ({ item, index }) => {
-    if (!userData?.id) {
-      return;
-    }
-
-    const matchedProfile = getMatchedProfile(item);
+    const matchedData = item.matched_data;
+    const matchedProfile = item.matched_data.matched_profile;
 
     return (
       <View style={styles.matchContainer}>
         <View style={styles.rowContainer}>
-          {matchedProfile.photos.length > 0 ? (
-            <TouchableOpacity
-              style={styles.imageContainer}
-              onPress={() => handleShowProfile(matchedProfile, false)}>
-              <Image
-                source={{ uri: `${matchedProfile.photos[0].image}` }}
-                style={styles.img}
-              />
-            </TouchableOpacity>
-          ) : (
-            <TouchableOpacity
-              style={styles.noPhotoContainer}
-              onPress={() => handleShowProfile(matchedProfile, false)}>
-              <Text style={{ color: Colors.white, fontSize: 10 }}>
-                {getInitials(matchedProfile.name)}
-              </Text>
-            </TouchableOpacity>
-          )}
-
+          <ChatAvatar
+            onShowProfile={() =>
+              handleShowProfile(matchedProfile, matchedData.is_group_match)
+            }
+            matchedProfile={matchedProfile}
+            matchedData={matchedData}
+            isInGroup={matchedData.is_group_match}
+            matchedProfileHasPhoto={matchedProfile.photos.length > 0}
+            matchedProfilePhoto={
+              matchedProfile.photos.length > 0
+                ? matchedProfile.photos[0].image
+                : null
+            }
+          />
           <TouchableOpacity
             onPress={() => onOpenActionSheet(matchedProfile, item.id)}
-            style={styles.cardContainer}>
+            style={styles.cardContainer}
+          >
             <Text style={styles.instagramText}>
               {matchedProfile.instagram
                 ? `@ ${matchedProfile.instagram}`
@@ -210,7 +172,8 @@ const ChatScreen = (props) => {
             {matchedProfile.instagram ? (
               <TouchableOpacity
                 onPress={() => handleInstagram(matchedProfile.instagram)}
-                style={styles.sendButtonContainer}>
+                style={styles.sendButtonContainer}
+              >
                 <Image
                   source={require('../assets/images/send-button.png')}
                   style={styles.img}
@@ -233,7 +196,8 @@ const ChatScreen = (props) => {
           width: '100%',
           height: '100%',
           textAlign: 'center',
-        }}>
+        }}
+      >
         <View style={{ width: 200, height: 200 }}>
           <Image
             source={require('../assets/images/no-chats.png')}
@@ -270,9 +234,10 @@ const ChatScreen = (props) => {
           justifyContent: 'flex-end',
           marginBottom: 36,
           alignItems: 'center',
-        }}>
+        }}
+      >
         <Text style={{ color: Colors.white }}>
-          Toogether chat in the next update
+          Real-time chat in the next update
         </Text>
       </View>
     </View>
@@ -316,31 +281,6 @@ const styles = StyleSheet.create({
     width: '80%',
   },
 
-  imageContainer: {
-    width: 60,
-    height: 60,
-    borderRadius: 100,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginRight: 20,
-  },
-
-  img: {
-    width: '100%',
-    height: '100%',
-    borderRadius: 100,
-  },
-
-  noPhotoContainer: {
-    width: 45,
-    height: 45,
-    borderRadius: 100,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: Colors.orange,
-    marginRight: 20,
-  },
-
   cardContainer: {
     flexDirection: 'row',
     backgroundColor: Colors.bgCard,
@@ -369,6 +309,12 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 
+  img: {
+    width: '100%',
+    height: '100%',
+    borderRadius: 100,
+  },
+
   avatar_view: {
     backgroundColor: Colors.orange,
     width: '100%',
@@ -376,6 +322,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+
   avatar_initials: {
     color: Colors.white,
     fontSize: 18,

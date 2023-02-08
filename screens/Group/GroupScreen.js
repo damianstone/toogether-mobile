@@ -225,7 +225,7 @@ const GroupScreen = (props) => {
           text: 'Cancel',
         },
         {
-          text: 'Leave',
+          text: 'Delete',
           onPress: () => {
             if (isOwner && storedGroupData?.id) {
               dispatch(deleteGroup(storedGroupData.id));
@@ -348,7 +348,8 @@ const GroupScreen = (props) => {
           onRefresh={loadGroup}
           tintColor={Colors.white}
         />
-      }>
+      }
+    >
       <View style={{ ...styles.action_view, ...HEIGHT_ACTION_CONTAINER }}>
         <View style={styles.profile_photo_container}>
           {!group && <Loader />}

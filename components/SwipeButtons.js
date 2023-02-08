@@ -6,13 +6,15 @@ import tw from 'tailwind-rn';
 import Colors from '../constants/Colors';
 
 const SwipeButtons = (props) => {
+  const { onLeft, onRewind, onRight, rewind } = props;
+
   return (
     <View style={[tw('flex flex-row justify-evenly pb-4'), styles.screen]}>
-      <TouchableOpacity onPress={props.onLeft} style={styles.button1}>
+      <TouchableOpacity onPress={onLeft} style={styles.button1}>
         <Entypo color="white" name="cross" size={24} />
       </TouchableOpacity>
-      {props.rewind ? (
-        <TouchableOpacity onPress={props.onRewind} style={styles.button3}>
+      {rewind ? (
+        <TouchableOpacity onPress={onRewind} style={styles.button3}>
           <MaterialCommunityIcons
             name="backup-restore"
             size={24}
@@ -20,7 +22,7 @@ const SwipeButtons = (props) => {
           />
         </TouchableOpacity>
       ) : null}
-      <TouchableOpacity onPress={props.onRight} style={styles.button2}>
+      <TouchableOpacity onPress={onRight} style={styles.button2}>
         <Entypo color="white" name="heart" size={24} />
       </TouchableOpacity>
     </View>

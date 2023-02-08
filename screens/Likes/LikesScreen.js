@@ -11,6 +11,7 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import { listLikes, removeLike, like } from '../../store/actions/swipe';
 import { checkServerError } from '../../utils/errors';
+import { exist, isMatch, alreadyMatched } from '../../utils/checks';
 
 import * as w from '../../constants/swipe';
 import LikeCard from '../../components/LikeCard';
@@ -58,25 +59,33 @@ const LikesScreen = (props) => {
       checkServerError(likeError);
       dispatch({ type: w.LIKE_PROFILE_RESET });
     }
-  }, [dispatch, removeLikeError, likeError, likes]);
+  }, [dispatch, removeLikeError, likeError]);
 
   useEffect(() => {
     if (removeLikeSuccess) {
       dispatch({ type: w.REMOVE_LIKE_RESET });
       dispatch(listLikes());
     }
-    if (likeData) {
+  }, [dispatch, removeLikeSuccess]);
+
+  useEffect(() => {
+    if (isMatch(likeData)) {
+      props.navigation.navigate('SwipeMatch', {
+        likeData: likeData,
+      });
+    } else if (alreadyMatched(likeData)) {
+      return props.navigation.navigate('Chat');
+    } else {
       dispatch({ type: w.LIKE_PROFILE_RESET });
-      dispatch(listLikes());
     }
-  }, [removeLikeSuccess]);
+  }, [dispatch, likeData?.details]);
 
   // add listener to fetch the user and re fetch it
   useEffect(() => {
     const unsubscribe = props.navigation.addListener('didFocus', () => {
       reload();
     });
-    return unsubscribe;
+    return () => unsubscribe;
   }, [reload]);
 
   const reload = useCallback(async () => {
@@ -96,10 +105,15 @@ const LikesScreen = (props) => {
   //   });
   // };
 
-  const handleRemoveLike = async (profileId) => {
+  const handleRemoveLike = async (profileId, alreadyMatched) => {
     if (profileId) {
       await dispatch(removeLike(profileId));
     }
+
+    if (removeLikeSuccess && alreadyMatched) {
+      props.navigation.navigate('Chat');
+    }
+
     if (removeLikeSuccess) {
       return dispatch(listLikes());
     }
@@ -111,6 +125,10 @@ const LikesScreen = (props) => {
       await dispatch(like(profileId));
     }
     if (likeData) {
+      console.log('like data success');
+      if (alreadyMatched(likeData)) {
+        handleRemoveLike(profileId, true);
+      }
       return dispatch(listLikes());
     }
     return null;
@@ -164,7 +182,8 @@ const LikesScreen = (props) => {
           width: '100%',
           height: '100%',
           textAlign: 'center',
-        }}>
+        }}
+      >
         <View style={{ width: 200, height: 200 }}>
           <Image
             source={require('../../assets/images/no-likes.png')}

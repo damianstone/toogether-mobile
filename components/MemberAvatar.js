@@ -4,25 +4,22 @@ import Constants from 'expo-constants';
 import Colors from '../constants/Colors';
 
 const MemberAvatar = (props) => {
+  const { onPress, photos, name } = props;
+
   const getInitials = (name) => {
     const first = name ? name.charAt(0).toUpperCase() : 'N';
     return first;
   };
 
   return (
-    <TouchableOpacity onPress={props.onPress} style={styles.imgContainer}>
-      {props.photos && props.photos.length >= 1 && (
-        <Image
-          source={{ uri: `${props.photos[0].image}` }}
-          style={styles.img}
-        />
+    <TouchableOpacity onPress={onPress} style={styles.imgContainer}>
+      {photos && photos.length >= 1 && (
+        <Image source={{ uri: `${photos[0].image}` }} style={styles.img} />
       )}
-      {!props.photos ||
-        (props.photos.length === 0 && (
+      {!photos ||
+        (photos.length === 0 && (
           <View style={styles.avatar_view}>
-            <Text style={styles.avatar_initials}>
-              {getInitials(props.name)}
-            </Text>
+            <Text style={styles.avatar_initials}>{getInitials(name)}</Text>
           </View>
         ))}
     </TouchableOpacity>
