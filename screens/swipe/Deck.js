@@ -17,9 +17,6 @@ import styles from './styles';
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
-// TODO: error: cuando cambio el estado a showMatch true no aparece el pop y tengo que hacer un manual
-//reload para que funcione
-
 const Deck = (props) => {
   const { swipeProfiles, showProfileHandler, setShowMode, topProfile } = props;
   const dispatch = useDispatch();
@@ -153,6 +150,7 @@ const Deck = (props) => {
           members={exist(profile.members) ? profile.members : null}
           profile={profile}
           showProfileHandler={showProfileHandler}
+          showProfileRestricted={false}
         />
       );
     }

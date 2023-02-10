@@ -21,7 +21,7 @@ const SwipeCard = (props) => {
     isGroup,
     profile,
     members,
-    showProfileHandler, // function to open the open
+    showProfileHandler, // function to open the profile
     showProfileRestricted, // restriction to open a specific profile
     allowedProfileId, // specific profile that can be open
   } = props;
@@ -104,8 +104,7 @@ const SwipeCard = (props) => {
           removeClippedSubviews={false}
           showsButtons
           buttonWrapperStyle={{ color: Colors.placeholder }}
-          style={styles.wrapper}
-        >
+          style={styles.wrapper}>
           {isGroup ? (
             members.map((profile) => {
               return (
@@ -114,8 +113,7 @@ const SwipeCard = (props) => {
                   imageStyle={{ ...imageStyle }}
                   resizeMode="cover"
                   source={checkPhoto(profile)}
-                  style={styles.image}
-                >
+                  style={styles.image}>
                   <InfoCard
                     name={profile.name}
                     city={profile.city}
@@ -124,11 +122,10 @@ const SwipeCard = (props) => {
                     age={profile.age}
                     university={profile.university}
                   />
-                  {allowedProfileId === profile.id && (
+                  {showProfileRestricted && allowedProfileId === profile.id && (
                     <TouchableOpacity
                       onPress={() => showProfileHandler(profile, true)}
-                      style={styles.arrowContainer}
-                    >
+                      style={styles.arrowContainer}>
                       <Image
                         source={require('../assets/images/white-arrow-up.png')}
                         style={{ width: '100%', height: '100%' }}
@@ -144,8 +141,7 @@ const SwipeCard = (props) => {
               key={profile.id}
               resizeMode="cover"
               source={checkPhoto(profile)}
-              style={styles.image}
-            >
+              style={styles.image}>
               <InfoCard
                 name={profile.name}
                 city={profile.city}
@@ -156,8 +152,7 @@ const SwipeCard = (props) => {
               />
               <TouchableOpacity
                 onPress={() => showProfileHandler(profile, false)}
-                style={styles.arrowContainer}
-              >
+                style={styles.arrowContainer}>
                 <Image
                   source={require('../assets/images/white-arrow-up.png')}
                   style={{ width: '100%', height: '100%' }}

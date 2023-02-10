@@ -473,7 +473,6 @@ MyProfileScreen.navigationOptions = (navData) => {
             Platform.OS === 'android' ? 'settings-sharp' : 'settings-sharp'
           }
           onPress={() => {
-            // go to chat screen
             navData.navigation.navigate('Setting');
           }}
           title="Back arrow"
@@ -487,7 +486,6 @@ MyProfileScreen.navigationOptions = (navData) => {
             Platform.OS === 'android' ? 'ios-arrow-back' : 'ios-arrow-back'
           }
           onPress={() => {
-            // go to chat screen
             navData.navigation.navigate('Swipe');
           }}
           title="Back arrow"

@@ -329,7 +329,6 @@ EditProfileScreen.navigationOptions = (navData) => {
             Platform.OS === 'android' ? 'ios-arrow-back' : 'ios-arrow-back'
           }
           onPress={() => {
-            // go to chat screen
             navData.navigation.navigate('MyProfile');
           }}
           title="Back arrow"

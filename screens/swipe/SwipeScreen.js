@@ -21,7 +21,6 @@ import HeaderButtom from '../../components/UI/HeaderButton';
 import ActivityModal from '../../components/UI/ActivityModal';
 import Avatar from '../../components/UI/Avatar';
 import SwipeError from '../../components/SwipeError';
-import Colors from '../../constants/Colors';
 import styles from './styles';
 
 /*
@@ -85,7 +84,7 @@ const SwipeScreen = (props) => {
     );
   }, [swipe, errorSwipe, topProfile, postLocationError]);
 
-  // TODO: fix render when enter the screen
+  // TODO: add listener so then reload swipe for determinates screen transitions
 
   // add listener to fetch the user and re fetch it
   // useEffect(() => {
@@ -107,7 +106,7 @@ const SwipeScreen = (props) => {
     // reset the top profile so dont show it over and over
     props.navigation.setParams({ topProfile: null });
 
-    // function that determine which screen (show mode) we should show
+    // function that determine which screen we should show
     setShowMode(
       getShowMode(
         showMode,
@@ -216,6 +215,8 @@ const SwipeScreen = (props) => {
       </SafeAreaView>
     );
   }
+
+  console.log(showMode, swipe, errorSwipe);
 
   return (
     <SafeAreaView style={styles.safe}>
