@@ -85,7 +85,7 @@ The conventions or general rules for the structure of this project are the follo
 - Folders or files that export objects or components in capital letters
 - For all this project we use `arrow functions`, `functional components` and `react hooks`
 - To save states or information coming from the backend we use redux and the `Flux Architecture`
-- `State` y `props` must be destructured before used
+- `State` and `props` must be destructured before used
 - More conventions and patters can be found looking the code
 
 ### Folders
