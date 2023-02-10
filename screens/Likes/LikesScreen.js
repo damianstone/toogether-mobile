@@ -19,6 +19,8 @@ import Avatar from '../../components/UI/Avatar';
 import Loader from '../../components/UI/Loader';
 import Colors from '../../constants/Colors';
 
+// TODO: handle already match in a better and more clear way
+
 const LikesScreen = (props) => {
   const dispatch = useDispatch();
   const [refreshing, setRefreshing] = useState(
@@ -61,6 +63,7 @@ const LikesScreen = (props) => {
     }
   }, [dispatch, removeLikeError, likeError]);
 
+  // * this works perfect
   useEffect(() => {
     if (removeLikeSuccess) {
       dispatch({ type: w.REMOVE_LIKE_RESET });
@@ -68,6 +71,7 @@ const LikesScreen = (props) => {
     }
   }, [dispatch, removeLikeSuccess]);
 
+  // TODO: clear already match
   useEffect(() => {
     if (isMatch(likeData)) {
       props.navigation.navigate('SwipeMatch', {
@@ -80,7 +84,6 @@ const LikesScreen = (props) => {
     }
   }, [dispatch, likeData?.details]);
 
-  // add listener to fetch the user and re fetch it
   useEffect(() => {
     const unsubscribe = props.navigation.addListener('didFocus', () => {
       reload();
@@ -105,6 +108,8 @@ const LikesScreen = (props) => {
   //   });
   // };
 
+
+  // TODO: separate the action of remove like and alread match
   const handleRemoveLike = async (profileId, alreadyMatched) => {
     if (profileId) {
       await dispatch(removeLike(profileId));
@@ -120,12 +125,12 @@ const LikesScreen = (props) => {
     return null;
   };
 
+  // TODO: make this more clean
   const handleLike = async (profileId) => {
     if (profileId) {
       await dispatch(like(profileId));
     }
     if (likeData) {
-      console.log('like data success');
       if (alreadyMatched(likeData)) {
         handleRemoveLike(profileId, true);
       }
@@ -182,8 +187,7 @@ const LikesScreen = (props) => {
           width: '100%',
           height: '100%',
           textAlign: 'center',
-        }}
-      >
+        }}>
         <View style={{ width: 200, height: 200 }}>
           <Image
             source={require('../../assets/images/no-likes.png')}
