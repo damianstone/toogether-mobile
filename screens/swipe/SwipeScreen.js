@@ -7,6 +7,7 @@ import {
   SafeAreaView,
   Alert,
 } from 'react-native';
+import { useNetInfo } from '@react-native-community/netinfo';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { withNavigation, withNavigationFocus } from 'react-navigation';
 import { StatusBar } from 'expo-status-bar';
@@ -36,6 +37,7 @@ const SwipeScreen = (props) => {
   const topProfile = props.navigation.getParam('topProfile');
 
   const dispatch = useDispatch();
+  const netInfo = useNetInfo();
   const [showMode, setShowMode] = useState(2);
   const [localLoading, setLocalLoading] = useState(false);
   const permissionGranted = verifyLocationPermissions();
@@ -86,16 +88,6 @@ const SwipeScreen = (props) => {
     }
   }, [swipe, loadingSwipe, errorSwipe, topProfile, postLocationError]);
 
-  // TODO: add listener so then reload swipe for determinates screen transitions
-
-  // add listener to fetch the user and re fetch it
-  // useEffect(() => {
-  //   const unsubscribe = props.navigation.addListener('focus', () => {
-  //     reload();
-  //   });
-  //   return unsubscribe;
-  // }, [reload]);
-
   const reload = useCallback(async () => {
     setLocalLoading(true);
     try {
@@ -104,22 +96,8 @@ const SwipeScreen = (props) => {
     } catch (err) {
       console.log(err);
     }
-
     // reset the top profile so dont show it over and over
     props.navigation.setParams({ topProfile: null });
-
-    // function that determine which screen we should show
-    setShowMode(
-      getShowMode(
-        showMode,
-        swipe,
-        errorSwipe,
-        null,
-        postLocationError,
-        permissionGranted
-      )
-    );
-
     setLocalLoading(false);
   }, [dispatch]);
 

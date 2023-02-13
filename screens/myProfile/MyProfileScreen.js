@@ -11,13 +11,11 @@ import {
   View,
   Alert,
   RefreshControl,
-  Linking,
 } from 'react-native';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { useDispatch, useSelector } from 'react-redux';
 import { withNavigationFocus } from 'react-navigation';
 import { useActionSheet } from '@expo/react-native-action-sheet';
-import Constants from 'expo-constants';
 import * as ImagePicker from 'expo-image-picker';
 import { LinearGradient } from 'expo-linear-gradient';
 import { MaterialIcons, Feather } from '@expo/vector-icons';
@@ -214,9 +212,6 @@ const MyProfileScreen = (props) => {
   };
 
   const handleOpenPreview = () => {
-    // TODO: pass the proper params
-    // * the user profile
-    // * is in group
     props.navigation.navigate('SwipeProfile', {
       mainProfileId: userProfile.id,
       isInGroup: userProfile.is_in_group,
