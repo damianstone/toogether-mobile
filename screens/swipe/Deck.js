@@ -73,9 +73,8 @@ const Deck = (props) => {
     return members[Math.floor(Math.random() * members.length)];
   };
 
-  // pasa como props al deck y del deck al swipecard
   const showProfileHandler = (profile, isGroup) => {
-    navigation.navigate('SwipeProfile', {
+    navigation.navigate('ProfileModal', {
       profile: profile,
       isGroup: isGroup,
     });

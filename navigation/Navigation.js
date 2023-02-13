@@ -12,7 +12,7 @@ import {
 import Colors from '../constants/Colors';
 
 import SwipeProfileScreen from '../screens/SwipeProfile/SwipeProfileScreen';
-import ProfileScreen from '../screens/SwipeProfile/ProfileScreen';
+import ProfileModalScreen from '../screens/SwipeProfile/ProfileModalScreen';
 import MatchScreen from '../screens/Match/MatchScreen';
 
 import StartupScreen from '../screens/StartupScreen';
@@ -101,7 +101,7 @@ const MyProfileNavigator = createStackNavigator(
 const MyProfileNavigatorWithModal = createStackNavigator(
   {
     MyProfile: MyProfileNavigator,
-    Profile: ProfileScreen,
+    ProfileModal: ProfileModalScreen
   },
   {
     mode: 'modal',
@@ -130,7 +130,7 @@ const ChatNavigator = createStackNavigator(
 const MatchNavigator = createStackNavigator(
   {
     Chat: ChatNavigator,
-    Profile: ProfileScreen,
+    ProfileModal: ProfileModalScreen
   },
   {
     mode: 'modal',
@@ -279,7 +279,7 @@ const ToogetherTab =
 const HomeNavigator = createStackNavigator(
   {
     Main: ToogetherTab,
-    SwipeProfile: ProfileScreen,
+    ProfileModal: ProfileModalScreen,
     SwipeMatch: MatchScreen,
   },
   {

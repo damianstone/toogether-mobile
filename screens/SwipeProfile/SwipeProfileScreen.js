@@ -48,7 +48,7 @@ const SwipeProfileScreen = (props) => {
 
   const showProfile = (profile, isGroup) => {
     if (profile.id === mainProfileId) {
-      props.navigation.navigate('Profile', {
+      props.navigation.navigate('ProfileModal', {
         profile: profile,
         isGroup: isGroup,
         preview: true,

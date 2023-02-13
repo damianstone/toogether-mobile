@@ -23,11 +23,13 @@ const ProfileScreen = (props) => {
     data: blockData,
   } = blockProfileReducer;
 
+  // TODO: change current index after like
   const handleLike = (profileId) => {
     dispatch(like(profileId));
     props.navigation.goBack();
   };
 
+  // TODO: change current index after dislike
   const handleDislike = () => {
     props.navigation.goBack();
   };
