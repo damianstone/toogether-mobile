@@ -21,7 +21,7 @@ const SwipeCard = (props) => {
     isGroup,
     profile,
     members,
-    showProfileHandler, // function to open the open
+    showProfileHandler, // function to open the profile
     showProfileRestricted, // restriction to open a specific profile
     allowedProfileId, // specific profile that can be open
   } = props;
@@ -124,7 +124,7 @@ const SwipeCard = (props) => {
                     age={profile.age}
                     university={profile.university}
                   />
-                  {allowedProfileId === profile.id && (
+                  {showProfileRestricted && allowedProfileId === profile.id && (
                     <TouchableOpacity
                       onPress={() => showProfileHandler(profile, true)}
                       style={styles.arrowContainer}

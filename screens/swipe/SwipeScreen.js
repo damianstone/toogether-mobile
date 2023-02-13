@@ -7,6 +7,7 @@ import {
   SafeAreaView,
   Alert,
 } from 'react-native';
+import { useNetInfo } from '@react-native-community/netinfo';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { withNavigation, withNavigationFocus } from 'react-navigation';
 import { StatusBar } from 'expo-status-bar';
@@ -21,22 +22,22 @@ import HeaderButtom from '../../components/UI/HeaderButton';
 import ActivityModal from '../../components/UI/ActivityModal';
 import Avatar from '../../components/UI/Avatar';
 import SwipeError from '../../components/SwipeError';
-import Colors from '../../constants/Colors';
 import styles from './styles';
 
 /*
-  showMode
+  * show modes:
   -1 = error location
-  0 = not found
+  0 = cards not found
   1 = all cards swiped
-  2 = swipe
-  3= match
+  2 = swipe deck
+  3 = its a match
 */
 
 const SwipeScreen = (props) => {
   const topProfile = props.navigation.getParam('topProfile');
 
   const dispatch = useDispatch();
+  const netInfo = useNetInfo();
   const [showMode, setShowMode] = useState(2);
   const [localLoading, setLocalLoading] = useState(false);
   const permissionGranted = verifyLocationPermissions();
@@ -73,27 +74,19 @@ const SwipeScreen = (props) => {
   }, [dispatch]);
 
   useEffect(() => {
-    setShowMode(
-      getShowMode(
-        showMode,
-        swipe,
-        errorSwipe,
-        topProfile,
-        postLocationError,
-        permissionGranted
-      )
-    );
-  }, [swipe, errorSwipe, topProfile, postLocationError]);
-
-  // TODO: fix render when enter the screen
-
-  // add listener to fetch the user and re fetch it
-  // useEffect(() => {
-  //   const unsubscribe = props.navigation.addListener('focus', () => {
-  //     reload();
-  //   });
-  //   return unsubscribe;
-  // }, [reload]);
+    if (!loadingSwipe) {
+      setShowMode(
+        getShowMode(
+          showMode,
+          swipe,
+          errorSwipe,
+          topProfile,
+          postLocationError,
+          permissionGranted
+        )
+      );
+    }
+  }, [swipe, loadingSwipe, errorSwipe, topProfile, postLocationError]);
 
   const reload = useCallback(async () => {
     setLocalLoading(true);
@@ -103,32 +96,10 @@ const SwipeScreen = (props) => {
     } catch (err) {
       console.log(err);
     }
-
     // reset the top profile so dont show it over and over
     props.navigation.setParams({ topProfile: null });
-
-    // function that determine which screen (show mode) we should show
-    setShowMode(
-      getShowMode(
-        showMode,
-        swipe,
-        errorSwipe,
-        null,
-        postLocationError,
-        permissionGranted
-      )
-    );
-
     setLocalLoading(false);
   }, [dispatch]);
-
-  // pasa como props al deck y del deck al swipecard
-  const showProfileHandler = (profile, isGroup) => {
-    props.navigation.navigate('SwipeProfile', {
-      profile: profile,
-      isGroup: isGroup,
-    });
-  };
 
   const showMatchHandler = () => {
     props.navigation.navigate('SwipeMatch');
@@ -217,6 +188,8 @@ const SwipeScreen = (props) => {
     );
   }
 
+  console.log('ABOVE-> ', showMode, swipe?.results.length);
+
   return (
     <SafeAreaView style={styles.safe}>
       <StatusBar style="light" />
@@ -235,7 +208,6 @@ const SwipeScreen = (props) => {
             showMode={showMode}
             renderAllCardSwiped={renderAllCardSwiped}
             navigation={props.navigation}
-            showProfileHandler={showProfileHandler}
             showMatchHandler={showMatchHandler}
           />
         )}

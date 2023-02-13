@@ -8,12 +8,14 @@ import {
   Text,
   Button,
 } from 'react-native';
+import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { useDispatch, useSelector } from 'react-redux';
 import { listLikes, removeLike, like } from '../../store/actions/swipe';
 import { checkServerError } from '../../utils/errors';
 import { exist, isMatch, alreadyMatched } from '../../utils/checks';
 
 import * as w from '../../constants/swipe';
+import HeaderButtom from '../../components/UI/HeaderButton';
 import LikeCard from '../../components/LikeCard';
 import Avatar from '../../components/UI/Avatar';
 import Loader from '../../components/UI/Loader';
@@ -108,7 +110,6 @@ const LikesScreen = (props) => {
   //   });
   // };
 
-
   // TODO: separate the action of remove like and alread match
   const handleRemoveLike = async (profileId, alreadyMatched) => {
     if (profileId) {
@@ -187,7 +188,8 @@ const LikesScreen = (props) => {
           width: '100%',
           height: '100%',
           textAlign: 'center',
-        }}>
+        }}
+      >
         <View style={{ width: 200, height: 200 }}>
           <Image
             source={require('../../assets/images/no-likes.png')}
@@ -236,6 +238,21 @@ LikesScreen.navigationOptions = (navData) => {
           navData.navigation.navigate('MyProfile');
         }}
       />
+    ),
+    headerRight: () => (
+      <HeaderButtons HeaderButtonComponent={HeaderButtom}>
+        <Item
+          title="Chat"
+          iconName={
+            Platform.OS === 'android'
+              ? 'chatbubble-outline'
+              : 'chatbubble-outline'
+          }
+          onPress={() => {
+            navData.navigation.navigate('Match');
+          }}
+        />
+      </HeaderButtons>
     ),
   };
 };

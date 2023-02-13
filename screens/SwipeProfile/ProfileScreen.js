@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { StyleSheet, View, ImageBackground, Alert } from 'react-native';
-import { withNavigationFocus } from 'react-navigation';
 import Swiper from 'react-native-swiper';
 import { useDispatch, useSelector } from 'react-redux';
 import { blockProfile } from '../../store/actions/block';
+import { like } from '../../store/actions/swipe';
 import { checkServerError, check400Error } from '../../utils/errors';
 import * as b from '../../constants/block';
 
@@ -23,9 +23,9 @@ const ProfileScreen = (props) => {
     data: blockData,
   } = blockProfileReducer;
 
-  const handleLike = () => {
-    // TODO: send like
-    // TODO: close the modal
+  const handleLike = (profileId) => {
+    dispatch(like(profileId));
+    props.navigation.goBack();
   };
 
   const handleDislike = () => {
@@ -135,7 +135,7 @@ const ProfileScreen = (props) => {
         </Swiper>
         <DetailBottomSheet
           onClose={handleDislike}
-          handleLike={handleLike}
+          handleLike={() => handleLike(profile.id)}
           openAlert={openAlert}
           isGroup={isGroup}
           preview={preview}

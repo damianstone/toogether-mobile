@@ -94,7 +94,6 @@ const ChatScreen = (props) => {
   }, []);
 
   const handleShowProfile = (profile, isInGroup) => {
-    console.log('chat screen ->', isInGroup);
     if (profile) {
       props.navigation.navigate('SwipeProfile', {
         mainProfileId: profile.id,
@@ -254,7 +253,6 @@ ChatScreen.navigationOptions = (navData) => {
             Platform.OS === 'android' ? 'ios-arrow-back' : 'ios-arrow-back'
           }
           onPress={() => {
-            // go to chat screen
             navData.navigation.navigate('Swipe');
           }}
           title="Back arrow"

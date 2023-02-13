@@ -7,7 +7,6 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import Constants from 'expo-constants';
 import { Entypo } from '@expo/vector-icons';
 
 import Colors from '../constants/Colors';
@@ -52,11 +51,6 @@ const LikeCard = (props) => {
       flexDirection: 'row',
     };
   }
-
-  const getInitials = (name) => {
-    const first = name ? name.charAt(0).toUpperCase() : 'N';
-    return first;
-  };
 
   const getCardInfo = () => {
     let n = name;
