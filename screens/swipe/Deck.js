@@ -18,7 +18,7 @@ const SCREEN_HEIGHT = Dimensions.get('window').height;
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
 const Deck = (props) => {
-  const { swipeProfiles, showProfileHandler, setShowMode, topProfile } = props;
+  const { navigation, swipeProfiles, setShowMode, topProfile } = props;
   const dispatch = useDispatch();
   const swipeRef = useRef();
   const currentDeckIndex = useRef(0);
@@ -73,7 +73,15 @@ const Deck = (props) => {
     return members[Math.floor(Math.random() * members.length)];
   };
 
-  // * Swiper actions
+  // pasa como props al deck y del deck al swipecard
+  const showProfileHandler = (profile, isGroup) => {
+    navigation.navigate('SwipeProfile', {
+      profile: profile,
+      isGroup: isGroup,
+    });
+  };
+
+  // * Swiper actions (swipe to the left / right)
   const handleLike = async (index) => {
     // liked profile can be a group or a single member
     const likedProfile = swipeCards[index];
@@ -141,7 +149,7 @@ const Deck = (props) => {
   };
 
   // render a card with the profiles (single and group)
-  const renderCard = (profile) => {
+  const renderCard = (profile, cardIndex) => {
     if (exist(profile)) {
       return (
         <SwipeCard

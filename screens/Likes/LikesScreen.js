@@ -110,7 +110,6 @@ const LikesScreen = (props) => {
   //   });
   // };
 
-
   // TODO: separate the action of remove like and alread match
   const handleRemoveLike = async (profileId, alreadyMatched) => {
     if (profileId) {
@@ -189,7 +188,8 @@ const LikesScreen = (props) => {
           width: '100%',
           height: '100%',
           textAlign: 'center',
-        }}>
+        }}
+      >
         <View style={{ width: 200, height: 200 }}>
           <Image
             source={require('../../assets/images/no-likes.png')}

@@ -24,12 +24,12 @@ import SwipeError from '../../components/SwipeError';
 import styles from './styles';
 
 /*
-  showMode
+  * show modes:
   -1 = error location
-  0 = not found
+  0 = cards not found
   1 = all cards swiped
-  2 = swipe
-  3= match
+  2 = swipe deck
+  3 = its a match
 */
 
 const SwipeScreen = (props) => {
@@ -72,17 +72,19 @@ const SwipeScreen = (props) => {
   }, [dispatch]);
 
   useEffect(() => {
-    setShowMode(
-      getShowMode(
-        showMode,
-        swipe,
-        errorSwipe,
-        topProfile,
-        postLocationError,
-        permissionGranted
-      )
-    );
-  }, [swipe, errorSwipe, topProfile, postLocationError]);
+    if (!loadingSwipe) {
+      setShowMode(
+        getShowMode(
+          showMode,
+          swipe,
+          errorSwipe,
+          topProfile,
+          postLocationError,
+          permissionGranted
+        )
+      );
+    }
+  }, [swipe, loadingSwipe, errorSwipe, topProfile, postLocationError]);
 
   // TODO: add listener so then reload swipe for determinates screen transitions
 
@@ -120,14 +122,6 @@ const SwipeScreen = (props) => {
 
     setLocalLoading(false);
   }, [dispatch]);
-
-  // pasa como props al deck y del deck al swipecard
-  const showProfileHandler = (profile, isGroup) => {
-    props.navigation.navigate('SwipeProfile', {
-      profile: profile,
-      isGroup: isGroup,
-    });
-  };
 
   const showMatchHandler = () => {
     props.navigation.navigate('SwipeMatch');
@@ -216,7 +210,7 @@ const SwipeScreen = (props) => {
     );
   }
 
-  console.log(showMode, swipe, errorSwipe);
+  console.log('ABOVE-> ', showMode, swipe?.results.length);
 
   return (
     <SafeAreaView style={styles.safe}>
@@ -236,7 +230,6 @@ const SwipeScreen = (props) => {
             showMode={showMode}
             renderAllCardSwiped={renderAllCardSwiped}
             navigation={props.navigation}
-            showProfileHandler={showProfileHandler}
             showMatchHandler={showMatchHandler}
           />
         )}
