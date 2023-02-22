@@ -249,7 +249,9 @@ LikesScreen.navigationOptions = (navData) => {
               : 'chatbubble-outline'
           }
           onPress={() => {
-            navData.navigation.navigate('Match');
+            navData.navigation.navigate('Match', {
+              screen: 'Likes'
+            });
           }}
         />
       </HeaderButtons>

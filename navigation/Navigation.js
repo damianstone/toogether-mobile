@@ -101,7 +101,7 @@ const MyProfileNavigator = createStackNavigator(
 const MyProfileNavigatorWithModal = createStackNavigator(
   {
     MyProfile: MyProfileNavigator,
-    ProfileModal: ProfileModalScreen
+    ProfileModal: ProfileModalScreen,
   },
   {
     mode: 'modal',
@@ -127,14 +127,12 @@ const ChatNavigator = createStackNavigator(
   }
 );
 
-const MatchNavigator = createStackNavigator(
+const LikeNavigator = createStackNavigator(
   {
-    Chat: ChatNavigator,
-    ProfileModal: ProfileModalScreen
+    Likes: LikesScreen,
   },
   {
-    mode: 'modal',
-    headerMode: 'none',
+    defaultNavigationOptions: defaultNavOptions,
   }
 );
 
@@ -147,12 +145,14 @@ const SwipeNavigator = createStackNavigator(
   }
 );
 
-const LikeNavigator = createStackNavigator(
+const MatchNavigator = createStackNavigator(
   {
-    Likes: LikesScreen,
+    Chat: ChatNavigator,
+    ProfileModal: ProfileModalScreen,
   },
   {
-    defaultNavigationOptions: defaultNavOptions,
+    mode: 'modal',
+    headerMode: 'none',
   }
 );
 
