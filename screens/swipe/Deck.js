@@ -77,6 +77,7 @@ const Deck = (props) => {
     navigation.navigate('ProfileModal', {
       profile: profile,
       isGroup: isGroup,
+      currentRef: swipeRef.current
     });
   };
 
@@ -158,6 +159,7 @@ const Deck = (props) => {
           profile={profile}
           showProfileHandler={showProfileHandler}
           showProfileRestricted={false}
+          allowedProfileId={null}
         />
       );
     }

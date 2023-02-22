@@ -15,6 +15,7 @@ const ProfileScreen = (props) => {
   const profile = props.navigation.getParam('profile');
   const isGroup = props.navigation.getParam('isGroup');
   const preview = props.navigation.getParam('preview');
+  const currentRef = props.navigation.getParam('currentRef');
 
   const blockProfileReducer = useSelector((state) => state.blockProfile);
   const {
@@ -32,6 +33,9 @@ const ProfileScreen = (props) => {
   // TODO: change current index after dislike
   const handleDislike = () => {
     props.navigation.goBack();
+    if (currentRef) { // this can be undefine if its set as a previeww
+      currentRef.swipeRight();
+    }
   };
 
   const handleBlockProfile = () => {
@@ -113,8 +117,7 @@ const ProfileScreen = (props) => {
                 margin: 4,
               }}
             />
-          }
-        >
+          }>
           {profile?.photos?.length > 0 ? (
             profile.photos.map((photo) => (
               <ImageBackground
