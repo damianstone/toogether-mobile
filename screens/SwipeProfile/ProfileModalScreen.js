@@ -24,16 +24,21 @@ const ProfileScreen = (props) => {
     data: blockData,
   } = blockProfileReducer;
 
-  // TODO: change current index after like
-  const handleLike = (profileId) => {
-    dispatch(like(profileId));
+  const handleClose = () => {
     props.navigation.goBack();
   };
 
-  // TODO: change current index after dislike
+  const handleLike = async (profileId) => {
+    await dispatch(like(profileId));
+    props.navigation.goBack();
+    if (currentRef) {
+      currentRef.swipeRight();
+    }
+  };
+
   const handleDislike = () => {
     props.navigation.goBack();
-    if (currentRef) { // this can be undefine if its set as a previeww
+    if (currentRef) {
       currentRef.swipeRight();
     }
   };
@@ -139,8 +144,9 @@ const ProfileScreen = (props) => {
           )}
         </Swiper>
         <DetailBottomSheet
-          onClose={handleDislike}
+          handleClose={handleClose}
           handleLike={() => handleLike(profile.id)}
+          handleDislike={() => handleDislike(profile.id)}
           openAlert={openAlert}
           isGroup={isGroup}
           preview={preview}
