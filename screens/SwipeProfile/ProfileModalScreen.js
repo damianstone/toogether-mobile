@@ -15,6 +15,7 @@ const ProfileScreen = (props) => {
   const profile = props.navigation.getParam('profile');
   const isGroup = props.navigation.getParam('isGroup');
   const preview = props.navigation.getParam('preview');
+  const currentRef = props.navigation.getParam('currentRef');
 
   const blockProfileReducer = useSelector((state) => state.blockProfile);
   const {
@@ -23,13 +24,23 @@ const ProfileScreen = (props) => {
     data: blockData,
   } = blockProfileReducer;
 
-  const handleLike = (profileId) => {
-    dispatch(like(profileId));
+  const handleClose = () => {
     props.navigation.goBack();
+  };
+
+  const handleLike = async (profileId) => {
+    await dispatch(like(profileId));
+    props.navigation.goBack();
+    if (currentRef) {
+      currentRef.swipeRight();
+    }
   };
 
   const handleDislike = () => {
     props.navigation.goBack();
+    if (currentRef) {
+      currentRef.swipeRight();
+    }
   };
 
   const handleBlockProfile = () => {
@@ -111,8 +122,7 @@ const ProfileScreen = (props) => {
                 margin: 4,
               }}
             />
-          }
-        >
+          }>
           {profile?.photos?.length > 0 ? (
             profile.photos.map((photo) => (
               <ImageBackground
@@ -134,8 +144,9 @@ const ProfileScreen = (props) => {
           )}
         </Swiper>
         <DetailBottomSheet
-          onClose={handleDislike}
+          handleClose={handleClose}
           handleLike={() => handleLike(profile.id)}
+          handleDislike={() => handleDislike(profile.id)}
           openAlert={openAlert}
           isGroup={isGroup}
           preview={preview}

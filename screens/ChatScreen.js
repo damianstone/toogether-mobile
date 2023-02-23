@@ -253,7 +253,7 @@ ChatScreen.navigationOptions = (navData) => {
             Platform.OS === 'android' ? 'ios-arrow-back' : 'ios-arrow-back'
           }
           onPress={() => {
-            navData.navigation.navigate('Swipe');
+            navData.navigation.goBack(null);
           }}
           title="Back arrow"
         />
