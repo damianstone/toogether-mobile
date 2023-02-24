@@ -6,17 +6,15 @@ import {
   Text,
   View,
   Image,
-  Platform,
   ScrollView,
   ActivityIndicator,
   RefreshControl,
   Alert,
 } from 'react-native';
-import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useDispatch, useSelector } from 'react-redux';
 import { useActionSheet } from '@expo/react-native-action-sheet';
-import { NavigationActions, StackActions } from 'react-navigation';
+import { StackActions } from 'react-navigation';
 import {
   getGroup,
   leaveGroup,
@@ -24,12 +22,12 @@ import {
   deleteGroup,
 } from '../../store/actions/group';
 
-import HeaderButtom from '../../components/UI/HeaderButton';
 import Avatar from '../../components/UI/Avatar';
 import Loader from '../../components/UI/Loader';
 import ActionButton from '../../components/UI/ActionButton';
 import * as g from '../../constants/group';
 import { checkServerError, check400Error } from '../../utils/errors';
+import { getNameInitials, getCardName } from '../../utils/getMethods';
 
 import Colors from '../../constants/Colors';
 import ClipBoard from '../../components/UI/ClipBoard';
@@ -213,7 +211,7 @@ const GroupScreen = (props) => {
   }, [dispatch]);
 
   const handleNavigate = (screen) => {
-    return props.navigation.navigate(screen);
+    props.navigation.navigate(screen);
   };
 
   const handleDeleteGroup = () => {
@@ -302,18 +300,6 @@ const GroupScreen = (props) => {
     );
   };
 
-  const getInitials = (name) => {
-    const first = name ? name.charAt(0).toUpperCase() : 'N';
-    return first;
-  };
-
-  const getName = (name) => {
-    if (name) {
-      return name;
-    }
-    return 'Null';
-  };
-
   if (loadingDelete || loadingLeave) {
     return (
       <View style={styles.loadingScreen}>
@@ -332,7 +318,7 @@ const GroupScreen = (props) => {
             isOwner ? handleOpenActionSheet(item.id, item.name) : null
           }
         />
-        <Text style={styles.name_text}>{getName(item.name)}</Text>
+        <Text style={styles.name_text}>{getCardName(item.name)}</Text>
       </View>
     );
   };
@@ -365,7 +351,7 @@ const GroupScreen = (props) => {
             (group?.owner.photos.length === 0 && (
               <View style={styles.avatar_view}>
                 <Text style={styles.avatar_initials}>
-                  {getInitials(group.owner.name)}
+                  {getNameInitials(group.owner.name)}
                 </Text>
               </View>
             ))}

@@ -97,7 +97,6 @@ const MyProfileNavigator = createStackNavigator(
   }
 );
 
-// we wrap the my profile navigator with the modal we want to display as full screen
 const MyProfileNavigatorWithModal = createStackNavigator(
   {
     MyProfile: MyProfileNavigator,
@@ -156,7 +155,7 @@ const MatchNavigator = createStackNavigator(
   }
 );
 
-const GroupNavigator = createStackNavigator(
+const ConditionalGroupNavigator = createStackNavigator(
   {
     StartGroup: {
       screen: StartGroupScreen,
@@ -174,6 +173,32 @@ const GroupNavigator = createStackNavigator(
       },
     },
   },
+  {
+    defaultNavigationOptions: defaultNavOptions,
+  }
+);
+
+// assume userGroup is a boolean value received from the backend that determines
+// whether the user belongs to a specific group or not
+const userGroup = false;
+
+// Use the reverse method of the array to change the order of screens
+const screens = userGroup
+  ? ['JoinGroup', 'StartGroup', 'Group']
+  : ['Group', 'JoinGroup', 'StartGroup'];
+
+const GroupNavigator = createStackNavigator(
+  screens.reduceRight((acc, screenName) => {
+    const Component =
+      ConditionalGroupNavigator.router.getComponentForRouteName(screenName);
+    return {
+      ...acc,
+      [screenName]: {
+        screen: Component,
+        navigationOptions: Component.navigationOptions,
+      },
+    };
+  }, {}),
   {
     defaultNavigationOptions: defaultNavOptions,
   }
