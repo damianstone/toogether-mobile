@@ -118,7 +118,6 @@ const MyProfileScreen = (props) => {
     }
 
     if (errorRemovePhoto || errorPhotos || errorAddPhoto) {
-      console.log(errorAddPhoto);
       if (errorAddPhoto?.response?.status === 400) {
         check400Error(errorAddPhoto, 'image');
       } else {

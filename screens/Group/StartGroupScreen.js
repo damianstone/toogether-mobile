@@ -39,7 +39,6 @@ const StartGroupScreen = (props) => {
       group_id: dataCreate ? dataCreate.id : null,
     },
   });
-  // console.log('props navigation --> ', props.navigation);
 
   const getAsyncData = async () => {
     let group;
