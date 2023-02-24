@@ -1,7 +1,6 @@
-import React, { useEffect, useReducer, useCallback, useState } from 'react';
+import React, { useEffect, useReducer, useCallback } from 'react';
 import {
   View,
-  Text,
   Image,
   Platform,
   ScrollView,

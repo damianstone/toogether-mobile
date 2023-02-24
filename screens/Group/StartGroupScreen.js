@@ -33,13 +33,6 @@ const StartGroupScreen = (props) => {
     data: dataCreate,
   } = createGroupReducer;
 
-  const replaceAction = StackActions.replace({
-    routeName: 'Group',
-    params: {
-      group_id: dataCreate ? dataCreate.id : null,
-    },
-  });
-
   const getAsyncData = async () => {
     let group;
     try {
@@ -193,8 +186,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     width: '90%',
-    padding: 20,
-    paddingVertical: '7%',
+    padding: 3,
   },
 
   button: {
