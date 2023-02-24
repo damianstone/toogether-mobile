@@ -188,7 +188,7 @@ const SwipeScreen = (props) => {
     );
   }
 
-  console.log('Show mode & results ', showMode, swipe?.results.length);
+  // console.log('Show mode & results ', showMode, swipe?.results.length);
 
   return (
     <SafeAreaView style={styles.safe}>

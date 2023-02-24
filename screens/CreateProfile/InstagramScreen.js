@@ -104,7 +104,6 @@ const InstagramScreen = (props) => {
   );
 
   const handleInstagram = () => {
-    console.log(formIsValid);
     if (formIsValid) {
       dispatch(updateUserProfile(inputValues));
     } else {

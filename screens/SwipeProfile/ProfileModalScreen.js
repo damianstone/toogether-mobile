@@ -122,7 +122,8 @@ const ProfileScreen = (props) => {
                 margin: 4,
               }}
             />
-          }>
+          }
+        >
           {profile?.photos?.length > 0 ? (
             profile.photos.map((photo) => (
               <ImageBackground

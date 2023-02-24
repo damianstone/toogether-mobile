@@ -6,7 +6,6 @@ import {
   Image,
   RefreshControl,
   Text,
-  Button,
 } from 'react-native';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { useDispatch, useSelector } from 'react-redux';
@@ -20,8 +19,6 @@ import LikeCard from '../../components/LikeCard';
 import Avatar from '../../components/UI/Avatar';
 import Loader from '../../components/UI/Loader';
 import Colors from '../../constants/Colors';
-
-// TODO: handle already match in a better and more clear way
 
 const LikesScreen = (props) => {
   const dispatch = useDispatch();
@@ -65,7 +62,6 @@ const LikesScreen = (props) => {
     }
   }, [dispatch, removeLikeError, likeError]);
 
-  // * this works perfect
   useEffect(() => {
     if (removeLikeSuccess) {
       dispatch({ type: w.REMOVE_LIKE_RESET });
@@ -73,17 +69,18 @@ const LikesScreen = (props) => {
     }
   }, [dispatch, removeLikeSuccess]);
 
-  // TODO: clear already match
   useEffect(() => {
     if (isMatch(likeData)) {
       props.navigation.navigate('SwipeMatch', {
         likeData: likeData,
       });
-    } else if (alreadyMatched(likeData)) {
-      return props.navigation.navigate('Chat');
-    } else {
-      dispatch({ type: w.LIKE_PROFILE_RESET });
     }
+
+    if (alreadyMatched(likeData)) {
+      props.navigation.navigate('Chat');
+    }
+
+    dispatch({ type: w.LIKE_PROFILE_RESET });
   }, [dispatch, likeData?.details]);
 
   useEffect(() => {
@@ -103,39 +100,16 @@ const LikesScreen = (props) => {
     setRefreshing(false);
   }, [dispatch]);
 
-  // const showProfileHandler = (profile) => {
-  //   props.navigation.navigate('SwipeProfile', {
-  //     profile: profile,
-  //     isGroup: false,
-  //   });
-  // };
-
-  // TODO: separate the action of remove like and alread match
-  const handleRemoveLike = async (profileId, alreadyMatched) => {
+  const handleRemoveLike = async (profileId) => {
     if (profileId) {
       await dispatch(removeLike(profileId));
-    }
-
-    if (removeLikeSuccess && alreadyMatched) {
-      props.navigation.navigate('Chat');
-    }
-
-    if (removeLikeSuccess) {
-      return dispatch(listLikes());
     }
     return null;
   };
 
-  // TODO: make this more clean
   const handleLike = async (profileId) => {
     if (profileId) {
       await dispatch(like(profileId));
-    }
-    if (likeData) {
-      if (alreadyMatched(likeData)) {
-        handleRemoveLike(profileId, true);
-      }
-      return dispatch(listLikes());
     }
     return null;
   };
@@ -250,7 +224,7 @@ LikesScreen.navigationOptions = (navData) => {
           }
           onPress={() => {
             navData.navigation.navigate('Match', {
-              screen: 'Likes'
+              screen: 'Likes',
             });
           }}
         />

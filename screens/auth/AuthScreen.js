@@ -102,7 +102,6 @@ const AuthStartScreen = (props) => {
 
   // LOGIN
   useEffect(() => {
-    console.log({ ...loginError });
     if (loginError) {
       if (loginError?.response?.status === 400) {
         check400Error(loginError);

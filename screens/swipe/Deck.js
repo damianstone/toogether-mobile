@@ -77,7 +77,7 @@ const Deck = (props) => {
     navigation.navigate('ProfileModal', {
       profile: profile,
       isGroup: isGroup,
-      currentRef: swipeRef.current
+      currentRef: swipeRef.current,
     });
   };
 
