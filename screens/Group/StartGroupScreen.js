@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useContext } from 'react';
 import {
   Image,
   View,
@@ -10,10 +10,8 @@ import {
 } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { useDispatch, useSelector } from 'react-redux';
-import { StackActions } from 'react-navigation';
-
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { createGroup, resetData } from '../../store/actions/group';
+import { Context } from '../../context/ContextProvider';
+import { createGroup } from '../../store/actions/group';
 import { check400Error, checkServerError } from '../../utils/errors';
 
 import AuthButton from '../../components/UI/AuthButton';
@@ -22,10 +20,9 @@ import Colors from '../../constants/Colors';
 import * as g from '../../constants/group';
 
 const StartGroupScreen = (props) => {
-  const group_id = props.navigation.getParam('group_id');
-
-  const [storedGroupData, setStoredGroupData] = useState();
   const dispatch = useDispatch();
+  const { groupState, updateGroupState } = useContext(Context);
+
   const createGroupReducer = useSelector((state) => state.createGroup);
   const {
     loading: loadingCreate,
@@ -33,34 +30,7 @@ const StartGroupScreen = (props) => {
     data: dataCreate,
   } = createGroupReducer;
 
-  const getAsyncData = async () => {
-    let group;
-    try {
-      group = JSON.parse(await AsyncStorage.getItem('@groupData'));
-
-      if (group !== null) {
-        setStoredGroupData(group);
-      }
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
   useEffect(() => {
-    getAsyncData();
-  }, []);
-
-  useEffect(() => {
-    if (group_id === null) {
-      resetData();
-    }
-  });
-
-  useEffect(() => {
-    if (storedGroupData) {
-      props.navigation.replace('Group');
-    }
-
     if (errorCreate) {
       if (errorCreate?.response?.status === 400) {
         check400Error(errorCreate);
@@ -70,6 +40,7 @@ const StartGroupScreen = (props) => {
     }
 
     if (dataCreate) {
+      updateGroupState(dataCreate);
       props.navigation.replace('Group');
       dispatch({ type: g.CREATE_GROUP_RESET });
     }

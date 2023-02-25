@@ -7,15 +7,13 @@ import {
 import AppLoading from 'expo-app-loading';
 import * as Font from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
-import Entypo from '@expo/vector-icons/Entypo';
-import Ionicons from '@expo/vector-icons/Ionicons';
 
 import ToogetherNavigation from './navigation/Navigation';
+import { ContextProvider } from './context/ContextProvider';
 import store from './store/store';
 
 SplashScreen.preventAutoHideAsync();
 
-// FETCH FONTS
 const fetchFonts = async () => {
   const loadedFonts = await Font.loadAsync({
     'poppins-regular': require('./assets/fonts/Poppins-Regular.ttf'),
@@ -50,7 +48,9 @@ const App = () => {
   return (
     <Provider store={store}>
       <ActionSheetProvider>
-        <ToogetherNavigation theme="dark" />
+        <ContextProvider>
+          <ToogetherNavigation theme="dark" />
+        </ContextProvider>
       </ActionSheetProvider>
     </Provider>
   );

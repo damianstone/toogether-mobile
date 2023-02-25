@@ -11,6 +11,8 @@ import {
 } from '@expo/vector-icons';
 import Colors from '../constants/Colors';
 
+import GroupNavigator from './GroupNavigator';
+
 import SwipeProfileScreen from '../screens/SwipeProfile/SwipeProfileScreen';
 import ProfileModalScreen from '../screens/SwipeProfile/ProfileModalScreen';
 import MatchScreen from '../screens/Match/MatchScreen';
@@ -155,54 +157,50 @@ const MatchNavigator = createStackNavigator(
   }
 );
 
-const ConditionalGroupNavigator = createStackNavigator(
-  {
-    StartGroup: {
-      screen: StartGroupScreen,
-      navigationOptions: {
-        ...defaultNavOptions,
-        gestureDirection: 'horizontal-inverted',
-      },
-    },
-    JoinGroup: JoinGroupScreen,
-    Group: {
-      screen: GroupScreen,
-      navigationOptions: {
-        ...defaultNavOptions,
-        gestureDirection: 'horizontal',
-      },
-    },
-  },
-  {
-    defaultNavigationOptions: defaultNavOptions,
-  }
-);
+// const ConditionalGroupNavigator = createStackNavigator(
+//   {
+//     StartGroup: {
+//       screen: StartGroupScreen,
+//       navigationOptions: {
+//         ...defaultNavOptions,
+//         gestureDirection: 'horizontal-inverted',
+//       },
+//     },
+//     JoinGroup: JoinGroupScreen,
+//     Group: {
+//       screen: GroupScreen,
+//       navigationOptions: {
+//         ...defaultNavOptions,
+//         gestureDirection: 'horizontal',
+//       },
+//     },
+//   },
+//   {
+//     defaultNavigationOptions: defaultNavOptions,
+//   }
+// );
 
-// assume userGroup is a boolean value received from the backend that determines
-// whether the user belongs to a specific group or not
-const userGroup = false;
+// // Use the reverse method of the array to change the order of screens
+// const screens = false
+//   ? ['JoinGroup', 'StartGroup', 'Group']
+//   : ['Group', 'JoinGroup', 'StartGroup'];
 
-// Use the reverse method of the array to change the order of screens
-const screens = userGroup
-  ? ['JoinGroup', 'StartGroup', 'Group']
-  : ['Group', 'JoinGroup', 'StartGroup'];
-
-const GroupNavigator = createStackNavigator(
-  screens.reduceRight((acc, screenName) => {
-    const Component =
-      ConditionalGroupNavigator.router.getComponentForRouteName(screenName);
-    return {
-      ...acc,
-      [screenName]: {
-        screen: Component,
-        navigationOptions: Component.navigationOptions,
-      },
-    };
-  }, {}),
-  {
-    defaultNavigationOptions: defaultNavOptions,
-  }
-);
+// const GroupNavigator = createStackNavigator(
+//   screens.reduceRight((acc, screenName) => {
+//     const Component =
+//       ConditionalGroupNavigator.router.getComponentForRouteName(screenName);
+//     return {
+//       ...acc,
+//       [screenName]: {
+//         screen: Component,
+//         navigationOptions: Component.navigationOptions,
+//       },
+//     };
+//   }, {}),
+//   {
+//     defaultNavigationOptions: defaultNavOptions,
+//   }
+// );
 
 // CREAR NAVBAR
 const tabScreenCnfig = {
@@ -231,7 +229,7 @@ const tabScreenCnfig = {
     },
   },
   Group: {
-    screen: GroupNavigator, // STACK NAVIGATOR
+    screen: GroupNavigator,
     navigationOptions: ({ navigation }) => ({
       tabBarIcon: (tabInfo) => {
         return (
@@ -249,16 +247,18 @@ const tabScreenCnfig = {
         activeTintColor: Colors.orange,
         style: {
           backgroundColor:
+            navigation.state.routes &&
             navigation.state.routes[navigation.state.index].routeName ===
-            'Group'
+              'Group'
               ? Colors.bgCard
               : Colors.bg,
           borderTopWidth: 0,
         },
         tabStyle: {
           backgroundColor:
+            navigation.state.routes &&
             navigation.state.routes[navigation.state.index].routeName ===
-            'Group'
+              'Group'
               ? Colors.bgCard
               : Colors.bg,
           statusBarStyle: Colors.bg,
