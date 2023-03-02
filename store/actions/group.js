@@ -38,7 +38,6 @@ export const listGroup = () => {
   };
 };
 
-
 export const createGroup = () => {
   return async (dispatch) => {
     try {
@@ -86,7 +85,6 @@ export const getGroup = () => {
       dispatch({ type: g.GET_GROUP_REQUEST });
 
       const userData = JSON.parse(await AsyncStorage.getItem('@userData'));
-      const groupData = JSON.parse(await AsyncStorage.getItem('@groupData'));
 
       const config = {
         'Content-Type': 'application/json',
@@ -96,9 +94,10 @@ export const getGroup = () => {
 
       const { data } = await axios({
         method: 'get',
-        url: `${BASE_URL}/api/v1/groups/${groupData.id}/`,
+        url: `${BASE_URL}/api/v1/groups/actions/get-group/`,
         headers: config,
       });
+
       dispatch({
         type: g.GET_GROUP_SUCCESS,
         payload: data,
