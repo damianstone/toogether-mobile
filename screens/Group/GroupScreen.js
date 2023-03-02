@@ -33,10 +33,14 @@ import ClipBoard from '../../components/UI/ClipBoard';
 import MemberAvatar from '../../components/MemberAvatar';
 
 const GroupScreen = (props) => {
-  const { groupState, updateGroupState, currentProfile, updateCurrentProfile } =
-    useContext(Context);
+  const {
+    profileContext,
+    updateProfileContext,
+    groupContext, 
+    updateGroupContext
+  } = useContext(Context);
 
-  const [group, setGroup] = useState({ ...groupState });
+  const [group, setGroup] = useState({ ...groupContext });
   const [isOwner, setIsOwner] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
   const { showActionSheetWithOptions } = useActionSheet();
@@ -98,8 +102,8 @@ const GroupScreen = (props) => {
     }
 
     // if there is still a group in the context but the backend says that there is not...
-    if (!dataGroup && groupState) {
-      updateGroupState(null);
+    if (!dataGroup && groupContext) {
+      updateGroupContext(null);
     }
   }, [dispatch, errorGroup]);
 

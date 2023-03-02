@@ -21,10 +21,14 @@ import * as g from '../../constants/group';
 
 const StartGroupScreen = (props) => {
   const dispatch = useDispatch();
-  const { groupState, updateGroupState, currentProfile, updateCurrentProfile } =
-    useContext(Context);
+  const {
+    profileContext,
+    updateProfileContext,
+    groupContext,
+    updateGroupContext,
+  } = useContext(Context);
 
-  console.log('CURRENT PROFILE -> ', currentProfile, groupState);
+  console.log('CURRENT PROFILE -> ', profileContext, groupContext);
 
   const createGroupReducer = useSelector((state) => state.createGroup);
   const {
@@ -43,7 +47,7 @@ const StartGroupScreen = (props) => {
     }
 
     if (dataCreate) {
-      updateGroupState(dataCreate);
+      updateGroupContext(dataCreate);
       props.navigation.navigation('Group');
     }
   }, [dispatch, dataCreate, errorCreate]);
