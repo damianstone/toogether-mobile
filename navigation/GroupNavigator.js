@@ -1,6 +1,8 @@
 import React, { useContext } from 'react';
 import { createStackNavigator } from 'react-navigation-stack';
+import { createNavigator } from 'react-navigation';
 import { Context } from '../context/ContextProvider';
+import { createAppContainer } from 'react-navigation';
 
 import StartGroupScreen from '../screens/Group/StartGroupScreen';
 import JoinGroupScreen from '../screens/Group/JoinGroupScreen';
@@ -19,80 +21,59 @@ const defaultNavOptions = {
   headerTintColor: Colors.white,
 };
 
-const ConditionalGroupNavigator = createStackNavigator(
-  {
-    StartGroup: {
-      screen: StartGroupScreen,
-      navigationOptions: {
-        ...defaultNavOptions,
-        gestureDirection: 'horizontal-inverted',
-      },
-    },
-    JoinGroup: JoinGroupScreen,
-    Group: {
-      screen: GroupScreen,
-      navigationOptions: {
-        ...defaultNavOptions,
-        gestureDirection: 'horizontal',
-      },
-    },
-  },
-  {
-    defaultNavigationOptions: defaultNavOptions,
-  }
-);
-
 const GroupNavigator = (props) => {
   const { groupState } = useContext(Context);
+
+  // TODO: probar creando dos navigator dependiendo del context
+  // no user reduce right ni nada fancy solo if else y devolver el stack navigator
+
+  const ConditionalGroupNavigator = createStackNavigator(
+    {
+      StartGroup: {
+        screen: StartGroupScreen,
+        navigationOptions: {
+          ...defaultNavOptions,
+          gestureDirection: 'horizontal-inverted',
+        },
+      },
+      JoinGroup: JoinGroupScreen,
+      Group: {
+        screen: GroupScreen,
+        navigationOptions: {
+          ...defaultNavOptions,
+          gestureDirection: 'horizontal',
+        },
+      },
+    },
+    {
+      defaultNavigationOptions: defaultNavOptions,
+    }
+  );
 
   const screens = groupState
     ? ['JoinGroup', 'StartGroup', 'Group']
     : ['Group', 'JoinGroup', 'StartGroup'];
 
-  const routes = screens.reduceRight((acc, screenName) => {
-    const Component =
-      ConditionalGroupNavigator.router.getComponentForRouteName(screenName);
-    console.log(Component);
-    return {
-      ...acc,
-      [screenName]: {
-        screen: Component,
-        navigationOptions: Component.navigationOptions,
-        routeName: screenName,
-        routes: screenName,
-      },
-    };
-  }, {});
+  const GroupNavigatorStack = createStackNavigator(
+    screens.reduceRight((acc, screenName) => {
+      const Component =
+        ConditionalGroupNavigator.router.getComponentForRouteName(screenName);
+      return {
+        ...acc,
+        [screenName]: {
+          screen: Component,
+          navigationOptions: Component.navigationOptions,
+        },
+      };
+    }, {}),
+    {
+      defaultNavigationOptions: defaultNavOptions,
+    }
+  );
 
-  function transformRoutes(routesObj) {
-    const routesArr = Object.entries(routesObj).map(
-      ([routeName, routeData], index) => {
-        return {
-          routeName,
-          key: routeName,
-          // ...routeData,
-        };
-      }
-    );
+  const Container = createAppContainer(GroupNavigatorStack);
 
-    return routesArr;
-  }
-
-  const navigatorProps = {
-    ...props,
-    navigation: {
-      ...props.navigation,
-      state: {
-        ...props.navigation.state,
-        routes: transformRoutes(routes),
-        index: screens.indexOf(props.navigation.state.routeName),
-      },
-    },
-  };
-  console.log(props);
-  console.log(navigatorProps);
-
-  return <ConditionalGroupNavigator {...navigatorProps} />;
+  return <Container />;
 };
 
 export default GroupNavigator;

@@ -1,5 +1,4 @@
-/* eslint-disable no-promise-executor-return */
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback, useContext } from 'react';
 import {
   FlatList,
   StyleSheet,
@@ -11,7 +10,6 @@ import {
   RefreshControl,
   Alert,
 } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useDispatch, useSelector } from 'react-redux';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import { StackActions } from 'react-navigation';
@@ -21,6 +19,7 @@ import {
   removeMember,
   deleteGroup,
 } from '../../store/actions/group';
+import { Context } from '../../context/ContextProvider';
 
 import Avatar from '../../components/UI/Avatar';
 import Loader from '../../components/UI/Loader';
@@ -34,8 +33,10 @@ import ClipBoard from '../../components/UI/ClipBoard';
 import MemberAvatar from '../../components/MemberAvatar';
 
 const GroupScreen = (props) => {
-  const [storedGroupData, setStoredGroupData] = useState();
-  const [storedProfileData, setStoredProfileData] = useState();
+  const { groupState, updateGroupState, currentProfile, updateCurrentProfile } =
+    useContext(Context);
+
+  const [group, setGroup] = useState({ ...groupState });
   const [isOwner, setIsOwner] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
   const { showActionSheetWithOptions } = useActionSheet();
@@ -48,18 +49,11 @@ const GroupScreen = (props) => {
     ? { minHeight: '30%', maxHeight: '30%' }
     : { minHeight: '40%', maxHeight: '45%' };
 
-  const getProfileReducer = useSelector((state) => state.userGetProfile);
-  const {
-    loading: loadingGetProfile,
-    error: errorGetProfile,
-    data: ownerProfile,
-  } = getProfileReducer;
-
   const getGroupReducer = useSelector((state) => state.getGroup);
   const {
     loading: loadingGroup,
     error: errorGroup,
-    data: group,
+    data: dataGroup,
   } = getGroupReducer;
 
   const deleteGroupReducer = useSelector((state) => state.deleteGroup);
@@ -90,29 +84,8 @@ const GroupScreen = (props) => {
     },
   });
 
-  const getAsyncData = async () => {
-    let group;
-    let profile;
-    try {
-      group = JSON.parse(await AsyncStorage.getItem('@groupData'));
-      profile = JSON.parse(await AsyncStorage.getItem('@userData'));
-
-      if (!group || !profile) {
-        props.navigation.navigate('Swipe');
-      }
-      if (group !== null && profile !== null) {
-        setStoredGroupData(group);
-        setStoredProfileData(profile);
-      }
-    } catch (e) {
-      console.log(e);
-      props.navigation.navigate('Swipe');
-    }
-  };
-
   useEffect(() => {
     dispatch(getGroup());
-    getAsyncData();
   }, []);
 
   useEffect(() => {
@@ -124,24 +97,11 @@ const GroupScreen = (props) => {
       props.navigation.dispatch(replaceAction);
     }
 
-    if (storedGroupData && !group) {
-      dispatch(getGroup());
+    // if there is still a group in the context but the backend says that there is not...
+    if (!dataGroup && groupState) {
+      updateGroupState(null);
     }
-
-    if (
-      storedGroupData &&
-      storedProfileData &&
-      storedGroupData.owner.id === storedProfileData.id
-    ) {
-      setIsOwner(true);
-    }
-  }, [
-    dispatch,
-    errorGroup,
-    errorGetProfile,
-    storedGroupData,
-    storedProfileData,
-  ]);
+  }, [dispatch, errorGroup]);
 
   useEffect(() => {
     const unsubscribe = props.navigation.addListener('focus', () => {
@@ -225,11 +185,10 @@ const GroupScreen = (props) => {
         {
           text: 'Delete',
           onPress: () => {
-            if (isOwner && storedGroupData?.id) {
-              dispatch(deleteGroup(storedGroupData.id));
-              setStoredGroupData();
-              setStoredProfileData();
-            }
+            // TODO: create a function to check is the current user is the owner of the group and then dispatch the action
+            // if (isOwner) {
+            //   dispatch(deleteGroup(storedGroupData.id));
+            // }
           },
           style: 'destructive',
         },
@@ -248,9 +207,7 @@ const GroupScreen = (props) => {
         {
           text: 'Leave',
           onPress: () => {
-            dispatch(leaveGroup(storedGroupData.id));
-            setStoredGroupData();
-            setStoredProfileData();
+            // dispatch(leaveGroup(storedGroupData.id));
           },
           style: 'destructive',
         },
@@ -260,7 +217,7 @@ const GroupScreen = (props) => {
 
   const handleRemoveMember = (member_id) => {
     if (isOwner) {
-      dispatch(removeMember(storedGroupData.id, member_id));
+      // dispatch(removeMember(storedGroupData.id, member_id));
     }
   };
 
@@ -334,8 +291,7 @@ const GroupScreen = (props) => {
           onRefresh={loadGroup}
           tintColor={Colors.white}
         />
-      }
-    >
+      }>
       <View style={{ ...styles.action_view, ...HEIGHT_ACTION_CONTAINER }}>
         <View style={styles.profile_photo_container}>
           {!group && <Loader />}

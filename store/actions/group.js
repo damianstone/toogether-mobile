@@ -38,37 +38,6 @@ export const listGroup = () => {
   };
 };
 
-export const getGroup = () => {
-  return async (dispatch) => {
-    try {
-      dispatch({ type: g.GET_GROUP_REQUEST });
-
-      const userData = JSON.parse(await AsyncStorage.getItem('@userData'));
-      const groupData = JSON.parse(await AsyncStorage.getItem('@groupData'));
-
-      const config = {
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
-        Authorization: 'Bearer ' + userData.token,
-      };
-
-      const { data } = await axios({
-        method: 'get',
-        url: `${BASE_URL}/api/v1/groups/${groupData.id}/`,
-        headers: config,
-      });
-      dispatch({
-        type: g.GET_GROUP_SUCCESS,
-        payload: data,
-      });
-    } catch (error) {
-      dispatch({
-        type: g.GET_GROUP_FAIL,
-        payload: error,
-      });
-    }
-  };
-};
 
 export const createGroup = () => {
   return async (dispatch) => {
@@ -105,6 +74,38 @@ export const createGroup = () => {
     } catch (error) {
       dispatch({
         type: g.CREATE_GROUP_FAIL,
+        payload: error,
+      });
+    }
+  };
+};
+
+export const getGroup = () => {
+  return async (dispatch) => {
+    try {
+      dispatch({ type: g.GET_GROUP_REQUEST });
+
+      const userData = JSON.parse(await AsyncStorage.getItem('@userData'));
+      const groupData = JSON.parse(await AsyncStorage.getItem('@groupData'));
+
+      const config = {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+        Authorization: 'Bearer ' + userData.token,
+      };
+
+      const { data } = await axios({
+        method: 'get',
+        url: `${BASE_URL}/api/v1/groups/${groupData.id}/`,
+        headers: config,
+      });
+      dispatch({
+        type: g.GET_GROUP_SUCCESS,
+        payload: data,
+      });
+    } catch (error) {
+      dispatch({
+        type: g.GET_GROUP_FAIL,
         payload: error,
       });
     }

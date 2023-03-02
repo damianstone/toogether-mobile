@@ -1,6 +1,7 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useContext } from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
+import { Context } from '../../context/ContextProvider';
 import Colors from '../../constants/Colors';
 import { getUserProfile } from '../../store/actions/user';
 
@@ -8,14 +9,19 @@ import Loader from './Loader';
 
 const Avatar = (props) => {
   const { onPress } = props;
+
+  const { currentProfile, updateCurrentProfile } = useContext(Context);
   const dispatch = useDispatch();
 
   const userProfile = useSelector((state) => state.userGetProfile);
   const { loading, error: fetchError, data } = userProfile;
 
   useEffect(() => {
-    if (!data) {
+    if (!data && !currentProfile) {
       dispatch(getUserProfile());
+    }
+    if (data) {
+      updateCurrentProfile(data);
     }
   }, []);
 

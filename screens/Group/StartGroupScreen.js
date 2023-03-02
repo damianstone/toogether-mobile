@@ -21,7 +21,10 @@ import * as g from '../../constants/group';
 
 const StartGroupScreen = (props) => {
   const dispatch = useDispatch();
-  const { groupState, updateGroupState } = useContext(Context);
+  const { groupState, updateGroupState, currentProfile, updateCurrentProfile } =
+    useContext(Context);
+
+  console.log('CURRENT PROFILE -> ', currentProfile, groupState);
 
   const createGroupReducer = useSelector((state) => state.createGroup);
   const {
@@ -41,10 +44,9 @@ const StartGroupScreen = (props) => {
 
     if (dataCreate) {
       updateGroupState(dataCreate);
-      props.navigation.replace('Group');
-      dispatch({ type: g.CREATE_GROUP_RESET });
+      props.navigation.navigation('Group');
     }
-  }, [dispatch, dataCreate, errorCreate, storedGroupData]);
+  }, [dispatch, dataCreate, errorCreate]);
 
   const handleCreateGroup = () => {
     dispatch(createGroup());
@@ -67,8 +69,7 @@ const StartGroupScreen = (props) => {
       <StatusBar style="light" />
       <ScrollView
         style={styles.scrollview_style}
-        contentContainerStyle={styles.scrollview_content_container}
-      >
+        contentContainerStyle={styles.scrollview_content_container}>
         <View>
           <View style={styles.imageContainer}>
             <Image

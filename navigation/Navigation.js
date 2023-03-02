@@ -181,7 +181,7 @@ const MatchNavigator = createStackNavigator(
 // );
 
 // // Use the reverse method of the array to change the order of screens
-// const screens = false
+// const screens = groupState
 //   ? ['JoinGroup', 'StartGroup', 'Group']
 //   : ['Group', 'JoinGroup', 'StartGroup'];
 
@@ -230,41 +230,45 @@ const tabScreenCnfig = {
   },
   Group: {
     screen: GroupNavigator,
-    navigationOptions: ({ navigation }) => ({
-      tabBarIcon: (tabInfo) => {
-        return (
-          <MaterialCommunityIcons
-            name="account-group"
-            size={25}
-            color={tabInfo.tintColor}
-          />
-        );
-      },
-      tabBarColor: Colors.orange,
-      tabBarLabel: Platform.OS === 'android' ? <Text>Create group</Text> : null,
-      tabBarOptions: {
-        showLabel: false,
-        activeTintColor: Colors.orange,
-        style: {
-          backgroundColor:
-            navigation.state.routes &&
-            navigation.state.routes[navigation.state.index].routeName ===
-              'Group'
-              ? Colors.bgCard
-              : Colors.bg,
-          borderTopWidth: 0,
+    navigationOptions: ({ navigation }) => {
+      console.log(navigation.state);
+      return {
+        tabBarIcon: (tabInfo) => {
+          return (
+            <MaterialCommunityIcons
+              name="account-group"
+              size={25}
+              color={tabInfo.tintColor}
+            />
+          );
         },
-        tabStyle: {
-          backgroundColor:
-            navigation.state.routes &&
-            navigation.state.routes[navigation.state.index].routeName ===
-              'Group'
-              ? Colors.bgCard
-              : Colors.bg,
-          statusBarStyle: Colors.bg,
+        tabBarColor: Colors.orange,
+        tabBarLabel:
+          Platform.OS === 'android' ? <Text>Create group</Text> : null,
+        tabBarOptions: {
+          showLabel: false,
+          activeTintColor: Colors.orange,
+          style: {
+            backgroundColor:
+              navigation.state.routes &&
+              navigation.state.routes[navigation.state.index].routeName ===
+                'Group'
+                ? Colors.bgCard
+                : Colors.bg,
+            borderTopWidth: 0,
+          },
+          tabStyle: {
+            backgroundColor:
+              navigation.state.routes &&
+              navigation.state.routes[navigation.state.index].routeName ===
+                'Group'
+                ? Colors.bgCard
+                : Colors.bg,
+            statusBarStyle: Colors.bg,
+          },
         },
-      },
-    }),
+      };
+    },
   },
 };
 
