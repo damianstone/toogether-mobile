@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Context } from '../../context/ContextProvider';
 import Colors from '../../constants/Colors';
 import { getUserProfile } from '../../store/actions/user';
-import { getGroup } from '../../store/actions/group';
 
 import Loader from './Loader';
 

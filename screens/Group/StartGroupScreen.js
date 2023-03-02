@@ -20,7 +20,6 @@ import Colors from '../../constants/Colors';
 import * as g from '../../constants/group';
 
 const StartGroupScreen = (props) => {
-  const dispatch = useDispatch();
   const {
     profileContext,
     updateProfileContext,
@@ -28,7 +27,10 @@ const StartGroupScreen = (props) => {
     updateGroupContext,
   } = useContext(Context);
 
-  console.log('CURRENT PROFILE -> ', profileContext, groupContext);
+  console.log('PROFILE CONTEXT -> ', profileContext);
+  console.log('GROUP CONTEXT -> ', groupContext);
+
+  const dispatch = useDispatch();
 
   const createGroupReducer = useSelector((state) => state.createGroup);
   const {

@@ -17,6 +17,8 @@ import styles from './styles';
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
+// TODO: use context
+
 const Deck = (props) => {
   const { navigation, swipeProfiles, setShowMode, topProfile } = props;
   const dispatch = useDispatch();

@@ -24,6 +24,8 @@ const defaultNavOptions = {
 const GroupNavigator = (props) => {
   const { groupContext } = useContext(Context);
 
+  // console.log("GROUP CONTEXT -> ", groupContext)
+
   // TODO: probar creando dos navigator dependiendo del context
   // no user reduce right ni nada fancy solo if else y devolver el stack navigator
 
@@ -50,7 +52,7 @@ const GroupNavigator = (props) => {
     }
   );
 
-  const screens = groupContext
+  const screens = false
     ? ['JoinGroup', 'StartGroup', 'Group']
     : ['Group', 'JoinGroup', 'StartGroup'];
 

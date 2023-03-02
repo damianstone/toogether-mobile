@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect } from 'react';
+import React, { createContext, useState, useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getUserProfile } from '../store/actions/user';
 import { getGroup } from '../store/actions/group';
@@ -25,36 +25,35 @@ export const ContextProvider = ({ children }) => {
     setGroupContext(groupInfo);
   };
 
-  // * Profile
   useEffect(() => {
-    if (!dataProfile && !profileContext) {
-      dispatch(getUserProfile());
-    }
-    if (dataProfile) {
-      updateProfileContext(dataProfile);
-    }
+    const fetchData = async () => {
+      await dispatch(getUserProfile());
+      await dispatch(getGroup());
+    };
+    fetchData();
   }, []);
 
-  // * Group
   useEffect(() => {
-    if (!dataGroup && !groupContext) {
-      dispatch(getGroup());
+    if (dataProfile) {
+      console.log('data');
+      setProfileContext(dataProfile);
     }
     if (dataGroup) {
-      console.log("DATA GROUP", dataGroup)
-      updateGroupContext(dataGroup);
+      console.log('DATA GROUP', dataGroup);
+      setGroupContext(dataGroup);
     }
-  }, []);
+  }, [dataProfile, dataGroup]);
 
-  return (
-    <Context.Provider
-      value={{
-        groupContext,
-        updateGroupContext,
-        profileContext,
-        updateProfileContext,
-      }}>
-      {children}
-    </Context.Provider>
+  // memoize the full context value
+  const contextValue = useMemo(
+    () => ({
+      profileContext,
+      groupContext,
+      updateProfileContext,
+      updateGroupContext,
+    }),
+    [profileContext, groupContext, updateGroupContext, updateGroupContext]
   );
+
+  return <Context.Provider value={contextValue}>{children}</Context.Provider>;
 };
