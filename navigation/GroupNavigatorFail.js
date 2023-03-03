@@ -24,6 +24,11 @@ const defaultNavOptions = {
 const GroupNavigator = (props) => {
   const { groupContext } = useContext(Context);
 
+  // console.log("GROUP CONTEXT -> ", groupContext)
+
+  // TODO: probar creando dos navigator dependiendo del context
+  // no user reduce right ni nada fancy solo if else y devolver el stack navigator
+
   const ConditionalGroupNavigator = createStackNavigator(
     {
       StartGroup: {
@@ -68,9 +73,8 @@ const GroupNavigator = (props) => {
     }
   );
 
-  const Container = createAppContainer(GroupNavigatorStack);
 
-  return <Container />;
+  return <GroupNavigatorStack />;
 };
 
 export default GroupNavigator;

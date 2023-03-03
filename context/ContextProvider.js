@@ -35,11 +35,9 @@ export const ContextProvider = ({ children }) => {
 
   useEffect(() => {
     if (dataProfile) {
-      console.log('data');
       setProfileContext(dataProfile);
     }
     if (dataGroup) {
-      console.log('DATA GROUP', dataGroup);
       setGroupContext(dataGroup);
     }
   }, [dataProfile, dataGroup]);
