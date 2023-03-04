@@ -34,22 +34,19 @@ import MemberAvatar from '../../components/MemberAvatar';
 
 const GroupScreen = (props) => {
   const {
-    profileContext,
-    updateProfileContext,
     groupContext,
+    isOwnerGroup,
     updateGroupContext,
   } = useContext(Context);
 
-  const [group, setGroup] = useState({ ...groupContext });
-  const [isOwner, setIsOwner] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
   const { showActionSheetWithOptions } = useActionSheet();
   const dispatch = useDispatch();
 
-  const HEIGHT_ACTION_CONTAINER = isOwner
+  const HEIGHT_ACTION_CONTAINER = isOwnerGroup
     ? { height: '70%' }
     : { height: '60%' };
-  const HEIGHT_MEMBER_CARD_CONTAINER = isOwner
+  const HEIGHT_MEMBER_CARD_CONTAINER = isOwnerGroup
     ? { minHeight: '30%', maxHeight: '30%' }
     : { minHeight: '40%', maxHeight: '45%' };
 
@@ -195,10 +192,9 @@ const GroupScreen = (props) => {
         {
           text: 'Delete',
           onPress: () => {
-            // TODO: create a function to check is the current user is the owner of the group and then dispatch the action
-            // if (isOwner) {
-            //   dispatch(deleteGroup(storedGroupData.id));
-            // }
+            if (isOwnerGroup) {
+              dispatch(deleteGroup(groupContext.id));
+            }
           },
           style: 'destructive',
         },
@@ -217,7 +213,7 @@ const GroupScreen = (props) => {
         {
           text: 'Leave',
           onPress: () => {
-            // dispatch(leaveGroup(storedGroupData.id));
+            dispatch(leaveGroup(groupContext.id));
           },
           style: 'destructive',
         },
@@ -226,8 +222,8 @@ const GroupScreen = (props) => {
   };
 
   const handleRemoveMember = (member_id) => {
-    if (isOwner) {
-      // dispatch(removeMember(storedGroupData.id, member_id));
+    if (isOwnerGroup) {
+      dispatch(removeMember(groupContext.id, member_id));
     }
   };
 
@@ -282,7 +278,7 @@ const GroupScreen = (props) => {
           name={item.name}
           photos={item.photos}
           onPress={() =>
-            isOwner ? handleOpenActionSheet(item.id, item.name) : null
+            isOwnerGroup ? handleOpenActionSheet(item.id, item.name) : null
           }
         />
         <Text style={styles.name_text}>{getCardName(item.name)}</Text>
@@ -304,46 +300,46 @@ const GroupScreen = (props) => {
       }>
       <View style={{ ...styles.action_view, ...HEIGHT_ACTION_CONTAINER }}>
         <View style={styles.profile_photo_container}>
-          {!group && <Loader />}
-          {group && group.owner.photos && group.owner.photos.length > 0 && (
+          {!groupContext && <Loader />}
+          {groupContext && groupContext.owner.photos && groupContext.owner.photos.length > 0 && (
             <Image
               source={{
-                uri: `${group.owner.photos[0].image}`,
+                uri: `${groupContext.owner.photos[0].image}`,
               }}
               style={{ width: 150, height: 150, borderRadius: 100 }}
             />
           )}
-          {(group && !group.owner.photos) ||
-            (group?.owner.photos.length === 0 && (
+          {(groupContext && !groupContext.owner.photos) ||
+            (groupContext?.owner.photos.length === 0 && (
               <View style={styles.avatar_view}>
                 <Text style={styles.avatar_initials}>
-                  {getNameInitials(group.owner.name)}
+                  {getNameInitials(groupContext.owner.name)}
                 </Text>
               </View>
             ))}
           <View style={styles.nameView}>
-            {group?.owner && (
-              <Text style={styles.name}>{`${group.owner.name}'s group`}</Text>
+            {groupContext?.owner && (
+              <Text style={styles.name}>{`${groupContext.owner.name}'s group`}</Text>
             )}
           </View>
         </View>
         <View style={styles.buttons_container}>
-          {isOwner && group?.share_link && (
-            <ClipBoard text={group.share_link} backgroundColor={Colors.white} />
+          {isOwnerGroup && groupContext?.share_link && (
+            <ClipBoard text={groupContext.share_link} backgroundColor={Colors.white} />
           )}
           <ActionButton
             onPress={() => handleNavigate('Swipe')}
             text="Group chat"
             backgroundColor={Colors.blue}
           />
-          {isOwner && (
+          {isOwnerGroup && (
             <ActionButton
               onPress={handleDeleteGroup}
               text="Delete group"
               backgroundColor={Colors.orange}
             />
           )}
-          {!isOwner && (
+          {!isOwnerGroup && (
             <ActionButton
               onPress={handleLeaveGroup}
               text="Leave group"
@@ -353,7 +349,7 @@ const GroupScreen = (props) => {
         </View>
       </View>
       <View style={{ ...styles.members_view, ...HEIGHT_MEMBER_CARD_CONTAINER }}>
-        {group && (
+        {groupContext && (
           <FlatList
             style={{ flex: 1 }}
             contentContainerStyle={{
@@ -363,7 +359,7 @@ const GroupScreen = (props) => {
             nestedScrollEnabled
             horizontal={false}
             numColumns={3}
-            data={group.members}
+            data={groupContext.members}
             renderItem={renderMemberItem}
             keyExtractor={(item) => item.id}
           />

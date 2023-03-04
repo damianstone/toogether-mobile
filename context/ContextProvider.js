@@ -2,12 +2,14 @@ import React, { createContext, useState, useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getUserProfile } from '../store/actions/user';
 import { getGroup } from '../store/actions/group';
+import { exist } from '../utils/checks';
 
 export const Context = createContext();
 
 export const ContextProvider = ({ children }) => {
   const [profileContext, setProfileContext] = useState(null);
   const [groupContext, setGroupContext] = useState(null);
+  const [isOwnerGroup, setIsOwnerGroup] = useState(null);
 
   const dispatch = useDispatch();
 
@@ -29,6 +31,18 @@ export const ContextProvider = ({ children }) => {
     }
   };
 
+  const updateOwnerGroup = (currentProfile, groupInfo) => {
+    if (groupInfo?.detail === 'NO_GROUP') {
+      setIsOwnerGroup(null);
+      return;
+    }
+
+    // check if the user created the group to make available admin actions
+    if (currentProfile.id === groupInfo.owner.id) {
+      setIsOwnerGroup(true);
+    }
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       await dispatch(getUserProfile());
@@ -44,6 +58,9 @@ export const ContextProvider = ({ children }) => {
     if (dataGroup) {
       updateGroupContext(dataGroup);
     }
+    if (dataProfile && dataGroup) {
+      updateOwnerGroup(dataProfile, dataGroup);
+    }
   }, [dataProfile, dataGroup]);
 
   // memoize the full context value
@@ -51,6 +68,7 @@ export const ContextProvider = ({ children }) => {
     () => ({
       profileContext,
       groupContext,
+      isOwnerGroup,
       updateProfileContext,
       updateGroupContext,
     }),
