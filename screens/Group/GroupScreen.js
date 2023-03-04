@@ -33,11 +33,8 @@ import ClipBoard from '../../components/UI/ClipBoard';
 import MemberAvatar from '../../components/MemberAvatar';
 
 const GroupScreen = (props) => {
-  const {
-    groupContext,
-    isOwnerGroup,
-    updateGroupContext,
-  } = useContext(Context);
+  const { groupContext, isOwnerGroup, updateGroupContext } =
+    useContext(Context);
 
   const [refreshing, setRefreshing] = useState(false);
   const { showActionSheetWithOptions } = useActionSheet();
@@ -93,8 +90,12 @@ const GroupScreen = (props) => {
 
   useEffect(() => {
     dispatch(getGroup());
+    if (dataGroup) {
+      updateGroupContext(dataGroup);
+    }
   }, []);
 
+  // handle render after fetching the group
   useEffect(() => {
     if (errorGroup) {
       if (errorGroup?.response?.status === 400) {
@@ -110,13 +111,7 @@ const GroupScreen = (props) => {
     }
   }, [dispatch, errorGroup]);
 
-  useEffect(() => {
-    const unsubscribe = props.navigation.addListener('focus', () => {
-      loadGroup();
-    });
-    return unsubscribe;
-  }, [loadGroup]);
-
+  // handle render after delete the group action
   useEffect(() => {
     if (errorDelete) {
       if (errorDelete?.response?.status === 400) {
@@ -125,6 +120,15 @@ const GroupScreen = (props) => {
       checkServerError(errorDelete);
     }
 
+    if (dataDelete) {
+      dispatch({ type: g.DELETE_GROUP_RESET });
+      props.navigation.dispatch(replaceAction);
+      updateGroupContext(null);
+    }
+  }, [errorDelete, dataDelete]);
+
+  // handle render after leave the group
+  useEffect(() => {
     if (errorLeave) {
       if (errorLeave?.response?.status === 400) {
         check400Error(errorLeave);
@@ -132,21 +136,20 @@ const GroupScreen = (props) => {
       checkServerError(errorLeave);
     }
 
+    if (dataLeave) {
+      dispatch({ type: g.LEAVE_GROUP_RESET });
+      props.navigation.dispatch(replaceAction);
+      updateGroupContext(null);
+    }
+  }, [errorLeave, dataLeave]);
+
+  // handle render after remove a member from the group action
+  useEffect(() => {
     if (errorRemoveMember) {
       if (errorRemoveMember?.response?.status === 400) {
         check400Error(errorRemoveMember);
       }
       checkServerError(errorRemoveMember);
-    }
-
-    if (dataDelete) {
-      dispatch({ type: g.DELETE_GROUP_RESET });
-      props.navigation.dispatch(replaceAction);
-    }
-
-    if (dataLeave) {
-      dispatch({ type: g.LEAVE_GROUP_RESET });
-      props.navigation.dispatch(replaceAction);
     }
 
     if (dataRemoveMember) {
@@ -158,14 +161,14 @@ const GroupScreen = (props) => {
       ]);
       dispatch({ type: g.REMOVE_MEMBER_RESET });
     }
-  }, [
-    errorDelete,
-    dataDelete,
-    errorLeave,
-    dataLeave,
-    errorRemoveMember,
-    dataRemoveMember,
-  ]);
+  }, [errorRemoveMember, dataRemoveMember]);
+
+  useEffect(() => {
+    const unsubscribe = props.navigation.addListener('focus', () => {
+      loadGroup();
+    });
+    return unsubscribe;
+  }, [loadGroup]);
 
   const loadGroup = useCallback(async () => {
     setRefreshing(true);
@@ -301,14 +304,16 @@ const GroupScreen = (props) => {
       <View style={{ ...styles.action_view, ...HEIGHT_ACTION_CONTAINER }}>
         <View style={styles.profile_photo_container}>
           {!groupContext && <Loader />}
-          {groupContext && groupContext.owner.photos && groupContext.owner.photos.length > 0 && (
-            <Image
-              source={{
-                uri: `${groupContext.owner.photos[0].image}`,
-              }}
-              style={{ width: 150, height: 150, borderRadius: 100 }}
-            />
-          )}
+          {groupContext &&
+            groupContext.owner.photos &&
+            groupContext.owner.photos.length > 0 && (
+              <Image
+                source={{
+                  uri: `${groupContext.owner.photos[0].image}`,
+                }}
+                style={{ width: 150, height: 150, borderRadius: 100 }}
+              />
+            )}
           {(groupContext && !groupContext.owner.photos) ||
             (groupContext?.owner.photos.length === 0 && (
               <View style={styles.avatar_view}>
@@ -319,13 +324,19 @@ const GroupScreen = (props) => {
             ))}
           <View style={styles.nameView}>
             {groupContext?.owner && (
-              <Text style={styles.name}>{`${groupContext.owner.name}'s group`}</Text>
+              <Text
+                style={
+                  styles.name
+                }>{`${groupContext.owner.name}'s group`}</Text>
             )}
           </View>
         </View>
         <View style={styles.buttons_container}>
           {isOwnerGroup && groupContext?.share_link && (
-            <ClipBoard text={groupContext.share_link} backgroundColor={Colors.white} />
+            <ClipBoard
+              text={groupContext.share_link}
+              backgroundColor={Colors.white}
+            />
           )}
           <ActionButton
             onPress={() => handleNavigate('Swipe')}

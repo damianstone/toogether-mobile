@@ -2,7 +2,6 @@ import React, { createContext, useState, useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getUserProfile } from '../store/actions/user';
 import { getGroup } from '../store/actions/group';
-import { exist } from '../utils/checks';
 
 export const Context = createContext();
 
