@@ -36,8 +36,8 @@ const GroupScreen = (props) => {
   const {
     profileContext,
     updateProfileContext,
-    groupContext, 
-    updateGroupContext
+    groupContext,
+    updateGroupContext,
   } = useContext(Context);
 
   const [group, setGroup] = useState({ ...groupContext });
@@ -81,12 +81,18 @@ const GroupScreen = (props) => {
     data: dataRemoveMember,
   } = removeMemberReducer;
 
+  // * this function replaces the first screen on the GroupNavigato stack
   const replaceAction = StackActions.replace({
     routeName: 'StartGroup',
-    params: {
-      group_id: null,
-    },
   });
+
+  // * if the user leave the group, delete or is removed by an admin, the replace action
+  // * the replace action is activated changing the stack order to show the StartGroup screen
+  useEffect(() => {
+    if (!groupContext || dataLeave) {
+      props.navigation.dispatch(replaceAction);
+    }
+  }, [props.navigation]);
 
   useEffect(() => {
     dispatch(getGroup());
@@ -264,7 +270,7 @@ const GroupScreen = (props) => {
   if (loadingDelete || loadingLeave) {
     return (
       <View style={styles.loadingScreen}>
-        <ActivityIndicator color={Colors.orange} size="large" />
+        <ActivityIndicator color={Colors.white} size="large" />
       </View>
     );
   }

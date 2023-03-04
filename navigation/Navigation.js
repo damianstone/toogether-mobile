@@ -11,8 +11,6 @@ import {
 } from '@expo/vector-icons';
 import Colors from '../constants/Colors';
 
-import GroupNavigator from './GroupNavigator';
-
 import SwipeProfileScreen from '../screens/SwipeProfile/SwipeProfileScreen';
 import ProfileModalScreen from '../screens/SwipeProfile/ProfileModalScreen';
 import MatchScreen from '../screens/Match/MatchScreen';
@@ -157,50 +155,28 @@ const MatchNavigator = createStackNavigator(
   }
 );
 
-// const ConditionalGroupNavigator = createStackNavigator(
-//   {
-//     StartGroup: {
-//       screen: StartGroupScreen,
-//       navigationOptions: {
-//         ...defaultNavOptions,
-//         gestureDirection: 'horizontal-inverted',
-//       },
-//     },
-//     JoinGroup: JoinGroupScreen,
-//     Group: {
-//       screen: GroupScreen,
-//       navigationOptions: {
-//         ...defaultNavOptions,
-//         gestureDirection: 'horizontal',
-//       },
-//     },
-//   },
-//   {
-//     defaultNavigationOptions: defaultNavOptions,
-//   }
-// );
-
-// // Use the reverse method of the array to change the order of screens
-// const screens = groupState
-//   ? ['JoinGroup', 'StartGroup', 'Group']
-//   : ['Group', 'JoinGroup', 'StartGroup'];
-
-// const GroupNavigator = createStackNavigator(
-//   screens.reduceRight((acc, screenName) => {
-//     const Component =
-//       ConditionalGroupNavigator.router.getComponentForRouteName(screenName);
-//     return {
-//       ...acc,
-//       [screenName]: {
-//         screen: Component,
-//         navigationOptions: Component.navigationOptions,
-//       },
-//     };
-//   }, {}),
-//   {
-//     defaultNavigationOptions: defaultNavOptions,
-//   }
-// );
+const GroupNavigator = createStackNavigator(
+  {
+    StartGroup: {
+      screen: StartGroupScreen,
+      navigationOptions: {
+        ...defaultNavOptions,
+        gestureDirection: 'horizontal-inverted',
+      },
+    },
+    JoinGroup: JoinGroupScreen,
+    Group: {
+      screen: GroupScreen,
+      navigationOptions: {
+        ...defaultNavOptions,
+        gestureDirection: 'horizontal',
+      },
+    },
+  },
+  {
+    defaultNavigationOptions: defaultNavOptions,
+  }
+);
 
 // CREAR NAVBAR
 const tabScreenCnfig = {

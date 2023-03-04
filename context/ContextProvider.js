@@ -22,7 +22,11 @@ export const ContextProvider = ({ children }) => {
   };
 
   const updateGroupContext = (groupInfo) => {
-    setGroupContext(groupInfo);
+    if (groupInfo?.detail === 'NO_GROUP') {
+      setGroupContext(null);
+    } else {
+      setGroupContext(groupInfo);
+    }
   };
 
   useEffect(() => {
@@ -35,10 +39,10 @@ export const ContextProvider = ({ children }) => {
 
   useEffect(() => {
     if (dataProfile) {
-      setProfileContext(dataProfile);
+      updateProfileContext(dataProfile);
     }
     if (dataGroup) {
-      setGroupContext(dataGroup);
+      updateGroupContext(dataGroup);
     }
   }, [dataProfile, dataGroup]);
 
