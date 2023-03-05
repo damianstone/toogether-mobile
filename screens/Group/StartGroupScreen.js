@@ -21,12 +21,7 @@ import Colors from '../../constants/Colors';
 import * as g from '../../constants/group';
 
 const StartGroupScreen = (props) => {
-  const {
-    profileContext,
-    updateProfileContext,
-    groupContext,
-    updateGroupContext,
-  } = useContext(Context);
+  const { groupContext, updateGroupContext } = useContext(Context);
 
   /* set to true to have time to check if there is a group in the context and be able to redirect 
   the user to the group screen in a smooth way */
@@ -46,7 +41,7 @@ const StartGroupScreen = (props) => {
     routeName: 'Group',
   });
 
-  // * if the user is added to a group or create one then the replace action is activated
+  // * if the user is already in a group
   useEffect(() => {
     if (groupContext) {
       props.navigation.dispatch(replaceAction);
@@ -54,14 +49,9 @@ const StartGroupScreen = (props) => {
     } else {
       setTransitionLoading(false);
     }
+  }, [groupContext]);
 
-    if (dataCreate) {
-      updateGroupContext(dataCreate);
-      props.navigation.dispatch(replaceAction);
-      setTransitionLoading(false);
-    }
-  }, [props.navigation, dataCreate]);
-
+  // handle render after create group action
   useEffect(() => {
     if (errorCreate) {
       if (errorCreate?.response?.status === 400) {
@@ -70,7 +60,15 @@ const StartGroupScreen = (props) => {
       checkServerError(errorCreate);
       dispatch({ type: g.CREATE_GROUP_RESET });
     }
-  }, [dispatch, errorCreate]);
+
+    if (dataCreate) {
+      console.log('DATA CREATE -> ', dataCreate);
+      updateGroupContext(dataCreate);
+      // reset the create reducer since we updated the context
+      dispatch({ type: g.CREATE_GROUP_RESET });
+      props.navigation.dispatch(replaceAction);
+    }
+  }, [dispatch, errorCreate, dataCreate]);
 
   const handleCreateGroup = () => {
     dispatch(createGroup());

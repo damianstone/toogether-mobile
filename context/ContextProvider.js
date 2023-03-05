@@ -2,6 +2,7 @@ import React, { createContext, useState, useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getUserProfile } from '../store/actions/user';
 import { getGroup } from '../store/actions/group';
+import { exist } from '../utils/checks';
 
 export const Context = createContext();
 
@@ -25,21 +26,13 @@ export const ContextProvider = ({ children }) => {
   const updateGroupContext = (groupInfo) => {
     if (groupInfo?.detail === 'NO_GROUP') {
       setGroupContext(null);
-    } else {
-      setGroupContext(groupInfo);
-    }
-  };
-
-  const updateOwnerGroup = (currentProfile, groupInfo) => {
-    if (groupInfo?.detail === 'NO_GROUP') {
-      setIsOwnerGroup(null);
       return;
     }
-
     // check if the user created the group to make available admin actions
-    if (currentProfile.id === groupInfo.owner.id) {
+    if (exist(groupInfo) && profileContext.id === groupInfo.owner.id) {
       setIsOwnerGroup(true);
     }
+    setGroupContext(groupInfo);
   };
 
   useEffect(() => {
@@ -56,9 +49,6 @@ export const ContextProvider = ({ children }) => {
     }
     if (dataGroup) {
       updateGroupContext(dataGroup);
-    }
-    if (dataProfile && dataGroup) {
-      updateOwnerGroup(dataProfile, dataGroup);
     }
   }, [dataProfile, dataGroup]);
 

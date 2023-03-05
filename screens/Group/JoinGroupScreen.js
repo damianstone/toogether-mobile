@@ -1,8 +1,9 @@
-import React, { useEffect, useReducer, useCallback } from 'react';
+import React, { useEffect, useReducer, useCallback, useContext } from 'react';
 import {
   View,
   Image,
   Platform,
+  StyleSheet,
   ScrollView,
   SafeAreaView,
   ActivityIndicator,
@@ -12,6 +13,7 @@ import {
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { useDispatch, useSelector } from 'react-redux';
 import { StatusBar } from 'expo-status-bar';
+import { Context } from '../../context/ContextProvider';
 import { joinGroup } from '../../store/actions/group';
 import { check400Error, checkServerError } from '../../utils/errors';
 
@@ -20,8 +22,6 @@ import AuthButton from '../../components/UI/AuthButton';
 import AuthInput from '../../components/UI/AuthInput';
 import Colors from '../../constants/Colors';
 import * as g from '../../constants/group';
-
-import styles from './styles';
 
 const FORM_UPDATE = 'FORM_UPDATE';
 
@@ -50,6 +50,7 @@ const formReducer = (state, action) => {
 };
 
 const JoinGroupScreen = (props) => {
+  const { updateGroupContext } = useContext(Context);
   const dispatch = useDispatch();
 
   const joinGroupReducer = useSelector((state) => state.joinGroup);
@@ -59,6 +60,7 @@ const JoinGroupScreen = (props) => {
     data: dataJoin,
   } = joinGroupReducer;
 
+  // internar reducer for the form where the user put the invitation link
   const [formState, dispatchFormState] = useReducer(formReducer, {
     inputValues: {
       share_link: '',
@@ -86,7 +88,8 @@ const JoinGroupScreen = (props) => {
           text: 'OK',
         },
       ]);
-      props.navigation.replace('Group');
+      updateGroupContext(dataJoin);
+      props.navigation.navigate('Group');
       dispatch({ type: g.JOIN_GROUP_RESET });
     }
   }, [dispatch, errorJoin, dataJoin]);
@@ -132,8 +135,7 @@ const JoinGroupScreen = (props) => {
         <ScrollView
           style={styles.scrollview_style}
           contentContainerStyle={styles.scrollview_content_container}
-          automaticallyAdjustKeyboardInsets
-        >
+          automaticallyAdjustKeyboardInsets>
           <View style={styles.imageContainer}>
             <Image
               source={require('../../assets/images/hand_join.png')}
@@ -188,3 +190,112 @@ JoinGroupScreen.navigationOptions = (navData) => {
 };
 
 export default JoinGroupScreen;
+
+const styles = StyleSheet.create({
+  screen: {
+    backgroundColor: Colors.bg,
+    justifyContent: 'space-between',
+    flexDirection: 'column',
+    height: '100%',
+  },
+
+  loadingScreen: {
+    backgroundColor: Colors.bg,
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
+  gradient: {
+    flex: 1,
+    width: '100%',
+    height: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
+  scrollview_style: {
+    flexGrow: 1,
+    backgroundColor: Colors.bg,
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    paddingBottom: 0,
+  },
+
+  scrollview_content_container: {
+    flexDirection: 'column', // inner items will be added vertically
+    flexGrow: 1, // all the available vertical space will be occupied by it
+    justifyContent: 'space-between', // will create the gutter between body and footer
+  },
+
+  join_text_view: {
+    padding: 10,
+  },
+
+  join_text_container: {
+    width: '100%',
+  },
+
+  join_text_big: {
+    color: Colors.white,
+    fontSize: 35,
+    fontWeight: 'bold',
+  },
+
+  join_text_small: {
+    color: Colors.white,
+    fontSize: 25,
+  },
+
+  imageContainer: {
+    maxHeight: '100%',
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
+  image: {
+    width: '100%',
+    height: 470,
+  },
+
+  join_input_container: {
+    backgroundColor: Colors.bg,
+    width: '100%',
+    paddingHorizontal: 20,
+    marginBottom: 20,
+  },
+
+  label: {
+    color: Colors.white,
+    fontSize: 18,
+  },
+
+  join_loader_container: {
+    marginVertical: 30,
+    padding: 3,
+    height: 44,
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'row',
+    width: '100%',
+  },
+
+  join_button_container: {
+    marginVertical: 30,
+    marginBottom: 20,
+    padding: 3,
+    flexDirection: 'row',
+    width: '100%',
+    height: 44,
+    backgroundColor: Colors.orange,
+    borderRadius: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
+  join_text_button: {
+    color: '#4A4A4A',
+    fontSize: 15,
+  },
+});

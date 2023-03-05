@@ -75,6 +75,8 @@ const GroupScreen = (props) => {
     data: dataRemoveMember,
   } = removeMemberReducer;
 
+  console.log('GROUP CONTEXT IN GROUP -> ', groupContext);
+
   // * this function replaces the first screen on the GroupNavigato stack
   const replaceAction = StackActions.replace({
     routeName: 'StartGroup',
@@ -82,17 +84,15 @@ const GroupScreen = (props) => {
 
   // * if the user leave the group, delete or is removed by an admin, the replace action
   // * the replace action is activated changing the stack order to show the StartGroup screen
-  useEffect(() => {
-    if (!groupContext || dataLeave) {
-      props.navigation.dispatch(replaceAction);
-    }
-  }, [props.navigation]);
+  // useEffect(() => {
+  //   if (!groupContext) {
+  //     props.navigation.dispatch(replaceAction);
+  //   }
+  // }, [props.navigation, groupContext]);
 
+  // we need to kepp calling the group if there is any change made by an external member
   useEffect(() => {
     dispatch(getGroup());
-    if (dataGroup) {
-      updateGroupContext(dataGroup);
-    }
   }, []);
 
   // handle render after fetching the group
@@ -104,12 +104,10 @@ const GroupScreen = (props) => {
       checkServerError(errorGroup);
       props.navigation.dispatch(replaceAction);
     }
-
-    // if there is still a group in the context but the backend says that there is not...
-    if (!dataGroup && groupContext) {
-      updateGroupContext(null);
+    if (dataGroup) {
+      updateGroupContext(dataGroup);
     }
-  }, [dispatch, errorGroup]);
+  }, [errorGroup, dataGroup]);
 
   // handle render after delete the group action
   useEffect(() => {
@@ -121,9 +119,9 @@ const GroupScreen = (props) => {
     }
 
     if (dataDelete) {
+      updateGroupContext(null);
       dispatch({ type: g.DELETE_GROUP_RESET });
       props.navigation.dispatch(replaceAction);
-      updateGroupContext(null);
     }
   }, [errorDelete, dataDelete]);
 
@@ -137,9 +135,9 @@ const GroupScreen = (props) => {
     }
 
     if (dataLeave) {
+      updateGroupContext(null);
       dispatch({ type: g.LEAVE_GROUP_RESET });
       props.navigation.dispatch(replaceAction);
-      updateGroupContext(null);
     }
   }, [errorLeave, dataLeave]);
 
@@ -164,10 +162,12 @@ const GroupScreen = (props) => {
   }, [errorRemoveMember, dataRemoveMember]);
 
   useEffect(() => {
-    const unsubscribe = props.navigation.addListener('focus', () => {
-      loadGroup();
-    });
-    return unsubscribe;
+    const unsubscribe = props.navigation.addListener('focus', loadGroup);
+    return () => {
+      if (unsubscribe.remove) {
+        unsubscribe.remove();
+      }
+    };
   }, [loadGroup]);
 
   const loadGroup = useCallback(async () => {
@@ -338,11 +338,11 @@ const GroupScreen = (props) => {
               backgroundColor={Colors.white}
             />
           )}
-          <ActionButton
+          {/* <ActionButton
             onPress={() => handleNavigate('Swipe')}
             text="Group chat"
             backgroundColor={Colors.blue}
-          />
+          /> */}
           {isOwnerGroup && (
             <ActionButton
               onPress={handleDeleteGroup}
