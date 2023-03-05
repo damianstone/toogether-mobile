@@ -1,6 +1,7 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useContext } from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
+import { Context } from '../../context/ContextProvider';
 import Colors from '../../constants/Colors';
 import { getUserProfile } from '../../store/actions/user';
 
@@ -8,14 +9,26 @@ import Loader from './Loader';
 
 const Avatar = (props) => {
   const { onPress } = props;
+  const {
+    profileContext,
+    updateProfileContext,
+  } = useContext(Context);
+
   const dispatch = useDispatch();
 
   const userProfile = useSelector((state) => state.userGetProfile);
-  const { loading, error: fetchError, data } = userProfile;
+  const {
+    loading: loadingProfile,
+    error: errorProfile,
+    data: dataProfile,
+  } = userProfile;
 
   useEffect(() => {
-    if (!data) {
+    if (!dataProfile && !profileContext) {
       dispatch(getUserProfile());
+    }
+    if (dataProfile) {
+      updateProfileContext(dataProfile);
     }
   }, []);
 
@@ -26,23 +39,25 @@ const Avatar = (props) => {
 
   return (
     <TouchableOpacity onPress={onPress} style={styles.imgContainer}>
-      {loading ||
-        (typeof fetchError != 'undefined' && (
+      {loadingProfile ||
+        (typeof errorProfile != 'undefined' && (
           <View style={styles.error_avatar_view}>
             <Loader />
           </View>
         ))}
-      {data && data.photos.length > 0 && (
+      {dataProfile && dataProfile.photos.length > 0 && (
         <View style={styles.avatar_view}>
           <Image
-            source={{ uri: `${data.photos[0].image}` }}
+            source={{ uri: `${dataProfile.photos[0].image}` }}
             style={styles.img}
           />
         </View>
       )}
-      {data?.photos?.length === 0 && (
+      {dataProfile?.photos?.length === 0 && (
         <View style={styles.avatar_view}>
-          <Text style={styles.avatar_initials}>{getInitials(data.name)}</Text>
+          <Text style={styles.avatar_initials}>
+            {getInitials(dataProfile.name)}
+          </Text>
         </View>
       )}
     </TouchableOpacity>

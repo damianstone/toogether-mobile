@@ -1,67 +1,57 @@
-/* eslint-disable no-promise-executor-return */
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback, useContext } from 'react';
 import {
   FlatList,
   StyleSheet,
   Text,
   View,
   Image,
-  Platform,
   ScrollView,
   ActivityIndicator,
   RefreshControl,
   Alert,
 } from 'react-native';
-import { HeaderButtons, Item } from 'react-navigation-header-buttons';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useDispatch, useSelector } from 'react-redux';
 import { useActionSheet } from '@expo/react-native-action-sheet';
-import { NavigationActions, StackActions } from 'react-navigation';
+import { StackActions } from 'react-navigation';
 import {
   getGroup,
   leaveGroup,
   removeMember,
   deleteGroup,
 } from '../../store/actions/group';
+import { Context } from '../../context/ContextProvider';
 
-import HeaderButtom from '../../components/UI/HeaderButton';
 import Avatar from '../../components/UI/Avatar';
 import Loader from '../../components/UI/Loader';
 import ActionButton from '../../components/UI/ActionButton';
 import * as g from '../../constants/group';
 import { checkServerError, check400Error } from '../../utils/errors';
+import { getNameInitials, getCardName } from '../../utils/getMethods';
 
 import Colors from '../../constants/Colors';
 import ClipBoard from '../../components/UI/ClipBoard';
 import MemberAvatar from '../../components/MemberAvatar';
 
 const GroupScreen = (props) => {
-  const [storedGroupData, setStoredGroupData] = useState();
-  const [storedProfileData, setStoredProfileData] = useState();
-  const [isOwner, setIsOwner] = useState(false);
+  const { groupContext, isOwnerGroup, updateGroupContext } =
+    useContext(Context);
+
   const [refreshing, setRefreshing] = useState(false);
   const { showActionSheetWithOptions } = useActionSheet();
   const dispatch = useDispatch();
 
-  const HEIGHT_ACTION_CONTAINER = isOwner
+  const HEIGHT_ACTION_CONTAINER = isOwnerGroup
     ? { height: '70%' }
     : { height: '60%' };
-  const HEIGHT_MEMBER_CARD_CONTAINER = isOwner
+  const HEIGHT_MEMBER_CARD_CONTAINER = isOwnerGroup
     ? { minHeight: '30%', maxHeight: '30%' }
     : { minHeight: '40%', maxHeight: '45%' };
-
-  const getProfileReducer = useSelector((state) => state.userGetProfile);
-  const {
-    loading: loadingGetProfile,
-    error: errorGetProfile,
-    data: ownerProfile,
-  } = getProfileReducer;
 
   const getGroupReducer = useSelector((state) => state.getGroup);
   const {
     loading: loadingGroup,
     error: errorGroup,
-    data: group,
+    data: dataGroup,
   } = getGroupReducer;
 
   const deleteGroupReducer = useSelector((state) => state.deleteGroup);
@@ -85,73 +75,37 @@ const GroupScreen = (props) => {
     data: dataRemoveMember,
   } = removeMemberReducer;
 
+  // * this function replaces the first screen on the GroupNavigato stack
   const replaceAction = StackActions.replace({
     routeName: 'StartGroup',
-    params: {
-      group_id: null,
-    },
   });
 
-  const getAsyncData = async () => {
-    let group;
-    let profile;
-    try {
-      group = JSON.parse(await AsyncStorage.getItem('@groupData'));
-      profile = JSON.parse(await AsyncStorage.getItem('@userData'));
-
-      if (!group || !profile) {
-        props.navigation.navigate('Swipe');
-      }
-      if (group !== null && profile !== null) {
-        setStoredGroupData(group);
-        setStoredProfileData(profile);
-      }
-    } catch (e) {
-      console.log(e);
-      props.navigation.navigate('Swipe');
-    }
-  };
-
+  // we need to kepp calling the group if there is any change made by an external member
   useEffect(() => {
     dispatch(getGroup());
-    getAsyncData();
   }, []);
 
+  useEffect(() => {
+    if (!groupContext) {
+      console.log("replace back");
+      props.navigation.dispatch(replaceAction);
+    }
+  }, [groupContext]);
+
+  // handle render after fetching the group
   useEffect(() => {
     if (errorGroup) {
       if (errorGroup?.response?.status === 400) {
         check400Error(errorGroup);
       }
       checkServerError(errorGroup);
-      props.navigation.dispatch(replaceAction);
     }
-
-    if (storedGroupData && !group) {
-      dispatch(getGroup());
+    if (dataGroup) {
+      updateGroupContext(dataGroup);
     }
+  }, [errorGroup, dataGroup]);
 
-    if (
-      storedGroupData &&
-      storedProfileData &&
-      storedGroupData.owner.id === storedProfileData.id
-    ) {
-      setIsOwner(true);
-    }
-  }, [
-    dispatch,
-    errorGroup,
-    errorGetProfile,
-    storedGroupData,
-    storedProfileData,
-  ]);
-
-  useEffect(() => {
-    const unsubscribe = props.navigation.addListener('focus', () => {
-      loadGroup();
-    });
-    return unsubscribe;
-  }, [loadGroup]);
-
+  // handle render after delete the group action
   useEffect(() => {
     if (errorDelete) {
       if (errorDelete?.response?.status === 400) {
@@ -160,6 +114,15 @@ const GroupScreen = (props) => {
       checkServerError(errorDelete);
     }
 
+    if (dataDelete) {
+      updateGroupContext(null);
+      dispatch({ type: g.DELETE_GROUP_RESET });
+      props.navigation.dispatch(replaceAction);
+    }
+  }, [errorDelete, dataDelete]);
+
+  // handle render after leave the group
+  useEffect(() => {
     if (errorLeave) {
       if (errorLeave?.response?.status === 400) {
         check400Error(errorLeave);
@@ -167,21 +130,20 @@ const GroupScreen = (props) => {
       checkServerError(errorLeave);
     }
 
+    if (dataLeave) {
+      updateGroupContext(null);
+      dispatch({ type: g.LEAVE_GROUP_RESET });
+      props.navigation.dispatch(replaceAction);
+    }
+  }, [errorLeave, dataLeave]);
+
+  // handle render after remove a member from the group action
+  useEffect(() => {
     if (errorRemoveMember) {
       if (errorRemoveMember?.response?.status === 400) {
         check400Error(errorRemoveMember);
       }
       checkServerError(errorRemoveMember);
-    }
-
-    if (dataDelete) {
-      dispatch({ type: g.DELETE_GROUP_RESET });
-      props.navigation.dispatch(replaceAction);
-    }
-
-    if (dataLeave) {
-      dispatch({ type: g.LEAVE_GROUP_RESET });
-      props.navigation.dispatch(replaceAction);
     }
 
     if (dataRemoveMember) {
@@ -193,14 +155,16 @@ const GroupScreen = (props) => {
       ]);
       dispatch({ type: g.REMOVE_MEMBER_RESET });
     }
-  }, [
-    errorDelete,
-    dataDelete,
-    errorLeave,
-    dataLeave,
-    errorRemoveMember,
-    dataRemoveMember,
-  ]);
+  }, [errorRemoveMember, dataRemoveMember]);
+
+  useEffect(() => {
+    const unsubscribe = props.navigation.addListener('focus', loadGroup);
+    return () => {
+      if (unsubscribe.remove) {
+        unsubscribe.remove();
+      }
+    };
+  }, [loadGroup]);
 
   const loadGroup = useCallback(async () => {
     setRefreshing(true);
@@ -211,10 +175,6 @@ const GroupScreen = (props) => {
     }
     setRefreshing(false);
   }, [dispatch]);
-
-  const handleNavigate = (screen) => {
-    return props.navigation.navigate(screen);
-  };
 
   const handleDeleteGroup = () => {
     Alert.alert(
@@ -227,10 +187,8 @@ const GroupScreen = (props) => {
         {
           text: 'Delete',
           onPress: () => {
-            if (isOwner && storedGroupData?.id) {
-              dispatch(deleteGroup(storedGroupData.id));
-              setStoredGroupData();
-              setStoredProfileData();
+            if (isOwnerGroup) {
+              dispatch(deleteGroup(groupContext.id));
             }
           },
           style: 'destructive',
@@ -250,9 +208,7 @@ const GroupScreen = (props) => {
         {
           text: 'Leave',
           onPress: () => {
-            dispatch(leaveGroup(storedGroupData.id));
-            setStoredGroupData();
-            setStoredProfileData();
+            dispatch(leaveGroup(groupContext.id));
           },
           style: 'destructive',
         },
@@ -261,8 +217,8 @@ const GroupScreen = (props) => {
   };
 
   const handleRemoveMember = (member_id) => {
-    if (isOwner) {
-      dispatch(removeMember(storedGroupData.id, member_id));
+    if (isOwnerGroup) {
+      dispatch(removeMember(groupContext.id, member_id));
     }
   };
 
@@ -302,22 +258,10 @@ const GroupScreen = (props) => {
     );
   };
 
-  const getInitials = (name) => {
-    const first = name ? name.charAt(0).toUpperCase() : 'N';
-    return first;
-  };
-
-  const getName = (name) => {
-    if (name) {
-      return name;
-    }
-    return 'Null';
-  };
-
   if (loadingDelete || loadingLeave) {
     return (
       <View style={styles.loadingScreen}>
-        <ActivityIndicator color={Colors.orange} size="large" />
+        <ActivityIndicator color={Colors.white} size="large" />
       </View>
     );
   }
@@ -329,10 +273,10 @@ const GroupScreen = (props) => {
           name={item.name}
           photos={item.photos}
           onPress={() =>
-            isOwner ? handleOpenActionSheet(item.id, item.name) : null
+            isOwnerGroup ? handleOpenActionSheet(item.id, item.name) : null
           }
         />
-        <Text style={styles.name_text}>{getName(item.name)}</Text>
+        <Text style={styles.name_text}>{getCardName(item.name)}</Text>
       </View>
     );
   };
@@ -348,50 +292,57 @@ const GroupScreen = (props) => {
           onRefresh={loadGroup}
           tintColor={Colors.white}
         />
-      }
-    >
+      }>
       <View style={{ ...styles.action_view, ...HEIGHT_ACTION_CONTAINER }}>
         <View style={styles.profile_photo_container}>
-          {!group && <Loader />}
-          {group && group.owner.photos && group.owner.photos.length > 0 && (
-            <Image
-              source={{
-                uri: `${group.owner.photos[0].image}`,
-              }}
-              style={{ width: 150, height: 150, borderRadius: 100 }}
-            />
-          )}
-          {(group && !group.owner.photos) ||
-            (group?.owner.photos.length === 0 && (
+          {!groupContext && <Loader />}
+          {groupContext &&
+            groupContext.owner.photos &&
+            groupContext.owner.photos.length > 0 && (
+              <Image
+                source={{
+                  uri: `${groupContext.owner.photos[0].image}`,
+                }}
+                style={{ width: 150, height: 150, borderRadius: 100 }}
+              />
+            )}
+          {(groupContext && !groupContext.owner.photos) ||
+            (groupContext?.owner.photos.length === 0 && (
               <View style={styles.avatar_view}>
                 <Text style={styles.avatar_initials}>
-                  {getInitials(group.owner.name)}
+                  {getNameInitials(groupContext.owner.name)}
                 </Text>
               </View>
             ))}
           <View style={styles.nameView}>
-            {group?.owner && (
-              <Text style={styles.name}>{`${group.owner.name}'s group`}</Text>
+            {groupContext?.owner && (
+              <Text
+                style={
+                  styles.name
+                }>{`${groupContext.owner.name}'s group`}</Text>
             )}
           </View>
         </View>
         <View style={styles.buttons_container}>
-          {isOwner && group?.share_link && (
-            <ClipBoard text={group.share_link} backgroundColor={Colors.white} />
+          {isOwnerGroup && groupContext?.share_link && (
+            <ClipBoard
+              text={groupContext.share_link}
+              backgroundColor={Colors.white}
+            />
           )}
-          <ActionButton
+          {/* <ActionButton
             onPress={() => handleNavigate('Swipe')}
             text="Group chat"
             backgroundColor={Colors.blue}
-          />
-          {isOwner && (
+          /> */}
+          {isOwnerGroup && (
             <ActionButton
               onPress={handleDeleteGroup}
               text="Delete group"
               backgroundColor={Colors.orange}
             />
           )}
-          {!isOwner && (
+          {!isOwnerGroup && (
             <ActionButton
               onPress={handleLeaveGroup}
               text="Leave group"
@@ -401,7 +352,7 @@ const GroupScreen = (props) => {
         </View>
       </View>
       <View style={{ ...styles.members_view, ...HEIGHT_MEMBER_CARD_CONTAINER }}>
-        {group && (
+        {groupContext && (
           <FlatList
             style={{ flex: 1 }}
             contentContainerStyle={{
@@ -411,7 +362,7 @@ const GroupScreen = (props) => {
             nestedScrollEnabled
             horizontal={false}
             numColumns={3}
-            data={group.members}
+            data={groupContext.members}
             renderItem={renderMemberItem}
             keyExtractor={(item) => item.id}
           />

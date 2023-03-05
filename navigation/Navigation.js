@@ -97,7 +97,6 @@ const MyProfileNavigator = createStackNavigator(
   }
 );
 
-// we wrap the my profile navigator with the modal we want to display as full screen
 const MyProfileNavigatorWithModal = createStackNavigator(
   {
     MyProfile: MyProfileNavigator,
@@ -206,40 +205,46 @@ const tabScreenCnfig = {
     },
   },
   Group: {
-    screen: GroupNavigator, // STACK NAVIGATOR
-    navigationOptions: ({ navigation }) => ({
-      tabBarIcon: (tabInfo) => {
-        return (
-          <MaterialCommunityIcons
-            name="account-group"
-            size={25}
-            color={tabInfo.tintColor}
-          />
-        );
-      },
-      tabBarColor: Colors.orange,
-      tabBarLabel: Platform.OS === 'android' ? <Text>Create group</Text> : null,
-      tabBarOptions: {
-        showLabel: false,
-        activeTintColor: Colors.orange,
-        style: {
-          backgroundColor:
-            navigation.state.routes[navigation.state.index].routeName ===
-            'Group'
-              ? Colors.bgCard
-              : Colors.bg,
-          borderTopWidth: 0,
+    screen: GroupNavigator,
+    navigationOptions: ({ navigation }) => {
+      console.log(navigation.state);
+      return {
+        tabBarIcon: (tabInfo) => {
+          return (
+            <MaterialCommunityIcons
+              name="account-group"
+              size={25}
+              color={tabInfo.tintColor}
+            />
+          );
         },
-        tabStyle: {
-          backgroundColor:
-            navigation.state.routes[navigation.state.index].routeName ===
-            'Group'
-              ? Colors.bgCard
-              : Colors.bg,
-          statusBarStyle: Colors.bg,
+        tabBarColor: Colors.orange,
+        tabBarLabel:
+          Platform.OS === 'android' ? <Text>Create group</Text> : null,
+        tabBarOptions: {
+          showLabel: false,
+          activeTintColor: Colors.orange,
+          style: {
+            backgroundColor:
+              navigation.state.routes &&
+              navigation.state.routes[navigation.state.index].routeName ===
+                'Group'
+                ? Colors.bgCard
+                : Colors.bg,
+            borderTopWidth: 0,
+          },
+          tabStyle: {
+            backgroundColor:
+              navigation.state.routes &&
+              navigation.state.routes[navigation.state.index].routeName ===
+                'Group'
+                ? Colors.bgCard
+                : Colors.bg,
+            statusBarStyle: Colors.bg,
+          },
         },
-      },
-    }),
+      };
+    },
   },
 };
 
