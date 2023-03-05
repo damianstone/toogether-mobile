@@ -41,6 +41,7 @@ const StartGroupScreen = (props) => {
     routeName: 'Group',
   });
 
+  
   // * if the user is already in a group
   useEffect(() => {
     if (groupContext) {
@@ -49,7 +50,7 @@ const StartGroupScreen = (props) => {
     } else {
       setTransitionLoading(false);
     }
-  }, [groupContext]);
+  }, []);
 
   // handle render after create group action
   useEffect(() => {

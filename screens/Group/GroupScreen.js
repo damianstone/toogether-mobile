@@ -75,25 +75,22 @@ const GroupScreen = (props) => {
     data: dataRemoveMember,
   } = removeMemberReducer;
 
-  console.log('GROUP CONTEXT IN GROUP -> ', groupContext);
-
   // * this function replaces the first screen on the GroupNavigato stack
   const replaceAction = StackActions.replace({
     routeName: 'StartGroup',
   });
 
-  // * if the user leave the group, delete or is removed by an admin, the replace action
-  // * the replace action is activated changing the stack order to show the StartGroup screen
-  // useEffect(() => {
-  //   if (!groupContext) {
-  //     props.navigation.dispatch(replaceAction);
-  //   }
-  // }, [props.navigation, groupContext]);
-
   // we need to kepp calling the group if there is any change made by an external member
   useEffect(() => {
     dispatch(getGroup());
   }, []);
+
+  useEffect(() => {
+    if (!groupContext) {
+      console.log("replace back");
+      props.navigation.dispatch(replaceAction);
+    }
+  }, [groupContext]);
 
   // handle render after fetching the group
   useEffect(() => {
@@ -102,7 +99,6 @@ const GroupScreen = (props) => {
         check400Error(errorGroup);
       }
       checkServerError(errorGroup);
-      props.navigation.dispatch(replaceAction);
     }
     if (dataGroup) {
       updateGroupContext(dataGroup);
@@ -179,10 +175,6 @@ const GroupScreen = (props) => {
     }
     setRefreshing(false);
   }, [dispatch]);
-
-  const handleNavigate = (screen) => {
-    props.navigation.navigate(screen);
-  };
 
   const handleDeleteGroup = () => {
     Alert.alert(

@@ -16,6 +16,7 @@ import { StatusBar } from 'expo-status-bar';
 import { Context } from '../../context/ContextProvider';
 import { joinGroup } from '../../store/actions/group';
 import { check400Error, checkServerError } from '../../utils/errors';
+import { StackActions } from 'react-navigation';
 
 import HeaderButtom from '../../components/UI/HeaderButton';
 import AuthButton from '../../components/UI/AuthButton';
@@ -50,7 +51,7 @@ const formReducer = (state, action) => {
 };
 
 const JoinGroupScreen = (props) => {
-  const { updateGroupContext } = useContext(Context);
+  const { groupContext, updateGroupContext } = useContext(Context);
   const dispatch = useDispatch();
 
   const joinGroupReducer = useSelector((state) => state.joinGroup);
@@ -83,16 +84,11 @@ const JoinGroupScreen = (props) => {
     }
 
     if (dataJoin) {
-      Alert.alert('Joined to the group', '', [
-        {
-          text: 'OK',
-        },
-      ]);
       updateGroupContext(dataJoin);
-      props.navigation.navigate('Group');
       dispatch({ type: g.JOIN_GROUP_RESET });
+      props.navigation.navigate('Group');
     }
-  }, [dispatch, errorJoin, dataJoin]);
+  }, [errorJoin, dataJoin]);
 
   const inputChangeHandler = useCallback(
     (inputIdentifier, inputValue, inputValidity) => {
@@ -117,7 +113,9 @@ const JoinGroupScreen = (props) => {
         },
       ]);
     }
-    dispatch(joinGroup(inputValues.share_link));
+    if (inputValues.share_link) {
+      dispatch(joinGroup(inputValues.share_link));
+    }
   };
 
   if (loadingJoin) {
