@@ -24,6 +24,10 @@ export default StyleSheet.create({
     marginVertical: 0,
     top: '2.5%',
   },
+  logoContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   logo: {
     width: 57,
     height: 35,
