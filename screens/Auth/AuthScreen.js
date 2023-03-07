@@ -172,19 +172,31 @@ const AuthStartScreen = (props) => {
     <View style={styles.screen}>
       <StatusBar style="light" />
       <View style={styles.auth_text_view}>
-        <View style={styles.auth_text_container}>
+        <View style={[
+          styles.auth_text_container, 
+          Platform.OS === 'ios' ? {} : {
+            justifyContent: 'center', 
+            alignItems: 'center'}
+          ]}
+        >
           <Text style={styles.auth_text_big}>
             {register ? 'Lets create your account!' : 'Lets sign you in'}
           </Text>
         </View>
-        <View style={styles.auth_text_container}>
+        <View style={[
+          styles.auth_text_container, 
+          Platform.OS === 'ios' ? {} : {
+            justifyContent: 'center', 
+            alignItems: 'center'}
+          ]}
+        >
           <Text style={styles.auth_text_small}>
             {register ? 'Welcome ;)' : 'Welcome back'}
           </Text>
         </View>
       </View>
       <KeyboardAvoidingView 
-        behavior={Platform.OS === 'ios' ? "position" : "position"}
+        behavior={Platform.OS === 'ios' ? "position" : ""}
       >
         <ScrollView
           style={styles.scrollview_style}
