@@ -6,6 +6,7 @@ import { Platform } from 'react-native';
 
 export default StyleSheet.create({
   screen: {
+    flex: 1,
     backgroundColor: Colors.bg,
     justifyContent: 'space-between',
     flexDirection: 'column',
@@ -35,12 +36,18 @@ export default StyleSheet.create({
   },
 
   auth_text_view: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
     marginTop: Platform.OS === 'ios' ? 80 : 40,
     padding: 15,
     minHeight: '30%',
   },
 
   auth_text_container: {
+    // flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
     width: '100%',
   },
 
@@ -56,7 +63,9 @@ export default StyleSheet.create({
   },
 
   auth_input_container: {
+    flex: 1,
     backgroundColor: Colors.white,
+    borderRadius: 55,
     alignItems: 'center',
     width: '100%',
     padding: 20,

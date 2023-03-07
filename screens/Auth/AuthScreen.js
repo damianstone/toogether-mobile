@@ -183,7 +183,9 @@ const AuthStartScreen = (props) => {
           </Text>
         </View>
       </View>
-      <KeyboardAvoidingView behavior="position">
+      <KeyboardAvoidingView 
+        behavior={Platform.OS === 'ios' ? "position" : "position"}
+      >
         <ScrollView
           style={styles.scrollview_style}
           contentContainerStyle={styles.scrollview_content_container}
@@ -206,7 +208,7 @@ const AuthStartScreen = (props) => {
             />
             <AuthInput
               secureTextEntry
-              textContentType="new-password"
+              textContentType={Platform.OS ==='ios' ? "new-password" : "newPassword"}
               id="password"
               label="Password"
               keyboardType="default"
@@ -219,7 +221,7 @@ const AuthStartScreen = (props) => {
             {register && (
               <AuthInput
                 secureTextEntry
-                textContentType="new-password"
+                textContentType={Platform.OS ==='ios' ? "new-password" : "newPassword"}
                 required
                 autoCapitalize="none"
                 id="repeated_password"
