@@ -104,7 +104,7 @@ const StartGroupScreen = (props) => {
         <View style={styles.buttonsContainer}>
           <Button
             title="Join to group"
-            color={Colors.white}
+            color={Platform.OS === 'ios' ? Colors.white : Colors.bg}
             onPress={handleJoinToGroup}
           />
           <AuthButton onPress={handleCreateGroup} text="Create group" />
