@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, TouchableOpacity, Text } from 'react-native';
+import { StyleSheet, TouchableOpacity, Text, Platform } from 'react-native';
 import Colors from '../../constants/Colors';
 
 const AuthButton = (props) => {
@@ -16,7 +16,7 @@ export default AuthButton;
 
 const styles = StyleSheet.create({
   auth_button_container: {
-    marginVertical: 30,
+    marginVertical: Platform.OS === 'ios' ? 30 : 0,
     padding: 3,
     flexDirection: 'row',
     width: '100%',

@@ -7,6 +7,7 @@ import {
   Platform,
   ActivityIndicator,
   StyleSheet,
+  Dimensions,
 } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 
@@ -14,6 +15,8 @@ import AuthButton from '../../components/UI/AuthButton';
 import Colors from '../../constants/Colors';
 import ButtonAndroid from '../../components/UI/ButtonAndroid';
 // import Button from '../../components/UI/Button';
+
+const imageAspect = 0.85812356979;
 
 const AuthStartScreen = (props) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -49,19 +52,24 @@ const AuthStartScreen = (props) => {
           <Image
             source={require('../../assets/images/radar.png')}
             style={styles.image}
+            resizeMode= {Platform.OS === 'ios' ? 'cover' : 'contain'}
           />
         </View>
         <View style={styles.buttonsContainer}>
-          {/* <Button
-            title="Login"
-            color={Platform.OS === 'ios' ? Colors.white : Colors.bg}
-            onPress={handleLogin}
-          /> */}
-          <ButtonAndroid 
-            title="Login"
-            color={Platform.OS === 'ios' ? Colors.white : Colors.bg}
-            onPress={handleLogin}
-          />
+          {
+            Platform.OS === 'ios' ?
+              <Button
+                title="Login"
+                color={Platform.OS === 'ios' ? Colors.white : Colors.bg}
+                onPress={handleLogin}
+              />
+            :
+              <ButtonAndroid 
+                title="Login"
+                color={Platform.OS === 'ios' ? Colors.white : Colors.bg}
+                onPress={handleLogin}
+              />
+          }
           <AuthButton onPress={handleRegister} text="Create Account" />
         </View>
       </ScrollView>
@@ -114,14 +122,14 @@ const styles = StyleSheet.create({
 
   imageContainer: {
     marginTop: 20,
-    marginVertical: 20,
+    marginVertical: Platform.OS === 'ios' ? 20 : 0,
     alignItems: 'center',
     justifyContent: 'center',
   },
 
   image: {
     width: '100%',
-    height: 450,
+    height: Platform.OS === 'ios' ? 450 : 480,
   },
 
   buttonsContainer: {

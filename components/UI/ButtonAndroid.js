@@ -25,6 +25,10 @@ const styles = StyleSheet.create({
     // flex: 1, //flex seems to break TouchableOpacity
     justifyContent: 'center',
     alignItems: 'center',
+    marginVertical: 20,
+    height: 30,
+    paddingHorizontal: 35, 
+    
   },
   textStyle: {
     color: Colors.white,
