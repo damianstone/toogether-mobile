@@ -24,7 +24,7 @@ export const userLocation = () => {
       };
 
       const location = await Location.getCurrentPositionAsync({
-        accuracy: 3,
+        accuracy: Platform.OS === 'ios' ? 3 : BALANCED,
       });
 
       const { data } = await axios({
