@@ -12,6 +12,7 @@ import { StatusBar } from 'expo-status-bar';
 
 import AuthButton from '../../components/UI/AuthButton';
 import Colors from '../../constants/Colors';
+import ButtonAndroid from '../../components/UI/ButtonAndroid';
 // import Button from '../../components/UI/Button';
 
 const AuthStartScreen = (props) => {
@@ -51,7 +52,12 @@ const AuthStartScreen = (props) => {
           />
         </View>
         <View style={styles.buttonsContainer}>
-          <Button
+          {/* <Button
+            title="Login"
+            color={Platform.OS === 'ios' ? Colors.white : Colors.bg}
+            onPress={handleLogin}
+          /> */}
+          <ButtonAndroid 
             title="Login"
             color={Platform.OS === 'ios' ? Colors.white : Colors.bg}
             onPress={handleLogin}
