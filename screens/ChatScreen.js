@@ -213,7 +213,7 @@ const ChatScreen = (props) => {
   return (
     <View style={{ backgroundColor: Colors.bg, flex: 1 }}>
       <FlatList
-        data={matches?.data}
+        data={matches?.results}
         keyExtractor={(match) => match.id}
         scrollEnabled
         refreshControl={

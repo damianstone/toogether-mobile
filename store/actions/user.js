@@ -80,7 +80,7 @@ export const userRegister = (email, password, repeated_password) => {
 
       const { data } = await axios({
         method: 'POST',
-        url: `${BASE_URL}/api/v1/users/register/`,
+        url: `${BASE_URL}/api/v1/profiles/`,
         headers: config,
         data: {
           email,
@@ -216,7 +216,7 @@ export const userDelete = () => {
 
       const { data } = await axios({
         method: 'delete',
-        url: `${BASE_URL}/api/v1/users/delete/`,
+        url: `${BASE_URL}/api/v1/profiles/${userData.id}/`,
         headers: config,
       });
 
@@ -234,7 +234,6 @@ export const userDelete = () => {
 
 // -------------------------------- PROFILE ACTIONS --------------------------------
 
-// GET USER -> get any profile
 export const getUserProfile = (profile_id) => {
   return async (dispatch) => {
     try {
@@ -244,12 +243,6 @@ export const getUserProfile = (profile_id) => {
 
       const userData = JSON.parse(await AsyncStorage.getItem('@userData'));
 
-      if (profile_id !== undefined) {
-        id = profile_id;
-      } else {
-        id = userData.id;
-      }
-
       const config = {
         'Content-Type': 'application/json',
         Accept: 'application/json',
@@ -258,7 +251,7 @@ export const getUserProfile = (profile_id) => {
 
       const { data } = await axios({
         method: 'get',
-        url: `${BASE_URL}/api/v1/profiles/${id}/`,
+        url: `${BASE_URL}/api/v1/profiles/${userData.id}/`,
         headers: config,
       });
 
@@ -340,7 +333,6 @@ export const createUserProfile = (
   };
 };
 
-// UPDATE USER PROFILE
 export const updateUserProfile = (dataObj) => {
   return async (dispatch) => {
     try {
@@ -355,8 +347,8 @@ export const updateUserProfile = (dataObj) => {
       };
 
       const { data } = await axios({
-        method: 'patch',
-        url: `${BASE_URL}/api/v1/profiles/${userData.id}/actions/update-profile/`,
+        method: 'put',
+        url: `${BASE_URL}/api/v1/profiles/${userData.id}/`,
         headers: config,
         data: dataObj,
       });
