@@ -32,16 +32,29 @@ To check errors in the code style, run the following command:
 npm run lint:fix
 ```
 
-### Pull Requests
-Before any merge to **develop** or **rocket**, it will be necessary to make a Pull Request and a code review.
+## Style Standards
+To format the code in the project, simply run the following command in the root directory of the project:
+
+```bash
+black .
+```
+This command will automatically format all .py files in the project according to the black style guide, which adheres to the PEP 8 style guide
+
+**Make sure you run this command before any pull request**
+
+## Pull Requests
+
+Before any merge to develop or rocket, it will be necessary to make a Pull Request and a code review.
 
 Basic PR structure:
 
-`your-branch` -> `develop` -> `rocket`
+`your-branch` -> `feature-branch` -> `develop` -> `rocket`
 
-When a PR is made to either `develop` or `rocket`, a github action will be triggered in which code formatting is run.
-If the workflow fails, it will not be possible to merge them.
-
+### Steps for a Pull Request
+1. Push your branch to the remote repository: git push
+2.  Navigate to the GitHub website
+3.  Create the pull request (PR) manually by selecting the correct `feature-branch` you are working on and clicking on the "New pull request" button
+4.  Notify the team about your PR through our communication channel: Discord
 
 # Deployment
 
