@@ -57,18 +57,19 @@ const AuthStartScreen = (props) => {
         </View>
         <View style={styles.buttonsContainer}>
           {
-            Platform.OS === 'ios' ?
-              <Button
-                title="Login"
-                color={Platform.OS === 'ios' ? Colors.white : Colors.bg}
-                onPress={handleLogin}
-              />
-            :
-              <ButtonAndroid 
-                title="Login"
-                color={Platform.OS === 'ios' ? Colors.white : Colors.bg}
-                onPress={handleLogin}
-              />
+            Platform.OS === 'ios' 
+              ?
+                <Button
+                  title="Login"
+                  color={Platform.OS === 'ios' ? Colors.white : Colors.bg} //  not needed but kept for refernce
+                  onPress={handleLogin}
+                />
+              :
+                <ButtonAndroid 
+                  title="Login"
+                  color={Platform.OS === 'ios' ? Colors.white : Colors.bg}
+                  onPress={handleLogin}
+                />
           }
           <AuthButton onPress={handleRegister} text="Create Account" />
         </View>

@@ -42,11 +42,12 @@ export default StyleSheet.create({
 
   auth_text_container: {
     width: '100%',
+    paddingVertical: Platform.OS === 'ios' ? 0 : 5,
   },
 
   auth_text_big: {
     color: Colors.white,
-    fontSize: Platform.OS === 'ios' ? 40 : 32,
+    fontSize: Platform.OS === 'ios' ? 40 : 40,
     fontWeight: 'bold',
   },
 
@@ -88,6 +89,6 @@ export default StyleSheet.create({
 
   auth_text_button: {
     color: '#4A4A4A',
-    fontSize: Platform.OS === 'ios' ? 15 : 10,
+    fontSize: Platform.OS === 'ios' ? 15 : 18,
   },
 });

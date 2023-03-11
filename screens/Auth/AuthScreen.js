@@ -19,6 +19,7 @@ import * as c from '../../constants/user';
 import { userRegister, userLogin } from '../../store/actions/user';
 import { check400Error, checkServerError } from '../../utils/errors';
 import styles from './styles';
+import ButtonAndroid from '../../components/UI/ButtonAndroid';
 
 const FORM_UPDATE = 'FORM_UPDATE';
 
@@ -172,23 +173,13 @@ const AuthStartScreen = (props) => {
     <View style={styles.screen}>
       <StatusBar style="light" />
       <View style={styles.auth_text_view}>
-        <View style={[
-          styles.auth_text_container, 
-          Platform.OS === 'ios' ? {} : {
-            justifyContent: 'center', 
-            alignItems: 'center'}
-          ]}
+        <View style={styles.auth_text_container}
         >
           <Text style={styles.auth_text_big}>
             {register ? 'Lets create your account!' : 'Lets sign you in'}
           </Text>
         </View>
-        <View style={[
-          styles.auth_text_container, 
-          Platform.OS === 'ios' ? {} : {
-            justifyContent: 'center', 
-            alignItems: 'center'}
-          ]}
+        <View style={styles.auth_text_container}
         >
           <Text style={styles.auth_text_small}>
             {register ? 'Welcome ;)' : 'Welcome back'}
@@ -254,9 +245,9 @@ const AuthStartScreen = (props) => {
                 onPress={register ? handleRegister : handleLogin}
               />
             )}
-            <Button
+            <ButtonAndroid
               style={styles.auth_text_button}
-              color={Platform.OS === 'ios' ? Colors.bgCard : Colors.bgCard}
+              color={Colors.bgCard}
               title={
                 register
                   ? 'You already have an account?'

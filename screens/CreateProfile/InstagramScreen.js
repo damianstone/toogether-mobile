@@ -77,7 +77,7 @@ const InstagramScreen = (props) => {
         if (errorUpdate?.response?.data?.detail) {
           check400Error(errorUpdate);
         } else {
-          setError(true);
+          // setError(true);
         }
       } else {
         checkServerError(errorUpdate);
@@ -163,11 +163,14 @@ const InstagramScreen = (props) => {
           <Loader />
         ) : (
           <TouchableOpacity style={styles.touchable} onPress={handleInstagram}>
-            <Button
+            <Text style={styles.button_text} >
+              Continue
+            </Text>
+            {/* <Button
               onPress={handleInstagram}
               color={Colors.white}
               title="Continue"
-            />
+            /> */}
           </TouchableOpacity>
         )}
       </View>
@@ -220,6 +223,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   touchable: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
     width: '100%',
     height: '100%',
   },
@@ -234,4 +240,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#494863',
     borderRadius: 10,
   },
+  button_text: {
+    color: 'white',
+    fontSize: 20,
+  }
 });
