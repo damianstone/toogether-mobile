@@ -6,13 +6,15 @@ import {
   View,
   TouchableOpacity,
   Button,
+  Platform,
 } from 'react-native';
 import Colors from '../constants/Colors';
+import ButtonAndroid from './UI/ButtonAndroid';
 
 const SwipeError = (props) => {
   const { imageUrl, title, text, onPress, onReload, buttonText, reload } =
     props;
-
+    
   return (
     <View style={styles.screen}>
       <Image style={styles.img} source={imageUrl} />
@@ -25,7 +27,11 @@ const SwipeError = (props) => {
           <Text style={styles.buttonText}>{buttonText}</Text>
         </TouchableOpacity>
         {reload && (
-          <Button title="Reload" color={Colors.white} onPress={onReload} />
+          Platform.OS === 'ios'
+          ?
+            <Button title="Reload" color={Colors.white} onPress={onReload} />
+          :
+            <ButtonAndroid title="Reload" onPress={onReload} />
         )}
       </View>
     </View>

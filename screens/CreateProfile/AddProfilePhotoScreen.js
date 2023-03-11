@@ -20,6 +20,7 @@ import { addPhoto } from '../../store/actions/user';
 import { check400Error, checkServerError } from '../../utils/errors';
 
 import * as authStyles from '../Auth/styles';
+import ButtonAndroid from '../../components/UI/ButtonAndroid';
 
 const AddProfilePhotoScreen = (props) => {
   const [image, setImage] = useState('');
@@ -113,7 +114,12 @@ const AddProfilePhotoScreen = (props) => {
           </View>
         ) : (
           <>
-            <Button title="Skip" color={Colors.white} onPress={handleSkip} />
+            { Platform.OS === 'ios' 
+            ?
+              <Button title="Skip" color={Colors.white} onPress={handleSkip} />
+            :
+              <ButtonAndroid title="Skip" onPress={handleSkip} />
+            }
             <AuthButton text="Continue" onPress={handleAddPhoto} />
           </>
         )}

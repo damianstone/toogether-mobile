@@ -35,9 +35,8 @@ const styles = StyleSheet.create({
     borderColor: 'white',
   },
   buttonContainer: {
-    // flex: 1, //flex seems to break TouchableOpacity
+    flex: 1,
     justifyContent: 'center',
-    // margin: 5,
     height: 30,
     overflow: 'hidden',
     paddingHorizontal: 35,
