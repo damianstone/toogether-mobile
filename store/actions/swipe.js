@@ -104,6 +104,7 @@ export const listLikes = () => {
     }
   };
 };
+
 export const like = (id) => {
   return async (dispatch) => {
     try {
@@ -184,7 +185,7 @@ export const listMatches = () => {
 
       const { data } = await axios({
         method: 'get',
-        url: `${BASE_URL}/api/v1/matches/actions/list-profile-matches/`,
+        url: `${BASE_URL}/api/v1/matches/`,
         headers: config,
       });
 
