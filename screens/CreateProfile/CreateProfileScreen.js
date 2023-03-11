@@ -6,6 +6,8 @@ import {
   ScrollView,
   ActivityIndicator,
   Alert,
+  Platform,
+  PlatformColor,
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { StatusBar } from 'expo-status-bar';
@@ -148,10 +150,11 @@ const CreateProfileScreen = (props) => {
 
   return (
     <KeyboardAvoidingView
-      behavior="padding"
+      behavior={Platform.OS === 'ios' ? "padding" : ""}
       keyboardVerticalOffset={50}
       style={styles.screen}
       contentContainerStyle={styles.screen}
+      enabled
     >
       <StatusBar style="light" />
       <ScrollView
@@ -163,7 +166,7 @@ const CreateProfileScreen = (props) => {
         <View style={styles.auth_text_view}>
           <View style={authStyles.default.auth_text_container}>
             <Text style={authStyles.default.auth_text_big}>
-              Lets poss create your profile
+              Lets poss create your profile 
             </Text>
           </View>
           <View style={authStyles.default.auth_text_container}>

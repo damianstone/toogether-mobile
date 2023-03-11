@@ -32,8 +32,9 @@ export default StyleSheet.create({
     marginBottom: 20,
   },
   contentContainer: {
+    flexGrow: 1,
     width: '100%',
-    justifyContent: 'center',
+    justifyContent: Platform.OS === 'ios' ? 'center' : "space-between",
     overflow: 'hidden',
   },
   photoContainer: {

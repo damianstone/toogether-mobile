@@ -77,7 +77,7 @@ const InstagramScreen = (props) => {
         if (errorUpdate?.response?.data?.detail) {
           check400Error(errorUpdate);
         } else {
-          // setError(true);
+          // setError(true); // Fix this
         }
       } else {
         checkServerError(errorUpdate);
