@@ -4,7 +4,7 @@ import Colors from '../../constants/Colors';
 
 const AuthButton = (props) => {
   const { onPress, text } = props;
-
+  
   return (
     <TouchableOpacity style={styles.auth_button_container} onPress={onPress}>
       <Text style={styles.auth_button_text}>{text}</Text>
@@ -16,7 +16,7 @@ export default AuthButton;
 
 const styles = StyleSheet.create({
   auth_button_container: {
-    marginVertical: Platform.OS === 'ios' ? 30 : 0,
+    marginVertical: Platform.OS === 'ios' ? 30 : 30,
     padding: 3,
     flexDirection: 'row',
     width: '100%',

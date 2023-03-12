@@ -160,7 +160,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     width: '65%',
     alignItems: 'center',
-
     marginBottom: 30,
   },
 });
