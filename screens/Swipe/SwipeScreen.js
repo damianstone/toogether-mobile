@@ -1,43 +1,43 @@
-import React, { useEffect, useState, useRef, useCallback } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import {
   View,
   Image,
   Share,
-  Text,
   Platform,
   SafeAreaView,
   Alert,
 } from 'react-native';
+import { useNetInfo } from '@react-native-community/netinfo';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
-import { withNavigation } from 'react-navigation';
+import { withNavigation, withNavigationFocus } from 'react-navigation';
 import { StatusBar } from 'expo-status-bar';
 import { useSelector, useDispatch } from 'react-redux';
 import { verifyLocationPermissions } from '../../utils/permissions';
+import { exist, getShowMode } from '../../utils/checks';
 import { userLocation } from '../../store/actions/user';
 import { listSwipe } from '../../store/actions/swipe';
-import * as b from '../../constants/block';
 
 import Deck from './Deck';
 import HeaderButtom from '../../components/UI/HeaderButton';
 import ActivityModal from '../../components/UI/ActivityModal';
 import Avatar from '../../components/UI/Avatar';
 import SwipeError from '../../components/SwipeError';
-import Colors from '../../constants/Colors';
 import styles from './styles';
 
 /*
-  showMode
+  * show modes:
   -1 = error location
-  0 = not found
+  0 = cards not found
   1 = all cards swiped
-  2 = swipe
-  3= match
+  2 = swipe deck
+  3 = its a match
 */
 
 const SwipeScreen = (props) => {
   const topProfile = props.navigation.getParam('topProfile');
 
   const dispatch = useDispatch();
+  const netInfo = useNetInfo();
   const [showMode, setShowMode] = useState(2);
   const [localLoading, setLocalLoading] = useState(false);
   const permissionGranted = verifyLocationPermissions();
@@ -58,7 +58,7 @@ const SwipeScreen = (props) => {
 
   useEffect(() => {
     dispatch(listSwipe());
-  }, [dispatch]);
+  }, []);
 
   useEffect(() => {
     if (permissionGranted) {
@@ -71,33 +71,22 @@ const SwipeScreen = (props) => {
         [{ text: 'Okay', onPress: () => verifyLocationPermissions() }]
       );
     }
-    return null;
   }, [dispatch]);
 
   useEffect(() => {
-    if (postLocationError) {
-      setShowMode(-1);
-    } else {
-      setShowMode(2);
+    if (!loadingSwipe) {
+      setShowMode(
+        getShowMode(
+          showMode,
+          swipe,
+          errorSwipe,
+          topProfile,
+          postLocationError,
+          permissionGranted
+        )
+      );
     }
-  }, [dispatch, postLocationError]);
-
-  useEffect(() => {
-    if (swipe && swipe.results.length === 0) {
-      console.log(swipe.results);
-      setShowMode(0);
-    }
-  }, []);
-
-  // TODO: fix render when enter the screen
-
-  //add listener to fetch the user and re fetch it
-  // useEffect(() => {
-  //   const unsubscribe = props.navigation.addListener('didFocus', () => {
-  //     reload();
-  //   });
-  //   return unsubscribe;
-  // }, [reload]);
+  }, [swipe, loadingSwipe, errorSwipe, topProfile, postLocationError]);
 
   const reload = useCallback(async () => {
     setLocalLoading(true);
@@ -107,20 +96,10 @@ const SwipeScreen = (props) => {
     } catch (err) {
       console.log(err);
     }
+    // reset the top profile so dont show it over and over
+    props.navigation.setParams({ topProfile: null });
     setLocalLoading(false);
-
-    if (showMode !== 3) {
-      setShowMode(2); // show profiles
-    }
   }, [dispatch]);
-
-  // pasa como props al deck y del deck al swipecard
-  const showProfileHandler = (profile, isGroup) => {
-    props.navigation.navigate('SwipeProfile', {
-      profile: profile,
-      isGroup: isGroup,
-    });
-  };
 
   const showMatchHandler = () => {
     props.navigation.navigate('SwipeMatch');
@@ -130,7 +109,7 @@ const SwipeScreen = (props) => {
     try {
       const result = await Share.share({
         message:
-          'Toogether App | The app to have fun and meet other students, download it using the following link ;) URL',
+          'Toogether App 🎉 | Find parties around you and meet other students, download it here ;) https://toogether.app/',
       });
       if (result.action === Share.sharedAction) {
         if (result.activityType) {
@@ -184,18 +163,19 @@ const SwipeScreen = (props) => {
         onPress={verifyLocationPermissions}
         buttonText="Enable location service"
         reload
+        onReload={reload}
       />
     );
   };
 
-  if (loadingSwipe || localLoading) {
+  if (loadingSwipe || localLoading || postLocationLoading) {
     return (
       <SafeAreaView style={styles.safe}>
         <StatusBar style="light" />
         <View style={styles.screen}>
           <ActivityModal
             loading
-            title="Please wait"
+            title="Loading"
             size="small"
             activityColor="white"
             titleColor="white"
@@ -208,6 +188,8 @@ const SwipeScreen = (props) => {
     );
   }
 
+  // console.log('Show mode & results ', showMode, swipe?.results.length);
+
   return (
     <SafeAreaView style={styles.safe}>
       <StatusBar style="light" />
@@ -218,20 +200,17 @@ const SwipeScreen = (props) => {
 
         {showMode === 1 && renderAllCardSwiped()}
 
-        {(showMode === 2 || showMode === 3) &&
-          swipe &&
-          swipe.results.length > 0 && (
-            <Deck
-              swipeProfiles={swipe.results}
-              topProfile={topProfile}
-              setShowMode={setShowMode}
-              showMode={showMode}
-              renderAllCardSwiped={renderAllCardSwiped}
-              navigation={props.navigation}
-              showProfileHandler={showProfileHandler}
-              showMatchHandler={showMatchHandler}
-            />
-          )}
+        {(showMode === 2 || showMode === 3) && swipe?.results && (
+          <Deck
+            swipeProfiles={swipe.results}
+            topProfile={topProfile}
+            setShowMode={setShowMode}
+            showMode={showMode}
+            renderAllCardSwiped={renderAllCardSwiped}
+            navigation={props.navigation}
+            showMatchHandler={showMatchHandler}
+          />
+        )}
       </View>
     </SafeAreaView>
   );
@@ -262,7 +241,7 @@ SwipeScreen.navigationOptions = (navData) => {
               : 'chatbubble-outline'
           }
           onPress={() => {
-            navData.navigation.navigate('Chat');
+            navData.navigation.navigate('Match');
           }}
         />
       </HeaderButtons>

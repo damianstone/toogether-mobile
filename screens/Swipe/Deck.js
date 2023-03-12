@@ -5,6 +5,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useDispatch, useSelector } from 'react-redux';
 import tw from 'tailwind-rn';
 import { like } from '../../store/actions/swipe';
+import { exist } from '../../utils/checks';
 
 import SwipeCard from '../../components/SwipeCard';
 import SwipeButtons from '../../components/SwipeButtons';
@@ -16,15 +17,15 @@ import styles from './styles';
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
-// error: cuando cambio el estado a showMatch true no aparece el pop y tengo que hacer un manual
-//reload para que funcione
+// TODO: use context
 
 const Deck = (props) => {
-  const { swipeProfiles, showProfileHandler, setShowMode, topProfile } = props;
+  const { navigation, swipeProfiles, setShowMode, topProfile } = props;
   const dispatch = useDispatch();
   const swipeRef = useRef();
   const currentDeckIndex = useRef(0);
   const [userData, setUserData] = useState({});
+  const [swipeCards, setSwipeCards] = useState([...swipeProfiles]);
 
   const likeReducer = useSelector((state) => state.like);
   const {
@@ -74,21 +75,25 @@ const Deck = (props) => {
     return members[Math.floor(Math.random() * members.length)];
   };
 
-  // Swiper actions
+  const showProfileHandler = (profile, isGroup) => {
+    navigation.navigate('ProfileModal', {
+      profile: profile,
+      isGroup: isGroup,
+      currentRef: swipeRef.current,
+    });
+  };
+
+  // * Swiper actions (swipe to the left / right)
   const handleLike = async (index) => {
     // liked profile can be a group or a single member
-    const likedProfile = swipeProfiles[index];
+    const likedProfile = swipeCards[index];
 
     if ('members' in likedProfile) {
       // its a group profile
       const randomMember = getRandomMember(likedProfile.members);
-      // console.log('RANDOM MEMBER -> ', randomMember);
       await dispatch(like(randomMember.id));
-      console.log('LIKE DATA -> ', likeData, likeLoading);
     } else {
-      // console.log('LIKED PROFILE -> ', likedProfile);
       await dispatch(like(likedProfile.id));
-      console.log('LIKE DATA -> ', likeData, likeLoading);
     }
 
     currentDeckIndex.current = index;
@@ -98,7 +103,7 @@ const Deck = (props) => {
     currentDeckIndex.current = index;
   };
 
-  // Buttons actions
+  // * Buttons actions
   const onLikePressed = () => {
     // swipeLeft() function activates the onLike function
     swipeRef.current.swipeLeft();
@@ -119,6 +124,7 @@ const Deck = (props) => {
     setShowMode(1);
   };
 
+  // * Handle put card on the top of the stack
   const swapElement = (from, to, arr) => {
     const newArr = [...arr];
 
@@ -128,26 +134,34 @@ const Deck = (props) => {
     return newArr;
   };
 
-  const putOnTopCard = (topCard, swipes) => {
+  const putOnTopCard = (topCard, swipeCards) => {
     // get the index of the topCard and change it to the top
     const toIndex = 0;
-    const fromIndex = swipes.findIndex((elem) => elem.id === topCard.id);
+    const fromIndex = swipeCards.findIndex((elem) => elem.id === topCard.id);
+
+    // if the profile is already in the fetched swipes, then we need to swap positions
     if (fromIndex !== -1) {
-      const newSwipes = swapElement(fromIndex, toIndex, swipes);
+      const newSwipes = swapElement(fromIndex, toIndex, swipeCards);
       return newSwipes;
     }
-    return [topCard, ...swipes];
+
+    setSwipeCards([topCard, ...swipeCards]);
+
+    return [topCard, ...swipeCards];
   };
 
   // render a card with the profiles (single and group)
-  const renderCard = (profile) => {
-    if (typeof profile === 'object') {
+  const renderCard = (profile, cardIndex) => {
+    if (exist(profile)) {
       return (
         <SwipeCard
           key={profile.id}
-          isGroup={profile.hasOwnProperty('members')}
+          isGroup={exist(profile.members)}
+          members={exist(profile.members) ? profile.members : null}
           profile={profile}
           showProfileHandler={showProfileHandler}
+          showProfileRestricted={false}
+          allowedProfileId={null}
         />
       );
     }
@@ -159,9 +173,7 @@ const Deck = (props) => {
       <View style={styles.swipeContainer}>
         <Swiper
           containerStyle={tw('bg-transparent')}
-          cards={
-            topProfile ? putOnTopCard(topProfile, swipeProfiles) : swipeProfiles
-          }
+          cards={topProfile ? putOnTopCard(topProfile, swipeCards) : swipeCards}
           ref={swipeRef}
           renderCard={renderCard}
           stackSize={2}

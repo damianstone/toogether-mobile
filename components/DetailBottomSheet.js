@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import {
   ScrollView,
   StyleSheet,
@@ -8,10 +8,8 @@ import {
   Image,
 } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { Ionicons } from '@expo/vector-icons';
 import Colors from '../constants/Colors';
 import SwipeButtons from './SwipeButtons';
-import BottomSheet from './BottomSheet';
 
 const DetailBottomSheet = (props) => {
   const {
@@ -23,6 +21,10 @@ const DetailBottomSheet = (props) => {
     university,
     occupation,
     description,
+    handleClose,
+    handleDislike,
+    handleLike,
+    openAlert,
   } = props;
 
   const details = [
@@ -62,7 +64,8 @@ const DetailBottomSheet = (props) => {
       style={styles.screen}
       contentContainerStyle={styles.scrollview}
       showsVerticalScrollIndicator={false}
-      showsHorizontalScrollIndicator={false}>
+      showsHorizontalScrollIndicator={false}
+    >
       <View style={styles.container1}>
         <View style={styles.nameTextContainer}>
           <Text style={styles.nameText}>{`${name}, ${age}`}</Text>
@@ -70,7 +73,7 @@ const DetailBottomSheet = (props) => {
             <Text style={styles.toogetherGroupText}>Toogether group</Text>
           )}
         </View>
-        <TouchableOpacity onPress={props.onClose} style={styles.closeContainer}>
+        <TouchableOpacity onPress={handleClose} style={styles.closeContainer}>
           <Image
             source={require('../assets/images/red-arrow-down.png')}
             style={{ width: '100%', height: '100%' }}
@@ -100,15 +103,15 @@ const DetailBottomSheet = (props) => {
           <View style={styles.line} />
           <SwipeButtons
             rewind={false}
-            onLeft={props.onClose}
-            onRight={props.handleLike}
+            onLeft={handleDislike}
+            onRight={handleLike}
           />
           <View style={styles.line} />
           <View style={styles.reportContainer}>
             <Button
               title="Block profile"
               color={Colors.red}
-              onPress={props.openAlert}
+              onPress={openAlert}
             />
           </View>
         </>

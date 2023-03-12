@@ -11,6 +11,7 @@ import {
 } from '@expo/vector-icons';
 import Colors from '../constants/Colors';
 
+import SwipeProfileScreen from '../screens/SwipeProfile/SwipeProfileScreen';
 import ProfileModalScreen from '../screens/SwipeProfile/ProfileModalScreen';
 import MatchScreen from '../screens/Match/MatchScreen';
 
@@ -26,7 +27,6 @@ import JoinGroupScreen from '../screens/Group/JoinGroupScreen';
 import GroupScreen from '../screens/Group/GroupScreen';
 
 import MyProfileScreen from '../screens/MyProfile/MyProfileScreen';
-import ProfilePreviewScreen from '../screens/Preview/ProfilePreviewScreen';
 import SettingScreen from '../screens/MyProfile/SettingScreen';
 import EditProfileScreen from '../screens/MyProfile/EditProfileScreen';
 
@@ -64,23 +64,6 @@ const AuthNavigator = createStackNavigator(
   }
 );
 
-const ProfilePreviewNavigator = createStackNavigator(
-  {
-    ProfilePreview: {
-      screen: ProfilePreviewScreen,
-      navigationOptions: {
-        headerTitle: 'Profile Preview',
-      },
-    },
-    Profile: ProfileModalScreen,
-  },
-  {
-    mode: 'modal',
-    headerMode: 'none',
-    tabBarVisible: false,
-  }
-);
-
 const MyProfileNavigator = createStackNavigator(
   {
     MyProfile: {
@@ -89,7 +72,16 @@ const MyProfileNavigator = createStackNavigator(
         gestureDirection: 'horizontal-inverted',
       },
     },
-    Preview: ProfilePreviewNavigator,
+    SwipeProfile: {
+      screen: SwipeProfileScreen,
+      navigationOptions: {
+        // get rid the header so then the modal can be displayed with full height
+        ...defaultNavOptions,
+        title: 'Profile Preview',
+        gestureDirection: 'horizontal',
+        headerMode: 'none',
+      },
+    },
     EditProfile: {
       screen: EditProfileScreen,
     },
@@ -105,9 +97,38 @@ const MyProfileNavigator = createStackNavigator(
   }
 );
 
+const MyProfileNavigatorWithModal = createStackNavigator(
+  {
+    MyProfile: MyProfileNavigator,
+    ProfileModal: ProfileModalScreen,
+  },
+  {
+    mode: 'modal',
+    headerMode: 'none',
+  }
+);
+
 const ChatNavigator = createStackNavigator(
   {
     Chat: ChatScreen,
+    SwipeProfile: {
+      screen: SwipeProfileScreen,
+      navigationOptions: {
+        // get rid the header so then the modal can be displayed with full height
+        ...defaultNavOptions,
+        gestureDirection: 'horizontal',
+        title: null,
+      },
+    },
+  },
+  {
+    defaultNavigationOptions: defaultNavOptions,
+  }
+);
+
+const LikeNavigator = createStackNavigator(
+  {
+    Likes: LikesScreen,
   },
   {
     defaultNavigationOptions: defaultNavOptions,
@@ -123,12 +144,14 @@ const SwipeNavigator = createStackNavigator(
   }
 );
 
-const LikeNavigator = createStackNavigator(
+const MatchNavigator = createStackNavigator(
   {
-    Likes: LikesScreen,
+    Chat: ChatNavigator,
+    ProfileModal: ProfileModalScreen,
   },
   {
-    defaultNavigationOptions: defaultNavOptions,
+    mode: 'modal',
+    headerMode: 'none',
   }
 );
 
@@ -182,40 +205,46 @@ const tabScreenCnfig = {
     },
   },
   Group: {
-    screen: GroupNavigator, // STACK NAVIGATOR
-    navigationOptions: ({ navigation }) => ({
-      tabBarIcon: (tabInfo) => {
-        return (
-          <MaterialCommunityIcons
-            name="account-group"
-            size={25}
-            color={tabInfo.tintColor}
-          />
-        );
-      },
-      tabBarColor: Colors.orange,
-      tabBarLabel: Platform.OS === 'android' ? <Text>Create group</Text> : null,
-      tabBarOptions: {
-        showLabel: false,
-        activeTintColor: Colors.orange,
-        style: {
-          backgroundColor:
-            navigation.state.routes[navigation.state.index].routeName ===
-            'Group'
-              ? Colors.bgCard
-              : Colors.bg,
-          borderTopWidth: 0,
+    screen: GroupNavigator,
+    navigationOptions: ({ navigation }) => {
+      console.log(navigation.state);
+      return {
+        tabBarIcon: (tabInfo) => {
+          return (
+            <MaterialCommunityIcons
+              name="account-group"
+              size={25}
+              color={tabInfo.tintColor}
+            />
+          );
         },
-        tabStyle: {
-          backgroundColor:
-            navigation.state.routes[navigation.state.index].routeName ===
-            'Group'
-              ? Colors.bgCard
-              : Colors.bg,
-          statusBarStyle: Colors.bg,
+        tabBarColor: Colors.orange,
+        tabBarLabel:
+          Platform.OS === 'android' ? <Text>Create group</Text> : null,
+        tabBarOptions: {
+          showLabel: false,
+          activeTintColor: Colors.orange,
+          style: {
+            backgroundColor:
+              navigation.state.routes &&
+              navigation.state.routes[navigation.state.index].routeName ===
+                'Group'
+                ? Colors.bgCard
+                : Colors.bg,
+            borderTopWidth: 0,
+          },
+          tabStyle: {
+            backgroundColor:
+              navigation.state.routes &&
+              navigation.state.routes[navigation.state.index].routeName ===
+                'Group'
+                ? Colors.bgCard
+                : Colors.bg,
+            statusBarStyle: Colors.bg,
+          },
         },
-      },
-    }),
+      };
+    },
   },
 };
 
@@ -255,7 +284,7 @@ const ToogetherTab =
 const HomeNavigator = createStackNavigator(
   {
     Main: ToogetherTab,
-    SwipeProfile: ProfileModalScreen,
+    ProfileModal: ProfileModalScreen,
     SwipeMatch: MatchScreen,
   },
   {
@@ -267,9 +296,9 @@ const HomeNavigator = createStackNavigator(
 const AppNavigator = createStackNavigator(
   {
     Swipe: HomeNavigator,
-    Chat: ChatNavigator,
+    Match: MatchNavigator,
     Group: GroupNavigator,
-    MyProfile: MyProfileNavigator,
+    MyProfile: MyProfileNavigatorWithModal,
   },
   {
     headerMode: 'none',

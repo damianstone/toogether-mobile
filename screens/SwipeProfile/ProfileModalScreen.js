@@ -1,20 +1,22 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { StyleSheet, View, ImageBackground, Alert } from 'react-native';
-import { withNavigationFocus } from 'react-navigation';
 import Swiper from 'react-native-swiper';
 import { useDispatch, useSelector } from 'react-redux';
 import { blockProfile } from '../../store/actions/block';
+import { like } from '../../store/actions/swipe';
 import { checkServerError, check400Error } from '../../utils/errors';
+import { getImage } from '../../utils/getMethods';
 import * as b from '../../constants/block';
 
 import DetailBottomSheet from '../../components/DetailBottomSheet';
 import Colors from '../../constants/Colors';
 
-const ProfileModalScreen = (props) => {
+const ProfileScreen = (props) => {
   const dispatch = useDispatch();
   const profile = props.navigation.getParam('profile');
   const isGroup = props.navigation.getParam('isGroup');
   const preview = props.navigation.getParam('preview');
+  const currentRef = props.navigation.getParam('currentRef');
 
   const blockProfileReducer = useSelector((state) => state.blockProfile);
   const {
@@ -23,9 +25,23 @@ const ProfileModalScreen = (props) => {
     data: blockData,
   } = blockProfileReducer;
 
-  const handleLike = () => {
-    // TODO: send like
-    // TODO: close the modal
+  const handleClose = () => {
+    props.navigation.goBack();
+  };
+
+  const handleLike = async (profileId) => {
+    await dispatch(like(profileId));
+    props.navigation.goBack();
+    if (currentRef) {
+      currentRef.swipeRight();
+    }
+  };
+
+  const handleDislike = () => {
+    props.navigation.goBack();
+    if (currentRef) {
+      currentRef.swipeRight();
+    }
   };
 
   const handleBlockProfile = () => {
@@ -107,14 +123,15 @@ const ProfileModalScreen = (props) => {
                 margin: 4,
               }}
             />
-          }>
-          {profile.photos.length > 0 ? (
+          }
+        >
+          {profile?.photos?.length > 0 ? (
             profile.photos.map((photo) => (
               <ImageBackground
                 key={profile.id}
                 style={styles.image}
                 imageStyle={styles.imageStyle}
-                source={{ uri: `${photo.image}` }}
+                source={{ uri: `${getImage(photo.image)}` }}
                 resizeMode="cover"
               />
             ))
@@ -129,8 +146,9 @@ const ProfileModalScreen = (props) => {
           )}
         </Swiper>
         <DetailBottomSheet
-          onClose={() => props.navigation.goBack()}
-          handleLike={handleLike}
+          handleClose={handleClose}
+          handleLike={() => handleLike(profile.id)}
+          handleDislike={() => handleDislike(profile.id)}
           openAlert={openAlert}
           isGroup={isGroup}
           preview={preview}
@@ -147,7 +165,7 @@ const ProfileModalScreen = (props) => {
   );
 };
 
-export default ProfileModalScreen;
+export default ProfileScreen;
 
 const styles = StyleSheet.create({
   image: {

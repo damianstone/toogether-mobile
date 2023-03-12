@@ -3,14 +3,17 @@ import { StyleSheet, TouchableOpacity, Text } from 'react-native';
 import Colors from '../../constants/Colors';
 
 const AuthButton = (props) => {
+  const { backgroundColor, text, onPress } = props;
+
   return (
     <TouchableOpacity
       style={{
         ...styles.action_button_container,
-        backgroundColor: props.backgroundColor,
+        backgroundColor: backgroundColor,
       }}
-      onPress={props.onPress}>
-      <Text style={styles.action_button_text}>{props.text}</Text>
+      onPress={onPress}
+    >
+      <Text style={styles.action_button_text}>{text}</Text>
     </TouchableOpacity>
   );
 };

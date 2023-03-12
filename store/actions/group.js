@@ -7,7 +7,6 @@ import getEnvVars from '../../environment';
 
 const { API_URL: BASE_URL } = getEnvVars();
 
-
 export const listGroup = () => {
   return async (dispatch) => {
     try {
@@ -33,38 +32,6 @@ export const listGroup = () => {
     } catch (error) {
       dispatch({
         type: g.LIST_GROUP_FAIL,
-        payload: error,
-      });
-    }
-  };
-};
-
-export const getGroup = () => {
-  return async (dispatch) => {
-    try {
-      dispatch({ type: g.GET_GROUP_REQUEST });
-
-      const userData = JSON.parse(await AsyncStorage.getItem('@userData'));
-      const groupData = JSON.parse(await AsyncStorage.getItem('@groupData'));
-
-      const config = {
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
-        Authorization: 'Bearer ' + userData.token,
-      };
-
-      const { data } = await axios({
-        method: 'get',
-        url: `${BASE_URL}/api/v1/groups/${groupData.id}/`,
-        headers: config,
-      });
-      dispatch({
-        type: g.GET_GROUP_SUCCESS,
-        payload: data,
-      });
-    } catch (error) {
-      dispatch({
-        type: g.GET_GROUP_FAIL,
         payload: error,
       });
     }
@@ -110,6 +77,46 @@ export const createGroup = () => {
       });
     }
   };
+};
+
+export const getGroup = () => {
+  return async (dispatch) => {
+    try {
+      dispatch({ type: g.GET_GROUP_REQUEST });
+
+      const userData = JSON.parse(await AsyncStorage.getItem('@userData'));
+
+      const config = {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+        Authorization: 'Bearer ' + userData.token,
+      };
+
+      const { data } = await axios({
+        method: 'get',
+        url: `${BASE_URL}/api/v1/groups/actions/get-group/`,
+        headers: config,
+      });
+
+      dispatch({
+        type: g.GET_GROUP_SUCCESS,
+        payload: data,
+      });
+    } catch (error) {
+      dispatch({
+        type: g.GET_GROUP_FAIL,
+        payload: error,
+      });
+    }
+  };
+};
+
+export const resetData = async () => {
+  try {
+    await AsyncStorage.removeItem('@groupData');
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 export const deleteGroup = (group_id) => {

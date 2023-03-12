@@ -1,47 +1,56 @@
-import React, { useState, useEffect } from 'react';
-import {
-  ActivityIndicator,
-  Image,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import React, { useEffect, useContext } from 'react';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import Constants from 'expo-constants';
+import { Context } from '../../context/ContextProvider';
 import Colors from '../../constants/Colors';
-import { listUserPhotos, getUserProfile } from '../../store/actions/user';
+import { getUserProfile } from '../../store/actions/user';
+import { getNameInitials, getImage } from '../../utils/getMethods';
 
 import Loader from './Loader';
 
 const Avatar = (props) => {
+  const { onPress } = props;
+  const { profileContext, updateProfileContext } = useContext(Context);
+
   const dispatch = useDispatch();
-  const [error, setError] = useState(false);
 
   const userProfile = useSelector((state) => state.userGetProfile);
-  const { loading, error: fetchError, data } = userProfile;
+  const {
+    loading: loadingProfile,
+    error: errorProfile,
+    data: dataProfile,
+  } = userProfile;
 
   useEffect(() => {
-    if (!data) {
+    if (!dataProfile && !profileContext) {
       dispatch(getUserProfile());
+    }
+    if (dataProfile) {
+      updateProfileContext(dataProfile);
     }
   }, []);
 
   return (
-    <TouchableOpacity onPress={props.onPress} style={styles.imgContainer}>
-      {loading && <ActivityIndicator />}
-      {data && data.photos.length > 0 && (
-        <Image source={{ uri: `${data.photos[0].image}` }} style={styles.img} />
-      )}
-      {data === undefined ||
-        (data?.photos.length === 0 && (
-          <View style={styles.avatar_view}>
-            <Text style={styles.avatar_initials}>DS</Text>
+    <TouchableOpacity onPress={onPress} style={styles.imgContainer}>
+      {loadingProfile ||
+        (typeof errorProfile != 'undefined' && (
+          <View style={styles.error_avatar_view}>
+            <Loader />
           </View>
         ))}
-      {typeof fetchError != 'undefined' && (
-        <View style={styles.error_avatar_view}>
-          <Loader />
+      {dataProfile && dataProfile.photos.length > 0 && (
+        <View style={styles.avatar_view}>
+          <Image
+            source={{ uri: `${getImage(dataProfile.photos[0].image)}` }}
+            style={styles.img}
+          />
+        </View>
+      )}
+      {dataProfile?.photos?.length === 0 && (
+        <View style={styles.avatar_view}>
+          <Text style={styles.avatar_initials}>
+            {getNameInitials(dataProfile.name)}
+          </Text>
         </View>
       )}
     </TouchableOpacity>
@@ -61,6 +70,7 @@ const styles = StyleSheet.create({
   img: {
     width: '100%',
     height: '100%',
+    backgroundColor: Colors.bgCard,
   },
 
   avatar_view: {

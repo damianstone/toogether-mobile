@@ -6,13 +6,15 @@ import {
   Image,
   RefreshControl,
   Text,
-  Button,
 } from 'react-native';
+import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { useDispatch, useSelector } from 'react-redux';
 import { listLikes, removeLike, like } from '../../store/actions/swipe';
 import { checkServerError } from '../../utils/errors';
+import { exist, isMatch, alreadyMatched } from '../../utils/checks';
 
 import * as w from '../../constants/swipe';
+import HeaderButtom from '../../components/UI/HeaderButton';
 import LikeCard from '../../components/LikeCard';
 import Avatar from '../../components/UI/Avatar';
 import Loader from '../../components/UI/Loader';
@@ -58,25 +60,34 @@ const LikesScreen = (props) => {
       checkServerError(likeError);
       dispatch({ type: w.LIKE_PROFILE_RESET });
     }
-  }, [dispatch, removeLikeError, likeError, likes]);
+  }, [dispatch, removeLikeError, likeError]);
 
   useEffect(() => {
     if (removeLikeSuccess) {
       dispatch({ type: w.REMOVE_LIKE_RESET });
       dispatch(listLikes());
     }
-    if (likeData) {
-      dispatch({ type: w.LIKE_PROFILE_RESET });
-      dispatch(listLikes());
-    }
-  }, [removeLikeSuccess]);
+  }, [dispatch, removeLikeSuccess]);
 
-  // add listener to fetch the user and re fetch it
+  useEffect(() => {
+    if (isMatch(likeData)) {
+      props.navigation.navigate('SwipeMatch', {
+        likeData: likeData,
+      });
+    }
+
+    if (alreadyMatched(likeData)) {
+      props.navigation.navigate('Chat');
+    }
+
+    dispatch({ type: w.LIKE_PROFILE_RESET });
+  }, [dispatch, likeData?.details]);
+
   useEffect(() => {
     const unsubscribe = props.navigation.addListener('didFocus', () => {
       reload();
     });
-    return unsubscribe;
+    return () => unsubscribe;
   }, [reload]);
 
   const reload = useCallback(async () => {
@@ -89,19 +100,9 @@ const LikesScreen = (props) => {
     setRefreshing(false);
   }, [dispatch]);
 
-  // const showProfileHandler = (profile) => {
-  //   props.navigation.navigate('SwipeProfile', {
-  //     profile: profile,
-  //     isGroup: false,
-  //   });
-  // };
-
   const handleRemoveLike = async (profileId) => {
     if (profileId) {
       await dispatch(removeLike(profileId));
-    }
-    if (removeLikeSuccess) {
-      return dispatch(listLikes());
     }
     return null;
   };
@@ -109,9 +110,6 @@ const LikesScreen = (props) => {
   const handleLike = async (profileId) => {
     if (profileId) {
       await dispatch(like(profileId));
-    }
-    if (likeData) {
-      return dispatch(listLikes());
     }
     return null;
   };
@@ -164,7 +162,8 @@ const LikesScreen = (props) => {
           width: '100%',
           height: '100%',
           textAlign: 'center',
-        }}>
+        }}
+      >
         <View style={{ width: 200, height: 200 }}>
           <Image
             source={require('../../assets/images/no-likes.png')}
@@ -213,6 +212,23 @@ LikesScreen.navigationOptions = (navData) => {
           navData.navigation.navigate('MyProfile');
         }}
       />
+    ),
+    headerRight: () => (
+      <HeaderButtons HeaderButtonComponent={HeaderButtom}>
+        <Item
+          title="Chat"
+          iconName={
+            Platform.OS === 'android'
+              ? 'chatbubble-outline'
+              : 'chatbubble-outline'
+          }
+          onPress={() => {
+            navData.navigation.navigate('Match', {
+              screen: 'Likes',
+            });
+          }}
+        />
+      </HeaderButtons>
     ),
   };
 };

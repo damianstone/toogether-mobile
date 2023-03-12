@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useContext, useState } from 'react';
 import {
   Image,
   View,
@@ -10,11 +10,10 @@ import {
 } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { useDispatch, useSelector } from 'react-redux';
-import { StackActions } from 'react-navigation';
-
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Context } from '../../context/ContextProvider';
 import { createGroup } from '../../store/actions/group';
 import { check400Error, checkServerError } from '../../utils/errors';
+import { StackActions } from 'react-navigation';
 
 import AuthButton from '../../components/UI/AuthButton';
 import Avatar from '../../components/UI/Avatar';
@@ -22,8 +21,14 @@ import Colors from '../../constants/Colors';
 import * as g from '../../constants/group';
 
 const StartGroupScreen = (props) => {
-  const [storedGroupData, setStoredGroupData] = useState();
+  const { groupContext, updateGroupContext } = useContext(Context);
+
+  /* set to true to have time to check if there is a group in the context and be able to redirect 
+  the user to the group screen in a smooth way */
+  const [transitionLoading, setTransitionLoading] = useState(true);
+
   const dispatch = useDispatch();
+
   const createGroupReducer = useSelector((state) => state.createGroup);
   const {
     loading: loadingCreate,
@@ -31,36 +36,24 @@ const StartGroupScreen = (props) => {
     data: dataCreate,
   } = createGroupReducer;
 
+  // * this function replaces the first screen on the GroupNavigato stack
   const replaceAction = StackActions.replace({
     routeName: 'Group',
-    params: {
-      group_id: dataCreate ? dataCreate.id : null,
-    },
   });
-  // console.log('props navigation --> ', props.navigation);
 
-  const getAsyncData = async () => {
-    let group;
-    try {
-      group = JSON.parse(await AsyncStorage.getItem('@groupData'));
-
-      if (group !== null) {
-        setStoredGroupData(group);
-      }
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
+  
+  // * if the user is already in a group
   useEffect(() => {
-    getAsyncData();
+    if (groupContext) {
+      props.navigation.dispatch(replaceAction);
+      setTransitionLoading(false);
+    } else {
+      setTransitionLoading(false);
+    }
   }, []);
 
+  // handle render after create group action
   useEffect(() => {
-    if (storedGroupData) {
-      props.navigation.replace('Group');
-    }
-
     if (errorCreate) {
       if (errorCreate?.response?.status === 400) {
         check400Error(errorCreate);
@@ -70,10 +63,11 @@ const StartGroupScreen = (props) => {
     }
 
     if (dataCreate) {
-      props.navigation.replace('Group');
+      updateGroupContext(dataCreate);
+      props.navigation.dispatch(replaceAction);
       dispatch({ type: g.CREATE_GROUP_RESET });
     }
-  }, [dispatch, dataCreate, errorCreate, storedGroupData]);
+  }, [dispatch, errorCreate, dataCreate]);
 
   const handleCreateGroup = () => {
     dispatch(createGroup());
@@ -83,10 +77,10 @@ const StartGroupScreen = (props) => {
     props.navigation.navigate('JoinGroup');
   };
 
-  if (loadingCreate) {
+  if (loadingCreate || transitionLoading) {
     return (
       <View style={styles.loadingScreen}>
-        <ActivityIndicator color={Colors.orange} size="large" />
+        <ActivityIndicator color={Colors.white} size="large" />
       </View>
     );
   }
@@ -185,8 +179,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     width: '90%',
-    padding: 20,
-    paddingVertical: '7%',
+    padding: 3,
   },
 
   button: {

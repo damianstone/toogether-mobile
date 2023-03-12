@@ -29,7 +29,7 @@ export const SETTINGS_ACCOUNT_DATA = [
     id: 'privacy-policy',
     action: {
       type: 'REDIRECT_TO_URL',
-      url: 'https://toogether.app/',
+      url: 'https://toogether.app/privacy-policy',
     },
     icon: 'lock-closed-outline',
     ionicons: true,
@@ -58,20 +58,20 @@ export const SETTINGS_APP_DATA = [
     title: 'FAQ',
   },
   {
-    id: 'terms-of-use',
+    id: 'terms-of-conditions',
     action: {
       type: 'REDIRECT_TO_URL',
-      url: 'https://toogether.app/',
+      url: 'https://toogether.app/terms-and-conditions',
     },
     icon: 'warning',
     antdesign: true,
-    title: 'Terms of use',
+    title: 'Terms and conditions',
   },
   {
     id: 'community-guidelines',
     action: {
       type: 'REDIRECT_TO_URL',
-      url: 'https://toogether.app/',
+      url: 'https://toogether.app/community-guidelines',
     },
     icon: 'team',
     antdesign: true,
@@ -81,7 +81,7 @@ export const SETTINGS_APP_DATA = [
     id: 'safety-tips',
     action: {
       type: 'REDIRECT_TO_URL',
-      url: 'https://toogether.app/',
+      url: 'https://toogether.app/safety-tips',
     },
     icon: 'Safety',
     antdesign: true,

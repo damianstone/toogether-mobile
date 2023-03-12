@@ -197,7 +197,7 @@ const EditProfileScreen = (props) => {
   if (loadingUpdate || loadingProfile) {
     return (
       <View style={styles.loadingScreen}>
-        <ActivityIndicator color={Colors.orange} size="large" />
+        <ActivityIndicator color={Colors.white} size="large" />
       </View>
     );
   }
@@ -208,7 +208,8 @@ const EditProfileScreen = (props) => {
         style={{ flex: 1, flexDirection: 'column', justifyContent: 'center' }}
         behavior="padding"
         enabled
-        keyboardVerticalOffset={100}>
+        keyboardVerticalOffset={100}
+      >
         <ScrollView
           contentContainerStyle={{ backgroundColor: Colors.bg }}
           refreshControl={
@@ -217,7 +218,8 @@ const EditProfileScreen = (props) => {
               onRefresh={loadProfile}
               tintColor={Colors.white}
             />
-          }>
+          }
+        >
           <View style={styles.editContainer}>
             {userProfile &&
               UPDATE_PROFILE_INPUTS.map((field) => (
@@ -302,7 +304,8 @@ const EditProfileScreen = (props) => {
                   alignSelf: 'center',
                   alignItems: 'center',
                   width: '95%',
-                }}>
+                }}
+              >
                 <AuthButton
                   text="Update profile"
                   onPress={handleUpdateUserProfile}
@@ -326,7 +329,6 @@ EditProfileScreen.navigationOptions = (navData) => {
             Platform.OS === 'android' ? 'ios-arrow-back' : 'ios-arrow-back'
           }
           onPress={() => {
-            // go to chat screen
             navData.navigation.navigate('MyProfile');
           }}
           title="Back arrow"

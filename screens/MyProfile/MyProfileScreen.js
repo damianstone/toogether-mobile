@@ -11,17 +11,16 @@ import {
   View,
   Alert,
   RefreshControl,
-  Linking,
 } from 'react-native';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { useDispatch, useSelector } from 'react-redux';
 import { withNavigationFocus } from 'react-navigation';
 import { useActionSheet } from '@expo/react-native-action-sheet';
-import Constants from 'expo-constants';
 import * as ImagePicker from 'expo-image-picker';
 import { LinearGradient } from 'expo-linear-gradient';
 import { MaterialIcons, Feather } from '@expo/vector-icons';
 import { useNetInfo } from '@react-native-community/netinfo';
+import { getNameInitials, getImage } from '../../utils/getMethods';
 
 import HeaderButtom from '../../components/UI/HeaderButton';
 import Loader from '../../components/UI/Loader';
@@ -120,7 +119,6 @@ const MyProfileScreen = (props) => {
     }
 
     if (errorRemovePhoto || errorPhotos || errorAddPhoto) {
-      console.log(errorAddPhoto);
       if (errorAddPhoto?.response?.status === 400) {
         check400Error(errorAddPhoto, 'image');
       } else {
@@ -214,12 +212,10 @@ const MyProfileScreen = (props) => {
   };
 
   const handleOpenPreview = () => {
-    props.navigation.navigate('Preview');
-  };
-
-  const getInitials = (name) => {
-    const first = name ? name.charAt(0).toUpperCase() : 'N';
-    return first;
+    props.navigation.navigate('SwipeProfile', {
+      mainProfileId: userProfile.id,
+      isInGroup: userProfile.is_in_group,
+    });
   };
 
   const handleNavigate = (screen) => {
@@ -249,7 +245,7 @@ const MyProfileScreen = (props) => {
         ) : (
           <Image
             source={{
-              uri: `${photo.image}`,
+              uri: `${getImage(photo.image)}`,
             }}
             style={{
               width: '100%',
@@ -297,19 +293,18 @@ const MyProfileScreen = (props) => {
               {photos && Object.values(photos).length > 0 && (
                 <Image
                   source={{
-                    uri: `${Object.values(photos)[0].image}`,
+                    uri: `${getImage(Object.values(photos)[0].image)}`,
                   }}
                   style={styles.image}
                 />
               )}
-              {!photos ||
-                (Object.values(photos).length === 0 && (
-                  <View style={styles.avatar_view}>
-                    <Text style={styles.avatar_initials}>
-                      {userProfile?.name ? getInitials(userProfile.name) : 'N'}
-                    </Text>
-                  </View>
-                ))}
+              {(!photos || Object.values(photos).length === 0) && userProfile && (
+                <View style={styles.avatar_view}>
+                  <Text style={styles.avatar_initials}>
+                    {getNameInitials(userProfile.name)}
+                  </Text>
+                </View>
+              )}
             </TouchableOpacity>
             <View style={styles.nameView}>
               {userProfile && userProfile.name && (
@@ -456,7 +451,6 @@ MyProfileScreen.navigationOptions = (navData) => {
             Platform.OS === 'android' ? 'settings-sharp' : 'settings-sharp'
           }
           onPress={() => {
-            // go to chat screen
             navData.navigation.navigate('Setting');
           }}
           title="Back arrow"
@@ -470,7 +464,6 @@ MyProfileScreen.navigationOptions = (navData) => {
             Platform.OS === 'android' ? 'ios-arrow-back' : 'ios-arrow-back'
           }
           onPress={() => {
-            // go to chat screen
             navData.navigation.navigate('Swipe');
           }}
           title="Back arrow"

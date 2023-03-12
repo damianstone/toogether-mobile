@@ -7,9 +7,9 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import Constants from 'expo-constants';
 import { Entypo } from '@expo/vector-icons';
 
+import { getImage } from '../utils/getMethods';
 import Colors from '../constants/Colors';
 
 const SCREEN_HEIGHT = Dimensions.get('window').height;
@@ -53,11 +53,6 @@ const LikeCard = (props) => {
     };
   }
 
-  const getInitials = (name) => {
-    const first = name ? name.charAt(0).toUpperCase() : 'N';
-    return first;
-  };
-
   const getCardInfo = () => {
     let n = name;
     let a = age;
@@ -86,8 +81,9 @@ const LikeCard = (props) => {
             <ImageBackground
               imageStyle={styles.imageStyle}
               resizeMode="cover"
-              source={{ uri: `${image}` }}
-              style={{ ...imageContainer }}>
+              source={{ uri: `${getImage(image)}` }}
+              style={{ ...imageContainer }}
+            >
               <View style={styles.infoCard}>
                 <Text style={{ color: Colors.black, fontSize: 10 }}>
                   {getCardInfo()}
@@ -103,19 +99,26 @@ const LikeCard = (props) => {
               </View>
             </ImageBackground>
           ) : (
-            <View style={styles.initialsView}>
-              <Text style={{ color: Colors.black, fontSize: 30 }}>
-                {getInitials(name)}
-              </Text>
-              <View>
+            <ImageBackground
+              imageStyle={styles.imageStyle}
+              resizeMode="cover"
+              source={require('../assets/images/placeholder-profile.png')}
+              style={{ ...imageContainer }}
+            >
+              <View style={styles.infoCard}>
+                <Text style={{ color: Colors.black, fontSize: 10 }}>
+                  {getCardInfo()}
+                </Text>
+              </View>
+              <View style={styles.buttonsContainer}>
                 <TouchableOpacity onPress={dislike} style={styles.dislike}>
                   <Entypo color="white" name="cross" size={15} />
                 </TouchableOpacity>
                 <TouchableOpacity onPress={like} style={styles.like}>
-                  <Entypo color="white" name="cross" size={15} />
+                  <Entypo color="white" name="heart" size={15} />
                 </TouchableOpacity>
               </View>
-            </View>
+            </ImageBackground>
           )}
         </TouchableOpacity>
       </View>

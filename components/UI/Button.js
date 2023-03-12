@@ -3,14 +3,12 @@ import { StyleSheet, Text, View } from 'react-native';
 import Colors from '../../constants/Colors';
 
 const Button = (props) => {
+  const { onPress, color, title } = props;
+
   return (
     <View style={{ justifyContent: 'center', alignItems: 'center' }}>
       <View style={styles.buttonContainerNoValid}>
-        <Button
-          onPress={props.onPress}
-          color={props.color}
-          title={props.title}
-        />
+        <Button onPress={onPress} color={color} title={title} />
       </View>
     </View>
   );

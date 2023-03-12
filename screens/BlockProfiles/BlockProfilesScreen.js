@@ -13,6 +13,7 @@ import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { useDispatch, useSelector } from 'react-redux';
 import { listBlockedProfiles, unBlockProfile } from '../../store/actions/block';
 import { checkServerError } from '../../utils/errors';
+import { getNameInitials, getImage } from '../../utils/getMethods';
 
 import HeaderButtom from '../../components/UI/HeaderButton';
 import Colors from '../../constants/Colors';
@@ -61,7 +62,7 @@ const BlockProfilesScreen = (props) => {
     const unsubscribe = props.navigation.addListener('didFocus', () => {
       reload();
     });
-    return unsubscribe;
+    return () => unsubscribe;
   }, [reload]);
 
   const reload = useCallback(async () => {
@@ -83,11 +84,6 @@ const BlockProfilesScreen = (props) => {
     }
   };
 
-  const getInitials = (name) => {
-    const first = name ? name.charAt(0).toUpperCase() : 'N';
-    return first;
-  };
-
   const renderBlockedProfile = ({ item }) => {
     return (
       <>
@@ -96,14 +92,14 @@ const BlockProfilesScreen = (props) => {
             {item.photos.length > 0 ? (
               <View style={styles.imageContainer}>
                 <Image
-                  source={{ uri: `${item.photos[0].image}` }}
+                  source={{ uri: `${getImage(item.photos[0].image)}` }}
                   style={{ width: '100%', height: '100%', borderRadius: 100 }}
                 />
               </View>
             ) : (
               <View style={styles.noPhotoContainer}>
                 <Text style={{ color: Colors.white, fontSize: 10 }}>
-                  {getInitials(item.name)}
+                  {getNameInitials(item.name)}
                 </Text>
               </View>
             )}
@@ -111,12 +107,38 @@ const BlockProfilesScreen = (props) => {
           </View>
           <TouchableOpacity
             onPress={() => handleUnblock(item.id)}
-            style={styles.buttonContainer}>
+            style={styles.buttonContainer}
+          >
             <Text style={{ color: Colors.white, fontSize: 12 }}>Unblock</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.line} />
       </>
+    );
+  };
+
+  const renderEmptyList = () => {
+    return (
+      <View
+        style={{
+          backgroundColor: Colors.bg,
+          justifyContent: 'center',
+          alignItems: 'center',
+          width: '100%',
+          height: '100%',
+          textAlign: 'center',
+        }}
+      >
+        <View style={{ width: 130, height: 130 }}>
+          <Image
+            source={require('../../assets/images/empty-blocked-screen.png')}
+            style={{ resizeMode: 'contain', flex: 1, aspectRatio: 1 }}
+          />
+        </View>
+        <Text style={{ color: Colors.white, fontSize: 15 }}>
+          {`You haven’t blocked any user`}
+        </Text>
+      </View>
     );
   };
 
@@ -133,7 +155,9 @@ const BlockProfilesScreen = (props) => {
             tintColor={Colors.white}
           />
         }
+        contentContainerStyle={{ flexGrow: 1 }}
         renderItem={renderBlockedProfile}
+        ListEmptyComponent={renderEmptyList}
       />
     </View>
   );
@@ -149,7 +173,6 @@ BlockProfilesScreen.navigationOptions = (navData) => {
             Platform.OS === 'android' ? 'ios-arrow-back' : 'ios-arrow-back'
           }
           onPress={() => {
-            // go to chat screen
             navData.navigation.goBack();
           }}
           title="Back arrow"

@@ -3,6 +3,8 @@ import { View, ActivityIndicator } from 'react-native';
 import Colors from '../../constants/Colors';
 
 const Loader = (props) => {
+  const { size } = props;
+
   return (
     <View
       style={{
@@ -12,7 +14,7 @@ const Loader = (props) => {
         alignItems: 'center',
       }}
     >
-      <ActivityIndicator size={props.size} color={Colors.icons} />
+      <ActivityIndicator size={size} color={Colors.icons} />
     </View>
   );
 };

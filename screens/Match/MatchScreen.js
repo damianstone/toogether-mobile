@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { useDispatch } from 'react-redux';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { exist } from '../../utils/checks';
 
 import * as r from '../../constants/responses/match';
 import * as w from '../../constants/swipe';
@@ -8,41 +8,23 @@ import SwipeMatch from '../../components/SwipeMatch';
 
 const MatchScreen = (props) => {
   const dispatch = useDispatch();
-  const [userData, setUserData] = useState({});
   const likeData = props.navigation.getParam('likeData');
 
-  const getAsyncData = async () => {
-    try {
-      const user = JSON.parse(await AsyncStorage.getItem('@userData'));
-
-      if (user !== null) {
-        setUserData(user);
-      }
-    } catch (e) {
-      console.log(e);
-    }
+  const handleGoToMatches = () => {
+    props.navigation.goBack(null);
+    props.navigation.navigate('Chat');
   };
 
-  useEffect(() => {
-    getAsyncData();
-  }, []);
   const handleCloseMatch = () => {
     dispatch({ type: w.LIKE_PROFILE_RESET });
     props.navigation.goBack(null);
   };
 
-  const getCurrentProfile = (matchData) => {
-    if (matchData.profile1.id === userData.id) {
-      return matchData.profile1;
+  const getProfileImage = (profile) => {
+    if (exist(profile.photos[0])) {
+      return profile.photos[0].image;
     }
-    return matchData?.profile2;
-  };
-
-  const getMatchedProfile = (matchData) => {
-    if (matchData.profile1.id === userData.id) {
-      return matchData.profile2;
-    }
-    return matchData?.profile1;
+    return null;
   };
 
   const getMatchedType = (type) => {
@@ -76,35 +58,35 @@ const MatchScreen = (props) => {
   };
 
   const getMatchData = (data) => {
-    const matchedProfile = getMatchedProfile(data?.match_data);
-    const currentProfile = getCurrentProfile(data?.match_data);
+    const matchedProfile = data?.match_data.matched_data.matched_profile;
+    const currentProfile = data?.match_data.current_profile;
     const matchType = getMatchedType(data?.group_match);
-
-    console.log('CURRENT -> ', currentProfile);
 
     switch (data.details) {
       case r.NEW_MATCH:
         return {
           matchId: data.match_data.id,
           title: 'NEW MATCH!!',
-          currentProfileImage: currentProfile.photos[0].image,
-          matchedProfileImage: matchedProfile.photos[0].image,
+          currentProfileImage: getProfileImage(currentProfile),
+          matchedProfileImage: getProfileImage(matchedProfile),
           currentProfileName: currentProfile.name,
           matchedProfileName: matchedProfile.name,
           currentType: matchType.current,
           matchedType: matchType.matched,
+          matchedInstagram: matchedProfile.instagram,
           chatButtonText: `Send message to ${matchedProfile.name}`,
         };
       case r.SAME_MATCH:
         return {
           matchId: data.match_data.id,
           title: 'MATCH!!',
-          currentProfileImage: currentProfile.photos[0].image,
-          matchedProfileImage: matchedProfile.photos[0].image,
+          currentProfileImage: getProfileImage(currentProfile),
+          matchedProfileImage: getProfileImage(matchedProfile),
           currentProfileName: currentProfile.name,
           matchedProfileName: matchedProfile.name,
           currentType: matchType.current,
           matchedType: matchType.matched,
+          matchedInstagram: matchedProfile.instagram,
           chatButtonText: `Send message to ${matchedProfile.name}`,
         };
       default:
@@ -115,7 +97,7 @@ const MatchScreen = (props) => {
   return (
     <SwipeMatch
       matchData={getMatchData(likeData)}
-      chatOnPress={() => props.navigation.navigate('Chat')}
+      chatOnPress={handleGoToMatches}
       laterOnPress={handleCloseMatch}
     />
   );

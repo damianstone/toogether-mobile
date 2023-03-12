@@ -193,7 +193,7 @@ export default StyleSheet.create({
     alignSelf: 'flex-end',
     alignItems: 'center',
     flexDirection: 'column',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
   },
   linearCircle: {
     position: 'absolute',
