@@ -13,6 +13,7 @@ import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { useDispatch, useSelector } from 'react-redux';
 import { listBlockedProfiles, unBlockProfile } from '../../store/actions/block';
 import { checkServerError } from '../../utils/errors';
+import { getNameInitials, getImage } from '../../utils/getMethods';
 
 import HeaderButtom from '../../components/UI/HeaderButton';
 import Colors from '../../constants/Colors';
@@ -83,11 +84,6 @@ const BlockProfilesScreen = (props) => {
     }
   };
 
-  const getInitials = (name) => {
-    const first = name ? name.charAt(0).toUpperCase() : 'N';
-    return first;
-  };
-
   const renderBlockedProfile = ({ item }) => {
     return (
       <>
@@ -96,14 +92,14 @@ const BlockProfilesScreen = (props) => {
             {item.photos.length > 0 ? (
               <View style={styles.imageContainer}>
                 <Image
-                  source={{ uri: `${item.photos[0].image}` }}
+                  source={{ uri: `${getImage(item.photos[0].image)}` }}
                   style={{ width: '100%', height: '100%', borderRadius: 100 }}
                 />
               </View>
             ) : (
               <View style={styles.noPhotoContainer}>
                 <Text style={{ color: Colors.white, fontSize: 10 }}>
-                  {getInitials(item.name)}
+                  {getNameInitials(item.name)}
                 </Text>
               </View>
             )}

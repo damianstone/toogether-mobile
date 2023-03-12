@@ -4,15 +4,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Context } from '../../context/ContextProvider';
 import Colors from '../../constants/Colors';
 import { getUserProfile } from '../../store/actions/user';
+import { getNameInitials, getImage } from '../../utils/getMethods';
 
 import Loader from './Loader';
 
 const Avatar = (props) => {
   const { onPress } = props;
-  const {
-    profileContext,
-    updateProfileContext,
-  } = useContext(Context);
+  const { profileContext, updateProfileContext } = useContext(Context);
 
   const dispatch = useDispatch();
 
@@ -32,11 +30,6 @@ const Avatar = (props) => {
     }
   }, []);
 
-  const getInitials = (name) => {
-    const first = name ? name.charAt(0).toUpperCase() : 'N';
-    return first;
-  };
-
   return (
     <TouchableOpacity onPress={onPress} style={styles.imgContainer}>
       {loadingProfile ||
@@ -48,7 +41,7 @@ const Avatar = (props) => {
       {dataProfile && dataProfile.photos.length > 0 && (
         <View style={styles.avatar_view}>
           <Image
-            source={{ uri: `${dataProfile.photos[0].image}` }}
+            source={{ uri: `${getImage(dataProfile.photos[0].image)}` }}
             style={styles.img}
           />
         </View>
@@ -56,7 +49,7 @@ const Avatar = (props) => {
       {dataProfile?.photos?.length === 0 && (
         <View style={styles.avatar_view}>
           <Text style={styles.avatar_initials}>
-            {getInitials(dataProfile.name)}
+            {getNameInitials(dataProfile.name)}
           </Text>
         </View>
       )}

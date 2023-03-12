@@ -14,7 +14,7 @@ import {
 } from 'react-native';
 import { exist } from '../utils/checks';
 import Ionicons from '@expo/vector-icons/Ionicons';
-
+import { getImage } from '../utils/getMethods';
 import Colors from '../constants/Colors';
 import GradientText from './UI/GradientText';
 
@@ -62,7 +62,7 @@ const SwipeMatch = (props) => {
           <View style={styles.imageContainer}>
             {currentProfileImage ? (
               <Image
-                source={{ uri: `${currentProfileImage}` }}
+                source={{ uri: `${getImage(currentProfileImage)}` }}
                 style={styles.image}
               />
             ) : (
@@ -77,7 +77,7 @@ const SwipeMatch = (props) => {
           <View style={styles.imageContainer}>
             {matchedProfileImage ? (
               <Image
-                source={{ uri: `${matchedProfileImage}` }}
+                source={{ uri: `${getImage(matchedProfileImage)}` }}
                 style={styles.image}
               />
             ) : (

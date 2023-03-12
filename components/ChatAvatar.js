@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
+import { getNameInitials, getImage } from '../utils/getMethods';
 import Colors from '../constants/Colors';
 
 const ChatAvatar = (props) => {
@@ -19,16 +20,11 @@ const ChatAvatar = (props) => {
     onShowProfile,
   } = props;
 
-  const getInitials = (name) => {
-    const first = name ? name.charAt(0).toUpperCase() : 'N';
-    return first;
-  };
-
   if (matchedProfileHasPhoto) {
     return (
       <TouchableOpacity onPress={onShowProfile}>
         <ImageBackground
-          source={{ uri: `${matchedProfilePhoto}` }}
+          source={{ uri: `${getImage(matchedProfilePhoto)}` }}
           imageStyle={styles.img}
           style={
             isInGroup ? styles.groupImageContainer : styles.singleImageContainer
@@ -53,7 +49,7 @@ const ChatAvatar = (props) => {
       onPress={props.onShowProfile}
     >
       <Text style={{ color: Colors.white, fontSize: 20 }}>
-        {getInitials(matchedProfile.name)}
+        {getNameInitials(matchedProfile.name)}
       </Text>
     </TouchableOpacity>
   );

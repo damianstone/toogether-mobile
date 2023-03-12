@@ -16,3 +16,4 @@ package-lock.json
 .env
 .node_modules
 .vscode
+.eas.json

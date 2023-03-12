@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { blockProfile } from '../../store/actions/block';
 import { like } from '../../store/actions/swipe';
 import { checkServerError, check400Error } from '../../utils/errors';
+import { getImage } from '../../utils/getMethods';
 import * as b from '../../constants/block';
 
 import DetailBottomSheet from '../../components/DetailBottomSheet';
@@ -130,7 +131,7 @@ const ProfileScreen = (props) => {
                 key={profile.id}
                 style={styles.image}
                 imageStyle={styles.imageStyle}
-                source={{ uri: `${photo.image}` }}
+                source={{ uri: `${getImage(photo.image)}` }}
                 resizeMode="cover"
               />
             ))
