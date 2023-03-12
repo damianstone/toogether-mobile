@@ -87,10 +87,9 @@ const GroupScreen = (props) => {
 
   useEffect(() => {
     if (!groupContext) {
-      console.log("replace back");
       props.navigation.dispatch(replaceAction);
     }
-  }, [groupContext]);
+  }, []);
 
   // handle render after fetching the group
   useEffect(() => {
