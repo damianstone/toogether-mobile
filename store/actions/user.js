@@ -14,7 +14,7 @@ export const userLocation = () => {
   return async (dispatch) => {
     try {
       dispatch({ type: c.USER_LOCATION_REQUEST });
-
+      
       const userData = JSON.parse(await AsyncStorage.getItem('@userData'));
 
       const config = {
@@ -22,11 +22,11 @@ export const userLocation = () => {
         Accept: 'application/json',
         Authorization: `Bearer ${userData.token}`,
       };
-
+      
       const location = await Location.getCurrentPositionAsync({
-        accuracy: Platform.OS === 'ios' ? 3 : BALANCED,
+        accuracy: Platform.OS === 'ios' ? 3 : Location.Accuracy.Highest,
       });
-
+     
       const { data } = await axios({
         method: 'POST',
         url: `${BASE_URL}/api/v1/profiles/actions/location/`,

@@ -28,12 +28,13 @@ export const verifyPermissions = async () => {
 */
 export const verifyLocationPermissions = async () => {
   const result = await Location.getForegroundPermissionsAsync();
-
+  
   if (!result.granted) {
     const askPermissions = await Location.requestForegroundPermissionsAsync();
     if (!askPermissions.granted) {
       return false;
     }
   }
+  
   return true;
 };

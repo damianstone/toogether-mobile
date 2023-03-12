@@ -44,7 +44,8 @@
       "permissions": [
         "ACCESS_FINE_LOCATION",
         "CAMERA",
-        "WRITE_EXTERNAL_STORAGE"
+        "WRITE_EXTERNAL_STORAGE",
+        "ACCESS_BACKGROUND_LOCATION"
       ],
       "package": "toogether.app",
       "versionCode": 1
