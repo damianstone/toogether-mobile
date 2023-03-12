@@ -26,7 +26,7 @@ import Loader from '../../components/UI/Loader';
 import ActionButton from '../../components/UI/ActionButton';
 import * as g from '../../constants/group';
 import { checkServerError, check400Error } from '../../utils/errors';
-import { getNameInitials, getCardName } from '../../utils/getMethods';
+import { getNameInitials, getCardName, getImage } from '../../utils/getMethods';
 
 import Colors from '../../constants/Colors';
 import ClipBoard from '../../components/UI/ClipBoard';
@@ -87,10 +87,9 @@ const GroupScreen = (props) => {
 
   useEffect(() => {
     if (!groupContext) {
-      console.log("replace back");
       props.navigation.dispatch(replaceAction);
     }
-  }, [groupContext]);
+  }, []);
 
   // handle render after fetching the group
   useEffect(() => {
@@ -301,7 +300,7 @@ const GroupScreen = (props) => {
             groupContext.owner.photos.length > 0 && (
               <Image
                 source={{
-                  uri: `${groupContext.owner.photos[0].image}`,
+                  uri: `${getImage(groupContext.owner.photos[0].image)}`,
                 }}
                 style={{ width: 150, height: 150, borderRadius: 100 }}
               />

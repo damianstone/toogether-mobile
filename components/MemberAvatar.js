@@ -1,25 +1,20 @@
 import React, { useEffect } from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import Constants from 'expo-constants';
+import { getNameInitials, getImage } from '../utils/getMethods';
 import Colors from '../constants/Colors';
 
 const MemberAvatar = (props) => {
   const { onPress, photos, name } = props;
 
-  const getInitials = (name) => {
-    const first = name ? name.charAt(0).toUpperCase() : 'N';
-    return first;
-  };
-
   return (
     <TouchableOpacity onPress={onPress} style={styles.imgContainer}>
       {photos && photos.length >= 1 && (
-        <Image source={{ uri: `${photos[0].image}` }} style={styles.img} />
+        <Image source={{ uri: `${getImage(photos[0].image)}` }} style={styles.img} />
       )}
       {!photos ||
         (photos.length === 0 && (
           <View style={styles.avatar_view}>
-            <Text style={styles.avatar_initials}>{getInitials(name)}</Text>
+            <Text style={styles.avatar_initials}>{getNameInitials(name)}</Text>
           </View>
         ))}
     </TouchableOpacity>

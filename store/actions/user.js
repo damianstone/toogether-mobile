@@ -1,7 +1,6 @@
 import { Platform } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
-import Constants from 'expo-constants';
 import * as Location from 'expo-location';
 import * as c from '../../constants/user';
 import getEnvVars from '../../environment';

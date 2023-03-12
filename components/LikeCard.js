@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import { Entypo } from '@expo/vector-icons';
 
+import { getImage } from '../utils/getMethods';
 import Colors from '../constants/Colors';
 
 const SCREEN_HEIGHT = Dimensions.get('window').height;
@@ -80,7 +81,7 @@ const LikeCard = (props) => {
             <ImageBackground
               imageStyle={styles.imageStyle}
               resizeMode="cover"
-              source={{ uri: `${image}` }}
+              source={{ uri: `${getImage(image)}` }}
               style={{ ...imageContainer }}
             >
               <View style={styles.infoCard}>
