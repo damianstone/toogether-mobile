@@ -65,11 +65,9 @@ const StartGroupScreen = (props) => {
     }
 
     if (dataCreate) {
-      console.log('DATA CREATE -> ', dataCreate);
       updateGroupContext(dataCreate);
-      // reset the create reducer since we updated the context
-      dispatch({ type: g.CREATE_GROUP_RESET });
       props.navigation.dispatch(replaceAction);
+      dispatch({ type: g.CREATE_GROUP_RESET });
     }
   }, [dispatch, errorCreate, dataCreate]);
 

@@ -9,8 +9,7 @@ import {
   View,
 } from 'react-native';
 import Swiper from 'react-native-swiper';
-import Constants from 'expo-constants';
-
+import { getImage } from '../utils/getMethods';
 import Colors from '../constants/Colors';
 import InfoCard from './InfoCard';
 
@@ -63,7 +62,7 @@ const SwipeCard = (props) => {
 
   const checkPhoto = (profile) => {
     if (profile.photos.length > 0) {
-      return { uri: `${profile.photos[0]?.image}` };
+      return { uri: `${getImage(profile.photos[0]?.image)}` };
     }
     return require('../assets/images/placeholder-profile.png');
   };

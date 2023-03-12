@@ -4,11 +4,11 @@ import { ROCKET_URL, LOCAL_URL } from '@env';
 const ENV = {
   develop: {
     API_URL: String(LOCAL_URL),
-    BUCKET_URL: 'https://toogether-images.s3.eu-west-2.amazonaws.com',
+    DEVELOP: true,
   },
   rocket: {
     API_URL: String(ROCKET_URL),
-    BUCKET_URL: 'https://toogether-images.s3.eu-west-2.amazonaws.com',
+    DEVELOP: false,
   },
 };
 
