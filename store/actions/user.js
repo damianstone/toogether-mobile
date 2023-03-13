@@ -25,7 +25,7 @@ export const userLocation = () => {
       // const location = await Location.getCurrentPositionAsync({
       //   accuracy: Platform.OS === 'ios' ? 3 : Location.Accuracy.Highest,
       // });
-      
+      // comment
       const location = {
         coords: {
           latitude: 37.4214,
