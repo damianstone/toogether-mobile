@@ -16,7 +16,11 @@ import Colors from '../../constants/Colors';
 import ButtonAndroid from '../../components/UI/ButtonAndroid';
 // import Button from '../../components/UI/Button';
 
-const imageAspect = 0.85812356979;
+const height = Dimensions.get('window').height;
+const width = Dimensions.get('window').width;
+const aspectRatio = width/height;
+// 16x9 aspect ratio
+const sbn = aspectRatio === 0.6020066889632107;
 
 const AuthStartScreen = (props) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -110,7 +114,7 @@ const styles = StyleSheet.create({
   },
 
   logoContainer: {
-    marginTop: 80,
+    marginTop: !sbn ? 80 : 10,
     alignItems: 'center',
     width: '100%',
   },
@@ -130,7 +134,7 @@ const styles = StyleSheet.create({
 
   image: {
     width: '100%',
-    height: Platform.OS === 'ios' ? 450 : 480,
+    height: Platform.OS === 'ios' ? 450 : !sbn ? 480 : 450,
   },
 
   buttonsContainer: {
