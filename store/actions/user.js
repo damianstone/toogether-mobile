@@ -22,10 +22,17 @@ export const userLocation = () => {
         Authorization: `Bearer ${userData.token}`,
       };
       
-      const location = await Location.getCurrentPositionAsync({
-        accuracy: Platform.OS === 'ios' ? 3 : Location.Accuracy.Highest,
-      });
-     
+      // const location = await Location.getCurrentPositionAsync({
+      //   accuracy: Platform.OS === 'ios' ? 3 : Location.Accuracy.Highest,
+      // });
+      
+      const location = {
+        coords: {
+          latitude: 37.4214,
+          longitude: -122.0897
+        }
+      }
+
       const { data } = await axios({
         method: 'POST',
         url: `${BASE_URL}/api/v1/profiles/actions/location/`,
