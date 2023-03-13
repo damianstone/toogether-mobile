@@ -7,9 +7,16 @@ import {
   TouchableOpacity,
   Button,
   Platform,
+  Dimensions,
 } from 'react-native';
 import Colors from '../constants/Colors';
 import ButtonAndroid from './UI/ButtonAndroid';
+
+const height = Dimensions.get('window').height;
+const width = Dimensions.get('window').width;
+const aspectRatio = width/height;
+// 16x9 aspect ratio
+const sbn = aspectRatio === 0.6020066889632107;
 
 const SwipeError = (props) => {
   const { imageUrl, title, text, onPress, onReload, buttonText, reload } =
@@ -47,11 +54,15 @@ const styles = StyleSheet.create({
     height: '100%',
     justifyContent: 'center',
     alignItems: 'center',
+    borderWidth: 1,
+    borderColor: 'white',
+    marginTop: Platform.OS === 'ios' ? 0 : !sbn ? 0 : '3%',
   },
 
   img: {
+    flex: 1,
     width: '80%',
-    height: '55%',
+    height: '50%',
     alignSelf: 'center',
   },
   title: {
