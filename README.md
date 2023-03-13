@@ -15,7 +15,7 @@ The following command allows you to install all the requirements using the exact
 npm ci
 ```
 
-Further you need to create the .env with **LOCAL_URL**
+Further you need to create the .env with **LOCAL_URL** to connect to the back-end (i.e. the backend ip:port)
 
 ```
 # .env
