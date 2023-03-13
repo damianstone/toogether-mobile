@@ -15,6 +15,20 @@ The following command allows you to install all the requirements using the exact
 npm ci
 ```
 
+Further you need to create the .env with **LOCAL_URL** to connect to the back-end (i.e. the backend ip:port)
+
+```
+# .env
+LOCAL_URL=localhost:8000
+```
+
+On **Android** the default localhost doesn't work, therefore it needs to be changed to the loopback ip
+
+```
+# .env
+LOCAL_URL=10.0.2.2:8000
+```
+
 ### Style standards
 
 To keep the code in a standard style we use `Prettier + Eslint`
