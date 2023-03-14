@@ -22,7 +22,7 @@ export const userLocation = () => {
         Authorization: `Bearer ${userData.token}`,
       };
       
-      let location;
+      let location = {}
       
       if (Platform.OS === 'ios') {
         location = await Location.getCurrentPositionAsync({

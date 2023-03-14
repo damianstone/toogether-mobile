@@ -31,18 +31,17 @@ export default ButtonAndroid;
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    // flex: 1,
     justifyContent: 'center',
     flexDirection: 'row',
     flexWrap: 'wrap',
-    marginTop: !sbn ? 20 : 5,
-    marginBottom: !sbn ? 10 : 0,
+    marginTop: '5%',
     // borderWidth: 1,
     // borderColor: 'white',
   },
   buttonContainer: {
     justifyContent: 'center',
-    height: 30,
+    height: 0.06*height,
     overflow: 'hidden',
     paddingHorizontal: 35,
     borderRadius: 10,

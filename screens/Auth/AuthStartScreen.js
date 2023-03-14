@@ -114,15 +114,17 @@ const styles = StyleSheet.create({
   },
 
   logoContainer: {
-    marginTop: sbn ? 10 : 80,
+    marginTop: Platform.OS === 'ios' ? 80 : 0.07 * height,
     alignItems: 'center',
     width: '100%',
+    // borderWidth: 1,
+    // borderColor: 'white',
   },
 
   logo: {
-    width: 350,
-    height: 90,
-    resizeMode: 'stretch',
+    width: Platform.OS === 'ios' ? 350 : 0.69 * width,
+    height: Platform.OS === 'ios' ? 90 : 0.1 * height,
+    resizeMode: Platform.OS === 'ios' ? 'stretch' : 'center',
   },
 
   imageContainer: {
@@ -130,20 +132,28 @@ const styles = StyleSheet.create({
     marginVertical: 20,
     alignItems: 'center',
     justifyContent: 'center',
+    // borderWidth: 1,
+    // borderColor: 'white'
   },
 
   image: {
     width: '100%',
-    height: Platform.OS === 'ios' ? 450 : 480,
+    height: Platform.OS === 'ios' ? 450 : 0.60*height,
+    overflow: 'hidden',
   },
 
   buttonsContainer: {
+    flex: 1,
     alignSelf: 'center',
     justifyContent: 'center',
     alignItems: 'center',
     width: '90%',
-    padding: 20,
-    paddingVertical: '7%',
+    padding: Platform.OS === 'ios' ? 20 : 0,
+    paddingHorizontal: Platform.OS === 'ios' ? 0 : 20,
+    paddingVertical: Platform.OS === 'ios' ? '7%' : 0,
+    paddingBottom: Platform.OS === 'ios' ? 0 : 0.01 * height,
+    // borderWidth: 1,
+    // borderColor: 'white',
   },
 
   button: {

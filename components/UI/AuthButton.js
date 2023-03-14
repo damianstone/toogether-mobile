@@ -22,15 +22,19 @@ export default AuthButton;
 
 const styles = StyleSheet.create({
   auth_button_container: {
-    marginVertical: Platform.OS === 'ios' ? 30 : !sbn ? 30 : 12,
+    // marginVertical: Platform.OS === 'ios' ? 30 : !sbn ? 30 : 12,
+    marginVertical: Platform.OS === 'ios' ? 30 : 0,
+    marginTop: Platform.OS === 'ios' ? 0 : 15,
     padding: 3,
     flexDirection: 'row',
     width: '100%',
-    height: 44,
+    height: Platform.OS === 'ios' ? 44 : 0.06*height,
     backgroundColor: Colors.orange,
     borderRadius: 10,
     alignItems: 'center',
     justifyContent: 'center',
+    // borderWidth: 1,
+    // borderColor: 'white',
   },
   auth_button_text: {
     color: Colors.white,
