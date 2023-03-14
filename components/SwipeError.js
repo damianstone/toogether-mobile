@@ -54,8 +54,6 @@ const styles = StyleSheet.create({
     height: '100%',
     justifyContent: 'center',
     alignItems: 'center',
-    borderWidth: 1,
-    borderColor: 'white',
     marginTop: Platform.OS === 'ios' ? 0 : !sbn ? 0 : '3%',
   },
 
