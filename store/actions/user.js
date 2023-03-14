@@ -22,20 +22,20 @@ export const userLocation = () => {
         Authorization: `Bearer ${userData.token}`,
       };
       
-      let platformLocation = {}
+      let location;
+      
       if (Platform.OS === 'ios') {
-        platformLocation = await Location.getCurrentPositionAsync({
+        location = await Location.getCurrentPositionAsync({
           accuracy: Platform.OS === 'ios' ? 3 : Location.Accuracy.Highest,
         })
       } else {
-        platformLocation = {
+        location  = {
           coords: {
             latitude: 37.4214,
             longitude: -122.0897
           }
         }
       }
-      const location = platformLocation;
 
       const { data } = await axios({
         method: 'POST',
