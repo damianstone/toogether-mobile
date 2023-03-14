@@ -12,6 +12,7 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import { StatusBar } from 'expo-status-bar';
 
+import ButtonAndroid from '../../components/UI/ButtonAndroid';
 import AuthButton from '../../components/UI/AuthButton';
 import ImageSelector from '../../components/UI/ImageSelector';
 import Colors from '../../constants/Colors';
@@ -20,7 +21,6 @@ import { addPhoto } from '../../store/actions/user';
 import { check400Error, checkServerError } from '../../utils/errors';
 
 import * as authStyles from '../Auth/styles';
-import ButtonAndroid from '../../components/UI/ButtonAndroid';
 
 const AddProfilePhotoScreen = (props) => {
   const [image, setImage] = useState('');

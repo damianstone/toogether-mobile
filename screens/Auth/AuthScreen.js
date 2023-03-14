@@ -12,6 +12,7 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import { StatusBar } from 'expo-status-bar';
 
+import ButtonAndroid from '../../components/UI/ButtonAndroid';
 import AuthButton from '../../components/UI/AuthButton';
 import AuthInput from '../../components/UI/AuthInput';
 import Colors from '../../constants/Colors';
@@ -19,7 +20,6 @@ import * as c from '../../constants/user';
 import { userRegister, userLogin } from '../../store/actions/user';
 import { check400Error, checkServerError } from '../../utils/errors';
 import styles from './styles';
-import ButtonAndroid from '../../components/UI/ButtonAndroid';
 
 const FORM_UPDATE = 'FORM_UPDATE';
 

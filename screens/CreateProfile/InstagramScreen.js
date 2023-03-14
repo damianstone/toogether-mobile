@@ -77,7 +77,7 @@ const InstagramScreen = (props) => {
         if (errorUpdate?.response?.data?.detail) {
           check400Error(errorUpdate);
         } else {
-          setError(true); // Fix this
+          setError(true);
         }
       } else {
         checkServerError(errorUpdate);
@@ -166,11 +166,6 @@ const InstagramScreen = (props) => {
             <Text style={styles.button_text} >
               Continue
             </Text>
-            {/* <Button
-              onPress={handleInstagram}
-              color={Colors.white}
-              title="Continue"
-            /> */}
           </TouchableOpacity>
         )}
       </View>

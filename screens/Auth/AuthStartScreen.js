@@ -114,7 +114,7 @@ const styles = StyleSheet.create({
   },
 
   logoContainer: {
-    marginTop: !sbn ? 80 : 10,
+    marginTop: sbn ? 10 : 80,
     alignItems: 'center',
     width: '100%',
   },
@@ -127,14 +127,14 @@ const styles = StyleSheet.create({
 
   imageContainer: {
     marginTop: 20,
-    marginVertical: Platform.OS === 'ios' ? 20 : 0,
+    marginVertical: 20,
     alignItems: 'center',
     justifyContent: 'center',
   },
 
   image: {
     width: '100%',
-    height: Platform.OS === 'ios' ? 450 : !sbn ? 480 : 450,
+    height: Platform.OS === 'ios' ? 450 : 480,
   },
 
   buttonsContainer: {

@@ -47,7 +47,7 @@ export default StyleSheet.create({
 
   auth_text_big: {
     color: Colors.white,
-    fontSize: Platform.OS === 'ios' ? 40 : 40,
+    fontSize: 40,
     fontWeight: 'bold',
   },
 

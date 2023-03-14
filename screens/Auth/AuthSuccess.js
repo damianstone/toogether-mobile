@@ -42,24 +42,6 @@ const AuthSucess = (props) => {
           <Text style={styles.button_text} >
             Continue
           </Text>
-          {/* { Platform.OS === 'ios' 
-            ?
-              <Button
-                onPress={() => {
-                  props.navigation.navigate('Instagram');
-                }}
-                color={Platform.OS === 'ios' ? Colors.white : Colors.bg}
-                title="Continue"
-              />
-            : 
-              <ButtonAndroid
-                onPress={() => {
-                  props.navigation.navigate('Instagram');
-                }}
-                color={Platform.OS === 'ios' ? Colors.white : Colors.bg}
-                title="Continue"
-              />
-          } */}
         </TouchableOpacity>
       </View>
     </View>

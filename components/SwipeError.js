@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
     height: '100%',
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: Platform.OS === 'ios' ? 0 : !sbn ? 0 : '3%',
+    marginTop: 0,
   },
 
   img: {
