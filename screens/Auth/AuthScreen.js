@@ -173,8 +173,7 @@ const AuthStartScreen = (props) => {
     <View style={styles.screen}>
       <StatusBar style="light" />
       <View style={styles.auth_text_view}>
-        <View style={styles.auth_text_container}
-        >
+        <View style={styles.auth_text_container}>
           <Text style={styles.auth_text_big}>
             {register ? 'Lets create your account!' : 'Lets sign you in'}
           </Text>
