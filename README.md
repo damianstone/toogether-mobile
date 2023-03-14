@@ -19,14 +19,14 @@ Further you need to create the .env with **LOCAL_URL** to connect to the back-en
 
 ```
 # .env
-LOCAL_URL=localhost:8000
+LOCAL_URL=http://127.0.0.1:8000
 ```
 
 On **Android** the default localhost doesn't work, therefore it needs to be changed to the loopback ip
 
 ```
 # .env
-LOCAL_URL=10.0.2.2:8000
+LOCAL_URL=http://10.0.2.2:8000
 ```
 
 ### Style standards
