@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
 
   img: {
     width: '80%',
-    height: '50%',
+    height: '55%',
     alignSelf: 'center',
   },
   title: {
