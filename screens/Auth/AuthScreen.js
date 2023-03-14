@@ -8,7 +8,9 @@ import {
   Platform,
   ActivityIndicator,
   KeyboardAvoidingView,
+  Keyboard
 } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { useDispatch, useSelector } from 'react-redux';
 import { StatusBar } from 'expo-status-bar';
 
@@ -16,6 +18,7 @@ import ButtonAndroid from '../../components/UI/ButtonAndroid';
 import AuthButton from '../../components/UI/AuthButton';
 import AuthInput from '../../components/UI/AuthInput';
 import Colors from '../../constants/Colors';
+import Device from '../../constants/Device';
 import * as c from '../../constants/user';
 import { userRegister, userLogin } from '../../store/actions/user';
 import { check400Error, checkServerError } from '../../utils/errors';
@@ -186,8 +189,8 @@ const AuthStartScreen = (props) => {
         </View>
       </View>
       <KeyboardAvoidingView 
-        behavior={Platform.OS === 'ios' ? "position" : ""}
-        keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 0}
+        behavior={Platform.OS === 'ios' ? "position" : "padding"}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : (register ? -82 : -123)}
       >
         <ScrollView
           style={styles.scrollview_style}

@@ -1,11 +1,13 @@
 import { StyleSheet } from 'react-native';
 import Colors from '../../constants/Colors';
+import Device from '../../constants/Device';
 import { Platform } from 'react-native';
 
 // ---------------------- AUTH SCREEN -----------------------
 
 export default StyleSheet.create({
   screen: {
+    flex: 1,
     backgroundColor: Colors.bg,
     justifyContent: 'space-between',
     flexDirection: 'column',
@@ -42,7 +44,7 @@ export default StyleSheet.create({
 
   auth_text_container: {
     width: '100%',
-    paddingVertical: Platform.OS === 'ios' ? 0 : 5,
+    paddingVertical: 0,
   },
 
   auth_text_big: {
@@ -62,7 +64,7 @@ export default StyleSheet.create({
     alignItems: 'center',
     width: '100%',
     padding: 20,
-    paddingVertical: '7%',
+    paddingVertical: Platform.OS === 'ios' ? '7%' : '5%', 
   },
 
   auth_loader_container: {

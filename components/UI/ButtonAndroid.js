@@ -1,12 +1,7 @@
 import { StyleSheet, Text, View, Dimensions } from "react-native"
 import { TouchableOpacity } from "react-native-gesture-handler"
 import Colors from "../../constants/Colors";
-
-const height = Dimensions.get('window').height;
-const width = Dimensions.get('window').width;
-const aspectRatio = width/height;
-// 16x9 aspect ratio
-const sbn = aspectRatio === 0.6020066889632107;
+import Device from "../../constants/Device";
 
 const ButtonAndroid = ({ onPress, title, style}) => {
   
@@ -41,7 +36,7 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     justifyContent: 'center',
-    height: 0.06*height,
+    height: 0.06 * Device.height,
     overflow: 'hidden',
     paddingHorizontal: 35,
     borderRadius: 10,

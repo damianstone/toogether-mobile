@@ -1,7 +1,8 @@
 import React, { useReducer, useEffect } from 'react';
-import { StyleSheet, Text, View, TextInput } from 'react-native';
+import { StyleSheet, Text, View, TextInput, Platform } from 'react-native';
 
 import Colors from '../../constants/Colors';
+import Device from '../../constants/Device';
 
 const CHANGE = 'CHANGE';
 const BLUR = 'BLUR';
@@ -115,12 +116,14 @@ const styles = StyleSheet.create({
     width: '100%',
     justifyContent: 'center',
     alignItems: 'center',
+    borderWidth: 1,
+    borderColor: 'black',
   },
 
   label: {
     color: Colors.black,
     fontSize: 20,
-    marginVertical: 10,
+    marginVertical: Platform.OS === 'ios' ? 10 : 0.001 * Device.height,
     alignSelf: 'flex-start',
   },
 

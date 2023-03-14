@@ -16,11 +16,7 @@ import Colors from '../../constants/Colors';
 import ButtonAndroid from '../../components/UI/ButtonAndroid';
 // import Button from '../../components/UI/Button';
 
-const height = Dimensions.get('window').height;
-const width = Dimensions.get('window').width;
-const aspectRatio = width/height;
-// 16x9 aspect ratio
-const sbn = aspectRatio === 0.6020066889632107;
+import Device from '../../constants/Device';
 
 const AuthStartScreen = (props) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -114,7 +110,7 @@ const styles = StyleSheet.create({
   },
 
   logoContainer: {
-    marginTop: Platform.OS === 'ios' ? 80 : 0.07 * height,
+    marginTop: Platform.OS === 'ios' ? 80 : 0.07 * Device.height,
     alignItems: 'center',
     width: '100%',
     // borderWidth: 1,
@@ -122,8 +118,8 @@ const styles = StyleSheet.create({
   },
 
   logo: {
-    width: Platform.OS === 'ios' ? 350 : 0.69 * width,
-    height: Platform.OS === 'ios' ? 90 : 0.1 * height,
+    width: Platform.OS === 'ios' ? 350 : 0.69 * Device.width,
+    height: Platform.OS === 'ios' ? 90 : 0.1 * Device.height,
     resizeMode: Platform.OS === 'ios' ? 'stretch' : 'center',
   },
 
@@ -138,7 +134,7 @@ const styles = StyleSheet.create({
 
   image: {
     width: '100%',
-    height: Platform.OS === 'ios' ? 450 : 0.60*height,
+    height: Platform.OS === 'ios' ? 450 : 0.60 * Device.height,
     resizeMode: 'center',
   },
 
@@ -151,7 +147,7 @@ const styles = StyleSheet.create({
     padding: Platform.OS === 'ios' ? 20 : 0,
     paddingHorizontal: Platform.OS === 'ios' ? 0 : 20,
     paddingVertical: Platform.OS === 'ios' ? '7%' : 0,
-    paddingBottom: Platform.OS === 'ios' ? 0 : 0.01 * height,
+    paddingBottom: Platform.OS === 'ios' ? 0 : 0.01 * Device.height,
     // borderWidth: 1,
     // borderColor: 'white',
   },
