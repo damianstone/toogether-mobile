@@ -46,16 +46,6 @@ To check errors in the code style, run the following command:
 npm run lint:fix
 ```
 
-## Style Standards
-To format the code in the project, simply run the following command in the root directory of the project:
-
-```bash
-black .
-```
-This command will automatically format all .py files in the project according to the black style guide, which adheres to the PEP 8 style guide
-
-**Make sure you run this command before any pull request**
-
 ## Pull Requests
 
 Before any merge to develop or rocket, it will be necessary to make a Pull Request and a code review.
