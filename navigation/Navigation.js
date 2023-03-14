@@ -1,5 +1,5 @@
 import React from 'react';
-import { Platform, Text } from 'react-native';
+import { Platform, Text, View } from 'react-native';
 import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 import { createMaterialBottomTabNavigator } from 'react-navigation-material-bottom-tabs';
 import { createStackNavigator } from 'react-navigation-stack';
@@ -46,6 +46,7 @@ const defaultNavOptions = {
   headerBackTitleStyle: {},
   statusBarStyle: Colors.bg,
   headerTintColor: Colors.white,
+  headerTitleAlign: 'center'
 };
 
 const AuthNavigator = createStackNavigator(
