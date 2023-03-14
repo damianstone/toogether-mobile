@@ -219,10 +219,12 @@ const SwipeScreen = (props) => {
 SwipeScreen.navigationOptions = (navData) => {
   return {
     headerTitle: () => (
-      <Image
-        source={require('../../assets/images/logo-1.png')}
-        style={styles.logo}
-      />
+      <View style={styles.logoContainer}>
+        <Image
+          source={require('../../assets/images/logo-1.png')}
+          style={styles.logo}
+        />
+      </View>
     ),
     headerLeft: () => (
       <Avatar

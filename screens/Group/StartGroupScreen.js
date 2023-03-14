@@ -7,6 +7,7 @@ import {
   StyleSheet,
   Alert,
   ActivityIndicator,
+  Platform,
 } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { useDispatch, useSelector } from 'react-redux';
@@ -19,6 +20,7 @@ import AuthButton from '../../components/UI/AuthButton';
 import Avatar from '../../components/UI/Avatar';
 import Colors from '../../constants/Colors';
 import * as g from '../../constants/group';
+import ButtonAndroid from '../../components/UI/ButtonAndroid';
 
 const StartGroupScreen = (props) => {
   const { groupContext, updateGroupContext } = useContext(Context);
@@ -100,11 +102,19 @@ const StartGroupScreen = (props) => {
           </View>
         </View>
         <View style={styles.buttonsContainer}>
-          <Button
-            title="Join to group"
-            color={Colors.white}
-            onPress={handleJoinToGroup}
-          />
+          {Platform.OS === 'ios'
+            ?
+              <Button
+                title="Join to group"
+                color={Colors.white}
+                onPress={handleJoinToGroup}
+              />
+            : 
+              <ButtonAndroid
+                title="Join to group"
+                onPress={handleJoinToGroup}
+              />
+          }
           <AuthButton onPress={handleCreateGroup} text="Create group" />
         </View>
       </ScrollView>

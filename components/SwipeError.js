@@ -6,13 +6,22 @@ import {
   View,
   TouchableOpacity,
   Button,
+  Platform,
+  Dimensions,
 } from 'react-native';
 import Colors from '../constants/Colors';
+import ButtonAndroid from './UI/ButtonAndroid';
+
+const height = Dimensions.get('window').height;
+const width = Dimensions.get('window').width;
+const aspectRatio = width/height;
+// 16x9 aspect ratio
+const sbn = aspectRatio === 0.6020066889632107;
 
 const SwipeError = (props) => {
   const { imageUrl, title, text, onPress, onReload, buttonText, reload } =
     props;
-
+    
   return (
     <View style={styles.screen}>
       <Image style={styles.img} source={imageUrl} />
@@ -25,7 +34,11 @@ const SwipeError = (props) => {
           <Text style={styles.buttonText}>{buttonText}</Text>
         </TouchableOpacity>
         {reload && (
-          <Button title="Reload" color={Colors.white} onPress={onReload} />
+          Platform.OS === 'ios'
+          ?
+            <Button title="Reload" color={Colors.white} onPress={onReload} />
+          :
+            <ButtonAndroid title="Reload" onPress={onReload} />
         )}
       </View>
     </View>
@@ -41,6 +54,7 @@ const styles = StyleSheet.create({
     height: '100%',
     justifyContent: 'center',
     alignItems: 'center',
+    marginTop: 0,
   },
 
   img: {

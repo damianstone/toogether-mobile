@@ -12,6 +12,7 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import { StatusBar } from 'expo-status-bar';
 
+import ButtonAndroid from '../../components/UI/ButtonAndroid';
 import AuthButton from '../../components/UI/AuthButton';
 import AuthInput from '../../components/UI/AuthInput';
 import Colors from '../../constants/Colors';
@@ -177,13 +178,17 @@ const AuthStartScreen = (props) => {
             {register ? 'Lets create your account!' : 'Lets sign you in'}
           </Text>
         </View>
-        <View style={styles.auth_text_container}>
+        <View style={styles.auth_text_container}
+        >
           <Text style={styles.auth_text_small}>
             {register ? 'Welcome ;)' : 'Welcome back'}
           </Text>
         </View>
       </View>
-      <KeyboardAvoidingView behavior="position">
+      <KeyboardAvoidingView 
+        behavior={Platform.OS === 'ios' ? "position" : ""}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 0}
+      >
         <ScrollView
           style={styles.scrollview_style}
           contentContainerStyle={styles.scrollview_content_container}
@@ -206,7 +211,7 @@ const AuthStartScreen = (props) => {
             />
             <AuthInput
               secureTextEntry
-              textContentType="new-password"
+              textContentType={Platform.OS ==='ios' ? "new-password" : "newPassword"}
               id="password"
               label="Password"
               keyboardType="default"
@@ -219,7 +224,7 @@ const AuthStartScreen = (props) => {
             {register && (
               <AuthInput
                 secureTextEntry
-                textContentType="new-password"
+                textContentType={Platform.OS ==='ios' ? "new-password" : "newPassword"}
                 required
                 autoCapitalize="none"
                 id="repeated_password"
@@ -240,9 +245,9 @@ const AuthStartScreen = (props) => {
                 onPress={register ? handleRegister : handleLogin}
               />
             )}
-            <Button
+            <ButtonAndroid
               style={styles.auth_text_button}
-              color={Platform.OS === 'ios' ? Colors.bgCard : Colors.bgCard}
+              color={Colors.bgCard}
               title={
                 register
                   ? 'You already have an account?'

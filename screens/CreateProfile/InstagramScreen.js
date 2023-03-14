@@ -163,11 +163,9 @@ const InstagramScreen = (props) => {
           <Loader />
         ) : (
           <TouchableOpacity style={styles.touchable} onPress={handleInstagram}>
-            <Button
-              onPress={handleInstagram}
-              color={Colors.white}
-              title="Continue"
-            />
+            <Text style={styles.button_text} >
+              Continue
+            </Text>
           </TouchableOpacity>
         )}
       </View>
@@ -220,6 +218,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   touchable: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
     width: '100%',
     height: '100%',
   },
@@ -234,4 +235,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#494863',
     borderRadius: 10,
   },
+  button_text: {
+    color: 'white',
+    fontSize: 20,
+  }
 });

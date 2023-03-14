@@ -7,11 +7,20 @@ import {
   Platform,
   ActivityIndicator,
   StyleSheet,
+  Dimensions,
 } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 
 import AuthButton from '../../components/UI/AuthButton';
 import Colors from '../../constants/Colors';
+import ButtonAndroid from '../../components/UI/ButtonAndroid';
+// import Button from '../../components/UI/Button';
+
+const height = Dimensions.get('window').height;
+const width = Dimensions.get('window').width;
+const aspectRatio = width/height;
+// 16x9 aspect ratio
+const sbn = aspectRatio === 0.6020066889632107;
 
 const AuthStartScreen = (props) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -47,14 +56,25 @@ const AuthStartScreen = (props) => {
           <Image
             source={require('../../assets/images/radar.png')}
             style={styles.image}
+            resizeMode= {Platform.OS === 'ios' ? 'cover' : 'contain'}
           />
         </View>
         <View style={styles.buttonsContainer}>
-          <Button
-            title="Login"
-            color={Platform.OS === 'ios' ? Colors.white : Colors.bgCard}
-            onPress={handleLogin}
-          />
+          {
+            Platform.OS === 'ios' 
+              ?
+                <Button
+                  title="Login"
+                  color={Platform.OS === 'ios' ? Colors.white : Colors.bg} //  not needed but kept for refernce
+                  onPress={handleLogin}
+                />
+              :
+                <ButtonAndroid 
+                  title="Login"
+                  color={Platform.OS === 'ios' ? Colors.white : Colors.bg}
+                  onPress={handleLogin}
+                />
+          }
           <AuthButton onPress={handleRegister} text="Create Account" />
         </View>
       </ScrollView>
@@ -94,7 +114,7 @@ const styles = StyleSheet.create({
   },
 
   logoContainer: {
-    marginTop: 80,
+    marginTop: sbn ? 10 : 80,
     alignItems: 'center',
     width: '100%',
   },
@@ -114,7 +134,7 @@ const styles = StyleSheet.create({
 
   image: {
     width: '100%',
-    height: 450,
+    height: Platform.OS === 'ios' ? 450 : 480,
   },
 
   buttonsContainer: {

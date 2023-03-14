@@ -42,6 +42,7 @@ export default StyleSheet.create({
 
   auth_text_container: {
     width: '100%',
+    paddingVertical: Platform.OS === 'ios' ? 0 : 5,
   },
 
   auth_text_big: {
@@ -56,6 +57,7 @@ export default StyleSheet.create({
   },
 
   auth_input_container: {
+    borderRadius: 55, //for android (ios has borderRadius by default)
     backgroundColor: Colors.white,
     alignItems: 'center',
     width: '100%',
@@ -87,6 +89,6 @@ export default StyleSheet.create({
 
   auth_text_button: {
     color: '#4A4A4A',
-    fontSize: Platform.OS === 'ios' ? 15 : 10,
+    fontSize: Platform.OS === 'ios' ? 15 : 18,
   },
 });
