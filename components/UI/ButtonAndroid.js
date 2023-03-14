@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     flexDirection: 'row',
     flexWrap: 'wrap',
-    marginTop: '5%',
+    // marginTop: '5%',
     // borderWidth: 1,
     // borderColor: 'white',
   },
