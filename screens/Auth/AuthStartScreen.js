@@ -135,7 +135,7 @@ const styles = StyleSheet.create({
   image: {
     width: '100%',
     height: Platform.OS === 'ios' ? 450 : 0.60 * Device.height,
-    resizeMode: 'center',
+    resizeMode: 'cover',
   },
 
   buttonsContainer: {
