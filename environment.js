@@ -1,6 +1,5 @@
 import Constants from 'expo-constants';
 import { ROCKET_URL, LOCAL_URL } from '@env';
-
 const ENV = {
   develop: {
     API_URL: String(LOCAL_URL),

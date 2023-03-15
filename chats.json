@@ -1,0 +1,73 @@
+{
+  "count": 2,
+  "results": [
+    {
+      "id": "1",
+      "matched_data": {
+        "matched_profile": {
+          "id": "c3cdd010-f981-41d7-b624-9879aceeddce",
+          "email": "janeking@gmail.com",
+          "is_in_group": true,
+          "name": "Jane King",
+          "birthdate": "2001-03-18",
+          "age": 22,
+          "gender": "Male",
+          "show_me": "Everyone",
+          "nationality": "British",
+          "city": "Blackburn",
+          "university": "University of Blackburn",
+          "description": "Vitae deserunt explicabo nihil facilis sunt. Doloribus necessitatibus est laboriosam cumque repellat. Quia cumque pariatur omnis. Libero exercitationem impedit. Deleniti ullam iure reprehenderit illo. Debitis explicabo eveniet nihil adipisci. Cum voluptate quaerat corporis occaecati. Quis omnis explicabo laboriosam. Optio at vel non quae.",
+          "location": null,
+          "photos": [],
+          "instagram": "jane.king"
+        },
+        "is_group_match": true,
+        "members_count": 3
+      },
+      "messages": [
+        {
+          "id": "1",
+          "text": "Hello World!"
+        },
+        {
+          "id": "2",
+          "text": "Hello World!"
+        }
+      ]
+    },
+    {
+      "id": "2",
+      "matched_data": {
+        "matched_profile": {
+          "id": "46d9bf41-6e96-47de-89de-9a068e772ad9",
+          "email": "siansims@gmail.com",
+          "is_in_group": true,
+          "name": "Sian Sims",
+          "birthdate": "1999-03-19",
+          "age": 24,
+          "gender": "Male",
+          "show_me": "Everyone",
+          "nationality": "British",
+          "city": "Leicester",
+          "university": "University of Leicester",
+          "description": "Nisi officia rem fuga. Doloremque corporis repudiandae quaerat vero tempora maxime. Provident voluptates nihil laudantium culpa labore mollitia. Perferendis vel iusto quod incidunt atque fugit. Debitis nulla natus laborum cupiditate quia. Qui magnam numquam rem eveniet dolorem. Perspiciatis iste praesentium voluptates. Quia sed voluptatibus. Quisquam corporis beatae magnam accusantium. Occaecati sunt cumque aperiam iusto dolorem itaque.",
+          "location": null,
+          "photos": [],
+          "instagram": "sian.sims"
+        },
+        "is_group_match": true,
+        "members_count": 3
+      },
+      "messages": [
+        {
+          "id": "1",
+          "text": "Hello World!"
+        },
+        {
+          "id": "2",
+          "text": "Hello World!"
+        }
+      ]
+    }
+  ]
+}

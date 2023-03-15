@@ -31,7 +31,8 @@ import SettingScreen from '../screens/MyProfile/SettingScreen';
 import EditProfileScreen from '../screens/MyProfile/EditProfileScreen';
 
 import SwipeScreen from '../screens/Swipe/SwipeScreen';
-import ChatScreen from '../screens/ChatScreen';
+import ChatScreen from '../screens/Chat/ChatScreen';
+import ChatsScreen from '../screens/Chat/ChatsScreen';
 import LikesScreen from '../screens/Likes/LikesScreen';
 import BlockProfilesScreen from '../screens/BlockProfiles/BlockProfilesScreen';
 import InstagramScreen from '../screens/CreateProfile/InstagramScreen';
@@ -110,16 +111,8 @@ const MyProfileNavigatorWithModal = createStackNavigator(
 
 const ChatNavigator = createStackNavigator(
   {
+    Chats: ChatsScreen,
     Chat: ChatScreen,
-    SwipeProfile: {
-      screen: SwipeProfileScreen,
-      navigationOptions: {
-        // get rid the header so then the modal can be displayed with full height
-        ...defaultNavOptions,
-        gestureDirection: 'horizontal',
-        title: null,
-      },
-    },
   },
   {
     defaultNavigationOptions: defaultNavOptions,
