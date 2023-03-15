@@ -1,0 +1,41 @@
+name: Code Formatting
+
+on:
+  push:
+    branches: [ rocket, develop ]
+  pull_request:
+    branches: [ rocket, develop ]
+
+jobs:
+  format-code:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Format code
+        run: npm run format
+
+      - name: Check for changes
+        id: check-changes
+        run: |
+          git status
+          git diff-index --quiet HEAD || echo "::set-output name=changes::yes"
+          echo "Code has been formatted"
+
+      - name: Commit changes
+        if: steps.check-changes.outputs.changes == 'yes'
+        run: |
+          git config --global user.email "damianstonedev@gmail.com"
+          git config --global user.name "damianstone"
+          git add .
+          git commit -m "Format from workflow"
+          git push
