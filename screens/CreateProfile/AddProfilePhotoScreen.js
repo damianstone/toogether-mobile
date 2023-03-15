@@ -114,12 +114,11 @@ const AddProfilePhotoScreen = (props) => {
           </View>
         ) : (
           <>
-            { Platform.OS === 'ios' 
-            ?
+            {Platform.OS === 'ios' ? (
               <Button title="Skip" color={Colors.white} onPress={handleSkip} />
-            :
+            ) : (
               <ButtonAndroid title="Skip" onPress={handleSkip} />
-            }
+            )}
             <AuthButton text="Continue" onPress={handleAddPhoto} />
           </>
         )}

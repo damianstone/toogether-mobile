@@ -1,10 +1,10 @@
 import { Alert } from 'react-native';
 
 /*
-  * This function takes in an errorFromServer object as a parameter and checks for specific types of errors from the backend. It returns an alert object to be displayed if an error is found, otherwise it returns null.
-  * @param {object} errorFromServer - The error object returned from the server
-  * @return {object|null} - An alert object if an error is found, otherwise null
-*/
+ * This function takes in an errorFromServer object as a parameter and checks for specific types of errors from the backend. It returns an alert object to be displayed if an error is found, otherwise it returns null.
+ * @param {object} errorFromServer - The error object returned from the server
+ * @return {object|null} - An alert object if an error is found, otherwise null
+ */
 export const checkServerError = (errorFromServer) => {
   let message = { title: '', message: '' };
 
@@ -63,11 +63,11 @@ export const checkServerError = (errorFromServer) => {
 };
 
 /*
-  * This function takes in an errorFromServer and nameBackendField as parameters and checks for a specific type of error from the backend. It returns an error message to be displayed in the form of an alert if the error is found, otherwise it returns null.
-  * @param {object} errorFromServer - The error object returned from the server
-  * @param {string} nameBackendField - The name of the backend field to check for errors
-  * @return {object|null} - An alert object if an error is found, otherwise null
-*/
+ * This function takes in an errorFromServer and nameBackendField as parameters and checks for a specific type of error from the backend. It returns an error message to be displayed in the form of an alert if the error is found, otherwise it returns null.
+ * @param {object} errorFromServer - The error object returned from the server
+ * @param {string} nameBackendField - The name of the backend field to check for errors
+ * @return {object|null} - An alert object if an error is found, otherwise null
+ */
 export const check400Error = (errorFromServer, nameBackendField) => {
   let message = { title: '', message: '' };
 
@@ -116,11 +116,11 @@ export const check400Error = (errorFromServer, nameBackendField) => {
 };
 
 /*
-  * This function takes in an errorFromServer and nameBackendField as parameters and extracts an error message associated with a specific backend field if it exists. It returns the error message if found, otherwise it returns an empty string.
-  * @param {object} errorFromServer - The error object returned from the server
-  * @param {string} nameBackendField - The name of the backend field to extract the error message from
-  * @return {string} - The error message if found, otherwise an empty string
-*/
+ * This function takes in an errorFromServer and nameBackendField as parameters and extracts an error message associated with a specific backend field if it exists. It returns the error message if found, otherwise it returns an empty string.
+ * @param {object} errorFromServer - The error object returned from the server
+ * @param {string} nameBackendField - The name of the backend field to extract the error message from
+ * @return {string} - The error message if found, otherwise an empty string
+ */
 export const getFieldErrorFromServer = (errorFromServer, nameBackendField) => {
   if (
     errorFromServer &&

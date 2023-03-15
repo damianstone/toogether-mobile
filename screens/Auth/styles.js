@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native';
 import Colors from '../../constants/Colors';
+import Device from '../../theme/Device';
 import { Platform } from 'react-native';
 
 // ---------------------- AUTH SCREEN -----------------------
@@ -42,7 +43,7 @@ export default StyleSheet.create({
 
   auth_text_container: {
     width: '100%',
-    paddingVertical: Platform.OS === 'ios' ? 0 : 5,
+    paddingVertical: 0, // fixes styling for Android and should be default for iOS
   },
 
   auth_text_big: {
@@ -62,7 +63,7 @@ export default StyleSheet.create({
     alignItems: 'center',
     width: '100%',
     padding: 20,
-    paddingVertical: '7%',
+    paddingVertical: Platform.OS === 'ios' ? '7%' : '5%',
   },
 
   auth_loader_container: {

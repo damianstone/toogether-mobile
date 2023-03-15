@@ -8,6 +8,7 @@ import {
   Platform,
   ActivityIndicator,
   KeyboardAvoidingView,
+  Keyboard,
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { StatusBar } from 'expo-status-bar';
@@ -16,6 +17,7 @@ import ButtonAndroid from '../../components/UI/ButtonAndroid';
 import AuthButton from '../../components/UI/AuthButton';
 import AuthInput from '../../components/UI/AuthInput';
 import Colors from '../../constants/Colors';
+import Device from '../../theme/Device';
 import * as c from '../../constants/user';
 import { userRegister, userLogin } from '../../store/actions/user';
 import { check400Error, checkServerError } from '../../utils/errors';
@@ -170,7 +172,7 @@ const AuthStartScreen = (props) => {
   };
 
   return (
-    <View style={styles.screen}>
+    <View style={[styles.screen, Platform.OS === 'ios' ? {} : { flex: 1 }]}>
       <StatusBar style="light" />
       <View style={styles.auth_text_view}>
         <View style={styles.auth_text_container}>
@@ -178,16 +180,17 @@ const AuthStartScreen = (props) => {
             {register ? 'Lets create your account!' : 'Lets sign you in'}
           </Text>
         </View>
-        <View style={styles.auth_text_container}
-        >
+        <View style={styles.auth_text_container}>
           <Text style={styles.auth_text_small}>
             {register ? 'Welcome ;)' : 'Welcome back'}
           </Text>
         </View>
       </View>
-      <KeyboardAvoidingView 
-        behavior={Platform.OS === 'ios' ? "position" : ""}
-        keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 0}
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'position' : 'height'}
+        keyboardVerticalOffset={
+          Platform.OS === 'ios' ? undefined : -0.3 * Device.height
+        }
       >
         <ScrollView
           style={styles.scrollview_style}
@@ -211,7 +214,9 @@ const AuthStartScreen = (props) => {
             />
             <AuthInput
               secureTextEntry
-              textContentType={Platform.OS ==='ios' ? "new-password" : "newPassword"}
+              textContentType={
+                Platform.OS === 'ios' ? 'newPassword' : 'newPassword'
+              }
               id="password"
               label="Password"
               keyboardType="default"
@@ -224,7 +229,9 @@ const AuthStartScreen = (props) => {
             {register && (
               <AuthInput
                 secureTextEntry
-                textContentType={Platform.OS ==='ios' ? "new-password" : "newPassword"}
+                textContentType={
+                  Platform.OS === 'ios' ? 'newPassword' : 'newPassword'
+                }
                 required
                 autoCapitalize="none"
                 id="repeated_password"
