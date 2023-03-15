@@ -34,7 +34,7 @@ const AuthStartScreen = (props) => {
   };
 
   return (
-    <View style={styles.screen}>
+    <View style={[styles.screen, Platform.OS === 'ios' ? {} : {flex: 1,}]}>
       <StatusBar style="light" />
       <ScrollView
         style={styles.scrollview_style}

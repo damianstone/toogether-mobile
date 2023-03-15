@@ -16,7 +16,7 @@ const AuthSucess = (props) => {
   const register = props.navigation.getParam('register');
 
   return (
-    <View style={styles.screen}>
+    <View style={[styles.screen, Platform.OS === 'ios' ? {} : {flex: 1,}]}>
       <StatusBar style="light" />
       <View style={styles.container}>
         <Text style={styles.mainText}>

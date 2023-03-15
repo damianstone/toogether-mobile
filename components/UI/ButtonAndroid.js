@@ -1,15 +1,15 @@
-import { StyleSheet, Text, View, Dimensions } from "react-native"
-import { TouchableOpacity } from "react-native-gesture-handler"
+import { StyleSheet, Text, View, Dimensions, TouchableOpacity } from "react-native"
 import Colors from "../../constants/Colors";
 import Device from "../../theme/Device";
 
-const ButtonAndroid = ({ onPress, title, style}) => {
+const ButtonAndroid = ({ onPress, title, style }) => {
   
   const textStyle = style ? style : styles.textStyle;
 
   return (
     <View
-      style={styles.container}>
+      style={styles.container}
+    >
       <TouchableOpacity 
         style={styles.buttonContainer}
         onPress={onPress}

@@ -172,7 +172,7 @@ const AuthStartScreen = (props) => {
   };
 
   return (
-    <View style={styles.screen}>
+    <View style={[styles.screen, Platform.OS === 'ios' ? {} : {flex: 1,}]}>
       <StatusBar style="light" />
       <View style={styles.auth_text_view}>
         <View style={styles.auth_text_container}>

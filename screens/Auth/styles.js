@@ -7,7 +7,6 @@ import { Platform } from 'react-native';
 
 export default StyleSheet.create({
   screen: {
-    flex: 1,
     backgroundColor: Colors.bg,
     justifyContent: 'space-between',
     flexDirection: 'column',
@@ -44,7 +43,7 @@ export default StyleSheet.create({
 
   auth_text_container: {
     width: '100%',
-    paddingVertical: 0,
+    paddingVertical: 0, // fixes styling for Android and should be default for iOS
   },
 
   auth_text_big: {

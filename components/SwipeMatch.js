@@ -17,6 +17,7 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { getImage } from '../utils/getMethods';
 import Colors from '../constants/Colors';
 import GradientText from './UI/GradientText';
+import ButtonAndroid from './UI/ButtonAndroid';
 
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 const SCREEN_WIDTH = Dimensions.get('window').width;
@@ -102,11 +103,20 @@ const SwipeMatch = (props) => {
             </Text>
             <Ionicons name="chatbubble-outline" size={20} color="white" />
           </TouchableOpacity>
-          <Button
-            title="Later"
-            color={Platform.OS === 'ios' ? Colors.placeholder : Colors.bg}
-            onPress={laterOnPress}
-          />
+          {
+            Platform.OS === 'ios'
+            ?
+              <Button
+                title="Later"
+                color={Platform.OS === 'ios' ? Colors.placeholder : Colors.bg}
+                onPress={laterOnPress}
+              />
+            :
+              <ButtonAndroid
+                title="Later"
+                onPress={laterOnPress}
+              />
+          }
         </View>
       </View>
     </Modal>
