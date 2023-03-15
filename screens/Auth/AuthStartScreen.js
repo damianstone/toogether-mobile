@@ -113,8 +113,6 @@ const styles = StyleSheet.create({
     marginTop: Platform.OS === 'ios' ? 80 : 0.07 * Device.height,
     alignItems: 'center',
     width: '100%',
-    // borderWidth: 1,
-    // borderColor: 'white',
   },
 
   logo: {
@@ -128,8 +126,6 @@ const styles = StyleSheet.create({
     marginVertical: 20,
     alignItems: 'center',
     justifyContent: 'center',
-    // borderWidth: 1,
-    // borderColor: 'white'
   },
 
   image: {
@@ -148,8 +144,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: Platform.OS === 'ios' ? 0 : 20,
     paddingVertical: Platform.OS === 'ios' ? '7%' : 0,
     paddingBottom: Platform.OS === 'ios' ? 0 : 0.01 * Device.height,
-    // borderWidth: 1,
-    // borderColor: 'white',
   },
 
   button: {
