@@ -16,7 +16,7 @@ const AuthSucess = (props) => {
   const register = props.navigation.getParam('register');
 
   return (
-    <View style={[styles.screen, Platform.OS === 'ios' ? {} : {flex: 1,}]}>
+    <View style={[styles.screen, Platform.OS === 'ios' ? {} : { flex: 1 }]}>
       <StatusBar style="light" />
       <View style={styles.container}>
         <Text style={styles.mainText}>
@@ -39,9 +39,7 @@ const AuthSucess = (props) => {
             props.navigation.navigate('Instagram');
           }}
         >
-          <Text style={styles.button_text} >
-            Continue
-          </Text>
+          <Text style={styles.button_text}>Continue</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -97,7 +95,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  button_text: {  
+  button_text: {
     color: Colors.white,
     fontSize: 20,
   },

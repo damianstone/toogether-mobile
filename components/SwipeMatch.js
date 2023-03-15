@@ -103,20 +103,15 @@ const SwipeMatch = (props) => {
             </Text>
             <Ionicons name="chatbubble-outline" size={20} color="white" />
           </TouchableOpacity>
-          {
-            Platform.OS === 'ios'
-            ?
-              <Button
-                title="Later"
-                color={Platform.OS === 'ios' ? Colors.placeholder : Colors.bg}
-                onPress={laterOnPress}
-              />
-            :
-              <ButtonAndroid
-                title="Later"
-                onPress={laterOnPress}
-              />
-          }
+          {Platform.OS === 'ios' ? (
+            <Button
+              title="Later"
+              color={Platform.OS === 'ios' ? Colors.placeholder : Colors.bg}
+              onPress={laterOnPress}
+            />
+          ) : (
+            <ButtonAndroid title="Later" onPress={laterOnPress} />
+          )}
         </View>
       </View>
     </Modal>

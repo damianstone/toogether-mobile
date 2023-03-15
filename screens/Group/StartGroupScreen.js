@@ -44,7 +44,6 @@ const StartGroupScreen = (props) => {
     routeName: 'Group',
   });
 
-  
   // * if the user is already in a group
   useEffect(() => {
     if (groupContext) {
@@ -93,7 +92,8 @@ const StartGroupScreen = (props) => {
       <StatusBar style="light" />
       <ScrollView
         style={styles.scrollview_style}
-        contentContainerStyle={styles.scrollview_content_container}>
+        contentContainerStyle={styles.scrollview_content_container}
+      >
         <View>
           <View style={styles.imageContainer}>
             <Image
@@ -103,19 +103,15 @@ const StartGroupScreen = (props) => {
           </View>
         </View>
         <View style={styles.buttonsContainer}>
-          {Platform.OS === 'ios'
-            ?
-              <Button
-                title="Join to group"
-                color={Colors.white}
-                onPress={handleJoinToGroup}
-              />
-            : 
-              <ButtonAndroid
-                title="Join to group"
-                onPress={handleJoinToGroup}
-              />
-          }
+          {Platform.OS === 'ios' ? (
+            <Button
+              title="Join to group"
+              color={Colors.white}
+              onPress={handleJoinToGroup}
+            />
+          ) : (
+            <ButtonAndroid title="Join to group" onPress={handleJoinToGroup} />
+          )}
           <AuthButton onPress={handleCreateGroup} text="Create group" />
         </View>
       </ScrollView>

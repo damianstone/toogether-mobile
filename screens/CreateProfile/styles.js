@@ -34,7 +34,7 @@ export default StyleSheet.create({
   contentContainer: {
     flexGrow: 1,
     width: '100%',
-    justifyContent: Platform.OS === 'ios' ? 'center' : "space-between",
+    justifyContent: Platform.OS === 'ios' ? 'center' : 'space-between',
     overflow: 'hidden',
   },
   photoContainer: {

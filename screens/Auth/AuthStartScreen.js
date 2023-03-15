@@ -34,7 +34,7 @@ const AuthStartScreen = (props) => {
   };
 
   return (
-    <View style={[styles.screen, Platform.OS === 'ios' ? {} : {flex: 1,}]}>
+    <View style={[styles.screen, Platform.OS === 'ios' ? {} : { flex: 1 }]}>
       <StatusBar style="light" />
       <ScrollView
         style={styles.scrollview_style}
@@ -50,25 +50,28 @@ const AuthStartScreen = (props) => {
           <Image
             source={require('../../assets/images/radar.png')}
             style={styles.image}
-            resizeMode= {Platform.OS === 'ios' ? 'cover' : 'contain'}
+            resizeMode={Platform.OS === 'ios' ? 'cover' : 'contain'}
           />
         </View>
-        <View style={[styles.buttonsContainer , Platform.OS === 'ios' ? {} : {flex: 1,}]}>
-          {
-            Platform.OS === 'ios' 
-              ?
-                <Button
-                  title="Login"
-                  color={Platform.OS === 'ios' ? Colors.white : Colors.bg} //  not needed but kept for refernce
-                  onPress={handleLogin}
-                />
-              :
-                <ButtonAndroid 
-                  title="Login"
-                  color={Platform.OS === 'ios' ? Colors.white : Colors.bg}
-                  onPress={handleLogin}
-                />
-          }
+        <View
+          style={[
+            styles.buttonsContainer,
+            Platform.OS === 'ios' ? {} : { flex: 1 },
+          ]}
+        >
+          {Platform.OS === 'ios' ? (
+            <Button
+              title="Login"
+              color={Platform.OS === 'ios' ? Colors.white : Colors.bg} //  not needed but kept for refernce
+              onPress={handleLogin}
+            />
+          ) : (
+            <ButtonAndroid
+              title="Login"
+              color={Platform.OS === 'ios' ? Colors.white : Colors.bg}
+              onPress={handleLogin}
+            />
+          )}
           <AuthButton onPress={handleRegister} text="Create Account" />
         </View>
       </ScrollView>
@@ -128,7 +131,7 @@ const styles = StyleSheet.create({
 
   image: {
     width: '100%',
-    height: Platform.OS === 'ios' ? 450 : 0.60 * Device.height,
+    height: Platform.OS === 'ios' ? 450 : 0.6 * Device.height,
     resizeMode: 'cover', // default value
   },
 
@@ -140,7 +143,7 @@ const styles = StyleSheet.create({
     padding: Platform.OS === 'ios' ? 20 : 0,
     paddingHorizontal: Platform.OS === 'ios' ? 0 : 20,
     paddingVertical: Platform.OS === 'ios' ? '7%' : 0,
-    paddingBottom: Platform.OS === 'ios' ? 0 : 0.01 * Device.height,
+    paddingBottom: Platform.OS === 'ios' ? '7%' : 0.01 * Device.height,
   },
 
   button: {

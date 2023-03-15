@@ -1,26 +1,24 @@
-import { StyleSheet, Text, View, Dimensions, TouchableOpacity } from "react-native"
-import Colors from "../../constants/Colors";
-import Device from "../../theme/Device";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Dimensions,
+  TouchableOpacity,
+} from 'react-native';
+import Colors from '../../constants/Colors';
+import Device from '../../theme/Device';
 
 const ButtonAndroid = ({ onPress, title, style }) => {
-  
   const textStyle = style ? style : styles.textStyle;
 
   return (
-    <View
-      style={styles.container}
-    >
-      <TouchableOpacity 
-        style={styles.buttonContainer}
-        onPress={onPress}
-      >
-        <Text style={textStyle}>
-          {title}
-        </Text>
+    <View style={styles.container}>
+      <TouchableOpacity style={styles.buttonContainer} onPress={onPress}>
+        <Text style={textStyle}>{title}</Text>
       </TouchableOpacity>
     </View>
-  )
-}
+  );
+};
 
 export default ButtonAndroid;
 
@@ -41,5 +39,5 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: Colors.white,
     fontSize: 18,
-  }
+  },
 });

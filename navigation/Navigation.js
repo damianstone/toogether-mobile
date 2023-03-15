@@ -46,7 +46,7 @@ const defaultNavOptions = {
   headerBackTitleStyle: {},
   statusBarStyle: Colors.bg,
   headerTintColor: Colors.white,
-  headerTitleAlign: 'center'
+  headerTitleAlign: 'center',
 };
 
 const AuthNavigator = createStackNavigator(

@@ -13,7 +13,7 @@ export const userLocation = () => {
   return async (dispatch) => {
     try {
       dispatch({ type: c.USER_LOCATION_REQUEST });
-      
+
       const userData = JSON.parse(await AsyncStorage.getItem('@userData'));
 
       const config = {
@@ -21,20 +21,20 @@ export const userLocation = () => {
         Accept: 'application/json',
         Authorization: `Bearer ${userData.token}`,
       };
-      
+
       let location;
-      
+
       if (Platform.OS === 'ios') {
         location = await Location.getCurrentPositionAsync({
           accuracy: Platform.OS === 'ios' ? 3 : Location.Accuracy.Highest,
-        })
+        });
       } else {
-        location  = {
+        location = {
           coords: {
             latitude: 37.785834,
-            longitude: -122.406417
-          }
-        }
+            longitude: -122.406417,
+          },
+        };
       }
 
       const { data } = await axios({

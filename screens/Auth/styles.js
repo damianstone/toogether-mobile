@@ -63,7 +63,7 @@ export default StyleSheet.create({
     alignItems: 'center',
     width: '100%',
     padding: 20,
-    paddingVertical: Platform.OS === 'ios' ? '7%' : '5%', 
+    paddingVertical: Platform.OS === 'ios' ? '7%' : '5%',
   },
 
   auth_loader_container: {
