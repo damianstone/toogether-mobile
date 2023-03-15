@@ -208,7 +208,6 @@ const tabScreenCnfig = {
   Group: {
     screen: GroupNavigator,
     navigationOptions: ({ navigation }) => {
-      console.log(navigation.state);
       return {
         tabBarIcon: (tabInfo) => {
           return (
