@@ -13,10 +13,8 @@ import { StatusBar } from 'expo-status-bar';
 
 import AuthButton from '../../components/UI/AuthButton';
 import Colors from '../../constants/Colors';
+import Device from '../../theme/Device';
 import ButtonAndroid from '../../components/UI/ButtonAndroid';
-// import Button from '../../components/UI/Button';
-
-import Device from '../../constants/Device';
 
 const AuthStartScreen = (props) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -55,7 +53,7 @@ const AuthStartScreen = (props) => {
             resizeMode= {Platform.OS === 'ios' ? 'cover' : 'contain'}
           />
         </View>
-        <View style={styles.buttonsContainer}>
+        <View style={[styles.buttonsContainer , Platform.OS === 'ios' ? {} : {flex: 1,}]}>
           {
             Platform.OS === 'ios' 
               ?
@@ -131,11 +129,10 @@ const styles = StyleSheet.create({
   image: {
     width: '100%',
     height: Platform.OS === 'ios' ? 450 : 0.60 * Device.height,
-    resizeMode: 'cover',
+    resizeMode: 'cover', // default value
   },
 
   buttonsContainer: {
-    flex: 1,
     alignSelf: 'center',
     justifyContent: 'center',
     alignItems: 'center',

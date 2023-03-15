@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
 import Colors from '../../constants/Colors';
-import Device from '../../constants/Device';
+import Device from '../../theme/Device';
 import { Platform } from 'react-native';
 
 // ---------------------- AUTH SCREEN -----------------------

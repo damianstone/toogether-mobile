@@ -17,7 +17,7 @@ import ButtonAndroid from '../../components/UI/ButtonAndroid';
 import AuthButton from '../../components/UI/AuthButton';
 import AuthInput from '../../components/UI/AuthInput';
 import Colors from '../../constants/Colors';
-import Device from '../../constants/Device';
+import Device from '../../theme/Device';
 import * as c from '../../constants/user';
 import { userRegister, userLogin } from '../../store/actions/user';
 import { check400Error, checkServerError } from '../../utils/errors';

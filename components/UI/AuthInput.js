@@ -2,7 +2,7 @@ import React, { useReducer, useEffect } from 'react';
 import { StyleSheet, Text, View, TextInput, Platform } from 'react-native';
 
 import Colors from '../../constants/Colors';
-import Device from '../../constants/Device';
+import Device from '../../theme/Device';
 
 const CHANGE = 'CHANGE';
 const BLUR = 'BLUR';
@@ -116,8 +116,6 @@ const styles = StyleSheet.create({
     width: '100%',
     justifyContent: 'center',
     alignItems: 'center',
-    // borderWidth: 1,
-    // borderColor: 'black',
   },
 
   label: {

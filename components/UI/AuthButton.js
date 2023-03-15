@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, TouchableOpacity, Text, Platform, Dimensions } from 'react-native';
 import Colors from '../../constants/Colors';
-import Device from '../../constants/Device';
+import Device from '../../theme/Device';
 
 const AuthButton = (props) => {
   const { onPress, text } = props;
@@ -27,8 +27,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     alignItems: 'center',
     justifyContent: 'center',
-    // borderWidth: 1,
-    // borderColor: 'white',
   },
   auth_button_text: {
     color: Colors.white,

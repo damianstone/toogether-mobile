@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View, Dimensions } from "react-native"
 import { TouchableOpacity } from "react-native-gesture-handler"
 import Colors from "../../constants/Colors";
-import Device from "../../constants/Device";
+import Device from "../../theme/Device";
 
 const ButtonAndroid = ({ onPress, title, style}) => {
   
@@ -26,13 +26,9 @@ export default ButtonAndroid;
 
 const styles = StyleSheet.create({
   container: {
-    // flex: 1,
     justifyContent: 'center',
     flexDirection: 'row',
     flexWrap: 'wrap',
-    // marginTop: '5%',
-    // borderWidth: 1,
-    // borderColor: 'white',
   },
   buttonContainer: {
     justifyContent: 'center',
@@ -40,8 +36,6 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     paddingHorizontal: 35,
     borderRadius: 10,
-    // borderWidth: 1,
-    // borderColor: 'white', 
   },
   textStyle: {
     textAlign: 'center',
