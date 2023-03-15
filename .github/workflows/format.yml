@@ -38,4 +38,4 @@ jobs:
           git config --global user.name "damianstone"
           git add .
           git commit -m "Format from workflow"
-          git push
+          git push origin HEAD:${{ github.ref }}
