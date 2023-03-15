@@ -189,8 +189,8 @@ const AuthStartScreen = (props) => {
         </View>
       </View>
       <KeyboardAvoidingView 
-        behavior={Platform.OS === 'ios' ? "position" : "padding"}
-        keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : (register ? -82 : -123)}
+        behavior={Platform.OS === 'ios' ? "position" : 'height'}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : -0.3 * Device.height}
       >
         <ScrollView
           style={styles.scrollview_style}
