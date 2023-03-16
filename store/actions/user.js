@@ -392,7 +392,7 @@ export const addPhoto = (image) => {
 
       dataForm.append('image', {
         name: fileName,
-        type: Platform.OS === 'ios' ? image.type : 'image/'+fileType,
+        type: Platform.OS === 'ios' ? image.type : 'image/' + fileType,
         uri:
           Platform.OS === 'android'
             ? image.uri
@@ -436,7 +436,7 @@ export const updatePhoto = (photo_id, image) => {
 
       dataForm.append('image', {
         name: fileName,
-        type: Platform.OS === 'ios' ? image.type : 'image/'+fileType,
+        type: Platform.OS === 'ios' ? image.type : 'image/' + fileType,
         uri:
           Platform.OS === 'android'
             ? image.uri
