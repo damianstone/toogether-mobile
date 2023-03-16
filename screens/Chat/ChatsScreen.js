@@ -21,7 +21,8 @@ import { StatusBar } from 'expo-status-bar';
 import HeaderButtom from '../../components/UI/HeaderButton';
 import Loader from '../../components/UI/Loader';
 import Colors from '../../constants/Colors';
-import { listMatches } from '../../store/actions/swipe';
+import { listMatches, deleteMatch } from '../../store/actions/swipe';
+import { checkServerError, check400Error } from '../../utils/errors';
 
 import SwipeError from '../../components/SwipeError';
 import ActivityModal from '../../components/UI/ActivityModal';
@@ -37,10 +38,17 @@ const ChatsScreen = (props) => {
   const [refreshing, setRefreshing] = useState(false);
   const listMatchesReducer = useSelector((state) => state.listMatches);
   const {
-    loading: loadingMatches,
-    error: errorMatches,
+    error: errorListMatches,
+    loading: loadingListMatches,
     data: matches,
   } = listMatchesReducer;
+
+  const deleteMatchReducer = useSelector((state) => state.deleteMatch);
+  const {
+    error: errorDeleteMatch,
+    loading: loadingDeleteMatch,
+    data: matchDeleted,
+  } = deleteMatchReducer;
 
   useEffect(() => {
     dispatch(listMatches());
@@ -56,12 +64,54 @@ const ChatsScreen = (props) => {
     props.navigation.setParams({ topProfile: null });
     setLocalLoading(false);
   }, [dispatch]);
+
+  useEffect(() => {
+    if (errorListMatches) {
+      checkServerError(errorListMatches);
+    }
+
+    if (errorDeleteMatch) {
+      if (errorDeleteMatch?.response?.status === 400) {
+        check400Error(errorDeleteMatch);
+      }
+      checkServerError(errorDeleteMatch);
+    }
+  }, [errorDeleteMatch, errorListMatches]);
+
+  const handleShowProfile = (profile, isInGroup) => {
+    if (profile) {
+      props.navigation.navigate('SwipeProfile', {
+        mainProfileId: profile.id,
+        isInGroup: isInGroup,
+      });
+    }
+  };
+
+  const handleShowChat = (chat, matchedData) => {
+    if (chat) {
+      props.navigation.navigate('Chat', {
+        chatId: chat.id,
+        matchedData: matchedData,
+      });
+    }
+  };
+
+  const handleDeleteMatch = async (matchId) => {
+    if (matchId) {
+      await dispatch(deleteMatch(matchId));
+    }
+
+    if (matchDeleted) {
+      dispatch({ type: w.DELETE_MATCH_RESET });
+      return dispatch(listMatches());
+    }
+    return null;
+  };
   const onOpenActionSheet = (matchedProfile, matchId) => {
     // Same interface as https://facebook.github.io/react-native/docs/actionsheetios.html
     const options = ['Send message', 'Remove match', 'Cancel'];
     const destructiveButtonIndex = 2;
     const cancelButtonIndex = 3;
-
     showActionSheetWithOptions(
       {
         options,
@@ -80,7 +130,7 @@ const ChatsScreen = (props) => {
     );
   };
 
-  if (loadingMatches) {
+  if (loadingListMatches) {
     return (
       <SafeAreaView style={styles.safe}>
         <StatusBar style="light" />
@@ -105,9 +155,7 @@ const ChatsScreen = (props) => {
     return (
       <View style={styles.new_matches}>
         <ChatAvatar
-          onShowProfile={() =>
-            handleShowProfile(matchedProfile, matchedData.is_group_match)
-          }
+          onShowProfile={() => handleShowChat(item, matchedData)}
           matchedProfile={matchedProfile}
           matchedData={matchedData}
           isInGroup={matchedData.is_group_match}
@@ -143,10 +191,11 @@ const ChatsScreen = (props) => {
           />
         </View>
         <TouchableOpacity
-          onPress={() => onOpenActionSheet(matchedProfile, item.id)}
+          onLongPress={() => onOpenActionSheet(matchedProfile, item.id)}
           style={styles.cardContainer}>
           <View style={styles.chat_preview}>
             <Text style={styles.matchedName}>{matchedProfile.name}</Text>
+            <Text style={styles.last_message}>{item.messages[0].text}</Text>
           </View>
         </TouchableOpacity>
       </View>
@@ -177,18 +226,12 @@ const ChatsScreen = (props) => {
               />
             </ScrollView>
           )}
-          {errorMatches && ( // if there is an error
-            <SwipeError
-              title="Error"
-              message={errorMatches}
-              onReload={reload}
-            />
-          )}
         </View>
         <View style={styles.chat_preview}>
           <Text style={styles.title}> Chats</Text>
           <ScrollView>
             <FlatList
+              keyExtractor={(item) => item.id.toString()}
               contentContainerStyle={styles.chats}
               data={chats.results}
               renderItem={renderPreviewChats}
@@ -259,16 +302,28 @@ const styles = StyleSheet.create({
 
   matchedName: {
     color: Colors.white,
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: 'bold',
     justifyContent: 'center',
   },
 
   chat_preview: {
-    flex: 1,
-    borderBottomColor: Colors.calypso,
-    borderBottomWidth: 1,
+    flex: 2,
+    flexDirection: 'column',
     marginBottom: 10,
+  },
+
+  last_message: {
+    color: Colors.white,
+    marginTop: 5,
+    fontSize: 14,
+    justifyContent: 'center',
+  },
+
+  cardContainer: {
+    backgroundColor: Colors.bg,
+    borderRadius: 10,
+    width: '100%',
   },
 });
 
