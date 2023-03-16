@@ -5,7 +5,7 @@
     "slug": "toogether-app",
     "owner": "damian_stone",
     "privacy": "public",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "orientation": "portrait",
     "icon": "./assets/images/toogether-icon.png",
     "platforms": [
@@ -34,7 +34,7 @@
     "ios": {
       "supportsTablet": false,
       "bundleIdentifier": "toogether.app",
-      "buildNumber": "1.0.0"
+      "buildNumber": "1.0.1"
     },
     "android": {
       "adaptiveIcon": {
