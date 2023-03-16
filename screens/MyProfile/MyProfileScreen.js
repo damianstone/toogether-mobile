@@ -128,21 +128,21 @@ const MyProfileScreen = (props) => {
     }
 
     if (dataRemovePhoto) {
-      Alert.alert('Photo Removed', dataRemovePhoto.detail, {
+      Alert.alert('Photo Removed', dataRemovePhoto.detail, [{
         text: 'Ok',
         onPress: () => {
           dispatch({ type: c.USER_REMOVE_PHOTO_RESET });
         },
-      });
+      }]);
     }
 
     if (dataAddPhoto) {
-      Alert.alert('Photo added', 'well done', {
+      Alert.alert('Photo added', 'well done', [{
         text: 'Ok',
         onPress: () => {
           dispatch({ type: c.USER_ADD_PHOTO_RESET });
         },
-      });
+      }]);
     }
 
     dispatch({ type: c.USER_ADD_PHOTO_RESET });
