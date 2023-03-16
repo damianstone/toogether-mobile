@@ -291,7 +291,8 @@ const GroupScreen = (props) => {
           onRefresh={loadGroup}
           tintColor={Colors.white}
         />
-      }>
+      }
+    >
       <View style={{ ...styles.action_view, ...HEIGHT_ACTION_CONTAINER }}>
         <View style={styles.profile_photo_container}>
           {!groupContext && <Loader />}
@@ -316,9 +317,8 @@ const GroupScreen = (props) => {
           <View style={styles.nameView}>
             {groupContext?.owner && (
               <Text
-                style={
-                  styles.name
-                }>{`${groupContext.owner.name}'s group`}</Text>
+                style={styles.name}
+              >{`${groupContext.owner.name}'s group`}</Text>
             )}
           </View>
         </View>

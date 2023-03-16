@@ -150,7 +150,7 @@ const CreateProfileScreen = (props) => {
 
   return (
     <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? "padding" : ""}
+      behavior={Platform.OS === 'ios' ? 'padding' : ''}
       keyboardVerticalOffset={50}
       style={styles.screen}
       contentContainerStyle={styles.screen}
@@ -166,7 +166,7 @@ const CreateProfileScreen = (props) => {
         <View style={styles.auth_text_view}>
           <View style={authStyles.default.auth_text_container}>
             <Text style={authStyles.default.auth_text_big}>
-              Lets poss create your profile 
+              Lets poss create your profile
             </Text>
           </View>
           <View style={authStyles.default.auth_text_container}>
