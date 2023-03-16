@@ -386,12 +386,13 @@ export const addPhoto = (image) => {
       const userData = JSON.parse(await AsyncStorage.getItem('@userData'));
       const imageUri = image.uri;
       const fileName = imageUri.split('/').pop();
+      const fileType = fileName.split('.')[1];
 
       const dataForm = new FormData();
 
       dataForm.append('image', {
         name: fileName,
-        type: image.type,
+        type: Platform.OS === 'ios' ? image.type : 'image/' + fileType,
         uri:
           Platform.OS === 'android'
             ? image.uri
@@ -429,12 +430,13 @@ export const updatePhoto = (photo_id, image) => {
       const userData = JSON.parse(await AsyncStorage.getItem('@userData'));
       const imageUri = image.uri;
       const fileName = imageUri.split('/').pop();
+      const fileType = fileName.split('.')[1];
 
       const dataForm = new FormData();
 
       dataForm.append('image', {
         name: fileName,
-        type: image.type,
+        type: Platform.OS === 'ios' ? image.type : 'image/' + fileType,
         uri:
           Platform.OS === 'android'
             ? image.uri
