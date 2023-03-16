@@ -1,0 +1,41 @@
+name: Code Formatting
+
+on:
+  pull_request: 
+    branches: [rocket, develop]
+
+jobs:
+  format-code:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14.x'
+
+      - name: Install dependencies
+        run: npm install --legacy-peer-deps
+
+      - name: Format code
+        run: npm run format
+
+      - name: Check for changes
+        id: check-changes
+        run: |
+          git status
+          git diff-index --quiet HEAD || echo "::set-output name=changes::yes"
+          echo "Code has been formatted"
+
+      - name: Commit changes
+        if: steps.check-changes.outputs.changes == 'yes'
+        run: |
+          git config --global user.email "damianstonedev@gmail.com"
+          git config --global user.name "damianstone"
+          git add .
+          git commit -m "Format from workflow"
+          git push origin HEAD:${{ github.event.pull_request.head.ref }}
