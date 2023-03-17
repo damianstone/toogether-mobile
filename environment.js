@@ -1,24 +1,41 @@
 import Constants from 'expo-constants';
 import { Platform } from 'react-native';
-import { ROCKET_URL, LOCAL_URL } from '@env';
 
-const ENV = {
-  develop: {
-    API_URL: Platform.OS === 'ios' ? String(IOS_URL) : String(LOCAL_URL),
-    DEVELOP: true,
-  },
-  rocket: {
-    API_URL: String(ROCKET_URL),
-    DEVELOP: false,
-  },
-};
+const getApiUrl = () => {
+  const MODE = String(Constants.manifest.extra.MODE);
+  const IOS_LOCAL_URL = String(Constants.manifest.extra.IOS_LOCAL_URL);
+  const ANDROID_LOCAL_URL = String(Constants.manifest.extra.ANDROID_LOCAL_URL);
+  const ROCKET_API_URL = String(Constants.manifest.extra.ROCKET_API_URL);
 
-const getEnvVars = (env = Constants.manifest.releaseChannel) => {
-  if (__DEV__) {
-    return ENV.develop;
-  } else if (env === 'rocket') {
-    return ENV.rocket;
+  const iosDevelop = {
+    MODE: MODE,
+    API_URL: IOS_LOCAL_URL,
+  };
+
+  const androidDevelop = {
+    MODE: MODE,
+    API_URL: ANDROID_LOCAL_URL,
+  };
+
+  const rocket = {
+    MODE: MODE,
+    API_URL: ROCKET_API_URL,
+  };
+
+  if (MODE === 'development') {
+    if (Platform.OS === 'ios') {
+      return iosDevelop;
+    }
+    return androidDevelop;
+  }
+
+  if (MODE === 'rocket') {
+    if (!ROCKET_API_URL) {
+      throw new Error('API_URL is missing.');
+    }
+
+    return rocket;
   }
 };
 
-export default getEnvVars;
+export const ENV = getApiUrl();
