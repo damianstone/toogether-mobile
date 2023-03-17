@@ -2,10 +2,10 @@ import Constants from 'expo-constants';
 import { Platform } from 'react-native';
 
 const getApiUrl = () => {
-  const MODE = String(Constants.manifest.extra.MODE);
-  const IOS_LOCAL_URL = String(Constants.manifest.extra.IOS_LOCAL_URL);
-  const ANDROID_LOCAL_URL = String(Constants.manifest.extra.ANDROID_LOCAL_URL);
-  const ROCKET_API_URL = String(Constants.manifest.extra.ROCKET_API_URL);
+  const MODE = String(Constants.expoConfig.extra.MODE);
+  const IOS_LOCAL_URL = String(Constants.expoConfig.extra.IOS_LOCAL_URL);
+  const ANDROID_LOCAL_URL = String(Constants.expoConfig.extra.ANDROID_LOCAL_URL);
+  const ROCKET_API_URL = String(Constants.expoConfig.extra.ROCKET_API_URL);
 
   const iosDevelop = {
     MODE: MODE,
@@ -37,5 +37,7 @@ const getApiUrl = () => {
     return rocket;
   }
 };
+
+console.log(getApiUrl());
 
 export const ENV = getApiUrl();
