@@ -28,7 +28,7 @@ export default () => ({
     ios: {
       supportsTablet: false,
       bundleIdentifier: 'toogether.app',
-      buildNumber: '1.0.3',
+      buildNumber: '1.0.5',
     },
     android: {
       adaptiveIcon: {
