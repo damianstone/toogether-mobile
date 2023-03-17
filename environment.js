@@ -1,8 +1,9 @@
 import Constants from 'expo-constants';
+import { Platform } from 'react-native';
 import { ROCKET_URL, LOCAL_URL } from '@env';
 const ENV = {
   develop: {
-    API_URL: String(LOCAL_URL),
+    API_URL: Platform.OS === 'ios' ? String(IOS_URL) : String(LOCAL_URL),
     DEVELOP: true,
   },
   rocket: {
