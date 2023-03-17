@@ -3,8 +3,10 @@ import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { Context } from '../../context/ContextProvider';
 import Colors from '../../constants/Colors';
-import { getChatProfile, getUserProfile } from '../../store/actions/user';
+import { getUserProfile } from '../../store/actions/user';
 import { getNameInitials, getImage } from '../../utils/getMethods';
+//Chat
+import { getUserChatProfile } from '../../store/actions/chat';
 
 import Loader from './Loader';
 
@@ -41,7 +43,7 @@ const Avatar = (props) => {
   //Chat profile
   useEffect(() => {
     if (id) {
-      dispatch(getChatProfile(id));
+      dispatch(getUserChatProfile(id));
     }
   }, [id]);
 

@@ -23,13 +23,13 @@ import Loader from '../../components/UI/Loader';
 import Colors from '../../constants/Colors';
 import { listMatches, deleteMatch } from '../../store/actions/swipe';
 import { checkServerError, check400Error } from '../../utils/errors';
-
+import no_chats from '../../assets/images/no-chats.png';
 import SwipeError from '../../components/SwipeError';
 import ActivityModal from '../../components/UI/ActivityModal';
 import ChatAvatar from '../../components/ChatAvatar';
 
 /* For test purposes */
-import chats from '../../chats.json';
+import chats from '../../data/chats.json';
 
 const ChatsScreen = (props) => {
   const { showActionSheetWithOptions } = useActionSheet();
@@ -151,6 +151,14 @@ const ChatsScreen = (props) => {
       </SafeAreaView>
     );
   }
+  const renderNoMatches = () => {
+    return (
+      <View style={styles.no_matches}>
+        <Text style={styles.no_matches_text}>You have no matches yet.</Text>
+      </View>
+    );
+  };
+
   const renderBubblesMatches = ({ item }) => {
     const matchedData = item.matched_data;
     const matchedProfile = item.matched_data.matched_profile;
@@ -171,6 +179,15 @@ const ChatsScreen = (props) => {
       </View>
     );
   };
+  const renderNoChats = () => {
+    return (
+      <View style={styles.no_chats}>
+        <Image source={no_chats} style={styles.no_chats_image} />
+        <Text style={styles.no_chats_text}>You have no chats yet.</Text>
+      </View>
+    );
+  };
+
   const renderPreviewChats = ({ item }) => {
     const matchedData = item.matched_data;
     const matchedProfile = item.matched_data.matched_profile;
@@ -211,7 +228,7 @@ const ChatsScreen = (props) => {
         <View>
           <Text style={styles.title}> New Matches</Text>
           {/* {localLoading && renderAllCardSwiped()} */}
-          {!localLoading && matches?.results && (
+          {!localLoading && (
             <FlatList
               refreshControl={
                 <RefreshControl
@@ -225,6 +242,7 @@ const ChatsScreen = (props) => {
               data={matches?.results}
               keyExtractor={(item) => item.id.toString()}
               renderItem={renderBubblesMatches}
+              ListEmptyComponent={renderNoMatches}
             />
           )}
         </View>
@@ -242,6 +260,7 @@ const ChatsScreen = (props) => {
             contentContainerStyle={styles.chats}
             data={chats.results}
             renderItem={renderPreviewChats}
+            ListEmptyComponent={renderNoChats}
           />
         </View>
       </View>
@@ -281,6 +300,18 @@ const styles = StyleSheet.create({
     marginLeft: 5,
     flexDirection: 'row',
     backgroundColor: Colors.bg,
+  },
+
+  no_matches: {
+    overflow: 'hidden',
+    flexDirection: 'row',
+    backgroundColor: Colors.bg,
+  },
+
+  no_matches_text: {
+    color: Colors.white,
+    fontSize: 16,
+    justifyContent: 'center',
   },
 
   chats: {

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useContext } from 'react';
 import {
   View,
   Text,
@@ -13,18 +13,19 @@ import {
 } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { exist } from '../../utils/checks';
-import chat from '../../chats.json';
+import chat from '../../data/chats.json';
 import HeaderButtom from '../../components/UI/HeaderButton';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
-import { getChat } from '../../store/actions/swipe';
+import { getChat } from '../../store/actions/chat';
+import { Context } from '../../context/ContextProvider';
 
 import ActivityModal from '../../components/UI/ActivityModal';
 import Avatar from '../../components/UI/Avatar';
 import Colors from '../../constants/Colors';
 import { getUserProfile } from '../../store/actions/user';
+
 const ChatScreen = (props) => {
   const chat_id = props.navigation.getParam('chatId');
-  const matchedId = props.navigation.getParam('matchedId');
   const [refreshing, setRefreshing] = useState(false);
   const [localLoading, setLocalLoading] = useState(false);
   const dispatch = useDispatch();
@@ -34,30 +35,24 @@ const ChatScreen = (props) => {
     loading: loadingChat,
     data: dataChat,
   } = chatReducer;
-  const userReducer = useSelector((state) => state.userGetProfile);
-  const {
-    error: errorUser,
-    loading: loadingUser,
-    data: userData,
-  } = userReducer;
-  const { id } = userData;
+  const { profileContext, updateProfileContext } = useContext(Context);
+  const userData = profileContext;
 
   useEffect(() => {
     dispatch(getChat(chat_id));
-    dispatch(getUserProfile);
   }, [chat_id]);
 
   const reload = useCallback(async () => {
     setLocalLoading(true);
     try {
-      await dispatch(listMatches());
+      // await dispatch(listMessages());
     } catch (err) {
       console.log(err);
     }
     setLocalLoading(false);
   }, [dispatch]);
 
-  if (loadingChat || loadingUser) {
+  if (loadingChat || localLoading) {
     <ActivityModal
       loading
       title="Please wait"
@@ -71,7 +66,10 @@ const ChatScreen = (props) => {
   }
   const renderMessages = ({ item }) => {
     return (
-      <View style={item.sender.id === id ? styles.byMessages : styles.messages}>
+      <View
+        style={
+          item.sender.id === userData.id ? styles.byMessages : styles.messages
+        }>
         <Text style={{ color: 'white' }}>{item.text}</Text>
       </View>
     );

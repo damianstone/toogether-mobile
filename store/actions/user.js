@@ -22,23 +22,23 @@ export const userLocation = () => {
         Authorization: `Bearer ${userData.token}`,
       };
 
-      let location = await Location.getCurrentPositionAsync({
-        accuracy: Platform.OS === 'ios' ? 3 : Location.Accuracy.High,
-      });
+      // let location = await Location.getCurrentPositionAsync({
+      //   accuracy: Platform.OS === 'ios' ? 3 : Location.Accuracy.High,
+      // });
       // If you are getting stuck and not getting location (on Android uncomment this to get default location so that you can continue working)
-      // let location;
-      // if (Platform.OS === 'ios') {
-      //   location = await Location.getCurrentPositionAsync({
-      //     accuracy: Platform.OS === 'ios' ? 3 : Location.Accuracy.Highest,
-      //   });
-      // } else {
-      //   location = {
-      //     coords: {
-      //       latitude: 37.785834,
-      //       longitude: -122.406417,
-      //     },
-      //   };
-      // }
+      /* let location;
+      if (Platform.OS === 'ios') {
+        location = await Location.getCurrentPositionAsync({
+          accuracy: Platform.OS === 'ios' ? 3 : Location.Accuracy.Highest,
+        });
+      } else {
+        location = {
+          coords: {
+            latitude: 37.785834,
+            longitude: -122.406417,
+          },
+        };
+      } */
 
       const { data } = await axios({
         method: 'POST',
@@ -527,39 +527,6 @@ export const listUserPhotos = () => {
     } catch (error) {
       dispatch({
         type: c.USER_LIST_PHOTOS_FAIL,
-        payload: error,
-      });
-    }
-  };
-};
-
-//CHAT TEST
-export const getChatProfile = (profile_id) => {
-  return async (dispatch) => {
-    try {
-      dispatch({ type: c.USER_GET_CHAT_PROFILE_REQUEST });
-      let id;
-
-      const userData = JSON.parse(await AsyncStorage.getItem('@userData'));
-
-      const config = {
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
-        Authorization: 'Bearer ' + userData.token,
-      };
-      const { data } = await axios({
-        method: 'get',
-        url: `${BASE_URL}/api/v1/profiles/${profile_id}/`,
-        headers: config,
-      });
-
-      dispatch({
-        type: c.USER_GET_CHAT_PROFILE_SUCCESS,
-        payload: data,
-      });
-    } catch (error) {
-      dispatch({
-        type: c.USER_GET_CHAT_PROFILE_FAIL,
         payload: error,
       });
     }
