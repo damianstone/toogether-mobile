@@ -42,16 +42,6 @@ const ChatScreen = (props) => {
     dispatch(getChat(chat_id));
   }, [chat_id]);
 
-  const reload = useCallback(async () => {
-    setLocalLoading(true);
-    try {
-      // await dispatch(listMessages());
-    } catch (err) {
-      console.log(err);
-    }
-    setLocalLoading(false);
-  }, [dispatch]);
-
   if (loadingChat || localLoading) {
     <ActivityModal
       loading
@@ -78,13 +68,6 @@ const ChatScreen = (props) => {
     <View style={styles.screen}>
       <View style={styles.messages_Container}>
         <FlatList
-          refreshControl={
-            <RefreshControl
-              refreshing={refreshing}
-              onRefresh={reload}
-              tintColor={Colors.white}
-            />
-          }
           inverted={true}
           data={chat.results[0].messages.reverse()}
           keyExtractor={(item) => item.id.toString()}
