@@ -236,14 +236,14 @@ SwipeScreen.navigationOptions = (navData) => {
     headerRight: () => (
       <HeaderButtons HeaderButtonComponent={HeaderButtom}>
         <Item
-          title="Chat"
+          title="Chats"
           iconName={
             Platform.OS === 'android'
               ? 'chatbubble-outline'
               : 'chatbubble-outline'
           }
           onPress={() => {
-            navData.navigation.navigate('Match');
+            navData.navigation.navigate('Chats');
           }}
         />
       </HeaderButtons>

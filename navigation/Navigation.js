@@ -1,5 +1,5 @@
 import React from 'react';
-import { Platform, Text } from 'react-native';
+import { Platform, Text, View } from 'react-native';
 import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 import { createMaterialBottomTabNavigator } from 'react-navigation-material-bottom-tabs';
 import { createStackNavigator } from 'react-navigation-stack';
@@ -31,7 +31,8 @@ import SettingScreen from '../screens/MyProfile/SettingScreen';
 import EditProfileScreen from '../screens/MyProfile/EditProfileScreen';
 
 import SwipeScreen from '../screens/Swipe/SwipeScreen';
-import ChatScreen from '../screens/ChatScreen';
+import ChatScreen from '../screens/Chat/ChatScreen';
+import ChatsScreen from '../screens/Chat/ChatsScreen';
 import LikesScreen from '../screens/Likes/LikesScreen';
 import BlockProfilesScreen from '../screens/BlockProfiles/BlockProfilesScreen';
 import InstagramScreen from '../screens/CreateProfile/InstagramScreen';
@@ -46,6 +47,7 @@ const defaultNavOptions = {
   headerBackTitleStyle: {},
   statusBarStyle: Colors.bg,
   headerTintColor: Colors.white,
+  headerTitleAlign: 'center',
 };
 
 const AuthNavigator = createStackNavigator(
@@ -110,16 +112,8 @@ const MyProfileNavigatorWithModal = createStackNavigator(
 
 const ChatNavigator = createStackNavigator(
   {
+    Chats: ChatsScreen,
     Chat: ChatScreen,
-    SwipeProfile: {
-      screen: SwipeProfileScreen,
-      navigationOptions: {
-        // get rid the header so then the modal can be displayed with full height
-        ...defaultNavOptions,
-        gestureDirection: 'horizontal',
-        title: null,
-      },
-    },
   },
   {
     defaultNavigationOptions: defaultNavOptions,
@@ -207,7 +201,6 @@ const tabScreenCnfig = {
   Group: {
     screen: GroupNavigator,
     navigationOptions: ({ navigation }) => {
-      console.log(navigation.state);
       return {
         tabBarIcon: (tabInfo) => {
           return (
