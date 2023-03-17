@@ -3,13 +3,14 @@ import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { Context } from '../../context/ContextProvider';
 import Colors from '../../constants/Colors';
-import { getUserProfile } from '../../store/actions/user';
+import { getChatProfile, getUserProfile } from '../../store/actions/user';
 import { getNameInitials, getImage } from '../../utils/getMethods';
 
 import Loader from './Loader';
 
 const Avatar = (props) => {
   const { onPress } = props;
+  const { id } = props;
   const { profileContext, updateProfileContext } = useContext(Context);
 
   const dispatch = useDispatch();
@@ -20,15 +21,59 @@ const Avatar = (props) => {
     error: errorProfile,
     data: dataProfile,
   } = userProfile;
-
+  //Chat profile
+  const chatProfile = useSelector((state) => state.userChatProfile);
+  const {
+    loading: loadingChatProfile,
+    error: errorChatProfile,
+    data: dataChatProfile,
+  } = chatProfile;
+  ////////////////
   useEffect(() => {
-    if (!dataProfile && !profileContext) {
+    if (!dataProfile && !profileContext /* chat test */ && !id) {
       dispatch(getUserProfile());
     }
+
     if (dataProfile) {
       updateProfileContext(dataProfile);
     }
   }, []);
+  //Chat profile
+  useEffect(() => {
+    if (id) {
+      dispatch(getChatProfile(id));
+    }
+  }, [id]);
+
+  //Chat TEST
+  if (id) {
+    return (
+      <TouchableOpacity onPress={onPress} style={styles.imgContainer}>
+        {loadingProfile ||
+          (typeof errorChatProfile != 'undefined' && (
+            <View style={styles.error_avatar_view}>
+              <Loader />
+            </View>
+          ))}
+        {dataChatProfile && dataChatProfile.photos.length > 0 && (
+          <View style={styles.avatar_view}>
+            <Image
+              source={{ uri: `${getImage(dataChatProfile.photos[0].image)}` }}
+              style={styles.img}
+            />
+          </View>
+        )}
+        {dataChatProfile?.photos?.length === 0 && (
+          <View style={styles.avatar_view}>
+            <Text style={styles.avatar_initials}>
+              {getNameInitials(dataChatProfile.name)}
+            </Text>
+          </View>
+        )}
+      </TouchableOpacity>
+    );
+  }
+  /////////////////////////////////////////
 
   return (
     <TouchableOpacity onPress={onPress} style={styles.imgContainer}>

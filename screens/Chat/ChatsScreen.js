@@ -60,8 +60,6 @@ const ChatsScreen = (props) => {
     } catch (err) {
       console.log(err);
     }
-    // reset the top profile so dont show it over and over
-    props.navigation.setParams({ topProfile: null });
     setLocalLoading(false);
   }, [dispatch]);
 
@@ -86,12 +84,16 @@ const ChatsScreen = (props) => {
       });
     }
   };
-
   const handleShowChat = (chat, matchedData) => {
     if (chat) {
-      props.navigation.navigate('Chat', {
-        chatId: chat.id,
-        matchedData: matchedData,
+      props.navigation.navigate({
+        routeName: 'Chat',
+        params: {
+          chatId: chat.id,
+          isInGroup: matchedData.matched_profile.is_in_group,
+          matchedId: matchedData.matched_profile.id,
+          matchedName: matchedData.matched_profile.name,
+        },
       });
     }
   };
@@ -192,6 +194,7 @@ const ChatsScreen = (props) => {
         </View>
         <TouchableOpacity
           onLongPress={() => onOpenActionSheet(matchedProfile, item.id)}
+          onPress={() => handleShowChat(item, matchedData)}
           style={styles.cardContainer}>
           <View style={styles.chat_preview}>
             <Text style={styles.matchedName}>{matchedProfile.name}</Text>
@@ -209,34 +212,37 @@ const ChatsScreen = (props) => {
           <Text style={styles.title}> New Matches</Text>
           {/* {localLoading && renderAllCardSwiped()} */}
           {!localLoading && matches?.results && (
-            <ScrollView
-              horizontal
+            <FlatList
               refreshControl={
                 <RefreshControl
                   refreshing={refreshing}
                   onRefresh={reload}
                   tintColor={Colors.white}
                 />
-              }>
-              <FlatList
-                contentContainerStyle={styles.new_matches}
-                data={matches?.results}
-                keyExtractor={(item) => item.id.toString()}
-                renderItem={renderBubblesMatches}
-              />
-            </ScrollView>
+              }
+              horizontal
+              contentContainerStyle={styles.new_matches}
+              data={matches?.results}
+              keyExtractor={(item) => item.id.toString()}
+              renderItem={renderBubblesMatches}
+            />
           )}
         </View>
         <View style={styles.chat_preview}>
           <Text style={styles.title}> Chats</Text>
-          <ScrollView>
-            <FlatList
-              keyExtractor={(item) => item.id.toString()}
-              contentContainerStyle={styles.chats}
-              data={chats.results}
-              renderItem={renderPreviewChats}
-            />
-          </ScrollView>
+          <FlatList
+            refreshControl={
+              <RefreshControl
+                refreshing={refreshing}
+                onRefresh={reload}
+                tintColor={Colors.white}
+              />
+            }
+            keyExtractor={(item) => item.id.toString()}
+            contentContainerStyle={styles.chats}
+            data={chats.results}
+            renderItem={renderPreviewChats}
+          />
         </View>
       </View>
     </SafeAreaView>

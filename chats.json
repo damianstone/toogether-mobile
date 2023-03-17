@@ -27,11 +27,35 @@
       "messages": [
         {
           "id": "1",
-          "text": "Hello World!"
+          "text": "Hello World!",
+          "sender": {
+            "id": "c3cdd010-f981-41d7-b624-9879aceeddce",
+            "name": "Jane King"
+          }
         },
         {
           "id": "2",
-          "text": "Hello World!"
+          "text": "JJJJJJJJASDASDASDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD",
+          "sender": {
+            "id": "55685604-1215-4712-a6b3-3eca449ce8bb",
+            "name": "Fake User"
+          }
+        },
+        {
+          "id": "3",
+          "text": "Random Text",
+          "sender": {
+            "id": "55685604-1215-4712-a6b3-3eca449ce8bb",
+            "name": "Fake User"
+          }
+        },
+        {
+          "id": "4",
+          "text": "asdasdasdasd",
+          "sender": {
+            "id": "c3cdd010-f981-41d7-b624-9879aceeddce",
+            "name": "Jane King"
+          }
         }
       ]
     },

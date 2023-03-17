@@ -254,7 +254,7 @@ export const listChats = () => {
         url: `${BASE_URL}/api/v1/chats/`,
         headers: config,
       }); */
-      const { data } = chats;
+      const data = chats;
 
       dispatch({
         type: w.LIST_CHATS_SUCCESS,
@@ -287,8 +287,8 @@ export const getChat = (id) => {
         url: `${BASE_URL}/api/v1/chats/${id}`,
         headers: config,
       }); */
-      const { data } = chats.results.find((chat) => chat.id === id);
 
+      const data = chats.results.find((chat) => chat.id === id);
       dispatch({
         type: w.GET_CHAT_SUCCESS,
         payload: data,

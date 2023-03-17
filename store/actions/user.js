@@ -258,7 +258,6 @@ export const getUserProfile = (profile_id) => {
         Accept: 'application/json',
         Authorization: 'Bearer ' + userData.token,
       };
-
       const { data } = await axios({
         method: 'get',
         url: `${BASE_URL}/api/v1/profiles/${userData.id}/`,
@@ -523,6 +522,39 @@ export const listUserPhotos = () => {
     } catch (error) {
       dispatch({
         type: c.USER_LIST_PHOTOS_FAIL,
+        payload: error,
+      });
+    }
+  };
+};
+
+//CHAT TEST
+export const getChatProfile = (profile_id) => {
+  return async (dispatch) => {
+    try {
+      dispatch({ type: c.USER_GET_CHAT_PROFILE_REQUEST });
+      let id;
+
+      const userData = JSON.parse(await AsyncStorage.getItem('@userData'));
+
+      const config = {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+        Authorization: 'Bearer ' + userData.token,
+      };
+      const { data } = await axios({
+        method: 'get',
+        url: `${BASE_URL}/api/v1/profiles/${profile_id}/`,
+        headers: config,
+      });
+
+      dispatch({
+        type: c.USER_GET_CHAT_PROFILE_SUCCESS,
+        payload: data,
+      });
+    } catch (error) {
+      dispatch({
+        type: c.USER_GET_CHAT_PROFILE_FAIL,
         payload: error,
       });
     }
