@@ -44,7 +44,7 @@ export default () => ({
     },
     extra: {
       MODE: process.env.MODE || null,
-      ROCKET_API_URL: process.env.API_URL || null,
+      ROCKET_API_URL: process.env.ROCKET_API_URL || null,
       IOS_LOCAL_URL: process.env.IOS_LOCAL_URL || null,
       ANDROID_LOCAL_URL: process.env.ANDROID_LOCAL_URL || null,
       eas: {
