@@ -1,3 +1,5 @@
+import { Platform } from 'react-native';
+import Device from '../theme/Device';
 import { ENV } from '../environment';
 
 const API_URL = ENV.API_URL;
