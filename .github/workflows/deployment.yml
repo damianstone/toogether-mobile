@@ -1,10 +1,7 @@
 name: Deployment
 
 on:
-  push:
-    branches: [deployment-workflow]
-  pull_request:
-    branches: [rocket]
+  workflow_dispatch:
 
 jobs:
   build:
@@ -55,7 +52,7 @@ jobs:
       - name: Install dependencies
         run: npm install --legacy-peer-deps
 
-      - name: Build on EAS
+      - name: Build for IOS
         run: eas build -p ios --profile rocket --non-interactive
 
       - name: IOS deployment
