@@ -31,6 +31,7 @@ import { getNameInitials, getCardName, getImage } from '../../utils/getMethods';
 import Colors from '../../constants/Colors';
 import ClipBoard from '../../components/UI/ClipBoard';
 import MemberAvatar from '../../components/MemberAvatar';
+import Device from '../../theme/Device';
 
 const GroupScreen = (props) => {
   const { groupContext, isOwnerGroup, updateGroupContext } =
@@ -41,11 +42,11 @@ const GroupScreen = (props) => {
   const dispatch = useDispatch();
 
   const HEIGHT_ACTION_CONTAINER = isOwnerGroup
-    ? { height: '70%' }
-    : { height: '60%' };
+    ? { height: 0.45 * Device.height }
+    : { height: 0.35 * Device.height };
   const HEIGHT_MEMBER_CARD_CONTAINER = isOwnerGroup
-    ? { minHeight: '30%', maxHeight: '30%' }
-    : { minHeight: '40%', maxHeight: '45%' };
+    ? { minHeight: 0.5 * Device.height, maxHeight: 0.6 * Device.height }
+    : { minHeight: 0.6 * Device.height, maxHeight: 0.7 * Device.height };
 
   const getGroupReducer = useSelector((state) => state.getGroup);
   const {
@@ -291,8 +292,7 @@ const GroupScreen = (props) => {
           onRefresh={loadGroup}
           tintColor={Colors.white}
         />
-      }
-    >
+      }>
       <View style={{ ...styles.action_view, ...HEIGHT_ACTION_CONTAINER }}>
         <View style={styles.profile_photo_container}>
           {!groupContext && <Loader />}
@@ -317,8 +317,9 @@ const GroupScreen = (props) => {
           <View style={styles.nameView}>
             {groupContext?.owner && (
               <Text
-                style={styles.name}
-              >{`${groupContext.owner.name}'s group`}</Text>
+                style={
+                  styles.name
+                }>{`${groupContext.owner.name}'s group`}</Text>
             )}
           </View>
         </View>
@@ -464,6 +465,7 @@ const styles = StyleSheet.create({
     width: '100%',
     textAlign: 'center',
     fontSize: 12,
-    color: Colors.bg,
+    color: Colors.white,
+    fontWeight: '400'
   },
 });
