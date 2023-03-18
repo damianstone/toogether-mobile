@@ -54,4 +54,4 @@ jobs:
         run: npm install --legacy-peer-deps
 
       - name: Build on EAS
-        run: eas build -p ios --latest --profile rocket
+        run: eas build -p ios --profile rocket
