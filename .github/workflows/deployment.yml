@@ -18,6 +18,27 @@ jobs:
         with:
           node-version: '14.x'
           cache: npm
+      
+      - name: Create eas.json
+        run: |
+          cat > eas.json << EOF
+          {
+            "cli": {
+              "version": ">= 2.7.0"
+            },
+            "build": {
+              "rocket": {
+                "env": {
+                  "MODE": "rocket",
+                  "ROCKET_API_URL": "${{ secrets.ROCKET_API_URL }}"
+                }
+              }
+            },
+            "submit": {
+              "rocket": {}
+            }
+          }
+          EOF
         
       - name: Setup EAS
         uses: expo/expo-github-action@v8
@@ -29,6 +50,4 @@ jobs:
         run: npm install --legacy-peer-deps
 
       - name: Build for IOS
-        env:
-          EAS_JSON: ${{ secrets.EAS_JSON_ROCKET }}
         run: eas build -p ios --profile rocket
