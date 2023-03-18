@@ -35,15 +35,7 @@ jobs:
               }
             },
             "submit": {
-              "rocket": {
-                "asc": {
-                  "apiKey": {
-                    "issuerId": "${{ secrets.APPLE_ISSUER_ID }}",
-                    "keyId": "${{ secrets.APPLE_API_KEY_ID }}",
-                    "key": "${{ secrets.APPLE_APLE_KEY}}"
-                  }
-                }
-              }
+              "rocket": {}
             }
           }
           EOF
