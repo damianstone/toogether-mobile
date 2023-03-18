@@ -8,7 +8,7 @@ export default () => ({
     slug: 'toogether-app',
     owner: 'damian_stone',
     privacy: 'public',
-    version: '1.0.3',
+    version: '1.0.0',
     orientation: 'portrait',
     icon: './assets/images/toogether-icon.png',
     platforms: ['ios', 'android'],
@@ -27,7 +27,7 @@ export default () => ({
     ios: {
       supportsTablet: false,
       bundleIdentifier: 'toogether.app',
-      buildNumber: '1.0.5',
+      buildNumber: '1.0.2',
     },
     android: {
       adaptiveIcon: {
