@@ -50,4 +50,8 @@ jobs:
         run: npm install --legacy-peer-deps
 
       - name: Build on EAS
+        env: 
+          EXPO_APPLE_PASSWORD: ${{ secrets.EXPO_APPLE_PASSWORD }}
+          EXPO_APPLE_TEAM_ID: ${{ secrets.EXPO_APPLE_TEAM_ID }}
+          EXPO_APPLE_REMEMBER_PASSWORD: true
         run: eas build -p ios --profile rocket
