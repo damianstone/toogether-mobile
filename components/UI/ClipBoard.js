@@ -10,7 +10,8 @@ const ClipBoard = (props) => {
   const handleShareUrl = async (groupUrl) => {
     try {
       const result = await Share.share({
-        message: `Join to my group on Toogether app using the following link: ${groupUrl}
+        message: `Join to my group on Toogether app using the following link: 
+          \n ${groupUrl}
           \n How to join a group using the link? 🤔
           \n Open the app -> Group -> Join a group -> paste the link 
           \n Don't have Toogether yet? 👀

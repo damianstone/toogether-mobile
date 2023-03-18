@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-curly-brace-presence */
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback, useContext } from 'react';
 import {
   FlatList,
   Image,
@@ -19,7 +19,7 @@ import { useActionSheet } from '@expo/react-native-action-sheet';
 import * as ImagePicker from 'expo-image-picker';
 import { LinearGradient } from 'expo-linear-gradient';
 import { MaterialIcons, Feather } from '@expo/vector-icons';
-import { useNetInfo } from '@react-native-community/netinfo';
+import { Context } from '../../context/ContextProvider';
 import { getNameInitials, getImage } from '../../utils/getMethods';
 
 import HeaderButtom from '../../components/UI/HeaderButton';
@@ -35,38 +35,13 @@ import {
 } from '../../store/actions/user';
 import { checkServerError, check400Error } from '../../utils/errors';
 import { verifyPermissions } from '../../utils/permissions';
+import { BASE_PHOTOS } from '../../data/base_fotos';
 import styles from './styles';
 
-const BASE_PHOTOS = [
-  {
-    id: 1,
-    text: 'Add 📸',
-  },
-  {
-    id: 2,
-    text: 'Add 📸',
-  },
-  {
-    id: 3,
-    text: 'Add 📸',
-  },
-  {
-    id: 4,
-    text: 'Add photo',
-  },
-  {
-    id: 5,
-    text: 'Add photo',
-  },
-  {
-    id: 6,
-    text: 'Add photo',
-  },
-];
-
 const MyProfileScreen = (props) => {
+  const { profileContext, updateProfileContext } = useContext(Context);
+
   const dispatch = useDispatch();
-  const netInfo = useNetInfo();
   const { showActionSheetWithOptions } = useActionSheet();
   const [refreshing, setRefreshing] = useState(false);
   const [photoId, setPhotoId] = useState('');
@@ -106,6 +81,9 @@ const MyProfileScreen = (props) => {
     }
     if (errorProfile) {
       checkServerError(errorProfile);
+    }
+    if (userProfile) {
+      updateProfileContext(userProfile);
     }
   }, [photos, userProfile]);
 
@@ -241,8 +219,7 @@ const MyProfileScreen = (props) => {
       <TouchableOpacity
         key={photo.id}
         onPress={() => onOpenActionSheet(photo.id)}
-        style={{ ...stylesObj }}
-      >
+        style={{ ...stylesObj }}>
         {loadingPhotos ||
         loadingRemovePhoto ||
         (loadingAddPhoto && photo.id === photoId) ? (
@@ -277,12 +254,10 @@ const MyProfileScreen = (props) => {
                 onRefresh={loadProfile}
                 tintColor={Colors.white}
               />
-            }
-          >
+            }>
             <TouchableOpacity
               style={styles.profilePictureContainer}
-              onPress={handleOpenPreview}
-            >
+              onPress={handleOpenPreview}>
               {typeof userProfile === 'undefined' && (
                 <View
                   style={{
@@ -293,8 +268,7 @@ const MyProfileScreen = (props) => {
                     borderRadius: 100,
                     justifyContent: 'center',
                     alignItems: 'center',
-                  }}
-                >
+                  }}>
                   <Loader />
                 </View>
               )}
@@ -320,8 +294,7 @@ const MyProfileScreen = (props) => {
                 <>
                   <Text style={styles.name}>{userProfile.name}</Text>
                   <TouchableOpacity
-                    onPress={() => handleNavigate('EditProfile')}
-                  >
+                    onPress={() => handleNavigate('EditProfile')}>
                     <MaterialIcons name="edit" size={20} color="white" />
                   </TouchableOpacity>
                 </>
@@ -370,16 +343,14 @@ const MyProfileScreen = (props) => {
                       style={{
                         ...styles.myphotosItemView,
                         backgroundColor: Colors.bgCard,
-                      }}
-                    >
+                      }}>
                       <View
                         style={{
                           width: '100%',
                           height: '100%',
                           justifyContent: 'center',
                           alignItems: 'center',
-                        }}
-                      >
+                        }}>
                         {loadingAddPhoto && item.id === photoId ? (
                           <Loader size="small" />
                         ) : (
@@ -405,8 +376,7 @@ const MyProfileScreen = (props) => {
                   alignItems: 'center',
                   borderRadius: 10,
                   padding: 7,
-                }}
-              >
+                }}>
                 <LinearGradient
                   colors={['#ED665A', '#CF2A6E', '#BA007C']}
                   style={styles.linearCircle}
@@ -417,8 +387,7 @@ const MyProfileScreen = (props) => {
                       color: Colors.white,
                       fontSize: 20,
                       fontWeight: '500',
-                    }}
-                  >
+                    }}>
                     Profile Preview
                   </Text>
                 </View>
@@ -429,8 +398,7 @@ const MyProfileScreen = (props) => {
                     justifyContent: 'center',
                     alignItems: 'center',
                     marginHorizontal: 10,
-                  }}
-                >
+                  }}>
                   <Feather name="arrow-right" size={35} color={Colors.white} />
                 </View>
               </TouchableOpacity>
@@ -440,8 +408,7 @@ const MyProfileScreen = (props) => {
                   marginTop: 2,
                   marginBottom: 35,
                   padding: 10,
-                }}
-              >
+                }}>
                 <View style={styles.logoContainer}>
                   <Image
                     source={require('../../assets/images/logo-2.png')}
