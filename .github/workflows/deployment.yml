@@ -1,7 +1,7 @@
 name: Deployment
 
 on:
-  push: 
+  push:
     branches: [deployment-workflow]
 
 jobs:
@@ -18,7 +18,7 @@ jobs:
         with:
           node-version: '14.x'
           cache: npm
-      
+
       - name: Create eas.json
         run: |
           cat > eas.json << EOF
@@ -35,11 +35,19 @@ jobs:
               }
             },
             "submit": {
-              "rocket": {}
+              "rocket": {
+                "asc": {
+                  "apiKey": {
+                    "issuerId": "${{ secrets.APPLE_ISSUER_ID }}",
+                    "keyId": "${{ secrets.APPLE_API_KEY_ID }}",
+                    "key": "${{ secrets.APPLE_APLE_KEY}}"
+                  }
+                }
+              }
             }
           }
           EOF
-        
+
       - name: Setup EAS
         uses: expo/expo-github-action@v8
         with:
@@ -49,11 +57,5 @@ jobs:
       - name: Install dependencies
         run: npm install --legacy-peer-deps
 
-      - name: Build for IOS
-        env:
-          APPLE_API_KEY_ID: ${{ secrets.APPLE_API_KEY_ID }}
-          APPLE_ISSUER_ID: ${{ secrets.APPLE_ISSUER_ID }}
-          APPLE_API_KEY: ${{ secrets.APPLE_API_KEY }}
-        run: |
-          echo "$APPLE_API_KEY" > apple_api_key.p8
-          eas build -p ios --profile rocket --apple-id "$APPLE_API_KEY_ID" --apple-issuer-id "$APPLE_ISSUER_ID" --apple-key-path ./apple_api_key.p8
+      - name: Build on EAS
+        run: eas build -p ios --profile rocket
