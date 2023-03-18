@@ -7,6 +7,7 @@ import {
   StyleSheet,
   Alert,
   ActivityIndicator,
+  Platform,
 } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { useDispatch, useSelector } from 'react-redux';
@@ -19,6 +20,8 @@ import AuthButton from '../../components/UI/AuthButton';
 import Avatar from '../../components/UI/Avatar';
 import Colors from '../../constants/Colors';
 import * as g from '../../constants/group';
+import ButtonAndroid from '../../components/UI/ButtonAndroid';
+import Device from '../../theme/Device';
 
 const StartGroupScreen = (props) => {
   const { groupContext, updateGroupContext } = useContext(Context);
@@ -41,7 +44,6 @@ const StartGroupScreen = (props) => {
     routeName: 'Group',
   });
 
-  
   // * if the user is already in a group
   useEffect(() => {
     if (groupContext) {
@@ -90,7 +92,8 @@ const StartGroupScreen = (props) => {
       <StatusBar style="light" />
       <ScrollView
         style={styles.scrollview_style}
-        contentContainerStyle={styles.scrollview_content_container}>
+        contentContainerStyle={styles.scrollview_content_container}
+      >
         <View>
           <View style={styles.imageContainer}>
             <Image
@@ -100,11 +103,15 @@ const StartGroupScreen = (props) => {
           </View>
         </View>
         <View style={styles.buttonsContainer}>
-          <Button
-            title="Join to group"
-            color={Colors.white}
-            onPress={handleJoinToGroup}
-          />
+          {Platform.OS === 'ios' ? (
+            <Button
+              title="Join to group"
+              color={Colors.white}
+              onPress={handleJoinToGroup}
+            />
+          ) : (
+            <ButtonAndroid title="Join to group" onPress={handleJoinToGroup} />
+          )}
           <AuthButton onPress={handleCreateGroup} text="Create group" />
         </View>
       </ScrollView>
@@ -137,13 +144,6 @@ const styles = StyleSheet.create({
   loadingScreen: {
     backgroundColor: Colors.bg,
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  gradient: {
-    flex: 1,
-    width: '100%',
-    height: '100%',
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -180,6 +180,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: '90%',
     padding: 3,
+    marginBottom: Platform.OS === 'ios' ? 0 : 0.015 * Device.height,
   },
 
   button: {

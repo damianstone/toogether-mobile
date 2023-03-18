@@ -15,6 +15,15 @@ The following command allows you to install all the requirements using the exact
 npm ci
 ```
 
+### Create an .env file
+In the root of the project create an `.env` file with the following variables
+
+```
+MODE = development
+IOS_LOCAL_URL = http://127.0.0.1:8000
+ANDROID_LOCAL_URL = http://10.0.2.2:8000
+```
+
 ### Style standards
 
 To keep the code in a standard style we use `Prettier + Eslint`
@@ -31,16 +40,6 @@ To check errors in the code style, run the following command:
 ```bash
 npm run lint:fix
 ```
-
-## Style Standards
-To format the code in the project, simply run the following command in the root directory of the project:
-
-```bash
-black .
-```
-This command will automatically format all .py files in the project according to the black style guide, which adheres to the PEP 8 style guide
-
-**Make sure you run this command before any pull request**
 
 ## Pull Requests
 
@@ -77,7 +76,7 @@ npm install -g eas-cli
 To build the app we can use the following command specifying the channel (env variables) we want to use
 
 ```bash
-expo build:ios --release-channel rocket
+eas build -p ios --profile rocket
 ```
 
 Finally we can make the deployment to the App Store using the build url generated in expo

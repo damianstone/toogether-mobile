@@ -133,7 +133,8 @@ const JoinGroupScreen = (props) => {
         <ScrollView
           style={styles.scrollview_style}
           contentContainerStyle={styles.scrollview_content_container}
-          automaticallyAdjustKeyboardInsets>
+          automaticallyAdjustKeyboardInsets
+        >
           <View style={styles.imageContainer}>
             <Image
               source={require('../../assets/images/hand_join.png')}
@@ -191,6 +192,7 @@ export default JoinGroupScreen;
 
 const styles = StyleSheet.create({
   screen: {
+    flex: 1,
     backgroundColor: Colors.bg,
     justifyContent: 'space-between',
     flexDirection: 'column',
@@ -204,19 +206,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 
-  gradient: {
-    flex: 1,
-    width: '100%',
-    height: '100%',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-
   scrollview_style: {
     flexGrow: 1,
     backgroundColor: Colors.bg,
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
     paddingBottom: 0,
   },
 
@@ -224,6 +216,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column', // inner items will be added vertically
     flexGrow: 1, // all the available vertical space will be occupied by it
     justifyContent: 'space-between', // will create the gutter between body and footer
+    paddingBottom: 10, // Add paddingBottom to make space for the fixed container at the bottom
   },
 
   join_text_view: {
@@ -246,22 +239,24 @@ const styles = StyleSheet.create({
   },
 
   imageContainer: {
-    maxHeight: '100%',
-    width: '100%',
+    marginVertical: 5,
     alignItems: 'center',
     justifyContent: 'center',
   },
 
   image: {
     width: '100%',
-    height: 470,
+    height: 465,
   },
 
   join_input_container: {
+    justifyContent: 'center',
+    alignItems: 'center',
     backgroundColor: Colors.bg,
     width: '100%',
     paddingHorizontal: 20,
-    marginBottom: 20,
+    padding: 3,
+    marginBottom: Platform.OS === 'ios' ? 0 : 0.015 * Device.height,
   },
 
   label: {

@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native';
 import Colors from '../../constants/Colors';
+import Device from '../../theme/Device';
 import { Platform } from 'react-native';
 
 // ---------------------- AUTH SCREEN -----------------------
@@ -42,6 +43,7 @@ export default StyleSheet.create({
 
   auth_text_container: {
     width: '100%',
+    paddingVertical: 0, // fixes styling for Android and should be default for iOS
   },
 
   auth_text_big: {
@@ -56,11 +58,12 @@ export default StyleSheet.create({
   },
 
   auth_input_container: {
+    borderRadius: 55, //for android (ios has borderRadius by default)
     backgroundColor: Colors.white,
     alignItems: 'center',
     width: '100%',
     padding: 20,
-    paddingVertical: '7%',
+    paddingVertical: Platform.OS === 'ios' ? '7%' : '5%',
   },
 
   auth_loader_container: {
@@ -87,6 +90,6 @@ export default StyleSheet.create({
 
   auth_text_button: {
     color: '#4A4A4A',
-    fontSize: Platform.OS === 'ios' ? 15 : 10,
+    fontSize: Platform.OS === 'ios' ? 15 : 18,
   },
 });

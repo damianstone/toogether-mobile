@@ -1,6 +1,13 @@
 import React from 'react';
-import { StyleSheet, TouchableOpacity, Text } from 'react-native';
+import {
+  StyleSheet,
+  TouchableOpacity,
+  Text,
+  Platform,
+  Dimensions,
+} from 'react-native';
 import Colors from '../../constants/Colors';
+import Device from '../../theme/Device';
 
 const AuthButton = (props) => {
   const { onPress, text } = props;
@@ -16,11 +23,12 @@ export default AuthButton;
 
 const styles = StyleSheet.create({
   auth_button_container: {
-    marginVertical: 30,
+    marginVertical: Platform.OS === 'ios' ? 30 : 0,
+    marginTop: Platform.OS === 'ios' ? 30 : 15,
     padding: 3,
     flexDirection: 'row',
     width: '100%',
-    height: 44,
+    height: Platform.OS === 'ios' ? 44 : 0.06 * Device.height,
     backgroundColor: Colors.orange,
     borderRadius: 10,
     alignItems: 'center',

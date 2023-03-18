@@ -3,9 +3,9 @@ import axios from 'axios';
 import Constants from 'expo-constants';
 import * as g from '../../constants/group';
 import * as c from '../../constants/user';
-import getEnvVars from '../../environment';
+import { ENV } from '../../environment';
 
-const { API_URL: BASE_URL } = getEnvVars();
+const BASE_URL = ENV.API_URL;
 
 export const listGroup = () => {
   return async (dispatch) => {

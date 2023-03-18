@@ -6,6 +6,7 @@ import {
   Image,
   Button,
   TouchableOpacity,
+  Platform,
 } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 
@@ -15,7 +16,7 @@ const AuthSucess = (props) => {
   const register = props.navigation.getParam('register');
 
   return (
-    <View style={styles.screen}>
+    <View style={[styles.screen, Platform.OS === 'ios' ? {} : { flex: 1 }]}>
       <StatusBar style="light" />
       <View style={styles.container}>
         <Text style={styles.mainText}>
@@ -38,13 +39,7 @@ const AuthSucess = (props) => {
             props.navigation.navigate('Instagram');
           }}
         >
-          <Button
-            onPress={() => {
-              props.navigation.navigate('Instagram');
-            }}
-            color={Colors.white}
-            title="Continue"
-          />
+          <Text style={styles.button_text}>Continue</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -94,7 +89,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   touchable: {
+    flex: 1,
     width: '100%',
     height: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  button_text: {
+    color: Colors.white,
+    fontSize: 20,
   },
 });

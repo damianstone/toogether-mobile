@@ -7,11 +7,14 @@ import {
   Platform,
   ActivityIndicator,
   StyleSheet,
+  Dimensions,
 } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 
 import AuthButton from '../../components/UI/AuthButton';
 import Colors from '../../constants/Colors';
+import Device from '../../theme/Device';
+import ButtonAndroid from '../../components/UI/ButtonAndroid';
 
 const AuthStartScreen = (props) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -31,7 +34,7 @@ const AuthStartScreen = (props) => {
   };
 
   return (
-    <View style={styles.screen}>
+    <View style={[styles.screen, Platform.OS === 'ios' ? {} : { flex: 1 }]}>
       <StatusBar style="light" />
       <ScrollView
         style={styles.scrollview_style}
@@ -47,14 +50,28 @@ const AuthStartScreen = (props) => {
           <Image
             source={require('../../assets/images/radar.png')}
             style={styles.image}
+            resizeMode={Platform.OS === 'ios' ? 'cover' : 'contain'}
           />
         </View>
-        <View style={styles.buttonsContainer}>
-          <Button
-            title="Login"
-            color={Platform.OS === 'ios' ? Colors.white : Colors.bgCard}
-            onPress={handleLogin}
-          />
+        <View
+          style={[
+            styles.buttonsContainer,
+            Platform.OS === 'ios' ? {} : { flex: 1 },
+          ]}
+        >
+          {Platform.OS === 'ios' ? (
+            <Button
+              title="Login"
+              color={Platform.OS === 'ios' ? Colors.white : Colors.bg} //  not needed but kept for refernce
+              onPress={handleLogin}
+            />
+          ) : (
+            <ButtonAndroid
+              title="Login"
+              color={Platform.OS === 'ios' ? Colors.white : Colors.bg}
+              onPress={handleLogin}
+            />
+          )}
           <AuthButton onPress={handleRegister} text="Create Account" />
         </View>
       </ScrollView>
@@ -94,15 +111,15 @@ const styles = StyleSheet.create({
   },
 
   logoContainer: {
-    marginTop: 80,
+    marginTop: Platform.OS === 'ios' ? 80 : 0.07 * Device.height,
     alignItems: 'center',
     width: '100%',
   },
 
   logo: {
-    width: 350,
-    height: 90,
-    resizeMode: 'stretch',
+    width: Platform.OS === 'ios' ? 350 : 0.69 * Device.width,
+    height: Platform.OS === 'ios' ? 90 : 0.1 * Device.height,
+    resizeMode: Platform.OS === 'ios' ? 'stretch' : 'center',
   },
 
   imageContainer: {
@@ -114,7 +131,8 @@ const styles = StyleSheet.create({
 
   image: {
     width: '100%',
-    height: 450,
+    height: Platform.OS === 'ios' ? 450 : 0.6 * Device.height,
+    resizeMode: 'cover', // default value
   },
 
   buttonsContainer: {
@@ -122,8 +140,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     width: '90%',
-    padding: 20,
-    paddingVertical: '7%',
+    padding: Platform.OS === 'ios' ? 20 : 0,
+    paddingHorizontal: Platform.OS === 'ios' ? 0 : 20,
+    paddingVertical: Platform.OS === 'ios' ? '7%' : 0,
+    paddingBottom: Platform.OS === 'ios' ? '7%' : 0.01 * Device.height,
   },
 
   button: {

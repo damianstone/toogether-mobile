@@ -9,7 +9,10 @@ const MemberAvatar = (props) => {
   return (
     <TouchableOpacity onPress={onPress} style={styles.imgContainer}>
       {photos && photos.length >= 1 && (
-        <Image source={{ uri: `${getImage(photos[0].image)}` }} style={styles.img} />
+        <Image
+          source={{ uri: `${getImage(photos[0].image)}` }}
+          style={styles.img}
+        />
       )}
       {!photos ||
         (photos.length === 0 && (

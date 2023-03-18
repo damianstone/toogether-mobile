@@ -12,6 +12,7 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import { StatusBar } from 'expo-status-bar';
 
+import ButtonAndroid from '../../components/UI/ButtonAndroid';
 import AuthButton from '../../components/UI/AuthButton';
 import ImageSelector from '../../components/UI/ImageSelector';
 import Colors from '../../constants/Colors';
@@ -113,7 +114,11 @@ const AddProfilePhotoScreen = (props) => {
           </View>
         ) : (
           <>
-            <Button title="Skip" color={Colors.white} onPress={handleSkip} />
+            {Platform.OS === 'ios' ? (
+              <Button title="Skip" color={Colors.white} onPress={handleSkip} />
+            ) : (
+              <ButtonAndroid title="Skip" onPress={handleSkip} />
+            )}
             <AuthButton text="Continue" onPress={handleAddPhoto} />
           </>
         )}
@@ -154,7 +159,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     width: '65%',
     alignItems: 'center',
-
     marginBottom: 30,
   },
 });
