@@ -8,7 +8,7 @@ import {
   ActivityIndicator,
   KeyboardAvoidingView,
   Alert,
-  Dimensions
+  Dimensions,
 } from 'react-native';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { useDispatch, useSelector } from 'react-redux';
@@ -202,23 +202,23 @@ const styles = StyleSheet.create({
   },
 
   container: {
-    flexGrow: 1, 
-    flexDirection: 'column', 
-    justifyContent: 'space-between', 
+    flexGrow: 1,
+    flexDirection: 'column',
+    justifyContent: 'space-between',
   },
 
   imageContainer: {
     marginVertical: 5,
     alignItems: 'center',
     justifyContent: 'center',
-    height: Platform.OS === 'ios' ? 0.55 * height : 0.6 * height , 
+    height: Platform.OS === 'ios' ? 0.55 * height : 0.6 * height,
   },
 
   // make a dynamic css so for all screens the image will take a 60% of the height of the screen
   image: {
     width: '100%',
-    height: "100%",
-    resizeMode: 'contain'
+    height: '100%',
+    resizeMode: 'contain',
   },
 
   join_input_container: {
@@ -245,5 +245,4 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     width: '100%',
   },
-
 });
