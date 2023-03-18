@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     width: '100%',
     height: Platform.OS === 'ios' ? 44 : 0.06 * Device.height,
-    backgroundColor: Colors.orange,
+    backgroundColor: Platform.OS === 'ios' ? Colors.red : Colors.bgCard,
     borderRadius: 10,
     alignItems: 'center',
     justifyContent: 'center',

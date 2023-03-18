@@ -6,7 +6,7 @@ import {
   StyleSheet,
   ActivityIndicator,
   Platform,
-  Dimensions
+  Dimensions,
 } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { useDispatch, useSelector } from 'react-redux';
@@ -90,7 +90,7 @@ const StartGroupScreen = (props) => {
   }
 
   return (
-    <SafeAreaView style={styles.screen} >
+    <SafeAreaView style={styles.screen}>
       <StatusBar style="light" />
       <View style={styles.container}>
         <View style={styles.imageContainer}>
@@ -155,7 +155,7 @@ const styles = StyleSheet.create({
     marginVertical: 5,
     alignItems: 'center',
     justifyContent: 'center',
-    height: 0.55 * height, 
+    height: Platform.OS === 'ios' ? 0.55 * height : 0.55 * height,
   },
 
   image: {
@@ -167,6 +167,6 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     width: '90%',
     padding: 3,
-    marginBottom: Platform.OS === 'ios' ? 0 : 0.015 * height,
+    marginBottom: Platform.OS === 'ios' ? 0 : 0.15 * height,
   },
 });

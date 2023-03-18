@@ -45,7 +45,7 @@ const GroupScreen = (props) => {
     ? { height: 0.45 * Device.height }
     : { height: 0.35 * Device.height };
   const HEIGHT_MEMBER_CARD_CONTAINER = isOwnerGroup
-    ? { minHeight: 0.5 * Device.height, maxHeight: 0.6 * Device.height }
+    ? { minHeight: 0.4 * Device.height, maxHeight: 0.6 * Device.height }
     : { minHeight: 0.6 * Device.height, maxHeight: 0.7 * Device.height };
 
   const getGroupReducer = useSelector((state) => state.getGroup);

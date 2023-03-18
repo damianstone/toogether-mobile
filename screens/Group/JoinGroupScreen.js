@@ -211,13 +211,14 @@ const styles = StyleSheet.create({
     marginVertical: 5,
     alignItems: 'center',
     justifyContent: 'center',
-    height: 0.55 * height, 
+    height: Platform.OS === 'ios' ? 0.55 * height : 0.6 * height , 
   },
 
   // make a dynamic css so for all screens the image will take a 60% of the height of the screen
   image: {
     width: '100%',
     height: "100%",
+    resizeMode: 'contain'
   },
 
   join_input_container: {
