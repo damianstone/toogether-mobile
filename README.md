@@ -76,7 +76,7 @@ npm install -g eas-cli
 To build the app we can use the following command specifying the channel (env variables) we want to use
 
 ```bash
-expo build:ios --release-channel rocket
+eas build -p ios --profile rocket
 ```
 
 Finally we can make the deployment to the App Store using the build url generated in expo
