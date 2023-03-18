@@ -2,7 +2,7 @@ name: Deployment
 
 on:
   push:
-    branches: [rocket]
+    branches: [deployment-workflow]
   pull_request:
     branches: [rocket]
 
