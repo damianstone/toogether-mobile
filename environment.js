@@ -4,7 +4,9 @@ import { Platform } from 'react-native';
 const getApiUrl = () => {
   const MODE = String(Constants.expoConfig.extra.MODE);
   const IOS_LOCAL_URL = String(Constants.expoConfig.extra.IOS_LOCAL_URL);
-  const ANDROID_LOCAL_URL = String(Constants.expoConfig.extra.ANDROID_LOCAL_URL);
+  const ANDROID_LOCAL_URL = String(
+    Constants.expoConfig.extra.ANDROID_LOCAL_URL
+  );
   const ROCKET_API_URL = String(Constants.expoConfig.extra.ROCKET_API_URL);
 
   const iosDevelop = {

@@ -306,13 +306,14 @@ const MyProfileScreen = (props) => {
                   style={styles.image}
                 />
               )}
-              {(!photos || Object.values(photos).length === 0) && userProfile && (
-                <View style={styles.avatar_view}>
-                  <Text style={styles.avatar_initials}>
-                    {getNameInitials(userProfile.name)}
-                  </Text>
-                </View>
-              )}
+              {(!photos || Object.values(photos).length === 0) &&
+                userProfile && (
+                  <View style={styles.avatar_view}>
+                    <Text style={styles.avatar_initials}>
+                      {getNameInitials(userProfile.name)}
+                    </Text>
+                  </View>
+                )}
             </TouchableOpacity>
             <View style={styles.nameView}>
               {userProfile && userProfile.name && (
