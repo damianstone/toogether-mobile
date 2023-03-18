@@ -1,35 +1,55 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useEffect, useContext } from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
 import { Context } from '../../context/ContextProvider';
 import Colors from '../../constants/Colors';
+import { getUserProfile } from '../../store/actions/user';
 import { getNameInitials, getImage } from '../../utils/getMethods';
 
 import Loader from './Loader';
 
 const Avatar = (props) => {
-  const { profileContext } = useContext(Context);
+  const { onPress } = props;
+  const { profileContext, updateProfileContext } = useContext(Context);
+
+  const dispatch = useDispatch();
+
+  const userProfile = useSelector((state) => state.userGetProfile);
+  const {
+    loading: loadingProfile,
+    error: errorProfile,
+    data: dataProfile,
+  } = userProfile;
+
+  useEffect(() => {
+    if (!dataProfile && !profileContext) {
+      dispatch(getUserProfile());
+    }
+    if (dataProfile) {
+      updateProfileContext(dataProfile);
+    }
+  }, []);
 
   return (
-    <TouchableOpacity
-      onPress={props.onPress}
-      style={styles.imgContainer}>
-      {!profileContext && (
-        <View style={styles.error_avatar_view}>
-          <Loader />
-        </View>
-      )}
-      {profileContext && profileContext.photos.length > 0 && (
+    <TouchableOpacity onPress={onPress} style={styles.imgContainer}>
+      {loadingProfile ||
+        (typeof errorProfile != 'undefined' && (
+          <View style={styles.error_avatar_view}>
+            <Loader />
+          </View>
+        ))}
+      {dataProfile && dataProfile.photos.length > 0 && (
         <View style={styles.avatar_view}>
           <Image
-            source={{ uri: `${getImage(profileContext.photos[0].image)}` }}
+            source={{ uri: `${getImage(dataProfile.photos[0].image)}` }}
             style={styles.img}
           />
         </View>
       )}
-      {profileContext?.photos?.length === 0 && (
+      {dataProfile?.photos?.length === 0 && (
         <View style={styles.avatar_view}>
           <Text style={styles.avatar_initials}>
-            {getNameInitials(profileContext.name)}
+            {getNameInitials(dataProfile.name)}
           </Text>
         </View>
       )}

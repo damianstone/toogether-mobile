@@ -83,7 +83,6 @@ const MyProfileScreen = (props) => {
       checkServerError(errorProfile);
     }
     if (userProfile) {
-      console.log("UPDATE")
       updateProfileContext(userProfile);
     }
   }, [photos, userProfile]);
