@@ -4,11 +4,11 @@ import {
   Image,
   Platform,
   StyleSheet,
-  ScrollView,
   SafeAreaView,
   ActivityIndicator,
   KeyboardAvoidingView,
   Alert,
+  Dimensions
 } from 'react-native';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { useDispatch, useSelector } from 'react-redux';
@@ -23,6 +23,8 @@ import AuthButton from '../../components/UI/AuthButton';
 import AuthInput from '../../components/UI/AuthInput';
 import Colors from '../../constants/Colors';
 import * as g from '../../constants/group';
+
+const { width, height } = Dimensions.get('window');
 
 const FORM_UPDATE = 'FORM_UPDATE';
 
@@ -130,11 +132,7 @@ const JoinGroupScreen = (props) => {
     <SafeAreaView style={styles.screen}>
       <StatusBar style="light" />
       <KeyboardAvoidingView behavior="position">
-        <ScrollView
-          style={styles.scrollview_style}
-          contentContainerStyle={styles.scrollview_content_container}
-          automaticallyAdjustKeyboardInsets
-        >
+        <View style={styles.container}>
           <View style={styles.imageContainer}>
             <Image
               source={require('../../assets/images/hand_join.png')}
@@ -163,7 +161,7 @@ const JoinGroupScreen = (props) => {
               <AuthButton text="Join" onPress={handleJoinGroup} />
             )}
           </View>
-        </ScrollView>
+        </View>
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
@@ -191,72 +189,45 @@ JoinGroupScreen.navigationOptions = (navData) => {
 export default JoinGroupScreen;
 
 const styles = StyleSheet.create({
-  screen: {
-    flex: 1,
-    backgroundColor: Colors.bg,
-    justifyContent: 'space-between',
-    flexDirection: 'column',
-    height: '100%',
-  },
-
   loadingScreen: {
     backgroundColor: Colors.bg,
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
   },
-
-  scrollview_style: {
-    flexGrow: 1,
+  screen: {
+    flex: 1,
     backgroundColor: Colors.bg,
-    paddingBottom: 0,
+    height: '100%',
   },
 
-  scrollview_content_container: {
-    flexDirection: 'column', // inner items will be added vertically
-    flexGrow: 1, // all the available vertical space will be occupied by it
-    justifyContent: 'space-between', // will create the gutter between body and footer
-    paddingBottom: 10, // Add paddingBottom to make space for the fixed container at the bottom
-  },
-
-  join_text_view: {
-    padding: 10,
-  },
-
-  join_text_container: {
-    width: '100%',
-  },
-
-  join_text_big: {
-    color: Colors.white,
-    fontSize: 35,
-    fontWeight: 'bold',
-  },
-
-  join_text_small: {
-    color: Colors.white,
-    fontSize: 25,
+  container: {
+    flexGrow: 1, 
+    flexDirection: 'column', 
+    justifyContent: 'space-between', 
   },
 
   imageContainer: {
     marginVertical: 5,
     alignItems: 'center',
     justifyContent: 'center',
+    height: 0.55 * height, 
   },
 
+  // make a dynamic css so for all screens the image will take a 60% of the height of the screen
   image: {
     width: '100%',
-    height: 465,
+    height: "100%",
   },
 
   join_input_container: {
+    width: '100%',
+    alignSelf: 'center',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: Colors.bg,
-    width: '100%',
     paddingHorizontal: 20,
     padding: 3,
-    marginBottom: Platform.OS === 'ios' ? 0 : 0.015 * Device.height,
+    marginBottom: Platform.OS === 'ios' ? 0 : 0.015 * height,
   },
 
   label: {
@@ -274,21 +245,4 @@ const styles = StyleSheet.create({
     width: '100%',
   },
 
-  join_button_container: {
-    marginVertical: 30,
-    marginBottom: 20,
-    padding: 3,
-    flexDirection: 'row',
-    width: '100%',
-    height: 44,
-    backgroundColor: Colors.orange,
-    borderRadius: 10,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-
-  join_text_button: {
-    color: '#4A4A4A',
-    fontSize: 15,
-  },
 });
