@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { useActionSheet } from '@expo/react-native-action-sheet';
-import { StackActions } from 'react-navigation';
+import { useNavigation } from '@react-navigation/native';
 import {
   getGroup,
   leaveGroup,
@@ -31,6 +31,8 @@ import { getNameInitials, getCardName, getImage } from '../../utils/getMethods';
 import Colors from '../../constants/Colors';
 import ClipBoard from '../../components/UI/ClipBoard';
 import MemberAvatar from '../../components/MemberAvatar';
+
+const navigation = useNavigation();
 
 const GroupScreen = (props) => {
   const { groupContext, isOwnerGroup, updateGroupContext } =
@@ -75,10 +77,8 @@ const GroupScreen = (props) => {
     data: dataRemoveMember,
   } = removeMemberReducer;
 
-  // * this function replaces the first screen on the GroupNavigato stack
-  const replaceAction = StackActions.replace({
-    routeName: 'StartGroup',
-  });
+  // * this function replaces the first screen on the GroupNavigation stack
+  const replaceAction = navigation.replace('StartGroup');
 
   // we need to kepp calling the group if there is any change made by an external member
   useEffect(() => {

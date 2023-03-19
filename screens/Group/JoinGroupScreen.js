@@ -16,7 +16,6 @@ import { StatusBar } from 'expo-status-bar';
 import { Context } from '../../context/ContextProvider';
 import { joinGroup } from '../../store/actions/group';
 import { check400Error, checkServerError } from '../../utils/errors';
-import { StackActions } from 'react-navigation';
 
 import HeaderButtom from '../../components/UI/HeaderButton';
 import AuthButton from '../../components/UI/AuthButton';

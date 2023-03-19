@@ -14,7 +14,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Context } from '../../context/ContextProvider';
 import { createGroup } from '../../store/actions/group';
 import { check400Error, checkServerError } from '../../utils/errors';
-import { StackActions } from 'react-navigation';
+import { useNavigation } from '@react-navigation/native';
 
 import AuthButton from '../../components/UI/AuthButton';
 import Avatar from '../../components/UI/Avatar';
@@ -22,6 +22,8 @@ import Colors from '../../constants/Colors';
 import * as g from '../../constants/group';
 import ButtonAndroid from '../../components/UI/ButtonAndroid';
 import Device from '../../theme/Device';
+
+const navigation = useNavigation();
 
 const StartGroupScreen = (props) => {
   const { groupContext, updateGroupContext } = useContext(Context);
@@ -40,9 +42,7 @@ const StartGroupScreen = (props) => {
   } = createGroupReducer;
 
   // * this function replaces the first screen on the GroupNavigato stack
-  const replaceAction = StackActions.replace({
-    routeName: 'Group',
-  });
+  const replaceAction = navigation.replace('Group');
 
   // * if the user is already in a group
   useEffect(() => {
