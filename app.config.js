@@ -36,7 +36,7 @@ export default () => ({
       },
       permissions: ['ACCESS_FINE_LOCATION', 'CAMERA', 'WRITE_EXTERNAL_STORAGE'],
       package: 'toogether.app',
-      versionCode: 1,
+      versionCode: 2,
     },
     web: {
       favicon: './assets/images/toogether-icon.png',
