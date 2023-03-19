@@ -138,48 +138,56 @@ const LikeNavigator = () => {
   );
 };
 
-const SwipeNavigator = createStackNavigator(
-  {
-    Swipe: SwipeScreen,
-  },
-  {
-    defaultNavigationOptions: defaultNavOptions,
-  }
-);
+const SwipeNavigator = () => {
+  return (
+    <Stack.Navigator
+      screenOptions={{
+        ...defaultNavOptions,
+      }}
+    >
+      <Stack.Screen name="Swipe" component={SwipeScreen} />
+    </Stack.Navigator>
+  );
+};
 
-const MatchNavigator = createStackNavigator(
-  {
-    Chat: ChatNavigator,
-    ProfileModal: ProfileModalScreen,
-  },
-  {
-    mode: 'modal',
-    headerMode: 'none',
-  }
-);
+const MatchNavigator = () => {
+  return (
+    <Stack.Navigator mode="modal" headerMode="none" >
+      <Stack.Screen name="Chat" component={ChatNavigator} />
+      <Stack.Screen name="ProfileModal" component={ProfileModalScreen} />
+    </Stack.Navigator>
+  );
+};
 
-const GroupNavigator = createStackNavigator(
-  {
-    StartGroup: {
-      screen: StartGroupScreen,
-      navigationOptions: {
+const GroupNavigator = () => {
+  return (
+    <Stack.Navigator
+      initialRouteName="StartGroup"
+      screenOptions={{
         ...defaultNavOptions,
         gestureDirection: 'horizontal-inverted',
-      },
-    },
-    JoinGroup: JoinGroupScreen,
-    Group: {
-      screen: GroupScreen,
-      navigationOptions: {
-        ...defaultNavOptions,
-        gestureDirection: 'horizontal',
-      },
-    },
-  },
-  {
-    defaultNavigationOptions: defaultNavOptions,
-  }
-);
+      }}
+    >
+      <Stack.Screen
+        name="StartGroup"
+        component={StartGroupScreen}
+        options={{
+          ...defaultNavOptions,
+          gestureDirection: 'horizontal-inverted',
+        }}
+      />
+      <Stack.Screen name="JoinGroup" component={JoinGroupScreen} />
+      <Stack.Screen
+        name="Group"
+        component={GroupScreen}
+        options={{
+          ...defaultNavOptions,
+          gestureDirection: 'horizontal',
+        }}
+      />
+    </Stack.Navigator>
+  );
+};
 
 // CREAR NAVBAR
 const tabScreenCnfig = {
@@ -283,29 +291,38 @@ const ToogetherTab =
         },
       });
 
-const HomeNavigator = createStackNavigator(
-  {
-    Main: ToogetherTab,
-    ProfileModal: ProfileModalScreen,
-    SwipeMatch: MatchScreen,
-  },
-  {
-    mode: 'modal',
-    headerMode: 'none',
-  }
-);
+      
+const HomeNavigator = () => {
+  return (
+    <Stack.Navigator
+      initialRouteName="Main"
+      screenOptions={{
+        headerShown: false,
+      }}
+      mode="modal"
+    >
+      <Stack.Screen name="Main" component={ToogetherTab} />
+      <Stack.Screen name="ProfileModal" component={ProfileModalScreen} />
+      <Stack.Screen name="SwipeMatch" component={MatchScreen} />
+    </Stack.Navigator>
+  );
+};
 
-const AppNavigator = createStackNavigator(
-  {
-    Swipe: HomeNavigator,
-    Match: MatchNavigator,
-    Group: GroupNavigator,
-    MyProfile: MyProfileNavigatorWithModal,
-  },
-  {
-    headerMode: 'none',
-  }
-);
+const AppNavigator = () => {
+  return (
+    <Stack.Navigator
+      initialRouteName='Swipe'
+      screenOptions={{
+        headerShown: false,
+      }}
+    >
+      <Stack.Screen name="Swipe" component={HomeNavigator} />
+      <Stack.Screen name="Match" component={MatchNavigator} />
+      <Stack.Screen name="Group" component={GroupNavigator} />
+      <Stack.Screen name="MyProfile" component={MyProfileNavigatorWithModal} />
+    </Stack.Navigator>
+  );
+};
 
 const MainNavigator = createSwitchNavigator(
   {
