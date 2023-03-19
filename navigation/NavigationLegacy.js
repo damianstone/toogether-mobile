@@ -1,16 +1,9 @@
 import React from 'react';
 import { Platform, Text, View } from 'react-native';
-// import { createAppContainer, createSwitchNavigator } from 'react-navigation';
-// import { createMaterialBottomTabNavigator } from 'react-navigation-material-bottom-tabs';
-// import { createStackNavigator } from 'react-navigation-stack';
-// import { createBottomTabNavigator } from 'react-navigation-tabs';
-
-import { NavigationContainer } from '@react-navigation/native';
-import { createSwitchNavigator } from '@react-navigation/compat';
-import { createStackNavigator } from '@react-navigation/stack';
-import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-
+import { createAppContainer, createSwitchNavigator } from 'react-navigation';
+import { createMaterialBottomTabNavigator } from 'react-navigation-material-bottom-tabs';
+import { createStackNavigator } from 'react-navigation-stack';
+import { createBottomTabNavigator } from 'react-navigation-tabs';
 import {
   AntDesign,
   Ionicons,
@@ -43,8 +36,6 @@ import LikesScreen from '../screens/Likes/LikesScreen';
 import BlockProfilesScreen from '../screens/BlockProfiles/BlockProfilesScreen';
 import InstagramScreen from '../screens/CreateProfile/InstagramScreen';
 
-const Stack = createStackNavigator();
-
 const defaultNavOptions = {
   headerMode: 'none',
   headerStyle: {
@@ -58,85 +49,92 @@ const defaultNavOptions = {
   headerTitleAlign: 'center',
 };
 
-const AuthNavigator = () => {
-  return (
-    <Stack.Navigator headerMode="none">
-      <Stack.Screen name="AuthStart" component={AuthStartScreen} />
-      <Stack.Screen name="Auth" component={AuthScreen} />
-      <Stack.Screen name="Instagram" component={InstagramScreen} />
-      <Stack.Screen name="Create" component={CreateProfileScreen} />
-      <Stack.Screen name="AddPhoto" component={AddProfilePhotoScreen} />
-      <Stack.Screen name="Success" component={AuthSucess} />
-    </Stack.Navigator>
-  );
-};
+const AuthNavigator = createStackNavigator(
+  {
+    AuthStart: AuthStartScreen,
+    Auth: AuthScreen,
+    Instagram: InstagramScreen,
+    Create: CreateProfileScreen,
+    AddPhoto: AddProfilePhotoScreen,
+    Success: AuthSucess,
+  },
+  {
+    defaultNavigationOptions: {
+      headerShown: false,
+    },
+  }
+);
 
-const MyProfileNavigator = () => {
-  return (
-    <Stack.Navigator
-      screenOptions={{
+const MyProfileNavigator = createStackNavigator(
+  {
+    MyProfile: {
+      screen: MyProfileScreen,
+      navigationOptions: {
+        gestureDirection: 'horizontal-inverted',
+      },
+    },
+    SwipeProfile: {
+      screen: SwipeProfileScreen,
+      navigationOptions: {
+        // get rid the header so then the modal can be displayed with full height
         ...defaultNavOptions,
-      }}
-    >
-      <Stack.Screen
-        name="MyProfile"
-        component={MyProfileScreen}
-        options={{
-          gestureDirection: 'horizontal-inverted',
-        }}
-      />
-      <Stack.Screen
-        name="SwipeProfile"
-        component={SwipeProfileScreen}
-        options={{
-          ...defaultNavOptions,
-          title: 'Profile Preview',
-          gestureDirection: 'horizontal',
-          headerMode: 'none',
-        }}
-      />
-      <Stack.Screen name="EditProfile" component={EditProfileScreen} />
-      <Stack.Screen name="Setting" component={SettingScreen} />
-      <Stack.Screen name="Blocked" component={BlockProfilesScreen} />
-    </Stack.Navigator>
-  );
-};
+        title: 'Profile Preview',
+        gestureDirection: 'horizontal',
+        headerMode: 'none',
+      },
+    },
+    EditProfile: {
+      screen: EditProfileScreen,
+    },
+    Setting: {
+      screen: SettingScreen,
+    },
+    Blocked: {
+      screen: BlockProfilesScreen,
+    },
+  },
+  {
+    defaultNavigationOptions: defaultNavOptions,
+  }
+);
 
-const MyProfileNavigatorWithModal = () => {
-  return (
-    <Stack.Navigator mode="modal" headerMode="none" >
-      <Stack.Screen name="MyProfile" component={MyProfileNavigator} />
-      <Stack.Screen name="ProfileModal" component={ProfileModalScreen} />
-    </Stack.Navigator>
-  );
-};
+const MyProfileNavigatorWithModal = createStackNavigator(
+  {
+    MyProfile: MyProfileNavigator,
+    ProfileModal: ProfileModalScreen,
+  },
+  {
+    mode: 'modal',
+    headerMode: 'none',
+  }
+);
 
-const ChatNavigator = () => {
-  return (
-    <Stack.Navigator
-      screenOptions={{
+const ChatNavigator = createStackNavigator(
+  {
+    Chat: ChatScreen,
+    SwipeProfile: {
+      screen: SwipeProfileScreen,
+      navigationOptions: {
+        // get rid the header so then the modal can be displayed with full height
         ...defaultNavOptions,
         gestureDirection: 'horizontal',
         title: null,
-      }}
-    >
-      <Stack.Screen name="Chat" component={ChatScreen} />
-      <Stack.Screen name="SwipeProfile" component={SwipeProfileScreen} />
-    </Stack.Navigator>
-  );
-};
+      },
+    },
+  },
+  {
+    defaultNavigationOptions: defaultNavOptions,
+  }
+);
 
-const LikeNavigator = () => {
-  return (
-    <Stack.Navigator
-      screenOptions={{
-        ...defaultNavOptions,
-      }}
-    >
-      <Stack.Screen name="Likes" component={LikesScreen} />
-    </Stack.Navigator>
-  );
-};
+const LikeNavigator = createStackNavigator(
+  {
+    Likes: LikesScreen,
+  },
+  {
+    defaultNavigationOptions: defaultNavOptions,
+  }
+);
 
 const SwipeNavigator = createStackNavigator(
   {
@@ -318,12 +316,4 @@ const MainNavigator = createSwitchNavigator(
   }
 );
 
-function App() {
-  return (
-    <NavigationContainer>
-      <MainNavigator/>
-    </NavigationContainer>
-  );
-}
-
-export default App;
+export default createAppContainer(MainNavigator);
