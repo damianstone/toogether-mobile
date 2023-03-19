@@ -1,7 +1,8 @@
 name: Deployment
 
 on:
-  workflow_dispatch:
+  push:
+    branches: [android-deployment]
 
 jobs:
   build:
