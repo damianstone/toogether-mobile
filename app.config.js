@@ -36,7 +36,7 @@ export default () => ({
       },
       permissions: ['ACCESS_FINE_LOCATION', 'CAMERA', 'WRITE_EXTERNAL_STORAGE'],
       package: 'toogether.app',
-      versionCode: 202303191, // Using the date + T (try number) format YYYYMMDDT as version code.
+      versionCode: 202303192, // Using the date + T (try number) format YYYYMMDDT as version code.
     },
     web: {
       favicon: './assets/images/toogether-icon.png',
