@@ -1,10 +1,10 @@
-name: Deployment
+name: IOS deployment
 
 on:
   workflow_dispatch:
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
