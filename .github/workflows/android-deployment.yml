@@ -54,8 +54,8 @@ jobs:
       - name: Install dependencies
         run: npm install --legacy-peer-deps
 
-      # - name: Build for Android
-      #   run: eas build -p android --profile rocket 
+      - name: Build for Android
+        run: eas build -p android --profile rocket 
 
       - name: Android deployment
         run: eas submit -p android --latest --profile rocket
