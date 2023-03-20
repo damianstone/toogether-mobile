@@ -15,18 +15,13 @@ The following command allows you to install all the requirements using the exact
 npm ci
 ```
 
-Further you need to create the .env with **LOCAL_URL** to connect to the back-end (i.e. the backend ip:port)
+### Create an .env file
+In the root of the project create an `.env` file with the following variables
 
 ```
-# .env
-LOCAL_URL=http://127.0.0.1:8000
-```
-
-On **Android** the default localhost doesn't work, therefore it needs to be changed to the loopback ip
-
-```
-# .env
-LOCAL_URL=http://10.0.2.2:8000
+MODE = development
+IOS_LOCAL_URL = http://127.0.0.1:8000
+ANDROID_LOCAL_URL = http://10.0.2.2:8000
 ```
 
 ### Style standards
@@ -81,7 +76,7 @@ npm install -g eas-cli
 To build the app we can use the following command specifying the channel (env variables) we want to use
 
 ```bash
-expo build:ios --release-channel rocket
+eas build -p ios --profile rocket
 ```
 
 Finally we can make the deployment to the App Store using the build url generated in expo

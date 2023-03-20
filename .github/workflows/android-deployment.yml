@@ -1,0 +1,60 @@
+name: Android deployment
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '14.x'
+          cache: npm
+
+      - name: Create eas.json
+        run: |
+          cat > eas.json << EOF
+          {
+            "cli": {
+              "version": ">= 2.7.0"
+            },
+            "build": {
+              "rocket": {
+                "env": {
+                  "MODE": "rocket",
+                  "ROCKET_API_URL": "${{ secrets.ROCKET_API_URL }}"
+                }
+              }
+            },
+            "submit": {
+              "rocket": {
+                "android": {
+                  "track": "internal",
+                  "releaseStatus": "draft"
+                }
+              }
+            }
+          }
+          EOF
+
+      - name: Setup EAS
+        uses: expo/expo-github-action@v8
+        with:
+          eas-version: latest
+          token: ${{ secrets.EXPO_TOKEN }}
+
+      - name: Install dependencies
+        run: npm install --legacy-peer-deps
+
+      - name: Build for Android
+        run: eas build -p android --profile rocket 
+
+      - name: Android deployment
+        run: eas submit -p android --latest --profile rocket

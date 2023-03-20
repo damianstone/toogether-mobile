@@ -3,11 +3,10 @@ import {
   Image,
   View,
   Button,
-  ScrollView,
   StyleSheet,
-  Alert,
   ActivityIndicator,
   Platform,
+  Dimensions,
 } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { useDispatch, useSelector } from 'react-redux';
@@ -22,6 +21,9 @@ import Colors from '../../constants/Colors';
 import * as g from '../../constants/group';
 import ButtonAndroid from '../../components/UI/ButtonAndroid';
 import Device from '../../theme/Device';
+import { SafeAreaView } from 'react-native-safe-area-context';
+
+const { width, height } = Dimensions.get('window');
 
 const StartGroupScreen = (props) => {
   const { groupContext, updateGroupContext } = useContext(Context);
@@ -88,19 +90,14 @@ const StartGroupScreen = (props) => {
   }
 
   return (
-    <View style={styles.screen}>
+    <SafeAreaView style={styles.screen}>
       <StatusBar style="light" />
-      <ScrollView
-        style={styles.scrollview_style}
-        contentContainerStyle={styles.scrollview_content_container}
-      >
-        <View>
-          <View style={styles.imageContainer}>
-            <Image
-              source={require('../../assets/images/hands.png')}
-              style={styles.image}
-            />
-          </View>
+      <View style={styles.container}>
+        <View style={styles.imageContainer}>
+          <Image
+            source={require('../../assets/images/hands.png')}
+            style={styles.image}
+          />
         </View>
         <View style={styles.buttonsContainer}>
           {Platform.OS === 'ios' ? (
@@ -114,8 +111,8 @@ const StartGroupScreen = (props) => {
           )}
           <AuthButton onPress={handleCreateGroup} text="Create group" />
         </View>
-      </ScrollView>
-    </View>
+      </View>
+    </SafeAreaView>
   );
 };
 
@@ -135,70 +132,41 @@ StartGroupScreen.navigationOptions = (navData) => {
 export default StartGroupScreen;
 
 const styles = StyleSheet.create({
-  screen: {
-    backgroundColor: Colors.bg,
-    justifyContent: 'space-between',
-    flexDirection: 'column',
-    height: '100%',
-  },
   loadingScreen: {
-    backgroundColor: Colors.bg,
     flex: 1,
+    backgroundColor: Colors.bg,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  gradient: {
+
+  screen: {
     flex: 1,
-    width: '100%',
+    backgroundColor: Colors.bg,
     height: '100%',
-    justifyContent: 'center',
-    alignItems: 'center',
   },
 
-  scrollview_style: {
+  container: {
     flexGrow: 1,
-    backgroundColor: Colors.bg,
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-    paddingBottom: 0,
-  },
-
-  scrollview_content_container: {
-    flexDirection: 'column', // inner items will be added vertically
-    flexGrow: 1, // all the available vertical space will be occupied by it
-    justifyContent: 'space-between', // will create the gutter between body and footer
+    flexDirection: 'column',
+    justifyContent: 'space-between',
   },
 
   imageContainer: {
-    marginTop: 20,
-    marginVertical: 20,
+    marginVertical: 5,
     alignItems: 'center',
     justifyContent: 'center',
+    height: Platform.OS === 'ios' ? 0.55 * height : 0.55 * height,
   },
 
   image: {
     width: '100%',
-    height: 400,
+    height: '100%',
   },
 
   buttonsContainer: {
     alignSelf: 'center',
-    justifyContent: 'center',
-    alignItems: 'center',
     width: '90%',
     padding: 3,
-    marginBottom: Platform.OS === 'ios' ? 0 : 0.015 * Device.height,
-  },
-
-  button: {
-    fontSize: 60,
-    color: Colors.white,
-  },
-
-  inputsContainer: {
-    padding: 3,
-    width: '80%',
-    marginVertical: 0,
-    alignSelf: 'center',
+    marginBottom: Platform.OS === 'ios' ? 0 : 0.15 * height,
   },
 });

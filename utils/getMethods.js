@@ -1,6 +1,9 @@
-import getEnvVars from '../environment';
+import { Platform } from 'react-native';
+import Device from '../theme/Device';
+import { ENV } from '../environment';
 
-const { API_URL, DEVELOP } = getEnvVars();
+const API_URL = ENV.API_URL;
+const MODE = ENV.MODE;
 
 /*
  * This function takes a name as input and returns its initials. If the name is empty or undefined, it returns "N" as the initials.
@@ -26,7 +29,7 @@ export const getCardName = (name) => {
 
 export const getImage = (backend_image) => {
   let image;
-  if (DEVELOP) {
+  if (MODE === 'development') {
     image = `${API_URL}${backend_image}`;
   } else {
     image = `${backend_image}`;
