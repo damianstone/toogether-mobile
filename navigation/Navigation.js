@@ -135,7 +135,7 @@ const LikeNavigator = () => {
         ...defaultNavOptions,
       }}
     >
-      <Stack.Screen name="Likes" component={LikesScreen} />
+      <Stack.Screen name="LikesScreen" component={LikesScreen} />
     </Stack.Navigator>
   );
 };
@@ -147,7 +147,7 @@ const SwipeNavigator = () => {
         ...defaultNavOptions,
       }}
     >
-      <Stack.Screen name="Swipe" component={SwipeScreen} />
+      <Stack.Screen name="SwipeScreen" component={SwipeScreen} />
     </Stack.Navigator>
   );
 };
@@ -307,7 +307,7 @@ const ToogetherTab = () => {
       inactiveColor={Colors.white}
     > 
       <Tab.Screen 
-        name="Swipe" 
+        name="SwipeNavigator" 
         component={SwipeNavigator}
         options={{
           tabBarIcon: (tabInfo) => {
@@ -360,12 +360,12 @@ const HomeNavigator = () => {
 const AppNavigator = () => {
   return (
     <Stack.Navigator
-      initialRouteName='Swipe'
+      initialRouteName='SwipeScreen'
       screenOptions={{
         headerShown: false,
       }}
     >
-      <Stack.Screen name="Swipe" component={HomeNavigator} />
+      <Stack.Screen name="SwipeScreen" component={HomeNavigator} />
       <Stack.Screen name="Match" component={MatchNavigator} />
       <Stack.Screen name="Group" component={GroupNavigator} />
       <Stack.Screen name="MyProfile" component={MyProfileNavigatorWithModal} />
