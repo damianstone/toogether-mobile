@@ -1,10 +1,11 @@
-import * as c from '../../constants/user';
-import * as w from '../../constants/chat';
-import axios from 'axios';
+import { Platform } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import getEnvVars from '../../environment';
+import axios from 'axios';
+import Constants from 'expo-constants';
+import * as b from '../../constants/block';
+import { ENV } from '../../environment';
 
-const { API_URL: BASE_URL } = getEnvVars();
+const BASE_URL = ENV.API_URL;
 //CHAT TEST
 export const getUserChatProfile = (profile_id) => {
   return async (dispatch) => {
