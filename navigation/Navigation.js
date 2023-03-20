@@ -106,7 +106,7 @@ const MyProfileNavigator = () => {
 
 const MyProfileNavigatorWithModal = () => {
   return (
-    <Stack.Navigator mode="modal" headerMode="none" >
+    <Stack.Navigator presentation="modal" headerMode="none" >
       <Stack.Screen name="MyProfile" component={MyProfileNavigator} />
       <Stack.Screen name="ProfileModal" component={ProfileModalScreen} />
     </Stack.Navigator>
@@ -154,7 +154,7 @@ const SwipeNavigator = () => {
 
 const MatchNavigator = () => {
   return (
-    <Stack.Navigator mode="modal" headerMode="none" >
+    <Stack.Navigator presentation="modal" headerMode="none" >
       <Stack.Screen name="Chat" component={ChatNavigator} />
       <Stack.Screen name="ProfileModal" component={ProfileModalScreen} />
     </Stack.Navigator>
@@ -348,7 +348,7 @@ const HomeNavigator = () => {
       screenOptions={{
         headerShown: false,
       }}
-      mode="modal"
+      presentation="modal"
     >
       <Stack.Screen name="Main" component={ToogetherTab} />
       <Stack.Screen name="ProfileModal" component={ProfileModalScreen} />
