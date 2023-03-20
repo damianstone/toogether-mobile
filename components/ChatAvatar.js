@@ -29,8 +29,7 @@ const ChatAvatar = (props) => {
           style={
             isInGroup ? styles.groupImageContainer : styles.singleImageContainer
           }
-          onPress={onShowProfile}
-        >
+          onPress={onShowProfile}>
           {isInGroup ? (
             <View style={styles.counterCircle}>
               <Text style={styles.counterCircleText}>
@@ -46,8 +45,7 @@ const ChatAvatar = (props) => {
   return (
     <TouchableOpacity
       style={styles.noPhotoContainer}
-      onPress={props.onShowProfile}
-    >
+      onPress={props.onShowProfile}>
       <Text style={{ color: Colors.white, fontSize: 20 }}>
         {getNameInitials(matchedProfile.name)}
       </Text>
@@ -90,10 +88,10 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     padding: 5,
   },
-
+  //Changed width and height to 50 to match figma
   singleImageContainer: {
-    width: 60,
-    height: 60,
+    width: 50,
+    height: 50,
     borderRadius: 100,
     justifyContent: 'center',
     alignItems: 'center',
@@ -106,10 +104,10 @@ const styles = StyleSheet.create({
     height: '100%',
     borderRadius: 100,
   },
-
+  //Changed width and height to 50 to match figma
   noPhotoContainer: {
-    width: 60,
-    height: 60,
+    width: 50,
+    height: 50,
     borderRadius: 100,
     justifyContent: 'center',
     alignItems: 'center',

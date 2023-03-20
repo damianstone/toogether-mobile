@@ -110,15 +110,18 @@ const styles = StyleSheet.create({
     height: '100%',
     width: '100%',
   },
+
   text: {
     fontSize: 20,
     color: 'white',
   },
+
   titleContainer: {
     flexDirection: 'row',
     width: '100%',
     height: 50,
   },
+
   matched_Name: {
     fontSize: 18,
     color: 'white',
@@ -137,6 +140,7 @@ const styles = StyleSheet.create({
     height: '90%',
     width: '100%',
   },
+
   messages: {
     backgroundColor: Colors.bgCard,
     padding: 10,
