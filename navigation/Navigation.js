@@ -43,6 +43,8 @@ import LikesScreen from '../screens/Likes/LikesScreen';
 import BlockProfilesScreen from '../screens/BlockProfiles/BlockProfilesScreen';
 import InstagramScreen from '../screens/CreateProfile/InstagramScreen';
 
+import Deck from '../screens/Swipe/Deck';
+
 const Stack = createStackNavigator();
 
 const defaultNavOptions = {

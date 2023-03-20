@@ -34,8 +34,8 @@ export const userLocation = () => {
       } else {
         location = {
           coords: {
-            latitude: 37.785834,
-            longitude: -122.406417,
+            latitude: 37.4220936,
+            longitude: -122.083922,
           },
         };
       }
