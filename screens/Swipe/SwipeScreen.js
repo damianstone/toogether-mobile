@@ -33,7 +33,6 @@ import styles from './styles';
 */
 
 const SwipeScreen = (props) => {
-  console.log(props.route.params);
   const topProfile = props.route.params.topProfile;
 
   const dispatch = useDispatch();
