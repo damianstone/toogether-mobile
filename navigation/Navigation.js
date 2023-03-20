@@ -190,108 +190,155 @@ const GroupNavigator = () => {
 };
 
 // CREAR NAVBAR
-const tabScreenCnfig = {
-  // CONFIG
-  Swipe: {
-    screen: SwipeNavigator, // STACK NAVIGATOR
-    navigationOptions: {
-      // poner un icono en la navbar
-      tabBarIcon: (tabInfo) => {
-        return (
-          <Ionicons name="home-outline" size={25} color={tabInfo.tintColor} />
-        );
-      },
-      tabBarColor: Colors.orange,
-      tabBarLabel: Platform.OS === 'android' ? <Text>Swipe</Text> : 'Swipe',
-    },
-  },
-  Likes: {
-    screen: LikeNavigator, // STACK NAVIGATOR
-    navigationOptions: {
-      tabBarIcon: (tabInfo) => {
-        return <AntDesign color={tabInfo.tintColor} name="hearto" size={25} />;
-      },
-      tabBarColor: Colors.orange,
-      tabBarLabel: Platform.OS === 'android' ? <Text>Likes</Text> : 'Likes',
-    },
-  },
-  Group: {
-    screen: GroupNavigator,
-    navigationOptions: ({ navigation }) => {
-      return {
-        tabBarIcon: (tabInfo) => {
-          return (
-            <MaterialCommunityIcons
-              name="account-group"
-              size={25}
-              color={tabInfo.tintColor}
-            />
-          );
-        },
-        tabBarColor: Colors.orange,
-        tabBarLabel:
-          Platform.OS === 'android' ? <Text>Create group</Text> : null,
-        tabBarOptions: {
-          showLabel: false,
-          activeTintColor: Colors.orange,
-          style: {
-            backgroundColor:
-              navigation.state.routes &&
-              navigation.state.routes[navigation.state.index].routeName ===
-                'Group'
-                ? Colors.bgCard
-                : Colors.bg,
-            borderTopWidth: 0,
-          },
-          tabStyle: {
-            backgroundColor:
-              navigation.state.routes &&
-              navigation.state.routes[navigation.state.index].routeName ===
-                'Group'
-                ? Colors.bgCard
-                : Colors.bg,
-            statusBarStyle: Colors.bg,
-          },
-        },
-      };
-    },
-  },
-};
+// const tabScreenCnfig = {
+//   // CONFIG
+//   Swipe: {
+//     screen: SwipeNavigator, // STACK NAVIGATOR
+//     navigationOptions: {
+//       // poner un icono en la navbar
+//       tabBarIcon: (tabInfo) => {
+//         return (
+//           <Ionicons name="home-outline" size={25} color={tabInfo.tintColor} />
+//         );
+//       },
+//       tabBarColor: Colors.orange,
+//       tabBarLabel: Platform.OS === 'android' ? <Text>Swipe</Text> : 'Swipe',
+//     },
+//   },
+//   Likes: {
+//     screen: LikeNavigator, // STACK NAVIGATOR
+//     navigationOptions: {
+//       tabBarIcon: (tabInfo) => {
+//         return <AntDesign color={tabInfo.tintColor} name="hearto" size={25} />;
+//       },
+//       tabBarColor: Colors.orange,
+//       tabBarLabel: Platform.OS === 'android' ? <Text>Likes</Text> : 'Likes',
+//     },
+//   },
+//   Group: {
+//     screen: GroupNavigator,
+//     navigationOptions: ({ navigation }) => {
+//       return {
+//         tabBarIcon: (tabInfo) => {
+//           return (
+//             <MaterialCommunityIcons
+//               name="account-group"
+//               size={25}
+//               color={tabInfo.tintColor}
+//             />
+//           );
+//         },
+//         tabBarColor: Colors.orange,
+//         tabBarLabel:
+//           Platform.OS === 'android' ? <Text>Create group</Text> : null,
+//         tabBarOptions: {
+//           showLabel: false,
+//           activeTintColor: Colors.orange,
+//           style: {
+//             backgroundColor:
+//               navigation.state.routes &&
+//               navigation.state.routes[navigation.state.index].routeName ===
+//                 'Group'
+//                 ? Colors.bgCard
+//                 : Colors.bg,
+//             borderTopWidth: 0,
+//           },
+//           tabStyle: {
+//             backgroundColor:
+//               navigation.state.routes &&
+//               navigation.state.routes[navigation.state.index].routeName ===
+//                 'Group'
+//                 ? Colors.bgCard
+//                 : Colors.bg,
+//             statusBarStyle: Colors.bg,
+//           },
+//         },
+//       };
+//     },
+//   },
+// };
 
 // NAVBAR
 // Poner secciones en la parte de abajo, en otras palabras lo que en el celular seria la navbar
-const ToogetherTab =
-  Platform.OS === 'android'
-    ? createMaterialBottomTabNavigator(tabScreenCnfig, {
-        activeTintColor: Colors.orange,
-        showLabel: false,
-        shifting: true, // la navbar cambia de color al seleccion alguna opcion
-        barStyle: {
-          backgroundColor: Colors.bg,
-          statusBarStyle: Colors.bg,
-        },
-        style: {
-          backgroundColor: Colors.bg,
-          borderTopWidth: 0,
-        },
-      })
-    : createBottomTabNavigator(tabScreenCnfig, {
-        tabBarOptions: {
-          showLabel: false,
-          shifting: true,
-          activeTintColor: Colors.orange,
-          tabStyle: {
-            backgroundColor: Colors.bg,
-            statusBarStyle: Colors.bg,
-          },
-          style: {
-            backgroundColor: Colors.bg,
-            borderTopWidth: 0,
-          },
-        },
-      });
+// const ToogetherTab =
+//   Platform.OS === 'android'
+//     ? createMaterialBottomTabNavigator(tabScreenCnfig, {
+//         activeTintColor: Colors.orange,
+//         showLabel: false,
+//         shifting: true, // la navbar cambia de color al seleccion alguna opcion
+//         barStyle: {
+//           backgroundColor: Colors.bg,
+//           statusBarStyle: Colors.bg,
+//         },
+//         style: {
+//           backgroundColor: Colors.bg,
+//           borderTopWidth: 0,
+//         },
+//       })
+//     : createBottomTabNavigator(tabScreenCnfig, {
+//         tabBarOptions: {
+//           showLabel: false,
+//           shifting: true,
+//           activeTintColor: Colors.orange,
+//           tabStyle: {
+//             backgroundColor: Colors.bg,
+//             statusBarStyle: Colors.bg,
+//           },
+//           style: {
+//             backgroundColor: Colors.bg,
+//             borderTopWidth: 0,
+//           },
+//         },
+//       });
 
-      
+const Tab = Platform.OS === 'android'
+? createMaterialBottomTabNavigator()
+: createBottomTabNavigator();
+
+const ToogetherTab = () => {
+  return (
+    <Tab.Navigator
+      shifting={true}
+      sceneAnimationEnabled={false}
+      barStyle={{ backgroundColor: Colors.bg }}
+      activeColor={Colors.orange}
+      inactiveColor={Colors.white}
+    > 
+      <Tab.Screen 
+        name="Swipe" 
+        component={SwipeNavigator}
+        options={{
+          tabBarIcon: (tabInfo) => {
+            return (
+              <Ionicons name="home-outline" size={25} color={tabInfo.tintColor} />
+            );
+          },
+          tabBarColor: Colors.orange,
+          tabBarLabel: Platform.OS === 'android' ? <Text>Swipe</Text> : 'Swipe',
+        }} 
+      />
+      <Tab.Screen 
+        name="Likes" 
+        component={LikeNavigator}
+        options={{
+          tabBarIcon: (tabInfo) => {
+            return <AntDesign color={tabInfo.tintColor} name="hearto" size={25} />;
+          },
+          tabBarColor: Colors.orange,
+          tabBarLabel: Platform.OS === 'android' ? <Text>Likes</Text> : 'Likes',
+        }} 
+      />
+      <Tab.Screen 
+        name="Group" 
+        component={GroupNavigator} 
+        options={{ 
+          
+        }}
+      />
+    </Tab.Navigator>
+  );
+}
+
 const HomeNavigator = () => {
   return (
     <Stack.Navigator

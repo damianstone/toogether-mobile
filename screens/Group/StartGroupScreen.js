@@ -23,9 +23,9 @@ import * as g from '../../constants/group';
 import ButtonAndroid from '../../components/UI/ButtonAndroid';
 import Device from '../../theme/Device';
 
-const navigation = useNavigation();
-
 const StartGroupScreen = (props) => {
+  const navigation = useNavigation();
+
   const { groupContext, updateGroupContext } = useContext(Context);
 
   /* set to true to have time to check if there is a group in the context and be able to redirect 

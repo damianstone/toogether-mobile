@@ -32,9 +32,9 @@ import Colors from '../../constants/Colors';
 import ClipBoard from '../../components/UI/ClipBoard';
 import MemberAvatar from '../../components/MemberAvatar';
 
-const navigation = useNavigation();
-
 const GroupScreen = (props) => {
+  const navigation = useNavigation();
+
   const { groupContext, isOwnerGroup, updateGroupContext } =
     useContext(Context);
 
