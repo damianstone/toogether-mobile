@@ -305,6 +305,29 @@ const ToogetherTab = () => {
       barStyle={{ backgroundColor: Colors.bg }}
       activeColor={Colors.orange}
       inactiveColor={Colors.white}
+      tabBarOptions={({ navigation }) => {
+        return {
+          showLabel: false,
+          activeTintColor: Colors.orange,
+          style: {
+            backgroundColor:
+              navigation.getState.routes &&
+              navigation.getState.routes[navigation.getState.index].routeName ===
+                'Group'
+                ? Colors.bgCard
+                : Colors.bg,
+            borderTopWidth: 0,
+          },
+          tabStyle: {
+            backgroundColor:
+              navigation.getState.routes &&
+              navigation.getState.routes[navigation.getState.index].routeName ===
+                'Group'
+                ? Colors.bgCard
+                : Colors.bg,
+            statusBarStyle: Colors.bg,
+          },}}
+        }
     > 
       <Tab.Screen 
         name="SwipeNavigator" 
@@ -333,8 +356,21 @@ const ToogetherTab = () => {
       <Tab.Screen 
         name="Group" 
         component={GroupNavigator} 
-        options={{ 
-          
+        options={({ navigation }) => { 
+          return {
+            tabBarIcon: (tabInfo) => {
+              return (
+                <MaterialCommunityIcons
+                  name="account-group"
+                  size={25}
+                  color={tabInfo.color}
+                />
+              );
+            },
+            tabBarColor: Colors.orange,
+            tabBarLabel:
+              Platform.OS === 'android' ? <Text>Create group</Text> : null,
+          };
         }}
       />
     </Tab.Navigator>
