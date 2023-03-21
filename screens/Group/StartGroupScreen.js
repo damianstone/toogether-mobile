@@ -24,7 +24,7 @@ import ButtonAndroid from '../../components/UI/ButtonAndroid';
 import Device from '../../theme/Device';
 
 const StartGroupScreen = (props) => {
-  const navigation = useNavigation();
+  // const navigation = useNavigation();
 
   const { groupContext, updateGroupContext } = useContext(Context);
 
@@ -33,7 +33,6 @@ const StartGroupScreen = (props) => {
   const [transitionLoading, setTransitionLoading] = useState(true);
 
   const dispatch = useDispatch();
-
   const createGroupReducer = useSelector((state) => state.createGroup);
   const {
     loading: loadingCreate,
@@ -42,7 +41,7 @@ const StartGroupScreen = (props) => {
   } = createGroupReducer;
 
   // * this function replaces the first screen on the GroupNavigato stack
-  const replaceAction = navigation.replace('Group');
+  const replaceAction = props.navigation.reset('Group');
 
   // * if the user is already in a group
   useEffect(() => {

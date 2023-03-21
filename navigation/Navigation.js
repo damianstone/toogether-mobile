@@ -1,5 +1,5 @@
 import React from 'react';
-import { Platform, Text, View } from 'react-native';
+import { Platform, Switch, Text, View } from 'react-native';
 // import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 // import { createMaterialBottomTabNavigator } from 'react-navigation-material-bottom-tabs';
 // import { createStackNavigator } from 'react-navigation-stack';
@@ -48,7 +48,7 @@ import Deck from '../screens/Swipe/Deck';
 const Stack = createStackNavigator();
 
 const defaultNavOptions = {
-  // headerMode: 'none',
+  // headerMode: "none",
   headerStyle: {
     backgroundColor: Colors.bg,
     shadowColor: 'transparent',
@@ -62,7 +62,7 @@ const defaultNavOptions = {
 
 const AuthNavigator = () => {
   return (
-    <Stack.Navigator headerMode="none">
+    <Stack.Navigator headerShown={false}>
       <Stack.Screen name="AuthStart" component={AuthStartScreen} />
       <Stack.Screen name="Auth" component={AuthScreen} />
       <Stack.Screen name="Instagram" component={InstagramScreen} />
@@ -350,7 +350,7 @@ const ToogetherTab = () => {
       // sceneAnimationEnabled={false}
       initialRoute="SwipeNavigator"
       barStyle={{ backgroundColor: Colors.bg }}
-      activeColor={Colors.white}
+      activeColor={Platform.OS === 'ios' ? Colors.orange : Colors.white}
       inactiveColor={Colors.white}
       // tabBarOptions={tabBarConfig}
       // screenOptions={tabScreenConfig}
