@@ -17,6 +17,7 @@ const StartupScreen = (props) => {
       const userData = JSON.parse(await AsyncStorage.getItem('@userData'));
 
       if (userData && userData.has_account) {
+        console.log(userData);
         props.navigation.navigate('Swipe');
       } else {
         props.navigation.navigate('AuthStart');
@@ -27,6 +28,13 @@ const StartupScreen = (props) => {
       //   console.log('NO AUTH');
       //   props.navigation.navigate('AuthStart');
       // }
+      // -------------------------------------------------
+      // -------------------------------------------------
+
+      // console.log(userData);
+
+      // -------------------------------------------------
+      // -------------------------------------------------
     };
     tryLogin();
   }, []);

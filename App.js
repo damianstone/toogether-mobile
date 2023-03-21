@@ -11,45 +11,92 @@ import * as SplashScreen from 'expo-splash-screen';
 import ToogetherNavigation from './navigation/Navigation';
 import { ContextProvider } from './context/ContextProvider';
 import store from './store/store';
+import { View } from 'react-native';
 
 SplashScreen.preventAutoHideAsync();
+// const fetchFonts = async () => {
 
-const fetchFonts = async () => {
-  const loadedFonts = await Font.loadAsync({
-    'poppins-regular': require('./assets/fonts/Poppins-Regular.ttf'),
-    'poppins-bold': require('./assets/fonts/Poppins-Bold.ttf'),
-  });
-  return loadedFonts;
-};
+//   const loadedFonts = await Font.loadAsync({
+//     'poppins-regular': require('./assets/fonts/Poppins-Regular.ttf'),
+//     'poppins-bold': require('./assets/fonts/Poppins-Bold.ttf'),
+//   });
+//   return loadedFonts;
+// };
 
 const App = () => {
-  const [fontLoaded, setFontLoaded] = useState(false);
+  //   const [fontLoaded, setFontLoaded] = useState(false);
 
-  const stopSplash = async () => {
-    try {
-      await SplashScreen.hideAsync();
-      setFontLoaded(true);
-    } catch (error) {
-      console.log(error);
+  //   const stopSplash = async () => {
+  //     try {
+  //       await SplashScreen.hideAsync();
+  //       setFontLoaded(true);
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   };
+
+  //   if (!fontLoaded) {
+  //     return (
+  //       <AppLoading
+  //         startAsync={fetchFonts}
+  //         onError={(err) => console.warn(err)}
+  //         onFinish={stopSplash}
+  //         autoHideSplash
+  //       />
+  //     );
+  //   }
+
+  // -------------------------------------------
+  // -------------------------------------------
+  const [appIsReady, setAppIsReady] = useState(false);
+
+  useEffect(() => {
+    const prepare = async () => {
+      try {
+        // Pre-load fonts, make any API calls you need to do here
+        await Font.loadAsync({
+          'poppins-regular': require('./assets/fonts/Poppins-Regular.ttf'),
+          'poppins-bold': require('./assets/fonts/Poppins-Bold.ttf'),
+        });
+      } catch (e) {
+        console.warn(e);
+      } finally {
+        // Tell the application to render
+        setAppIsReady(true);
+      }
     }
-  };
 
-  if (!fontLoaded) {
-    return (
-      <AppLoading
-        startAsync={fetchFonts}
-        onError={(err) => console.warn(err)}
-        onFinish={stopSplash}
-        autoHideSplash
-      />
-    );
+    prepare();
+  }, []);
+
+  const onLayoutRootView = useCallback(async () => {
+    if (appIsReady) {
+      await SplashScreen.hideAsync();
+    }
+  }, [appIsReady]);
+
+  if (!appIsReady) {
+    return null;
+    // return (
+    //   <AppLoading
+    //     startAsync={fetchFonts}
+    //     onError={(err) => console.warn(err)}
+    //     onFinish={onLayoutRootView}
+    //     autoHideSplash
+    //   />
+    // );
   }
+
+
+  // -------------------------------------------
+  // -------------------------------------------
 
   return (
     <Provider store={store}>
       <ActionSheetProvider>
         <ContextProvider>
-          <ToogetherNavigation theme="dark" />
+          <View onLayout={onLayoutRootView} />
+          <ToogetherNavigation onLayout={onLayoutRootView} theme="dark" />
         </ContextProvider>
       </ActionSheetProvider>
     </Provider>
