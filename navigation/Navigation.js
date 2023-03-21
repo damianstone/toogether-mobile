@@ -48,7 +48,7 @@ import Deck from '../screens/Swipe/Deck';
 const Stack = createStackNavigator();
 
 const defaultNavOptions = {
-  headerMode: 'none',
+  // headerMode: 'none',
   headerStyle: {
     backgroundColor: Colors.bg,
     shadowColor: 'transparent',
@@ -178,7 +178,10 @@ const GroupNavigator = () => {
           gestureDirection: 'horizontal-inverted',
         }}
       />
-      <Stack.Screen name="JoinGroup" component={JoinGroupScreen} />
+      <Stack.Screen 
+        name="JoinGroup" 
+        component={JoinGroupScreen} 
+      />
       <Stack.Screen
         name="Group"
         component={GroupScreen}
@@ -293,29 +296,47 @@ const GroupNavigator = () => {
 //         },
 //       });
 
-const tabBarConfig = ({ navigation }) => {
-  return {
-    showLabel: false,
-    activeTintColor: Colors.orange,
-    style: {
-      backgroundColor:
-        navigation.getState.routes &&
-        navigation.getState.routes[navigation.getState.index].routeName ===
-          'Group'
-          ? Colors.bgCard
-          : Colors.bg,
-      borderTopWidth: 0,
-    },
-    tabStyle: {
-      backgroundColor:
-        navigation.getState.routes &&
-        navigation.getState.routes[navigation.getState.index].routeName ===
-          'Group'
-          ? Colors.bgCard
-          : Colors.bg,
-      statusBarStyle: Colors.bg,
-    },
-  };
+const tabScreenConfig = ({ route, navigation }) => {
+  switch (route.name) {
+    case 'SwipeNavigator':
+      return {}
+    case 'Likes':
+      return {}
+    case 'Group':
+      return {}
+  }
+}
+
+const tabBarConfig = ({ route, navigation }) => {
+  switch (route.name) {
+    case 'SwipeNavigator':
+      return {}
+    case 'Likes':
+      return {}
+    case 'Group':
+      return {
+        // showLabel: false,
+        // activeTintColor: Colors.orange,
+        // style: {
+        //   backgroundColor:
+        //     navigation.getState.routes &&
+        //     navigation.getState.routes[navigation.getState.index].routeName ===
+        //       'Group'
+        //       ? Colors.bgCard
+        //       : Colors.bg,
+        //   borderTopWidth: 0,
+        // },
+        // tabBarStyle: {
+        //   backgroundColor:
+        //     navigation.getState.routes &&
+        //     navigation.getState.routes[navigation.getState.index].routeName ===
+        //       'Group'
+        //       ? Colors.bgCard
+        //       : Colors.bg,
+        //   statusBarStyle: Colors.bg,
+        // },
+      };
+  }
 };
 
 const Tab = Platform.OS === 'android'
@@ -326,11 +347,13 @@ const ToogetherTab = () => {
   return (
     <Tab.Navigator
       shifting={true}
-      sceneAnimationEnabled={false}
+      // sceneAnimationEnabled={false}
+      initialRoute="SwipeNavigator"
       barStyle={{ backgroundColor: Colors.bg }}
-      activeColor={Colors.orange}
+      activeColor={Colors.white}
       inactiveColor={Colors.white}
-      tabBarOptions={tabBarConfig}
+      // tabBarOptions={tabBarConfig}
+      // screenOptions={tabScreenConfig}
     > 
       <Tab.Screen 
         name="SwipeNavigator" 
@@ -338,7 +361,11 @@ const ToogetherTab = () => {
         options={{
           tabBarIcon: (tabInfo) => {
             return (
-              <Ionicons name="home-outline" size={25} color={tabInfo.tintColor} />
+              <Ionicons 
+                name="home-outline" 
+                size={25} 
+                color={tabInfo.color} 
+              />
             );
           },
           tabBarColor: Colors.orange,
@@ -350,7 +377,11 @@ const ToogetherTab = () => {
         component={LikeNavigator}
         options={{
           tabBarIcon: (tabInfo) => {
-            return <AntDesign color={tabInfo.tintColor} name="hearto" size={25} />;
+            return <AntDesign 
+                    color={tabInfo.color} 
+                    name="hearto" 
+                    size={25} 
+                  />;
           },
           tabBarColor: Colors.orange,
           tabBarLabel: Platform.OS === 'android' ? <Text>Likes</Text> : 'Likes',
@@ -359,21 +390,19 @@ const ToogetherTab = () => {
       <Tab.Screen 
         name="Group" 
         component={GroupNavigator} 
-        options={({ navigation }) => { 
-          return {
-            tabBarIcon: (tabInfo) => {
-              return (
-                <MaterialCommunityIcons
-                  name="account-group"
-                  size={25}
-                  color={tabInfo.color}
-                />
-              );
-            },
-            tabBarColor: Colors.orange,
-            tabBarLabel:
-              Platform.OS === 'android' ? <Text>Create group</Text> : null,
-          };
+        options={{ 
+          tabBarIcon: (tabInfo) => {
+            return (
+              <MaterialCommunityIcons
+                name="account-group"
+                size={25}
+                color={tabInfo.color}
+              />
+            );
+          },
+          tabBarColor: Colors.orange,
+          tabBarLabel:
+            Platform.OS === 'android' ? <Text>Create group</Text> : 'Group',
         }}
       />
     </Tab.Navigator>
