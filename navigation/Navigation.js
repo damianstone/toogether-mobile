@@ -388,7 +388,7 @@ const ToogetherTab = () => {
         }} 
       />
       <Tab.Screen 
-        name="Group" 
+        name="GroupNavigator" 
         component={GroupNavigator} 
         options={{ 
           tabBarIcon: (tabInfo) => {
@@ -435,7 +435,7 @@ const AppNavigator = () => {
     >
       <Stack.Screen name="SwipeScreen" component={HomeNavigator} />
       <Stack.Screen name="Match" component={MatchNavigator} />
-      <Stack.Screen name="Group" component={GroupNavigator} />
+      <Stack.Screen name="GroupNavigator" component={GroupNavigator} />
       <Stack.Screen name="MyProfile" component={MyProfileNavigatorWithModal} />
     </Stack.Navigator>
   );

@@ -15,6 +15,7 @@ import { Context } from '../../context/ContextProvider';
 import { createGroup } from '../../store/actions/group';
 import { check400Error, checkServerError } from '../../utils/errors';
 import { useNavigation } from '@react-navigation/native';
+import { StackActions } from '@react-navigation/native';
 
 import AuthButton from '../../components/UI/AuthButton';
 import Avatar from '../../components/UI/Avatar';
@@ -33,6 +34,7 @@ const StartGroupScreen = (props) => {
   const [transitionLoading, setTransitionLoading] = useState(true);
 
   const dispatch = useDispatch();
+
   const createGroupReducer = useSelector((state) => state.createGroup);
   const {
     loading: loadingCreate,
@@ -41,7 +43,7 @@ const StartGroupScreen = (props) => {
   } = createGroupReducer;
 
   // * this function replaces the first screen on the GroupNavigato stack
-  const replaceAction = props.navigation.reset('Group');
+  const replaceAction = StackActions.replace("Group", {});
 
   // * if the user is already in a group
   useEffect(() => {

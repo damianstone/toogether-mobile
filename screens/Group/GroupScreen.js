@@ -33,7 +33,7 @@ import ClipBoard from '../../components/UI/ClipBoard';
 import MemberAvatar from '../../components/MemberAvatar';
 
 const GroupScreen = (props) => {
-  const navigation = useNavigation();
+  // const navigation = useNavigation();
 
   const { groupContext, isOwnerGroup, updateGroupContext } =
     useContext(Context);
@@ -78,7 +78,7 @@ const GroupScreen = (props) => {
   } = removeMemberReducer;
 
   // * this function replaces the first screen on the GroupNavigation stack
-  const replaceAction = navigation.replace('StartGroup');
+  const replaceAction = props.navigation.replace('StartGroup');
 
   // we need to kepp calling the group if there is any change made by an external member
   useEffect(() => {
