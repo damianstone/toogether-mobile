@@ -293,6 +293,31 @@ const GroupNavigator = () => {
 //         },
 //       });
 
+const tabBarConfig = ({ navigation }) => {
+  return {
+    showLabel: false,
+    activeTintColor: Colors.orange,
+    style: {
+      backgroundColor:
+        navigation.getState.routes &&
+        navigation.getState.routes[navigation.getState.index].routeName ===
+          'Group'
+          ? Colors.bgCard
+          : Colors.bg,
+      borderTopWidth: 0,
+    },
+    tabStyle: {
+      backgroundColor:
+        navigation.getState.routes &&
+        navigation.getState.routes[navigation.getState.index].routeName ===
+          'Group'
+          ? Colors.bgCard
+          : Colors.bg,
+      statusBarStyle: Colors.bg,
+    },
+  };
+};
+
 const Tab = Platform.OS === 'android'
 ? createMaterialBottomTabNavigator()
 : createBottomTabNavigator();
@@ -305,29 +330,7 @@ const ToogetherTab = () => {
       barStyle={{ backgroundColor: Colors.bg }}
       activeColor={Colors.orange}
       inactiveColor={Colors.white}
-      tabBarOptions={({ navigation }) => {
-        return {
-          showLabel: false,
-          activeTintColor: Colors.orange,
-          style: {
-            backgroundColor:
-              navigation.getState.routes &&
-              navigation.getState.routes[navigation.getState.index].routeName ===
-                'Group'
-                ? Colors.bgCard
-                : Colors.bg,
-            borderTopWidth: 0,
-          },
-          tabStyle: {
-            backgroundColor:
-              navigation.getState.routes &&
-              navigation.getState.routes[navigation.getState.index].routeName ===
-                'Group'
-                ? Colors.bgCard
-                : Colors.bg,
-            statusBarStyle: Colors.bg,
-          },}}
-        }
+      tabBarOptions={tabBarConfig}
     > 
       <Tab.Screen 
         name="SwipeNavigator" 
