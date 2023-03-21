@@ -17,10 +17,20 @@ const StartupScreen = (props) => {
       const userData = JSON.parse(await AsyncStorage.getItem('@userData'));
 
       if (userData && userData.has_account) {
-        console.log(userData);
         props.navigation.navigate('Swipe');
+        console.log(userData);
       } else {
         props.navigation.navigate('AuthStart');
+      }
+
+      if (userData && userData.has_account) {
+        const decoded = jwt_decode(userData.token);
+        
+        if (decoded.exp < (Date.now() / 1000)) {
+          console.log('Hacer logout');
+        } else {
+          console.log('Hacer Refresh');
+        }
       }
 
       // // if there is no user data

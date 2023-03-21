@@ -96,7 +96,7 @@ const App = () => {
       <ActionSheetProvider>
         <ContextProvider>
           <View onLayout={onLayoutRootView} />
-          <ToogetherNavigation onLayout={onLayoutRootView} theme="dark" />
+          <ToogetherNavigation theme="dark" />
         </ContextProvider>
       </ActionSheetProvider>
     </Provider>
