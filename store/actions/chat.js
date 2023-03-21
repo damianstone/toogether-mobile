@@ -2,17 +2,16 @@ import { Platform } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import Constants from 'expo-constants';
-import * as w from '../../constants/chat';
-import * as c from '../../constants/user';
+import * as c from '../../constants/chat';
 import { ENV } from '../../environment';
 import chats from '../../data/chats.json';
 
 const BASE_URL = ENV.API_URL;
 //CHAT TEST
-export const getUserChatProfile = (profile_id) => {
+export const getReceiverProfile = (profile_id) => {
   return async (dispatch) => {
     try {
-      dispatch({ type: c.USER_GET_CHAT_PROFILE_REQUEST });
+      dispatch({ type: c.GET_RECEIVER_PROFILE_REQUEST });
       let id;
 
       const userData = JSON.parse(await AsyncStorage.getItem('@userData'));
@@ -29,12 +28,12 @@ export const getUserChatProfile = (profile_id) => {
       });
 
       dispatch({
-        type: c.USER_GET_CHAT_PROFILE_SUCCESS,
+        type: c.GET_RECEIVER_PROFILE_SUCCESS,
         payload: data,
       });
     } catch (error) {
       dispatch({
-        type: c.USER_GET_CHAT_PROFILE_FAIL,
+        type: c.GET_RECEIVER_PROFILE_FAIL,
         payload: error,
       });
     }
@@ -45,7 +44,7 @@ export const getUserChatProfile = (profile_id) => {
 export const listChats = () => {
   return async (dispatch) => {
     try {
-      dispatch({ type: w.LIST_CHATS_REQUEST });
+      dispatch({ type: c.LIST_CHATS_REQUEST });
 
       const userData = JSON.parse(await AsyncStorage.getItem('@userData'));
 
@@ -63,12 +62,12 @@ export const listChats = () => {
       const data = chats;
 
       dispatch({
-        type: w.LIST_CHATS_SUCCESS,
+        type: c.LIST_CHATS_SUCCESS,
         payload: data,
       });
     } catch (error) {
       dispatch({
-        type: w.LIST_CHATS_FAIL,
+        type: c.LIST_CHATS_FAIL,
         payload: error,
       });
     }
@@ -78,7 +77,7 @@ export const listChats = () => {
 export const getChat = (id) => {
   return async (dispatch) => {
     try {
-      dispatch({ type: w.GET_CHAT_REQUEST });
+      dispatch({ type: c.GET_CHAT_REQUEST });
 
       const userData = JSON.parse(await AsyncStorage.getItem('@userData'));
 
@@ -96,12 +95,12 @@ export const getChat = (id) => {
 
       const data = chats.results.find((chat) => chat.id === id);
       dispatch({
-        type: w.GET_CHAT_SUCCESS,
+        type: c.GET_CHAT_SUCCESS,
         payload: data,
       });
     } catch (error) {
       dispatch({
-        type: w.GET_CHAT_FAIL,
+        type: c.GET_CHAT_FAIL,
         payload: error,
       });
     }
@@ -110,7 +109,7 @@ export const getChat = (id) => {
 export const deleteChat = (id) => {
   return async (dispatch) => {
     try {
-      dispatch({ type: w.DELETE_CHAT_REQUEST });
+      dispatch({ type: c.DELETE_CHAT_REQUEST });
 
       const userData = JSON.parse(await AsyncStorage.getItem('@userData'));
 
@@ -127,12 +126,12 @@ export const deleteChat = (id) => {
       });
 
       dispatch({
-        type: w.DELETE_CHAT_SUCCESS,
+        type: c.DELETE_CHAT_SUCCESS,
         payload: data,
       });
     } catch (error) {
       dispatch({
-        type: w.DELETE_CHAT_FAIL,
+        type: c.DELETE_CHAT_FAIL,
         payload: error,
       });
     }

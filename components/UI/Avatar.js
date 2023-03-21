@@ -6,13 +6,11 @@ import Colors from '../../constants/Colors';
 import { getUserProfile } from '../../store/actions/user';
 import { getNameInitials, getImage } from '../../utils/getMethods';
 //Chat
-import { getUserChatProfile } from '../../store/actions/chat';
-
+import { getReceiverProfile } from '../../store/actions/chat';
 import Loader from './Loader';
 
 const Avatar = (props) => {
-  const { onPress } = props;
-  const { id } = props;
+  const { onPress, id } = props;
   const { profileContext, updateProfileContext } = useContext(Context);
 
   const dispatch = useDispatch();
@@ -24,12 +22,12 @@ const Avatar = (props) => {
     data: dataProfile,
   } = userProfile;
   //Chat profile
-  const chatProfile = useSelector((state) => state.userChatProfile);
+  const receiverProfile = useSelector((state) => state.receiverProfile);
   const {
-    loading: loadingChatProfile,
-    error: errorChatProfile,
-    data: dataChatProfile,
-  } = chatProfile;
+    loading: loadingReceiverProfile,
+    error: errorReceiverProfile,
+    data: dataReceiverProfile,
+  } = receiverProfile;
   ////////////////
   useEffect(() => {
     if (!dataProfile && !profileContext /* chat test */ && !id) {
@@ -43,7 +41,7 @@ const Avatar = (props) => {
   //Chat profile
   useEffect(() => {
     if (id) {
-      dispatch(getUserChatProfile(id));
+      dispatch(getReceiverProfile(id));
     }
   }, [id]);
 
@@ -52,23 +50,25 @@ const Avatar = (props) => {
     return (
       <TouchableOpacity onPress={onPress} style={styles.imgContainer}>
         {loadingProfile ||
-          (typeof errorChatProfile != 'undefined' && (
+          (typeof errorReceiverProfile != 'undefined' && (
             <View style={styles.error_avatar_view}>
               <Loader />
             </View>
           ))}
-        {dataChatProfile && dataChatProfile.photos.length > 0 && (
+        {dataReceiverProfile && dataReceiverProfile.photos.length > 0 && (
           <View style={styles.avatar_view}>
             <Image
-              source={{ uri: `${getImage(dataChatProfile.photos[0].image)}` }}
+              source={{
+                uri: `${getImage(dataReceiverProfile.photos[0].image)}`,
+              }}
               style={styles.img}
             />
           </View>
         )}
-        {dataChatProfile?.photos?.length === 0 && (
+        {dataReceiverProfile?.photos?.length === 0 && (
           <View style={styles.avatar_view}>
             <Text style={styles.avatar_initials}>
-              {getNameInitials(dataChatProfile.name)}
+              {getNameInitials(dataReceiverProfile.name)}
             </Text>
           </View>
         )}

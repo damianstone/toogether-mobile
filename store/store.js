@@ -13,8 +13,6 @@ import {
   userRegisterReducer,
   userDeleteReducer,
   userGetProfileReducer,
-  //chat test
-  userChatProfileReducer,
 } from './reducers/user';
 import {
   listBlockedProfilesReducer,
@@ -38,10 +36,12 @@ import {
   removeLikeReducer,
   listMatchesReducer,
   deleteMatchReducer,
-  // chats
+} from './reducers/swipe';
+import {
   listChatsReducer,
   getChatReducer,
-} from './reducers/swipe';
+  getReceiverProfile,
+} from './reducers/chat';
 
 const reducer = combineReducers({
   // profile API
@@ -54,8 +54,6 @@ const reducer = combineReducers({
   userCreateProfile: userCreateProfileReducer,
   userUpdateProfile: userUpdateProfileReducer,
   userGetProfile: userGetProfileReducer,
-  //chat test
-  userChatProfile: userChatProfileReducer,
   // photos API
   userAddPhoto: userAddPhotoReducer,
   userRemovePhoto: userRemovePhotoReducer,
@@ -83,6 +81,7 @@ const reducer = combineReducers({
   // Chats Test
   listChats: listChatsReducer,
   getChat: getChatReducer,
+  receiverProfile: getReceiverProfile,
 });
 
 const initialState = {};

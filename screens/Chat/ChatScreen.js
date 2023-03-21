@@ -12,7 +12,6 @@ import {
   TextInput,
 } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
-import { exist } from '../../utils/checks';
 import chat from '../../data/chats.json';
 import HeaderButtom from '../../components/UI/HeaderButton';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
@@ -23,12 +22,13 @@ import ActivityModal from '../../components/UI/ActivityModal';
 import Avatar from '../../components/UI/Avatar';
 import Colors from '../../constants/Colors';
 import sendimg from '../../assets/images/send-button.png';
-import { getUserProfile } from '../../store/actions/user';
 
 const ChatScreen = (props) => {
-  const chat_id = props.navigation.getParam('chatId');
+  const chatId = props.navigation.getParam('chatId');
+  const { profileContext, updateProfileContext } = useContext(Context);
   const [refreshing, setRefreshing] = useState(false);
   const [localLoading, setLocalLoading] = useState(false);
+  const [chatMessage, setChatMessage] = useState('');
   const dispatch = useDispatch();
   const chatReducer = useSelector((state) => state.getChat);
   const {
@@ -36,12 +36,10 @@ const ChatScreen = (props) => {
     loading: loadingChat,
     data: dataChat,
   } = chatReducer;
-  const { profileContext, updateProfileContext } = useContext(Context);
-  const userData = profileContext;
 
   useEffect(() => {
-    dispatch(getChat(chat_id));
-  }, [chat_id]);
+    dispatch(getChat(chatId));
+  }, [chatId]);
 
   if (loadingChat || localLoading) {
     <ActivityModal
@@ -59,7 +57,9 @@ const ChatScreen = (props) => {
     return (
       <View
         style={
-          item.sender.id === userData.id ? styles.byMessages : styles.messages
+          item.sender.id === profileContext.id
+            ? styles.myMessage
+            : styles.senderMessage
         }>
         <Text style={styles.allMessages}>{item.text}</Text>
       </View>
@@ -79,30 +79,16 @@ const ChatScreen = (props) => {
         <View style={{ flex: 2, flexDirection: 'row', padding: 10 }}>
           <TextInput
             inputMode="text,url"
-            style={{
-              backgroundColor: Colors.white,
-              borderRadius: 50,
-              marginTop: 2.5,
-              marginBottom: 10,
-              paddingLeft: 10,
-              width: '85%',
-            }}
+            style={styles.inputMessage}
             placeholder="Type a message"
             placeholderTextColor={Colors.placeholder}
+            onChangeText={(text) => {
+              setChatMessage(text);
+            }}
+            value={chatMessage}
           />
-          <TouchableOpacity
-            style={{
-              backgroundColor: Colors.orange,
-              borderRadius: 50,
-              width: 40,
-              height: 40,
-              marginLeft: 15,
-              justifyContent: 'center',
-            }}>
-            <Image
-              source={sendimg}
-              style={{ width: '100%', height: '100%', alignSelf: 'center' }}
-            />
+          <TouchableOpacity style={styles.imgContainer}>
+            <Image source={sendimg} style={styles.image} />
           </TouchableOpacity>
           <View />
         </View>
@@ -110,71 +96,6 @@ const ChatScreen = (props) => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  screen: {
-    flex: 2,
-    backgroundColor: Colors.bg,
-    height: '100%',
-    width: '100%',
-  },
-
-  titleContainer: {
-    flexDirection: 'row',
-    width: '100%',
-    height: 50,
-  },
-
-  matched_Name: {
-    fontSize: 18,
-    color: 'white',
-    marginLeft: 30,
-    marginTop: 5,
-    paddingBottom: 5,
-    fontWeight: 'bold',
-  },
-
-  messages_Container: {
-    flex: 1,
-    marginTop: 10,
-    backgroundColor: Colors.bg,
-    height: '90%',
-    width: '100%',
-    marginBottom: 20,
-  },
-
-  messages: {
-    fontSize: 16,
-    lineHeight: '100%',
-    backgroundColor: Colors.blue,
-    padding: 10,
-    margin: 10,
-    borderRadius: 10,
-    width: '70%',
-    alignSelf: 'flex-start',
-  },
-
-  byMessages: {
-    backgroundColor: Colors.orange,
-    padding: 10,
-    margin: 10,
-    borderRadius: 10,
-    width: '70%',
-    alignSelf: 'flex-end',
-  },
-
-  allMessages: {
-    fontSize: 16,
-    color: Colors.white,
-  },
-
-  sendMessage: {
-    backgroundColor: Colors.blue,
-    height: '10%',
-    width: '100%',
-    alignItems: 'center',
-  },
-});
 
 ChatScreen.navigationOptions = (navData) => {
   const handleShowProfile = (profileid, isInGroup) => {
@@ -220,5 +141,92 @@ ChatScreen.navigationOptions = (navData) => {
     ),
   };
 };
+
+const styles = StyleSheet.create({
+  screen: {
+    flex: 2,
+    backgroundColor: Colors.bg,
+    height: '100%',
+    width: '100%',
+  },
+
+  titleContainer: {
+    flexDirection: 'row',
+    width: '100%',
+    height: 50,
+  },
+
+  matched_Name: {
+    fontSize: 18,
+    color: 'white',
+    marginLeft: 30,
+    marginTop: 5,
+    paddingBottom: 5,
+    fontWeight: 'bold',
+  },
+
+  messages_Container: {
+    flex: 1,
+    marginTop: 10,
+    backgroundColor: Colors.bg,
+    height: '90%',
+    width: '100%',
+    marginBottom: 20,
+  },
+
+  senderMessage: {
+    fontSize: 16,
+    lineHeight: '100%',
+    backgroundColor: Colors.blue,
+    padding: 10,
+    margin: 10,
+    borderRadius: 10,
+    width: '70%',
+    alignSelf: 'flex-start',
+  },
+
+  myMessage: {
+    backgroundColor: Colors.orange,
+    padding: 10,
+    margin: 10,
+    borderRadius: 10,
+    width: '70%',
+    alignSelf: 'flex-end',
+  },
+
+  allMessages: {
+    fontSize: 16,
+    color: Colors.white,
+  },
+
+  sendMessage: {
+    backgroundColor: Colors.blue,
+    height: '10%',
+    width: '100%',
+    alignItems: 'center',
+  },
+
+  inputMessage: {
+    backgroundColor: Colors.white,
+    borderRadius: 50,
+    marginTop: 2.5,
+    marginBottom: 10,
+    paddingLeft: 10,
+    width: '85%',
+  },
+  imgContainer: {
+    backgroundColor: Colors.orange,
+    borderRadius: 50,
+    width: 40,
+    height: 40,
+    marginLeft: 15,
+    justifyContent: 'center',
+  },
+  image: {
+    width: '100%',
+    height: '100%',
+    alignSelf: 'center',
+  },
+});
 
 export default ChatScreen;

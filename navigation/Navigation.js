@@ -114,6 +114,15 @@ const ChatNavigator = createStackNavigator(
   {
     Chats: ChatsScreen,
     Chat: ChatScreen,
+    SwipeProfile: {
+      screen: SwipeProfileScreen,
+      navigationOptions: {
+        //get rid the header so then the modal can be displayed with full height
+        ...defaultNavOptions,
+        gestureDirection: 'horizontal',
+        title: null,
+      },
+    },
   },
   {
     defaultNavigationOptions: defaultNavOptions,

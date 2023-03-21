@@ -247,24 +247,3 @@ export const userListPhotosReducer = (state = {}, action) => {
       return state;
   }
 };
-
-// ---------------------------------USER_CHAT_PROFILE REDUCERS ---------------------------------
-export const userChatProfileReducer = (state = {}, action) => {
-  switch (action.type) {
-    case c.USER_GET_CHAT_PROFILE_REQUEST:
-      return {
-        loading: true,
-      };
-    case c.USER_GET_CHAT_PROFILE_SUCCESS:
-      return {
-        data: { ...action.payload },
-      };
-    case c.USER_GET_CHAT_PROFILE_FAIL:
-      return {
-        loading: false,
-        error: action.payload,
-      };
-    default:
-      return state;
-  }
-};

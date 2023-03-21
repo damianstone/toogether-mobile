@@ -412,7 +412,7 @@ export const addPhoto = (image) => {
           },
         }
       );
-      dispatch({
+      dispat1({
         type: c.USER_ADD_PHOTO_SUCCESS,
         payload: data,
       });
