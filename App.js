@@ -29,7 +29,7 @@ const App = () => {
       } finally {
         setAppIsReady(true);
       }
-    }
+    };
 
     prepare();
   }, []);
