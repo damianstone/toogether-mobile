@@ -56,7 +56,7 @@ const ChatsScreen = (props) => {
   const reload = useCallback(async () => {
     setLocalLoading(true);
     try {
-      await dispatch(listMatches());
+      dispatch(listMatches());
     } catch (err) {
       console.log(err);
     }
@@ -165,6 +165,7 @@ const ChatsScreen = (props) => {
     return (
       <View style={styles.new_matches}>
         <ChatAvatar
+          hasBorder={true}
           onShowProfile={() => handleShowChat(item, matchedData)}
           matchedProfile={matchedProfile}
           matchedData={matchedData}
@@ -195,6 +196,8 @@ const ChatsScreen = (props) => {
       <View style={styles.container}>
         <View>
           <ChatAvatar
+            hasBorder={false}
+            isChat={true}
             onShowProfile={() =>
               handleShowProfile(matchedProfile, matchedData.is_group_match)
             }
@@ -214,9 +217,10 @@ const ChatsScreen = (props) => {
           onPress={() => handleShowChat(item, matchedData)}
           style={styles.cardContainer}>
           <View style={styles.chat_preview}>
-            <Text style={styles.matchedName}>{matchedProfile.name}</Text>
+            <Text style={styles.matched_name}>{matchedProfile.name}</Text>
             <Text style={styles.last_message}>{item.messages[0].text}</Text>
           </View>
+          <View style={styles.divider} />
         </TouchableOpacity>
       </View>
     );
@@ -289,15 +293,16 @@ const styles = StyleSheet.create({
 
   title: {
     color: 'white',
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: 'bold',
-    marginTop: 15,
+    marginTop: 24,
+    marginLeft: 15,
   },
 
   new_matches: {
     overflow: 'hidden',
-    marginTop: 5,
-    marginLeft: 5,
+    marginTop: 10,
+    marginLeft: 10,
     flexDirection: 'row',
     backgroundColor: Colors.bg,
   },
@@ -322,24 +327,15 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.bg,
   },
 
-  match_image: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
-    borderWidth: 2,
-    borderColor: Colors.orange,
-    margin: 10,
-  },
-
   container: {
     flexDirection: 'row',
     flex: 2,
     marginBottom: 15,
   },
 
-  matchedName: {
+  matched_name: {
     color: Colors.white,
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: 'bold',
     justifyContent: 'center',
   },
@@ -351,7 +347,7 @@ const styles = StyleSheet.create({
   },
 
   last_message: {
-    color: Colors.white,
+    color: Colors.lightGray,
     marginTop: 5,
     fontSize: 14,
     justifyContent: 'center',
@@ -361,6 +357,21 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.bg,
     borderRadius: 10,
     width: '100%',
+  },
+
+  bottom_border: {
+    borderBottomColor: Colors.lightGray,
+    borderBottomWidth: 0.5,
+    width: 50,
+    marginTop: 10,
+    height: 50,
+  },
+  divider: {
+    borderBottomWidth: 0.5,
+    borderBottomColor: 'white',
+    width: '85%',
+    marginTop: 20,
+    marginLeft: -40,
   },
 });
 

@@ -18,6 +18,8 @@ const ChatAvatar = (props) => {
     matchedProfileHasPhoto,
     matchedProfilePhoto,
     onShowProfile,
+    hasBorder,
+    isChat,
   } = props;
 
   if (matchedProfileHasPhoto) {
@@ -44,7 +46,11 @@ const ChatAvatar = (props) => {
 
   return (
     <TouchableOpacity
-      style={styles.noPhotoContainer}
+      style={[
+        styles.noPhotoContainer,
+        hasBorder && styles.hasBorder,
+        isChat && styles.chat,
+      ]}
       onPress={props.onShowProfile}>
       <Text style={{ color: Colors.white, fontSize: 20 }}>
         {getNameInitials(matchedProfile.name)}
@@ -111,7 +117,19 @@ const styles = StyleSheet.create({
     borderRadius: 100,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: Colors.orange,
+    backgroundColor: Colors.bgCard || null,
+
     marginRight: 20,
+  },
+  //If the match has no messages, the avatar will have a border
+  hasBorder: {
+    borderColor: Colors.orange,
+    borderWidth: 2,
+  },
+
+  chat: {
+    width: 65,
+    height: 65,
+    borderRadius: 100,
   },
 });

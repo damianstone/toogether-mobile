@@ -190,13 +190,11 @@ const AuthStartScreen = (props) => {
         behavior={Platform.OS === 'ios' ? 'position' : 'height'}
         keyboardVerticalOffset={
           Platform.OS === 'ios' ? undefined : -0.3 * Device.height
-        }
-      >
+        }>
         <ScrollView
           style={styles.scrollview_style}
           contentContainerStyle={styles.scrollview_content_container}
-          automaticallyAdjustKeyboardInsets
-        >
+          automaticallyAdjustKeyboardInsets>
           <View style={styles.auth_input_container}>
             <AuthInput
               id="email"

@@ -2,8 +2,10 @@ import { Platform } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import Constants from 'expo-constants';
-import * as b from '../../constants/block';
+import * as w from '../../constants/chat';
+import * as c from '../../constants/user';
 import { ENV } from '../../environment';
+import chats from '../../data/chats.json';
 
 const BASE_URL = ENV.API_URL;
 //CHAT TEST
@@ -40,7 +42,6 @@ export const getUserChatProfile = (profile_id) => {
 };
 
 // -------------------------------- CHAT --------------------------------
-import chats from '../../data/chats.json';
 export const listChats = () => {
   return async (dispatch) => {
     try {

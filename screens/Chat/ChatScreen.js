@@ -22,6 +22,7 @@ import { Context } from '../../context/ContextProvider';
 import ActivityModal from '../../components/UI/ActivityModal';
 import Avatar from '../../components/UI/Avatar';
 import Colors from '../../constants/Colors';
+import sendimg from '../../assets/images/send-button.png';
 import { getUserProfile } from '../../store/actions/user';
 
 const ChatScreen = (props) => {
@@ -69,7 +70,7 @@ const ChatScreen = (props) => {
       <View style={styles.messages_Container}>
         <FlatList
           inverted={true}
-          data={chat.results[0].messages.reverse()}
+          data={chat.results[0].messages}
           keyExtractor={(item) => item.id.toString()}
           renderItem={renderMessages}
         />
@@ -77,12 +78,12 @@ const ChatScreen = (props) => {
       <View style={styles.sendMessage}>
         <View style={{ flex: 2, flexDirection: 'row', padding: 10 }}>
           <TextInput
+            inputMode="text,url"
             style={{
               backgroundColor: Colors.white,
               borderRadius: 10,
               margin: 10,
               width: '85%',
-              color: 'white',
             }}
             placeholder="Type a message"
             placeholderTextColor={Colors.placeholder}
@@ -92,9 +93,12 @@ const ChatScreen = (props) => {
               backgroundColor: Colors.orange,
               borderRadius: 100,
               margin: 10,
-              width: '15%',
+              width: 30,
             }}>
-            <Text style={{ color: 'white' }}>Send</Text>
+            <Image
+              source={sendimg}
+              style={{ width: '100%', height: '100%', alignSelf: 'center' }}
+            />
           </TouchableOpacity>
           <View />
         </View>
@@ -134,8 +138,6 @@ const styles = StyleSheet.create({
   messages_Container: {
     flex: 1,
     marginTop: 10,
-    borderBottomColor: Colors.placeholder,
-    borderBottomWidth: 1,
     backgroundColor: Colors.bg,
     height: '90%',
     width: '100%',
