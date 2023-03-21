@@ -61,7 +61,7 @@ const ChatScreen = (props) => {
         style={
           item.sender.id === userData.id ? styles.byMessages : styles.messages
         }>
-        <Text style={{ color: 'white' }}>{item.text}</Text>
+        <Text style={styles.allMessages}>{item.text}</Text>
       </View>
     );
   };
@@ -81,8 +81,10 @@ const ChatScreen = (props) => {
             inputMode="text,url"
             style={{
               backgroundColor: Colors.white,
-              borderRadius: 10,
-              margin: 10,
+              borderRadius: 50,
+              marginTop: 2.5,
+              marginBottom: 10,
+              paddingLeft: 10,
               width: '85%',
             }}
             placeholder="Type a message"
@@ -91,9 +93,11 @@ const ChatScreen = (props) => {
           <TouchableOpacity
             style={{
               backgroundColor: Colors.orange,
-              borderRadius: 100,
-              margin: 10,
-              width: 30,
+              borderRadius: 50,
+              width: 40,
+              height: 40,
+              marginLeft: 15,
+              justifyContent: 'center',
             }}>
             <Image
               source={sendimg}
@@ -115,11 +119,6 @@ const styles = StyleSheet.create({
     width: '100%',
   },
 
-  text: {
-    fontSize: 20,
-    color: 'white',
-  },
-
   titleContainer: {
     flexDirection: 'row',
     width: '100%',
@@ -129,7 +128,7 @@ const styles = StyleSheet.create({
   matched_Name: {
     fontSize: 18,
     color: 'white',
-    marginLeft: 15,
+    marginLeft: 30,
     marginTop: 5,
     paddingBottom: 5,
     fontWeight: 'bold',
@@ -141,17 +140,18 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.bg,
     height: '90%',
     width: '100%',
+    marginBottom: 20,
   },
 
   messages: {
-    backgroundColor: Colors.bgCard,
+    fontSize: 16,
+    lineHeight: '100%',
+    backgroundColor: Colors.blue,
     padding: 10,
     margin: 10,
     borderRadius: 10,
     width: '70%',
     alignSelf: 'flex-start',
-    borderBottomColor: Colors.placeholder,
-    borderBottomWidth: 1,
   },
 
   byMessages: {
@@ -161,15 +161,17 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     width: '70%',
     alignSelf: 'flex-end',
-    borderBottomColor: Colors.white,
-    borderBottomWidth: 1,
+  },
+
+  allMessages: {
+    fontSize: 16,
+    color: Colors.white,
   },
 
   sendMessage: {
-    backgroundColor: Colors.bgCard,
+    backgroundColor: Colors.blue,
     height: '10%',
     width: '100%',
-    justifyContent: 'center',
     alignItems: 'center',
   },
 });
@@ -201,7 +203,13 @@ ChatScreen.navigationOptions = (navData) => {
             }}
           />
         </HeaderButtons>
-        <View style={{ marginTop: 5, flex: 2, flexDirection: 'row' }}>
+        <View
+          style={{
+            marginTop: 5,
+            marginLeft: 10,
+            flex: 2,
+            flexDirection: 'row',
+          }}>
           <Avatar
             id={matchedId}
             onPress={() => handleShowProfile(matchedId, isInGroup)}
