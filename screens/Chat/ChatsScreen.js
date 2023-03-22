@@ -285,6 +285,7 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     bottom: 10,
+    paddingHorizontal: 20,
   },
 
   text: {
@@ -296,7 +297,6 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     marginTop: 24,
-    marginLeft: 15,
   },
 
   new_matches: {
@@ -307,7 +307,6 @@ const styles = StyleSheet.create({
   },
 
   listHeader: {
-    marginLeft: 20,
     marginTop: 10,
     marginRight: 20,
   },
@@ -326,7 +325,6 @@ const styles = StyleSheet.create({
   chats: {
     overflow: 'hidden',
     marginTop: 10,
-    marginLeft: 5,
     flexDirection: 'column',
     backgroundColor: Colors.bg,
   },
@@ -335,7 +333,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flex: 2,
     marginBottom: 15,
-    marginLeft: 20,
     marginTop: 10,
   },
 
