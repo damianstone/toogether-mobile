@@ -53,7 +53,7 @@ const SwipeProfileScreen = (props) => {
         profile: profile,
         isGroup: isGroup,
         preview: true,
-        isMyProfile: isMyProfile
+        isMyProfile: isMyProfile,
       });
     }
   };

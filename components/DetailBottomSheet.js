@@ -18,7 +18,7 @@ const DetailBottomSheet = (props) => {
     city,
     live_in,
     from,
-    preview, 
+    preview,
     isMyProfile,
     university,
     occupation,
@@ -66,7 +66,8 @@ const DetailBottomSheet = (props) => {
       style={styles.screen}
       contentContainerStyle={styles.scrollview}
       showsVerticalScrollIndicator={false}
-      showsHorizontalScrollIndicator={false}>
+      showsHorizontalScrollIndicator={false}
+    >
       <View style={styles.container1}>
         <View style={styles.nameTextContainer}>
           <Text style={styles.nameText}>{`${name}, ${age}`}</Text>
@@ -99,7 +100,7 @@ const DetailBottomSheet = (props) => {
         <Text style={styles.descriptionText}>{description}</Text>
       </View>
 
-       {/* preview means open as match or member of group, so no need of like buttons */}
+      {/* preview means open as match or member of group, so no need of like buttons */}
       {!preview && (
         <>
           <View style={styles.line} />
@@ -112,7 +113,7 @@ const DetailBottomSheet = (props) => {
         </>
       )}
 
-       {/* if  is my profile review, then don't give the option to block my profile */}
+      {/* if  is my profile review, then don't give the option to block my profile */}
       {!isMyProfile && (
         <View style={styles.reportContainer}>
           <Button
