@@ -7,7 +7,7 @@
         "matched_profile": {
           "id": "7858a9bb-874f-4f63-a30a-959df53c51ae",
           "email": "janeking@gmail.com",
-          "is_in_group": true,
+          "is_in_group": false,
           "name": "Lesley King",
           "birthdate": "2001-03-18",
           "age": 22,
@@ -21,8 +21,7 @@
           "photos": [],
           "instagram": "jane.king"
         },
-        "is_group_match": true,
-        "members_count": 3
+        "is_group_match": false
       },
       "messages": [
         {
@@ -65,7 +64,7 @@
         "matched_profile": {
           "id": "f5d94cde-171d-4c10-9897-7dacf7d87ce4",
           "email": "siansims@gmail.com",
-          "is_in_group": true,
+          "is_in_group": false,
           "name": "Marion Smith",
           "birthdate": "1999-03-19",
           "age": 24,
@@ -79,8 +78,7 @@
           "photos": [],
           "instagram": "sian.sims"
         },
-        "is_group_match": true,
-        "members_count": 3
+        "is_group_match": false
       },
       "messages": [
         {

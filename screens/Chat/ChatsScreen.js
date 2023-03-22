@@ -155,8 +155,8 @@ const ChatsScreen = (props) => {
   }
   const renderNoMatches = () => {
     return (
-      <View style={styles.no_matches}>
-        <Text style={styles.no_matches_text}>You have no matches yet.</Text>
+      <View style={styles.noMatches}>
+        <Text style={styles.noMatchesText}>You have no matches yet.</Text>
       </View>
     );
   };
@@ -285,6 +285,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     marginTop: 24,
+    marginBottom: 5,
   },
 
   new_matches: {
@@ -298,13 +299,13 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginRight: 20,
   },
-  no_matches: {
+  noMatches: {
     overflow: 'hidden',
     flexDirection: 'row',
     backgroundColor: Colors.bg,
   },
 
-  no_matches_text: {
+  noMatchesText: {
     color: Colors.white,
     fontSize: 16,
     justifyContent: 'center',

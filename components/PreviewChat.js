@@ -26,7 +26,7 @@ const PreviewChat = (props) => {
     <View style={styles.container}>
       {matchedProfileHasPhoto ? (
         <View>
-          <TouchableOpacity onPress={onShowChat}>
+          <TouchableOpacity onPress={onShowProfile}>
             <ImageBackground
               source={{ uri: `${getImage(matchedProfilePhoto)}` }}
               imageStyle={styles.img}
@@ -38,7 +38,7 @@ const PreviewChat = (props) => {
         <View>
           <TouchableOpacity
             style={styles.noPhotoContainer}
-            onPress={onShowChat}>
+            onPress={onShowProfile}>
             <Text style={{ color: Colors.white, fontSize: 20 }}>
               {getNameInitials(matchedProfile.name)}
             </Text>
@@ -48,11 +48,14 @@ const PreviewChat = (props) => {
 
       <TouchableOpacity
         onLongPress={onOpenActionSheet}
-        onPress={onShowProfile}
+        onPress={onShowChat}
         style={styles.cardContainer}>
         <View style={styles.chat_preview}>
           <Text style={styles.matched_name}>{matchedProfile.name}</Text>
-          <Text style={styles.last_message}>{data.messages[0].text}</Text>
+          <View style={styles.lastMessagesContainer}>
+            <Text style={styles.last_message}>{data.messages[0].text}</Text>
+            <Text style={styles.messageCount}>1</Text>
+          </View>
         </View>
         <View style={styles.divider} />
       </TouchableOpacity>
@@ -69,7 +72,7 @@ const styles = StyleSheet.create({
     borderRadius: 100,
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: 20,
+    marginRight: 10,
     backgroundColor: Colors.bgCard,
   },
 
@@ -85,7 +88,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: Colors.bgCard,
-    marginRight: 20,
+    marginRight: 10,
   },
   container: {
     flexDirection: 'row',
@@ -107,6 +110,25 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
 
+  lastMessagesContainer: {
+    flexDirection: 'row',
+    width: '75%',
+    flex: 2,
+    justifyContent: 'space-between',
+  },
+
+  messageCount: {
+    width: 20,
+    height: 20,
+    borderRadius: 100,
+    backgroundColor: Colors.orange,
+    color: Colors.white,
+    fontSize: 12,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    alignSelf: 'center',
+  },
+
   last_message: {
     color: Colors.lightGray,
     marginTop: 5,
@@ -120,18 +142,9 @@ const styles = StyleSheet.create({
     width: '100%',
   },
 
-  bottom_border: {
-    borderBottomColor: Colors.lightGray,
-    borderBottomWidth: 0.5,
-    width: 50,
-    marginTop: 10,
-    height: 50,
-  },
   divider: {
     borderBottomWidth: 0.5,
-    borderBottomColor: 'white',
-    width: '85%',
-    marginTop: 20,
-    marginLeft: -40,
+    borderBottomColor: Colors.white,
+    width: '75%',
   },
 });
