@@ -17,7 +17,7 @@ const MatchCounter = (props) => {
   return (
     <TouchableOpacity style={styles.noPhotoContainer}>
       {matches?.count == 0 ? (
-        <Text style={styles.textCounter}>{0}</Text>
+        <Text style={styles.textCounter}>0</Text>
       ) : (
         <Text style={styles.textCounter}>
           <Text style={styles.plus}>+</Text>
