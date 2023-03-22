@@ -27,6 +27,7 @@ import no_chats from '../../assets/images/no-chats.png';
 import SwipeError from '../../components/SwipeError';
 import ActivityModal from '../../components/UI/ActivityModal';
 import ChatAvatar from '../../components/ChatAvatar';
+import MatchCounter from '../../components/MatchCounter';
 
 /* For test purposes */
 import chats from '../../data/chats.json';
@@ -231,9 +232,10 @@ const ChatsScreen = (props) => {
       <View style={styles.screen}>
         <View>
           <Text style={styles.title}> New Matches</Text>
-          {/* {localLoading && renderAllCardSwiped()} */}
           {!localLoading && (
             <FlatList
+              ListHeaderComponentStyle={styles.listHeader}
+              ListHeaderComponent={<MatchCounter data={matches} />}
               refreshControl={
                 <RefreshControl
                   refreshing={refreshing}
@@ -241,6 +243,7 @@ const ChatsScreen = (props) => {
                   tintColor={Colors.white}
                 />
               }
+              initialNumToRender={4}
               horizontal
               contentContainerStyle={styles.new_matches}
               data={matches?.results}
@@ -302,11 +305,15 @@ const styles = StyleSheet.create({
   new_matches: {
     overflow: 'hidden',
     marginTop: 10,
-    marginLeft: 10,
     flexDirection: 'row',
     backgroundColor: Colors.bg,
   },
 
+  listHeader: {
+    marginLeft: 20,
+    marginTop: 10,
+    marginRight: 20,
+  },
   no_matches: {
     overflow: 'hidden',
     flexDirection: 'row',
