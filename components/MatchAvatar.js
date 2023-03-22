@@ -17,24 +17,19 @@ const MatchAvatar = (props) => {
     matchedProfilePhoto,
     onShowChat,
   } = props;
-
-  if (matchedProfileHasPhoto) {
-    return (
-      <TouchableOpacity onPress={onShowChat}>
-        <ImageBackground
-          source={{ uri: `${getImage(matchedProfilePhoto)}` }}
-          imageStyle={styles.img}
-          style={styles.singleImageContainer}
-          onPress={onShowProfile}></ImageBackground>
-      </TouchableOpacity>
-    );
-  }
+  const checkPhoto = (profile) => {
+    if (profile.photos.length > 0) {
+      return { uri: `${getImage(profile.photos[0]?.image)}` };
+    }
+    return require('../assets/images/placeholder-profile.png');
+  };
 
   return (
-    <TouchableOpacity style={styles.noPhotoContainer} onPress={onShowChat}>
-      <Text style={{ color: Colors.white, fontSize: 20 }}>
-        {getNameInitials(matchedProfile.name)}
-      </Text>
+    <TouchableOpacity onPress={onShowChat}>
+      <ImageBackground
+        source={checkPhoto(matchedProfile)}
+        imageStyle={styles.img}
+        style={styles.singleImageContainer}></ImageBackground>
     </TouchableOpacity>
   );
 };
