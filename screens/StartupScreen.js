@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 import { ActivityIndicator, StyleSheet, View } from 'react-native';
 import { useDispatch } from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { authenticate } from '../store/actions/user';
+import { authenticate, logout, updateToken } from '../store/actions/user';
 import ActivityModal from '../components/UI/ActivityModal';
 import Colors from '../constants/Colors';
 
@@ -18,7 +18,6 @@ const StartupScreen = (props) => {
 
       if (userData && userData.has_account) {
         props.navigation.navigate('Swipe');
-        console.log(userData);
       } else {
         props.navigation.navigate('AuthStart');
       }
@@ -27,9 +26,10 @@ const StartupScreen = (props) => {
         const decoded = jwt_decode(userData.token);
         
         if (decoded.exp < (Date.now() / 1000)) {
-          console.log('Hacer logout');
+          dispatch(logout());
+          props.navigation.navigate('AuthStart');
         } else {
-          console.log('Hacer Refresh');
+          dispatch(updateToken());
         }
       }
 
@@ -38,13 +38,6 @@ const StartupScreen = (props) => {
       //   console.log('NO AUTH');
       //   props.navigation.navigate('AuthStart');
       // }
-      // -------------------------------------------------
-      // -------------------------------------------------
-
-      // console.log(userData);
-
-      // -------------------------------------------------
-      // -------------------------------------------------
     };
     tryLogin();
   }, []);
