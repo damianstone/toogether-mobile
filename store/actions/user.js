@@ -150,6 +150,7 @@ export const userLogin = (email, password) => {
           id: data.id,
           token: data.token,
           has_account: data.has_account,
+          refresh_token: data.refresh,
         })
       );
 
@@ -185,6 +186,8 @@ export const updateToken = () => {
       dispatch({ type: c.REFRESH_TOKEN_REQUEST });
       const userData = JSON.parse(await AsyncStorage.getItem('@userData'));
 
+      console.log({...userData})
+
       const config = {
         'Content-Type': 'application/json',
         Accept: 'application/json',
@@ -203,11 +206,11 @@ export const updateToken = () => {
         '@userData',
         JSON.stringify({
           ...userData,
-          token: data.token,
-          access_token: data.access.token,
+          token: data.access,
           refresh_token: data.refresh,
         })
       );
+
       dispatch({ type: c.REFRESH_TOKEN_SUCCESS, payload: data });
     } catch (error) {
       logout();
