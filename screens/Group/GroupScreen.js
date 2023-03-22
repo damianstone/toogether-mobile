@@ -78,7 +78,7 @@ const GroupScreen = (props) => {
   } = removeMemberReducer;
 
   // * this function replaces the first screen on the GroupNavigation stack
-  const replaceAction = props.navigation.replace('StartGroup');
+  // const replaceAction = props.navigation.replace('StartGroup');
 
   // we need to kepp calling the group if there is any change made by an external member
   useEffect(() => {
@@ -87,7 +87,7 @@ const GroupScreen = (props) => {
 
   useEffect(() => {
     if (!groupContext) {
-      props.navigation.dispatch(replaceAction);
+      // props.navigation.dispatch(replaceAction);
     }
   }, []);
 
@@ -116,7 +116,7 @@ const GroupScreen = (props) => {
     if (dataDelete) {
       updateGroupContext(null);
       dispatch({ type: g.DELETE_GROUP_RESET });
-      props.navigation.dispatch(replaceAction);
+      // props.navigation.dispatch(replaceAction);
     }
   }, [errorDelete, dataDelete]);
 

@@ -60,9 +60,9 @@ const defaultNavOptions = {
 
 const AuthNavigator = () => {
   return (
-    <Stack.Navigator headerShown={false}>
+    <Stack.Navigator screenOptions={{ headerShown: false}} >
       <Stack.Screen name="AuthStart" component={AuthStartScreen} />
-      <Stack.Screen name="Auth" component={AuthScreen} />
+      <Stack.Screen name="AuthLogin" component={AuthScreen} />
       <Stack.Screen name="Instagram" component={InstagramScreen} />
       <Stack.Screen name="Create" component={CreateProfileScreen} />
       <Stack.Screen name="AddPhoto" component={AddProfilePhotoScreen} />
@@ -133,7 +133,7 @@ const LikeNavigator = () => {
         ...defaultNavOptions,
       }}
     >
-      <Stack.Screen name="LikesScreen" component={LikesScreen} />
+      <Stack.Screen name="LikesScreen" component={LikesScreen} options={Header} />
     </Stack.Navigator>
   );
 };
