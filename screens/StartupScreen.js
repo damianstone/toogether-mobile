@@ -32,13 +32,8 @@ const StartupScreen = (props) => {
           dispatch(updateToken());
         }
       }
-
-      // // if there is no user data
-      // if (!userData || !userData.has_account) {
-      //   console.log('NO AUTH');
-      //   props.navigation.navigate('AuthStart');
-      // }
     };
+    
     tryLogin();
   }, []);
 

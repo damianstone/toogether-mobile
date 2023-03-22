@@ -203,7 +203,7 @@ export const updateToken = () => {
       await AsyncStorage.setItem(
         '@userData',
         JSON.stringify({
-          // ...userData,
+          ...userData,
           // token: data.token, //CUAL SE UTILIZA
           // access_token: data.access.token,
           // refresh_token: data.refresh,
