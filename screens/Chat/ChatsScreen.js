@@ -335,6 +335,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flex: 2,
     marginBottom: 15,
+    marginLeft: 20,
+    marginTop: 10,
   },
 
   matched_name: {
