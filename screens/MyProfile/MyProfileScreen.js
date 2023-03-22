@@ -197,6 +197,7 @@ const MyProfileScreen = (props) => {
     props.navigation.navigate('SwipeProfile', {
       mainProfileId: userProfile.id,
       isInGroup: userProfile.is_in_group,
+      isMyProfile: true,
     });
   };
 

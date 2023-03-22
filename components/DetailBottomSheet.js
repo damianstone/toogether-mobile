@@ -18,6 +18,8 @@ const DetailBottomSheet = (props) => {
     city,
     live_in,
     from,
+    preview, 
+    isMyProfile,
     university,
     occupation,
     description,
@@ -64,8 +66,7 @@ const DetailBottomSheet = (props) => {
       style={styles.screen}
       contentContainerStyle={styles.scrollview}
       showsVerticalScrollIndicator={false}
-      showsHorizontalScrollIndicator={false}
-    >
+      showsHorizontalScrollIndicator={false}>
       <View style={styles.container1}>
         <View style={styles.nameTextContainer}>
           <Text style={styles.nameText}>{`${name}, ${age}`}</Text>
@@ -98,7 +99,8 @@ const DetailBottomSheet = (props) => {
         <Text style={styles.descriptionText}>{description}</Text>
       </View>
 
-      {!props.preview && (
+       {/* preview means open as match or member of group, so no need of like buttons */}
+      {!preview && (
         <>
           <View style={styles.line} />
           <SwipeButtons
@@ -107,14 +109,18 @@ const DetailBottomSheet = (props) => {
             onRight={handleLike}
           />
           <View style={styles.line} />
-          <View style={styles.reportContainer}>
-            <Button
-              title="Block profile"
-              color={Colors.red}
-              onPress={openAlert}
-            />
-          </View>
         </>
+      )}
+
+       {/* if  is my profile review, then don't give the option to block my profile */}
+      {!isMyProfile && (
+        <View style={styles.reportContainer}>
+          <Button
+            title="Block profile"
+            color={Colors.red}
+            onPress={openAlert}
+          />
+        </View>
       )}
     </ScrollView>
   );
