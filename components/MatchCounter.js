@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
 import {
   Text,
   View,
@@ -7,8 +6,6 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from 'react-native';
-import { listMatches } from '../store/actions/swipe';
-import ActivityModal from './UI/ActivityModal';
 import Colors from '../constants/Colors';
 
 const MatchCounter = (props) => {
