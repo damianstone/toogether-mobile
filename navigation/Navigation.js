@@ -46,16 +46,16 @@ const Stack = createStackNavigator();
 
 const defaultNavOptions = {
   // headerMode: "none",
-  headerShown: false,
-  headerStyle: {
-    backgroundColor: Colors.bg,
-    shadowColor: 'transparent',
-  },
-  headerTitleStyle: {},
-  headerBackTitleStyle: {},
-  statusBarStyle: Colors.bg,
-  headerTintColor: Colors.white,
-  headerTitleAlign: 'center',
+  // headerShown: false,
+  // headerStyle: {
+  //   backgroundColor: Colors.bg,
+  //   shadowColor: 'transparent',
+  // },
+  // headerTitleStyle: {},
+  // headerBackTitleStyle: {},
+  // statusBarStyle: Colors.bg,
+  // headerTintColor: Colors.white,
+  // headerTitleAlign: 'center',
 };
 
 const AuthNavigator = () => {
@@ -145,7 +145,7 @@ const SwipeNavigator = () => {
         ...defaultNavOptions,
       }}
     >
-      <Stack.Screen name="SwipeScreen" component={SwipeScreen} />
+      <Stack.Screen name="SwipeScreen" component={SwipeScreen} options={Header} />
     </Stack.Navigator>
   );
 };
