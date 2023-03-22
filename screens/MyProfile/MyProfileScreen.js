@@ -11,6 +11,7 @@ import {
   View,
   Alert,
   RefreshControl,
+  VirtualizedList
 } from 'react-native';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { useDispatch, useSelector } from 'react-redux';

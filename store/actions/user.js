@@ -150,6 +150,7 @@ export const userLogin = (email, password) => {
           id: data.id,
           token: data.token,
           has_account: data.has_account,
+          refresh_token: data.refresh
         })
       );
 
@@ -202,12 +203,15 @@ export const updateToken = () => {
       await AsyncStorage.setItem(
         '@userData',
         JSON.stringify({
-          ...userData,
-          token: data.token,
-          access_token: data.access.token,
-          refresh_token: data.refresh,
+          // ...userData,
+          // token: data.token, //CUAL SE UTILIZA
+          // access_token: data.access.token,
+          // refresh_token: data.refresh,
+          token: data.access,
+          refresh_token: data.refresh
         })
       );
+
       dispatch({ type: c.REFRESH_TOKEN_SUCCESS, payload: data });
     } catch (error) {
       logout();
