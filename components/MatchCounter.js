@@ -12,12 +12,7 @@ import ActivityModal from './UI/ActivityModal';
 import Colors from '../constants/Colors';
 
 const MatchCounter = (props) => {
-  const listMatchesReducer = useSelector((state) => state.listMatches);
-  const {
-    error: errorListMatches,
-    loading: loadingListMatches,
-    data: matches,
-  } = listMatchesReducer;
+  const matches = props.data;
 
   return (
     <TouchableOpacity style={styles.noPhotoContainer}>
@@ -25,7 +20,7 @@ const MatchCounter = (props) => {
         <Text style={styles.textCounter}>{0}</Text>
       ) : (
         <Text style={styles.textCounter}>
-          <Text style={{ fontSize: 9 }}>+</Text>
+          <Text style={styles.plus}>+</Text>
           {matches?.count}
         </Text>
       )}
@@ -48,5 +43,8 @@ const styles = StyleSheet.create({
     color: Colors.white,
     fontSize: 15,
     fontWeight: 'bold',
+  },
+  plus: {
+    fontSize: 10,
   },
 });

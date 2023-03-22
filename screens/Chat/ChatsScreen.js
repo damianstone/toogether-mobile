@@ -232,11 +232,10 @@ const ChatsScreen = (props) => {
       <View style={styles.screen}>
         <View>
           <Text style={styles.title}> New Matches</Text>
-          {/* {localLoading && renderAllCardSwiped()} */}
           {!localLoading && (
             <FlatList
               ListHeaderComponentStyle={styles.listHeader}
-              ListHeaderComponent={MatchCounter}
+              ListHeaderComponent={<MatchCounter data={matches} />}
               refreshControl={
                 <RefreshControl
                   refreshing={refreshing}
