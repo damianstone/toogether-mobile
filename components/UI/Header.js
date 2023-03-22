@@ -14,7 +14,7 @@ const Header = (props) => {
 
   const headerTitleComponent = () => {
     switch (screenName) {
-      case "MyProfileNavigator":
+      case "MyProfileScreen":
         return (
           <Text style={styles.textContainer}>
             My Profile
@@ -38,9 +38,23 @@ const Header = (props) => {
     }
   }
 
-  const headerLeftComponent= () => {
+  const headerLeftComponent = () => {
     switch (screenName) {
-      case "MyProfileNavigator":
+      case "Settings":
+        return (
+          <HeaderButtons HeaderButtonComponent={HeaderButtom}>
+            <Item
+              iconName={
+                Platform.OS === 'android' ? 'ios-arrow-back' : 'ios-arrow-back'
+              }
+              onPress={() => {
+                navData.navigate('MyProfileScreen');
+              }}
+              title="Back arrow"
+            />
+          </HeaderButtons>
+        );
+      case "MyProfileScreen":
         return (
           <HeaderButtons HeaderButtonComponent={HeaderButtom}>
             <Item
@@ -65,7 +79,55 @@ const Header = (props) => {
     }
   }
 
+  const headerRightComponent = () => {
+    switch (screenName) {
+      case "Settings":
+        return (
+          <View></View>
+        );
+      case "MyProfileScreen":
+        return (
+          <HeaderButtons HeaderButtonComponent={HeaderButtom}>
+            <Item
+              iconName={
+                Platform.OS === 'android' ? 'settings-sharp' : 'settings-sharp'
+              }
+              onPress={() => {
+                navData.navigate('Settings');
+              }}
+            />
+          </HeaderButtons>
+        );
+      default :
+        return (
+          <HeaderButtons HeaderButtonComponent={HeaderButtom}>
+            <Item
+              title="Chat"
+              iconName={
+                Platform.OS === 'android'
+                  ? 'chatbubble-outline'
+                  : 'chatbubble-outline'
+              }
+              onPress={() => {
+                navData.navigate('Match');
+              }}
+            />
+          </HeaderButtons>
+        );
+    }
+  }
+
+  const additionalOptions = () => {
+    switch (screenName) {
+      case "MyProfileScreen":
+        return ({ gestureDirection: 'horizontal-inverted', })
+      default: 
+        return ({})
+    }
+  }
+
   return ({
+    headerShown: true,
     headerTitleAlign: 'center',
     headerStyle: {
       backgroundColor: Colors.bg,
@@ -73,21 +135,8 @@ const Header = (props) => {
     },
     headerTitle: headerTitleComponent,
     headerLeft: headerLeftComponent,
-    headerRight: () => (
-      <HeaderButtons HeaderButtonComponent={HeaderButtom}>
-        <Item
-          title="Chat"
-          iconName={
-            Platform.OS === 'android'
-              ? 'chatbubble-outline'
-              : 'chatbubble-outline'
-          }
-          onPress={() => {
-            navData.navigate('Match');
-          }}
-        />
-      </HeaderButtons>
-    ),
+    headerRight: headerRightComponent,
+    ...additionalOptions(),
   });
 };
 

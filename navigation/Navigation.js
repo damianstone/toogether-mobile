@@ -50,9 +50,9 @@ const defaultNavOptions = {
     backgroundColor: Colors.bg,
     shadowColor: 'transparent',
   },
-  headerTitleStyle: {},
-  headerBackTitleStyle: {},
-  statusBarStyle: Colors.bg,
+  // headerTitleStyle: {},
+  // headerBackTitleStyle: {},
+  // statusBarStyle: Colors.bg,
   headerTintColor: Colors.white,
   headerTitleAlign: 'center',
 };
@@ -80,10 +80,10 @@ const MyProfileNavigator = () => {
       <Stack.Screen
         name="MyProfileScreen"
         component={MyProfileScreen}
-        options={{
-          gestureDirection: 'horizontal-inverted',
-          headerShown: false,
-        }}
+        // options={[{
+        //   gestureDirection: 'horizontal-inverted',
+        // }, Header]}
+        options={Header}
       />
       <Stack.Screen
         name="SwipeProfile"
@@ -92,11 +92,11 @@ const MyProfileNavigator = () => {
           ...defaultNavOptions,
           title: 'Profile Preview',
           gestureDirection: 'horizontal',
-          headerShown: false,
+          // headerShown: false,
         }}
       />
       <Stack.Screen name="EditProfile" component={EditProfileScreen} />
-      <Stack.Screen name="Setting" component={SettingScreen} />
+      <Stack.Screen name="Settings" component={SettingScreen} options={{}} />
       <Stack.Screen name="Blocked" component={BlockProfilesScreen} />
     </Stack.Navigator>
   );
@@ -104,8 +104,8 @@ const MyProfileNavigator = () => {
 
 const MyProfileNavigatorWithModal = () => {
   return (
-    <Stack.Navigator presentation="modal" headerShown={false} >
-      <Stack.Screen name="MyProfileNavigator" component={MyProfileNavigator} options={Header} />
+    <Stack.Navigator presentation="modal" screenOptions={{ headerShown: false }} >
+      <Stack.Screen name="MyProfileNavigator" component={MyProfileNavigator} options={{}} />
       <Stack.Screen name="ProfileModal" component={ProfileModalScreen} />
     </Stack.Navigator>
   );
@@ -117,7 +117,7 @@ const ChatNavigator = () => {
       screenOptions={{
         ...defaultNavOptions,
         gestureDirection: 'horizontal',
-        title: null,
+        // title: null,
       }}
     >
       <Stack.Screen name="ChatScreen" component={ChatScreen} />
@@ -152,7 +152,7 @@ const SwipeNavigator = () => {
 
 const MatchNavigator = () => {
   return (
-    <Stack.Navigator presentation="modal" headerMode="none" >
+    <Stack.Navigator presentation="modal" headerShown={false}>
       <Stack.Screen name="Chat" component={ChatNavigator} />
       <Stack.Screen name="ProfileModal" component={ProfileModalScreen} />
     </Stack.Navigator>
