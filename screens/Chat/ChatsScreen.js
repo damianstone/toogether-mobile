@@ -19,7 +19,6 @@ import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { StatusBar } from 'expo-status-bar';
 
 import HeaderButtom from '../../components/UI/HeaderButton';
-import Loader from '../../components/UI/Loader';
 import Colors from '../../constants/Colors';
 import { listMatches, deleteMatch } from '../../store/actions/swipe';
 import { checkServerError, check400Error } from '../../utils/errors';
@@ -28,6 +27,7 @@ import SwipeError from '../../components/SwipeError';
 import ActivityModal from '../../components/UI/ActivityModal';
 import ChatAvatar from '../../components/ChatAvatar';
 import MatchCounter from '../../components/MatchCounter';
+import MatchAvatar from '../../components/MatchAvatar';
 
 /* For test purposes */
 import chats from '../../data/chats.json';
@@ -165,12 +165,9 @@ const ChatsScreen = (props) => {
     const matchedProfile = item.matched_data.matched_profile;
     return (
       <View style={styles.new_matches}>
-        <ChatAvatar
-          hasBorder={true}
-          onShowProfile={() => handleShowChat(item, matchedData)}
+        <MatchAvatar
+          onShowChat={() => handleShowChat(item, matchedData)}
           matchedProfile={matchedProfile}
-          matchedData={matchedData}
-          isInGroup={matchedData.is_group_match}
           matchedProfileHasPhoto={matchedProfile.photos.length > 0}
           matchedProfilePhoto={
             matchedProfile.photos.length > 0
