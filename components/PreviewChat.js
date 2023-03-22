@@ -22,30 +22,25 @@ const PreviewChat = (props) => {
     onOpenActionSheet,
     onShowChat,
   } = props;
+
+  const checkPhoto = (profile) => {
+    if (profile.photos.length > 0) {
+      return { uri: `${getImage(profile.photos[0]?.image)}` };
+    }
+    return require('../assets/images/placeholder-profile.png');
+  };
+
   return (
     <View style={styles.container}>
-      {matchedProfileHasPhoto ? (
-        <View>
-          <TouchableOpacity onPress={onShowProfile}>
-            <ImageBackground
-              source={{ uri: `${getImage(matchedProfilePhoto)}` }}
-              imageStyle={styles.img}
-              style={styles.singleImageContainer}
-              onPress={onShowProfile}></ImageBackground>
-          </TouchableOpacity>
-        </View>
-      ) : (
-        <View>
-          <TouchableOpacity
-            style={styles.noPhotoContainer}
-            onPress={onShowProfile}>
-            <Text style={{ color: Colors.white, fontSize: 20 }}>
-              {getNameInitials(matchedProfile.name)}
-            </Text>
-          </TouchableOpacity>
-        </View>
-      )}
-
+      <View>
+        <TouchableOpacity onPress={onShowProfile}>
+          <ImageBackground
+            source={checkPhoto(matchedProfile)}
+            imageStyle={styles.img}
+            style={styles.singleImageContainer}
+            onPress={onShowProfile}></ImageBackground>
+        </TouchableOpacity>
+      </View>
       <TouchableOpacity
         onLongPress={onOpenActionSheet}
         onPress={onShowChat}
