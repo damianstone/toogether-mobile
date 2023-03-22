@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, Image } from 'react-native';
+import { StyleSheet, View, Image, Text } from 'react-native';
 
 import Avatar from './Avatar';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
@@ -7,8 +7,36 @@ import HeaderButtom from './HeaderButton';
 import { useNavigation } from '@react-navigation/native';
 import Colors from '../../constants/Colors';
 
-const Header = () => {
+const Header = (props) => {
   const navData = useNavigation();
+
+  const headerTitleComponent = () => {
+    const screenName = props.route.name;
+    console.log(screenName)
+    switch (screenName) {
+      case "MyProfileNavigator":
+        return (
+          <Text style={styles.textContainer}>
+            My Profile
+          </Text>
+        );
+      case "LikesScreen":
+        return (
+          <Text style={styles.textContainer}>
+            Likes
+          </Text>
+        );
+      default :
+        return (
+          <View style={styles.logoContainer}>
+            <Image
+              source={require('../../assets/images/logo-1.png')}
+              style={styles.logo}
+            />
+          </View>
+        );
+    }
+  }
 
   return ({
     headerTitleAlign: 'center',
@@ -16,14 +44,7 @@ const Header = () => {
       backgroundColor: Colors.bg,
       shadowColor: 'transparent',
     },
-    headerTitle: () => (
-      <View style={styles.logoContainer}>
-        <Image
-          source={require('../../assets/images/logo-1.png')}
-          style={styles.logo}
-        />
-      </View>
-    ),
+    headerTitle: headerTitleComponent,
     headerLeft: () => (
       <Avatar
         onPress={() => {
@@ -60,4 +81,8 @@ const styles = StyleSheet.create({
     width: 57,
     height: 35,
   },
+  textContainer: {
+    fontSize: 24,
+    color: Colors.white,
+  }
 });

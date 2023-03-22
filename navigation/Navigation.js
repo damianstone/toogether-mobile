@@ -82,6 +82,7 @@ const MyProfileNavigator = () => {
         component={MyProfileScreen}
         options={{
           gestureDirection: 'horizontal-inverted',
+          headerShown: false,
         }}
       />
       <Stack.Screen
@@ -104,7 +105,7 @@ const MyProfileNavigator = () => {
 const MyProfileNavigatorWithModal = () => {
   return (
     <Stack.Navigator presentation="modal" headerShown={false} >
-      <Stack.Screen name="MyProfileNavigator" component={MyProfileNavigator} />
+      <Stack.Screen name="MyProfileNavigator" component={MyProfileNavigator} options={Header} />
       <Stack.Screen name="ProfileModal" component={ProfileModalScreen} />
     </Stack.Navigator>
   );

@@ -457,7 +457,7 @@ const MyProfileScreen = (props) => {
 
 MyProfileScreen.navigationOptions = (navData) => {
   return {
-    headerTitle: 'My Profile',
+    headerTitle: <Text>'My Profile'</Text>,
     headerRight: () => (
       <HeaderButtons HeaderButtonComponent={HeaderButtom}>
         <Item
