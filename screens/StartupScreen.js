@@ -7,10 +7,7 @@ import { authenticate, logout, updateToken } from '../store/actions/user';
 import ActivityModal from '../components/UI/ActivityModal';
 import Colors from '../constants/Colors';
 
-const jwt_decode = require('jwt-decode');
-
 const StartupScreen = (props) => {
-  const dispatch = useDispatch();
   useEffect(() => {
     const tryLogin = async () => {
       // get the user data as a promise
@@ -21,23 +18,6 @@ const StartupScreen = (props) => {
       } else {
         props.navigation.navigate('AuthStart');
       }
-
-      if (userData && userData.has_account) {
-        const decoded = jwt_decode(userData.token);
-
-        if (decoded.exp < Date.now() / 1000) {
-          dispatch(logout());
-          props.navigation.navigate('AuthStart');
-        } else {
-          dispatch(updateToken());
-        }
-      }
-
-      // // if there is no user data
-      // if (!userData || !userData.has_account) {
-      //   console.log('NO AUTH');
-      //   props.navigation.navigate('AuthStart');
-      // }
     };
     tryLogin();
   }, []);

@@ -186,6 +186,8 @@ export const updateToken = () => {
       dispatch({ type: c.REFRESH_TOKEN_REQUEST });
       const userData = JSON.parse(await AsyncStorage.getItem('@userData'));
 
+      console.log({...userData})
+
       const config = {
         'Content-Type': 'application/json',
         Accept: 'application/json',
@@ -203,10 +205,7 @@ export const updateToken = () => {
       await AsyncStorage.setItem(
         '@userData',
         JSON.stringify({
-          // ...userData,
-          // token: data.token, //CUAL SE UTILIZA
-          // access_token: data.access.token,
-          // refresh_token: data.refresh,
+          ...userData,
           token: data.access,
           refresh_token: data.refresh,
         })
