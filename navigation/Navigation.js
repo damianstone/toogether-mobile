@@ -45,17 +45,16 @@ import Header from '../components/UI/Header';
 const Stack = createStackNavigator();
 
 const defaultNavOptions = {
-  // headerMode: "none",
   // headerShown: false,
-  // headerStyle: {
-  //   backgroundColor: Colors.bg,
-  //   shadowColor: 'transparent',
-  // },
-  // headerTitleStyle: {},
-  // headerBackTitleStyle: {},
-  // statusBarStyle: Colors.bg,
-  // headerTintColor: Colors.white,
-  // headerTitleAlign: 'center',
+  headerStyle: {
+    backgroundColor: Colors.bg,
+    shadowColor: 'transparent',
+  },
+  headerTitleStyle: {},
+  headerBackTitleStyle: {},
+  statusBarStyle: Colors.bg,
+  headerTintColor: Colors.white,
+  headerTitleAlign: 'center',
 };
 
 const AuthNavigator = () => {
@@ -79,7 +78,7 @@ const MyProfileNavigator = () => {
       }}
     >
       <Stack.Screen
-        name="MyProfile"
+        name="MyProfileScreen"
         component={MyProfileScreen}
         options={{
           gestureDirection: 'horizontal-inverted',
@@ -92,7 +91,7 @@ const MyProfileNavigator = () => {
           ...defaultNavOptions,
           title: 'Profile Preview',
           gestureDirection: 'horizontal',
-          headerMode: 'none',
+          headerShown: false,
         }}
       />
       <Stack.Screen name="EditProfile" component={EditProfileScreen} />
@@ -104,8 +103,8 @@ const MyProfileNavigator = () => {
 
 const MyProfileNavigatorWithModal = () => {
   return (
-    <Stack.Navigator presentation="modal" headerMode="none" >
-      <Stack.Screen name="MyProfile" component={MyProfileNavigator} />
+    <Stack.Navigator presentation="modal" headerShown={false} >
+      <Stack.Screen name="MyProfileNavigator" component={MyProfileNavigator} />
       <Stack.Screen name="ProfileModal" component={ProfileModalScreen} />
     </Stack.Navigator>
   );
@@ -120,7 +119,7 @@ const ChatNavigator = () => {
         title: null,
       }}
     >
-      <Stack.Screen name="Chat" component={ChatScreen} />
+      <Stack.Screen name="ChatScreen" component={ChatScreen} />
       <Stack.Screen name="SwipeProfile" component={SwipeProfileScreen} />
     </Stack.Navigator>
   );
