@@ -9,7 +9,7 @@ import { updateToken, logout } from '../store/actions/user';
 const jwt_decode = require('jwt-decode');
 
 const ToogetherNav = (props) => {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const navRef = useRef();
 
   useEffect(() => {
@@ -24,7 +24,7 @@ const ToogetherNav = (props) => {
 
       if (isTokenExpired) {
         dispatch(logout());
-        console.log("expired")
+        console.log('expired');
         navRef.current.dispatch(
           NavigationActions.navigate({
             routeName: 'AuthStart',
@@ -35,8 +35,6 @@ const ToogetherNav = (props) => {
       // if (isTokenExpired && !isRefreshExpired) {
       //   dispatch(updateToken());
       // }
-
-
     };
     tryLogin();
   }, [navRef.current]);
