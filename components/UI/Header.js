@@ -1,29 +1,63 @@
 import React from 'react';
 import { StyleSheet, View, Image } from 'react-native';
 
-const Header = (props) => {
-  return (
-    <View style={styles.logoContainer}>
-      <Image
-        source={require('../../assets/images/logo-1.png')}
-        style={styles.logo}
+import Avatar from './Avatar';
+import { HeaderButtons, Item } from 'react-navigation-header-buttons';
+import HeaderButtom from './HeaderButton';
+import { useNavigation } from '@react-navigation/native';
+import Colors from '../../constants/Colors';
+
+const Header = () => {
+  const navData = useNavigation();
+
+  return ({
+    headerTitleAlign: 'center',
+    headerStyle: {
+      backgroundColor: Colors.bg,
+      shadowColor: 'transparent',
+    },
+    headerTitle: () => (
+      <View style={styles.logoContainer}>
+        <Image
+          source={require('../../assets/images/logo-1.png')}
+          style={styles.logo}
+        />
+      </View>
+    ),
+    headerLeft: () => (
+      <Avatar
+        onPress={() => {
+          navData.navigate('MyProfile');
+        }}
       />
-    </View>
-  );
+    ),
+    headerRight: () => (
+      <HeaderButtons HeaderButtonComponent={HeaderButtom}>
+        <Item
+          title="Chat"
+          iconName={
+            Platform.OS === 'android'
+              ? 'chatbubble-outline'
+              : 'chatbubble-outline'
+          }
+          onPress={() => {
+            navData.navigate('Match');
+          }}
+        />
+      </HeaderButtons>
+    ),
+  });
 };
 
 export default Header;
 
 const styles = StyleSheet.create({
   logoContainer: {
-    marginTop: 35,
-    padding: 10,
-    alignItems: 'center',
-    flexDirection: 'row',
     justifyContent: 'center',
+    alignItems: 'center',
   },
   logo: {
-    width: 70,
-    height: 40,
+    width: 57,
+    height: 35,
   },
 });

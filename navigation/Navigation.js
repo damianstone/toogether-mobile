@@ -1,9 +1,5 @@
 import React from 'react';
-import { Platform, Switch, Text, View } from 'react-native';
-// import { createAppContainer, createSwitchNavigator } from 'react-navigation';
-// import { createMaterialBottomTabNavigator } from 'react-navigation-material-bottom-tabs';
-// import { createStackNavigator } from 'react-navigation-stack';
-// import { createBottomTabNavigator } from 'react-navigation-tabs';
+import { Platform, Switch, Text, View, Image } from 'react-native';
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createSwitchNavigator } from '@react-navigation/compat';
@@ -44,11 +40,13 @@ import BlockProfilesScreen from '../screens/BlockProfiles/BlockProfilesScreen';
 import InstagramScreen from '../screens/CreateProfile/InstagramScreen';
 
 import Deck from '../screens/Swipe/Deck';
+import Header from '../components/UI/Header';
 
 const Stack = createStackNavigator();
 
 const defaultNavOptions = {
   // headerMode: "none",
+  headerShown: false,
   headerStyle: {
     backgroundColor: Colors.bg,
     shadowColor: 'transparent',
@@ -353,7 +351,7 @@ const ToogetherTab = () => {
       activeColor={Platform.OS === 'ios' ? Colors.orange : Colors.white}
       inactiveColor={Colors.white}
       // tabBarOptions={tabBarConfig}
-      // screenOptions={tabScreenConfig}
+      // screenOptions={Header}
     > 
       <Tab.Screen 
         name="SwipeNavigator" 
