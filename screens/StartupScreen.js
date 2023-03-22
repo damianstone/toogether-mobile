@@ -24,8 +24,8 @@ const StartupScreen = (props) => {
 
       if (userData && userData.has_account) {
         const decoded = jwt_decode(userData.token);
-        
-        if (decoded.exp < (Date.now() / 1000)) {
+
+        if (decoded.exp < Date.now() / 1000) {
           dispatch(logout());
           props.navigation.navigate('AuthStart');
         } else {

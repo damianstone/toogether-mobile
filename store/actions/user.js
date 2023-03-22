@@ -150,7 +150,7 @@ export const userLogin = (email, password) => {
           id: data.id,
           token: data.token,
           has_account: data.has_account,
-          refresh_token: data.refresh
+          refresh_token: data.refresh,
         })
       );
 
@@ -208,7 +208,7 @@ export const updateToken = () => {
           // access_token: data.access.token,
           // refresh_token: data.refresh,
           token: data.access,
-          refresh_token: data.refresh
+          refresh_token: data.refresh,
         })
       );
 
