@@ -15,9 +15,11 @@ import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import { useDispatch, useSelector } from 'react-redux';
 import { listMatches, deleteMatch } from '../store/actions/swipe';
+import { blockProfile } from '../store/actions/block';
 import { checkServerError, check400Error } from '../utils/errors';
 
 import * as w from '../constants/swipe';
+import * as b from '../constants/block';
 import HeaderButtom from '../components/UI/HeaderButton';
 import ChatAvatar from '../components/ChatAvatar';
 import Colors from '../constants/Colors';
@@ -40,8 +42,15 @@ const ChatScreen = (props) => {
     data: matchDeleted,
   } = deleteMatchReducer;
 
+  const blockProfileReducer = useSelector((state) => state.blockProfile);
+  const {
+    error: errorBlockProfile,
+    loading: loadingBlockProfile,
+    data: successBlockProfile,
+  } = blockProfileReducer;
+
   const [refreshing, setRefreshing] = useState(
-    !!(loadingListMatches || loadingDeleteMatch)
+    !!(loadingListMatches || loadingDeleteMatch || loadingBlockProfile)
   );
 
   useEffect(() => {
@@ -59,7 +68,26 @@ const ChatScreen = (props) => {
       }
       checkServerError(errorDeleteMatch);
     }
-  }, [errorDeleteMatch, errorListMatches]);
+
+    if (matchDeleted) {
+      dispatch(listMatches());
+      dispatch({ type: w.DELETE_MATCH_RESET });
+    }
+  }, [errorDeleteMatch, errorListMatches, matchDeleted]);
+
+  useEffect(() => {
+    if (errorBlockProfile) {
+      if (errorBlockProfile?.response?.status === 400) {
+        check400Error(errorBlockProfile);
+      }
+      checkServerError(errorBlockProfile);
+    }
+
+    if (successBlockProfile) {
+      dispatch(listMatches());
+      dispatch({ type: b.BLOCK_PROFILE_RESET });
+    }
+  }, [errorBlockProfile, successBlockProfile]);
 
   useEffect(() => {
     const unsubscribe = props.navigation.addListener('didFocus', () => {
@@ -102,21 +130,41 @@ const ChatScreen = (props) => {
     }
   };
 
-  const handleDeleteMatch = async (matchId) => {
+  const handleDeleteMatch = (matchId) => {
     if (matchId) {
-      await dispatch(deleteMatch(matchId));
-    }
-
-    if (matchDeleted) {
-      dispatch({ type: w.DELETE_MATCH_RESET });
-      return dispatch(listMatches());
+      dispatch(deleteMatch(matchId));
     }
     return null;
   };
 
+  const handleBlockProfile = (profileId, matchId) => {
+    if (!profileId) {
+      return;
+    }
+    Alert.alert(
+      `Are you sure you want to block this profile?`,
+      'This profile will not be able to see you and neither will you',
+      [
+        {
+          text: 'No',
+          onPress: () => {
+            props.navigation.navigate('Swipe');
+          },
+          style: 'cancel',
+        },
+        {
+          text: 'Yes',
+          onPress: () => {
+            dispatch(blockProfile(profileId));
+          },
+        },
+      ]
+    );
+  };
+
   const onOpenActionSheet = (matchedProfile, matchId) => {
     // Same interface as https://facebook.github.io/react-native/docs/actionsheetios.html
-    const options = ['Send message', 'Remove match', 'Cancel'];
+    const options = ['Send message', 'Remove match', 'Block profile', 'Cancel'];
     const destructiveButtonIndex = 2;
     const cancelButtonIndex = 3;
 
@@ -132,6 +180,9 @@ const ChatScreen = (props) => {
         }
         if (buttonIndex === 1) {
           handleDeleteMatch(matchId);
+        }
+        if (buttonIndex === 2) {
+          handleBlockProfile(matchedProfile.id, matchId);
         }
         return null;
       }
@@ -161,8 +212,7 @@ const ChatScreen = (props) => {
           />
           <TouchableOpacity
             onPress={() => onOpenActionSheet(matchedProfile, item.id)}
-            style={styles.cardContainer}
-          >
+            style={styles.cardContainer}>
             <Text style={styles.instagramText}>
               {matchedProfile.instagram
                 ? `@ ${matchedProfile.instagram}`
@@ -171,8 +221,7 @@ const ChatScreen = (props) => {
             {matchedProfile.instagram ? (
               <TouchableOpacity
                 onPress={() => handleInstagram(matchedProfile.instagram)}
-                style={styles.sendButtonContainer}
-              >
+                style={styles.sendButtonContainer}>
                 <Image
                   source={require('../assets/images/send-button.png')}
                   style={styles.img}
@@ -195,8 +244,7 @@ const ChatScreen = (props) => {
           width: '100%',
           height: '100%',
           textAlign: 'center',
-        }}
-      >
+        }}>
         <View style={{ width: 200, height: 200 }}>
           <Image
             source={require('../assets/images/no-chats.png')}
@@ -227,25 +275,13 @@ const ChatScreen = (props) => {
         renderItem={renderMatch}
         ListEmptyComponent={renderEmptyMatches}
       />
-      <View
-        style={{
-          flex: 1,
-          justifyContent: 'flex-end',
-          marginBottom: 36,
-          alignItems: 'center',
-        }}
-      >
-        <Text style={{ color: Colors.white }}>
-          Real-time chat in the next update
-        </Text>
-      </View>
     </View>
   );
 };
 
 ChatScreen.navigationOptions = (navData) => {
   return {
-    headerTitle: 'Chats',
+    headerTitle: 'Matches',
     headerLeft: () => (
       <HeaderButtons HeaderButtonComponent={HeaderButtom}>
         <Item
