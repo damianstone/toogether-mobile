@@ -49,14 +49,14 @@ const SettingScreen = (props) => {
     }
 
     if (dataDeleted) {
-      props.navigation.navigate('AuthStart');
+      props.navigation.navigate('Auth');
     }
   }, [errorDelete, dataDeleted]);
 
   const handleLogout = async () => {
     try {
       dispatch(logout());
-      props.navigation.navigate('AuthStart');
+      props.navigation.navigate('Auth');
     } catch (error) {
       if (error) {
         if (error?.response?.status === 400) {

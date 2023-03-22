@@ -152,7 +152,13 @@ const SwipeNavigator = () => {
 
 const MatchNavigator = () => {
   return (
-    <Stack.Navigator presentation="modal" headerShown={false}>
+    <Stack.Navigator 
+      presentation="modal" 
+      headerShown={false}
+      screenOptions={
+        defaultNavOptions
+      }
+    >
       <Stack.Screen name="Chat" component={ChatNavigator} />
       <Stack.Screen name="ProfileModal" component={ProfileModalScreen} />
     </Stack.Navigator>
