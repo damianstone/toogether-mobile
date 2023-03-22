@@ -28,6 +28,7 @@ import ActivityModal from '../../components/UI/ActivityModal';
 import ChatAvatar from '../../components/ChatAvatar';
 import MatchCounter from '../../components/MatchCounter';
 import MatchAvatar from '../../components/MatchAvatar';
+import PreviewChat from '../../components/PreviewChat';
 
 /* For test purposes */
 import chats from '../../data/chats.json';
@@ -154,8 +155,8 @@ const ChatsScreen = (props) => {
   }
   const renderNoMatches = () => {
     return (
-      <View style={styles.no_matches}>
-        <Text style={styles.no_matches_text}>You have no matches yet.</Text>
+      <View style={styles.noMatches}>
+        <Text style={styles.noMatchesText}>You have no matches yet.</Text>
       </View>
     );
   };
@@ -191,38 +192,25 @@ const ChatsScreen = (props) => {
     const matchedData = item.matched_data;
     const matchedProfile = item.matched_data.matched_profile;
     return (
-      <View style={styles.container}>
-        <View>
-          <ChatAvatar
-            hasBorder={false}
-            isChat={true}
-            onShowProfile={() =>
-              handleShowProfile(matchedProfile, matchedData.is_group_match)
-            }
-            matchedProfile={matchedProfile}
-            matchedData={matchedData}
-            isInGroup={matchedData.is_group_match}
-            matchedProfileHasPhoto={matchedProfile.photos.length > 0}
-            matchedProfilePhoto={
-              matchedProfile.photos.length > 0
-                ? matchedProfile.photos[0].image
-                : null
-            }
-          />
-        </View>
-        <TouchableOpacity
-          onLongPress={() => onOpenActionSheet(matchedProfile, item.id)}
-          onPress={() => handleShowChat(item, matchedData)}
-          style={styles.cardContainer}>
-          <View style={styles.chat_preview}>
-            <Text style={styles.matched_name}>{matchedProfile.name}</Text>
-            <Text style={styles.last_message}>{item.messages[0].text}</Text>
-          </View>
-          <View style={styles.divider} />
-        </TouchableOpacity>
-      </View>
+      <PreviewChat
+        onShowChat={() => handleShowChat(item, matchedData)}
+        onOpenActionSheet={() => onOpenActionSheet(matchedProfile, item.id)}
+        matchedProfileHasPhoto={matchedProfile.photos.length > 0}
+        matchedProfilePhoto={
+          matchedProfile.photos.length > 0
+            ? matchedProfile.photos[0].image
+            : null
+        }
+        data={item}
+        matchedData={matchedData}
+        matchedProfile={matchedProfile}
+        onShowProfile={() =>
+          handleShowProfile(matchedProfile, matchedProfile.is_in_group)
+        }
+      />
     );
   };
+
   return (
     <SafeAreaView style={styles.safe}>
       <StatusBar style="light" />
@@ -285,7 +273,7 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     bottom: 10,
-    paddingHorizontal: 20,
+    paddingHorizontal: 10,
   },
 
   text: {
@@ -297,6 +285,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     marginTop: 24,
+    marginBottom: 5,
   },
 
   new_matches: {
@@ -310,13 +299,13 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginRight: 20,
   },
-  no_matches: {
+  noMatches: {
     overflow: 'hidden',
     flexDirection: 'row',
     backgroundColor: Colors.bg,
   },
 
-  no_matches_text: {
+  noMatchesText: {
     color: Colors.white,
     fontSize: 16,
     justifyContent: 'center',
@@ -327,54 +316,6 @@ const styles = StyleSheet.create({
     marginTop: 10,
     flexDirection: 'column',
     backgroundColor: Colors.bg,
-  },
-
-  container: {
-    flexDirection: 'row',
-    flex: 2,
-    marginBottom: 15,
-    marginTop: 10,
-  },
-
-  matched_name: {
-    color: Colors.white,
-    fontSize: 16,
-    fontWeight: 'bold',
-    justifyContent: 'center',
-  },
-
-  chat_preview: {
-    flex: 2,
-    flexDirection: 'column',
-    marginBottom: 10,
-  },
-
-  last_message: {
-    color: Colors.lightGray,
-    marginTop: 5,
-    fontSize: 14,
-    justifyContent: 'center',
-  },
-
-  cardContainer: {
-    backgroundColor: Colors.bg,
-    borderRadius: 10,
-    width: '100%',
-  },
-
-  bottom_border: {
-    borderBottomColor: Colors.lightGray,
-    borderBottomWidth: 0.5,
-    width: 50,
-    marginTop: 10,
-    height: 50,
-  },
-  divider: {
-    borderBottomWidth: 0.5,
-    borderBottomColor: 'white',
-    width: '85%',
-    marginTop: 20,
-    marginLeft: -40,
   },
 });
 

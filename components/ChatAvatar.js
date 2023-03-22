@@ -46,7 +46,7 @@ const ChatAvatar = (props) => {
 
   return (
     <TouchableOpacity
-      style={[styles.noPhotoContainer, isChat && styles.chat]}
+      style={styles.noPhotoContainer}
       onPress={props.onShowProfile}>
       <Text style={{ color: Colors.white, fontSize: 20 }}>
         {getNameInitials(matchedProfile.name)}
