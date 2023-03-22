@@ -9,10 +9,10 @@ import Colors from '../../constants/Colors';
 
 const Header = (props) => {
   const navData = useNavigation();
+  const screenName = props.route.name;
+  console.log(screenName)
 
   const headerTitleComponent = () => {
-    const screenName = props.route.name;
-    console.log(screenName)
     switch (screenName) {
       case "MyProfileNavigator":
         return (
@@ -38,6 +38,33 @@ const Header = (props) => {
     }
   }
 
+  const headerLeftComponent= () => {
+    switch (screenName) {
+      case "MyProfileNavigator":
+        return (
+          <HeaderButtons HeaderButtonComponent={HeaderButtom}>
+            <Item
+              iconName={
+                Platform.OS === 'android' ? 'ios-arrow-back' : 'ios-arrow-back'
+              }
+              onPress={() => {
+                navData.navigate('SwipeScreen');
+              }}
+              title="Back arrow"
+            />
+          </HeaderButtons>
+        );
+      default :
+        return (
+          <Avatar
+            onPress={() => {
+              navData.navigate('MyProfile');
+            }}
+          />
+        );
+    }
+  }
+
   return ({
     headerTitleAlign: 'center',
     headerStyle: {
@@ -45,13 +72,7 @@ const Header = (props) => {
       shadowColor: 'transparent',
     },
     headerTitle: headerTitleComponent,
-    headerLeft: () => (
-      <Avatar
-        onPress={() => {
-          navData.navigate('MyProfile');
-        }}
-      />
-    ),
+    headerLeft: headerLeftComponent,
     headerRight: () => (
       <HeaderButtons HeaderButtonComponent={HeaderButtom}>
         <Item
