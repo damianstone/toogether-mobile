@@ -10,7 +10,6 @@ import Colors from '../../constants/Colors';
 const Header = (props) => {
   const navData = useNavigation();
   const screenName = props.route.name;
-  console.log(screenName)
 
   const headerTitleComponent = () => {
     switch (screenName) {
