@@ -93,8 +93,6 @@ const ChatsScreen = (props) => {
         params: {
           chatId: chat.id,
           isInGroup: matchedData.matched_profile.is_in_group,
-          matchedId: matchedData.matched_profile.id,
-          matchedName: matchedData.matched_profile.name,
           matchedData: matchedData,
         },
       });

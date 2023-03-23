@@ -16,6 +16,8 @@ const ProfileScreen = (props) => {
   const profile = props.navigation.getParam('profile');
   const isGroup = props.navigation.getParam('isGroup');
   const preview = props.navigation.getParam('preview');
+  const isMyProfile = props.navigation.getParam('isMyProfile');
+
   const currentRef = props.navigation.getParam('currentRef');
 
   const blockProfileReducer = useSelector((state) => state.blockProfile);
@@ -150,6 +152,7 @@ const ProfileScreen = (props) => {
           handleLike={() => handleLike(profile.id)}
           handleDislike={() => handleDislike(profile.id)}
           openAlert={openAlert}
+          isMyProfile={isMyProfile}
           isGroup={isGroup}
           preview={preview}
           name={profile.name}

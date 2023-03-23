@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     marginHorizontal: 5,
     borderRadius: 10,
-    width: '60%',
+    width: '65%',
     flex: 2,
     flexDirection: 'row',
     alignItems: 'center',
@@ -65,7 +65,8 @@ const styles = StyleSheet.create({
   messageContainer: {
     flex: 2,
     borderRadius: 15,
-    padding: 10,
+    paddingVertical: 7,
+    paddingLeft: 10,
     marginEnd: 5,
     width: '85%',
   },
@@ -85,6 +86,7 @@ const styles = StyleSheet.create({
     fontSize: 10,
     color: Colors.grey,
     alignSelf: 'flex-end',
+    marginHorizontal: 5,
   },
   singleImageContainer: {
     width: 35,
