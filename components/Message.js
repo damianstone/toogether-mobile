@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: '100%',
     padding: 10,
-    marginVertical: 10,
+    marginVertical: 5,
     marginHorizontal: 5,
     borderRadius: 10,
     width: '65%',

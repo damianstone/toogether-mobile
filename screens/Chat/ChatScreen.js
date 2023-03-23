@@ -54,6 +54,10 @@ const ChatScreen = (props) => {
     }
   };
 
+  const handleGoBack = () => {
+    props.navigation.navigate('Chats');
+  };
+
   if (loadingChat || localLoading) {
     <ActivityModal
       loading
@@ -81,6 +85,18 @@ const ChatScreen = (props) => {
   };
   return (
     <View style={styles.screen}>
+      {matchedData && (
+        <ChatHeader
+          onGoBack={() => handleGoBack()}
+          matchedData={matchedData}
+          onShowProfile={() =>
+            handleShowProfile(
+              matchedData.matched_profile,
+              matchedData.matched_profile.is_in_group
+            )
+          }
+        />
+      )}
       <View style={styles.messages_Container}>
         <FlatList
           inverted={true}
@@ -120,39 +136,11 @@ ChatScreen.navigationOptions = (navData) => {
       });
     }
   };
-  const matchedData = navData.navigation.getParam('matchedData');
-
-  return {
-    headerTitle: '',
-    headerLeft: () => (
-      <View style={styles.titleContainer}>
-        <HeaderButtons HeaderButtonComponent={HeaderButtom}>
-          <Item
-            iconName={
-              Platform.OS === 'android' ? 'ios-arrow-back' : 'ios-arrow-back'
-            }
-            title="Back"
-            onPress={() => {
-              navData.navigation.navigate('Chats');
-            }}
-          />
-        </HeaderButtons>
-        {matchedData && (
-          <ChatHeader
-            matchedData={matchedData}
-            onShowProfile={() => {
-              handleShowProfile(matchedData?.matched_profile.id, false);
-            }}
-          />
-        )}
-      </View>
-    ),
-  };
 };
 
 const styles = StyleSheet.create({
   screen: {
-    flex: 2,
+    flex: 3,
     backgroundColor: Colors.bg,
     height: '100%',
     width: '100%',

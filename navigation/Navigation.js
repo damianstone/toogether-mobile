@@ -113,7 +113,12 @@ const MyProfileNavigatorWithModal = createStackNavigator(
 const ChatNavigator = createStackNavigator(
   {
     Chats: ChatsScreen,
-    Chat: ChatScreen,
+    Chat: {
+      screen: ChatScreen,
+      navigationOptions: {
+        headerShown: false,
+      },
+    },
     SwipeProfile: {
       screen: SwipeProfileScreen,
       navigationOptions: {
