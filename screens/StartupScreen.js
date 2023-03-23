@@ -1,16 +1,11 @@
 /* eslint-disable consistent-return */
 import React, { useEffect } from 'react';
-import { ActivityIndicator, StyleSheet, View } from 'react-native';
-import { useDispatch } from 'react-redux';
+import { StyleSheet, View } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { authenticate } from '../store/actions/user';
 import ActivityModal from '../components/UI/ActivityModal';
 import Colors from '../constants/Colors';
 
-const jwt_decode = require('jwt-decode');
-
 const StartupScreen = (props) => {
-  const dispatch = useDispatch();
   useEffect(() => {
     const tryLogin = async () => {
       // get the user data as a promise
@@ -21,13 +16,8 @@ const StartupScreen = (props) => {
       } else {
         props.navigation.navigate('AuthStart');
       }
-
-      // // if there is no user data
-      // if (!userData || !userData.has_account) {
-      //   console.log('NO AUTH');
-      //   props.navigation.navigate('AuthStart');
-      // }
     };
+    
     tryLogin();
   }, []);
 
