@@ -314,7 +314,7 @@ const MainNavigator = createSwitchNavigator(
     Swipe: AppNavigator,
   },
   {
-    initialRouteName: 'Startup'
+    initialRouteName: 'Startup',
   }
 );
 
@@ -329,7 +329,7 @@ function getActiveRouteName(navigationState) {
   if (!navigationState) return null;
   // dive into nested navigators
   if (route.routes) return getActiveRouteName(route);
-  
+
   return route.routeName;
 }
 
@@ -340,4 +340,4 @@ export default () => (
       console.log(userData);
     }}
   />
-)
+);

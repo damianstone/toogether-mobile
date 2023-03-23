@@ -17,7 +17,7 @@ const StartupScreen = (props) => {
         props.navigation.navigate('AuthStart');
       }
     };
-    
+
     tryLogin();
   }, []);
 

@@ -10,7 +10,7 @@ import {
   TouchableOpacity,
   View,
   Alert,
-  RefreshControl
+  RefreshControl,
 } from 'react-native';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { useDispatch, useSelector } from 'react-redux';
