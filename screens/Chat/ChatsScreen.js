@@ -110,28 +110,6 @@ const ChatsScreen = (props) => {
     }
     return null;
   };
-  const onOpenActionSheet = (matchedProfile, matchId) => {
-    // Same interface as https://facebook.github.io/react-native/docs/actionsheetios.html
-    const options = ['Send message', 'Remove match', 'Cancel'];
-    const destructiveButtonIndex = 2;
-    const cancelButtonIndex = 3;
-    showActionSheetWithOptions(
-      {
-        options,
-        cancelButtonIndex,
-        destructiveButtonIndex,
-      },
-      (buttonIndex) => {
-        if (buttonIndex === 0) {
-          handleInstagram(matchedProfile.instagram);
-        }
-        if (buttonIndex === 1) {
-          handleDeleteMatch(matchId);
-        }
-        return null;
-      }
-    );
-  };
 
   if (loadingListMatches) {
     return (
@@ -193,7 +171,6 @@ const ChatsScreen = (props) => {
     return (
       <PreviewChat
         onShowChat={() => handleShowChat(item, matchedData)}
-        onOpenActionSheet={() => onOpenActionSheet(matchedProfile, item.id)}
         matchedProfileHasPhoto={matchedProfile.photos.length > 0}
         matchedProfilePhoto={
           matchedProfile.photos.length > 0
