@@ -1,5 +1,5 @@
 import React from 'react';
-import { Platform, Text, View } from 'react-native';
+import { Platform, Text } from 'react-native';
 import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 import { createMaterialBottomTabNavigator } from 'react-navigation-material-bottom-tabs';
 import { createStackNavigator } from 'react-navigation-stack';
@@ -48,8 +48,6 @@ const defaultNavOptions = {
   headerTintColor: Colors.white,
   headerTitleAlign: 'center',
 };
-
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const AuthNavigator = createStackNavigator(
   {
@@ -318,26 +316,4 @@ const MainNavigator = createSwitchNavigator(
   }
 );
 
-const AppContainer = createAppContainer(MainNavigator);
-
-// export default createAppContainer(MainNavigator);
-
-// gets the current screen from navigation state
-function getActiveRouteName(navigationState) {
-  const route = navigationState.routes[navigationState.index];
-
-  if (!navigationState) return null;
-  // dive into nested navigators
-  if (route.routes) return getActiveRouteName(route);
-  
-  return route.routeName;
-}
-
-export default () => (
-  <AppContainer
-    onNavigationStateChange={async () => {
-      const userData = JSON.parse(await AsyncStorage.getItem('@userData'));
-      console.log(userData);
-    }}
-  />
-)
+export default createAppContainer(MainNavigator);
