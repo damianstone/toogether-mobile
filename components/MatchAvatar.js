@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
-import { getNameInitials, getImage } from '../utils/getMethods';
+import { checkPhoto } from '../utils/checks';
 import Colors from '../constants/Colors';
 
 const MatchAvatar = (props) => {
@@ -17,12 +17,6 @@ const MatchAvatar = (props) => {
     matchedProfilePhoto,
     onShowChat,
   } = props;
-  const checkPhoto = (profile) => {
-    if (profile.photos.length > 0) {
-      return { uri: `${getImage(profile.photos[0]?.image)}` };
-    }
-    return require('../assets/images/placeholder-profile.png');
-  };
 
   return (
     <TouchableOpacity onPress={onShowChat}>

@@ -95,6 +95,7 @@ const ChatsScreen = (props) => {
           isInGroup: matchedData.matched_profile.is_in_group,
           matchedId: matchedData.matched_profile.id,
           matchedName: matchedData.matched_profile.name,
+          matchedData: matchedData,
         },
       });
     }

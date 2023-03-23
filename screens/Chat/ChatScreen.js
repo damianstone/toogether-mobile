@@ -22,9 +22,12 @@ import ActivityModal from '../../components/UI/ActivityModal';
 import Avatar from '../../components/UI/Avatar';
 import Colors from '../../constants/Colors';
 import sendimg from '../../assets/images/send-button.png';
+import Message from '../../components/Message';
 
 const ChatScreen = (props) => {
   const chatId = props.navigation.getParam('chatId');
+  const matchedData = props.navigation.getParam('matchedData');
+  const isInGroup = props.navigation.getParam('isInGroup');
   const { profileContext, updateProfileContext } = useContext(Context);
   const [refreshing, setRefreshing] = useState(false);
   const [localLoading, setLocalLoading] = useState(false);
@@ -41,6 +44,15 @@ const ChatScreen = (props) => {
     dispatch(getChat(chatId));
   }, [chatId]);
 
+  const handleShowProfile = (profile, isInGroup) => {
+    if (profile) {
+      props.navigation.navigate('SwipeProfile', {
+        mainProfileId: profile.id,
+        isInGroup: isInGroup,
+      });
+    }
+  };
+
   if (loadingChat || localLoading) {
     <ActivityModal
       loading
@@ -55,14 +67,15 @@ const ChatScreen = (props) => {
   }
   const renderMessages = ({ item }) => {
     return (
-      <View
-        style={
-          item.sender.id === profileContext.id
-            ? styles.myMessage
-            : styles.senderMessage
-        }>
-        <Text style={styles.allMessages}>{item.text}</Text>
-      </View>
+      <Message
+        message={item.text}
+        isMyMessage={profileContext.id != item.sender.id ? false : true}
+        ownProfile={profileContext}
+        matchedProfile={matchedData?.matched_profile}
+        onShowProfile={() => {
+          handleShowProfile(item.sender.id, isInGroup);
+        }}
+      />
     );
   };
   return (
@@ -172,31 +185,6 @@ const styles = StyleSheet.create({
     height: '90%',
     width: '100%',
     marginBottom: 20,
-  },
-
-  senderMessage: {
-    fontSize: 16,
-    lineHeight: '100%',
-    backgroundColor: Colors.blue,
-    padding: 10,
-    margin: 10,
-    borderRadius: 10,
-    width: '70%',
-    alignSelf: 'flex-start',
-  },
-
-  myMessage: {
-    backgroundColor: Colors.orange,
-    padding: 10,
-    margin: 10,
-    borderRadius: 10,
-    width: '70%',
-    alignSelf: 'flex-end',
-  },
-
-  allMessages: {
-    fontSize: 16,
-    color: Colors.white,
   },
 
   sendMessage: {
