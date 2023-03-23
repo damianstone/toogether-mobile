@@ -49,6 +49,8 @@ const defaultNavOptions = {
   headerTitleAlign: 'center',
 };
 
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 const AuthNavigator = createStackNavigator(
   {
     AuthStart: AuthStartScreen,
@@ -312,8 +314,30 @@ const MainNavigator = createSwitchNavigator(
     Swipe: AppNavigator,
   },
   {
-    initialRouteName: 'Startup',
+    initialRouteName: 'Startup'
   }
 );
 
-export default createAppContainer(MainNavigator);
+const AppContainer = createAppContainer(MainNavigator);
+
+// export default createAppContainer(MainNavigator);
+
+// gets the current screen from navigation state
+function getActiveRouteName(navigationState) {
+  const route = navigationState.routes[navigationState.index];
+
+  if (!navigationState) return null;
+  // dive into nested navigators
+  if (route.routes) return getActiveRouteName(route);
+  
+  return route.routeName;
+}
+
+export default () => (
+  <AppContainer
+    onNavigationStateChange={async () => {
+      const userData = JSON.parse(await AsyncStorage.getItem('@userData'));
+      console.log(userData);
+    }}
+  />
+)
