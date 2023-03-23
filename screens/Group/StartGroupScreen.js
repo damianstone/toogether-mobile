@@ -45,7 +45,7 @@ const StartGroupScreen = (props) => {
   } = createGroupReducer;
 
   // * this function replaces the first screen on the GroupNavigato stack
-  const replaceAction = StackActions.replace("Group", {});
+  const replaceAction = StackActions.replace('Group', {});
 
   // * if the user is already in a group
   useEffect(() => {

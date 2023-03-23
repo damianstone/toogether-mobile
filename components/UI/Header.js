@@ -13,19 +13,11 @@ const Header = (props) => {
 
   const headerTitleComponent = () => {
     switch (screenName) {
-      case "MyProfileScreen":
-        return (
-          <Text style={styles.textContainer}>
-            My Profile
-          </Text>
-        );
-      case "LikesScreen":
-        return (
-          <Text style={styles.textContainer}>
-            Likes
-          </Text>
-        );
-      default :
+      case 'MyProfileScreen':
+        return <Text style={styles.textContainer}>My Profile</Text>;
+      case 'LikesScreen':
+        return <Text style={styles.textContainer}>Likes</Text>;
+      default:
         return (
           <View style={styles.logoContainer}>
             <Image
@@ -35,11 +27,11 @@ const Header = (props) => {
           </View>
         );
     }
-  }
+  };
 
   const headerLeftComponent = () => {
     switch (screenName) {
-      case "Settings":
+      case 'Settings':
         return (
           <HeaderButtons HeaderButtonComponent={HeaderButtom}>
             <Item
@@ -53,7 +45,7 @@ const Header = (props) => {
             />
           </HeaderButtons>
         );
-      case "MyProfileScreen":
+      case 'MyProfileScreen':
         return (
           <HeaderButtons HeaderButtonComponent={HeaderButtom}>
             <Item
@@ -67,7 +59,7 @@ const Header = (props) => {
             />
           </HeaderButtons>
         );
-      default :
+      default:
         return (
           <Avatar
             onPress={() => {
@@ -76,15 +68,13 @@ const Header = (props) => {
           />
         );
     }
-  }
+  };
 
   const headerRightComponent = () => {
     switch (screenName) {
-      case "Settings":
-        return (
-          <View></View>
-        );
-      case "MyProfileScreen":
+      case 'Settings':
+        return <View></View>;
+      case 'MyProfileScreen':
         return (
           <HeaderButtons HeaderButtonComponent={HeaderButtom}>
             <Item
@@ -97,7 +87,7 @@ const Header = (props) => {
             />
           </HeaderButtons>
         );
-      default :
+      default:
         return (
           <HeaderButtons HeaderButtonComponent={HeaderButtom}>
             <Item
@@ -114,18 +104,18 @@ const Header = (props) => {
           </HeaderButtons>
         );
     }
-  }
+  };
 
   const additionalOptions = () => {
     switch (screenName) {
-      case "MyProfileScreen":
-        return ({ gestureDirection: 'horizontal-inverted', })
-      default: 
-        return ({})
+      case 'MyProfileScreen':
+        return { gestureDirection: 'horizontal-inverted' };
+      default:
+        return {};
     }
-  }
+  };
 
-  return ({
+  return {
     headerShown: true,
     headerTitleAlign: 'center',
     headerStyle: {
@@ -136,7 +126,7 @@ const Header = (props) => {
     headerLeft: headerLeftComponent,
     headerRight: headerRightComponent,
     ...additionalOptions(),
-  });
+  };
 };
 
 export default Header;
@@ -153,5 +143,5 @@ const styles = StyleSheet.create({
   textContainer: {
     fontSize: 24,
     color: Colors.white,
-  }
+  },
 });

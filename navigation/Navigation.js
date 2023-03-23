@@ -59,7 +59,7 @@ const defaultNavOptions = {
 
 const AuthNavigator = () => {
   return (
-    <Stack.Navigator screenOptions={{ headerShown: false}} >
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="AuthStart" component={AuthStartScreen} />
       <Stack.Screen name="AuthLogin" component={AuthScreen} />
       <Stack.Screen name="Instagram" component={InstagramScreen} />
@@ -104,8 +104,15 @@ const MyProfileNavigator = () => {
 
 const MyProfileNavigatorWithModal = () => {
   return (
-    <Stack.Navigator presentation="modal" screenOptions={{ headerShown: false }} >
-      <Stack.Screen name="MyProfileNavigator" component={MyProfileNavigator} options={{}} />
+    <Stack.Navigator
+      presentation="modal"
+      screenOptions={{ headerShown: false }}
+    >
+      <Stack.Screen
+        name="MyProfileNavigator"
+        component={MyProfileNavigator}
+        options={{}}
+      />
       <Stack.Screen name="ProfileModal" component={ProfileModalScreen} />
     </Stack.Navigator>
   );
@@ -133,7 +140,11 @@ const LikeNavigator = () => {
         ...defaultNavOptions,
       }}
     >
-      <Stack.Screen name="LikesScreen" component={LikesScreen} options={Header} />
+      <Stack.Screen
+        name="LikesScreen"
+        component={LikesScreen}
+        options={Header}
+      />
     </Stack.Navigator>
   );
 };
@@ -145,19 +156,21 @@ const SwipeNavigator = () => {
         ...defaultNavOptions,
       }}
     >
-      <Stack.Screen name="SwipeScreen" component={SwipeScreen} options={Header} />
+      <Stack.Screen
+        name="SwipeScreen"
+        component={SwipeScreen}
+        options={Header}
+      />
     </Stack.Navigator>
   );
 };
 
 const MatchNavigator = () => {
   return (
-    <Stack.Navigator 
-      presentation="modal" 
+    <Stack.Navigator
+      presentation="modal"
       headerShown={false}
-      screenOptions={
-        defaultNavOptions
-      }
+      screenOptions={defaultNavOptions}
     >
       <Stack.Screen name="Chat" component={ChatNavigator} />
       <Stack.Screen name="ProfileModal" component={ProfileModalScreen} />
@@ -182,10 +195,7 @@ const GroupNavigator = () => {
           gestureDirection: 'horizontal-inverted',
         }}
       />
-      <Stack.Screen 
-        name="JoinGroup" 
-        component={JoinGroupScreen} 
-      />
+      <Stack.Screen name="JoinGroup" component={JoinGroupScreen} />
       <Stack.Screen
         name="Group"
         component={GroupScreen}
@@ -303,20 +313,20 @@ const GroupNavigator = () => {
 const tabScreenConfig = ({ route, navigation }) => {
   switch (route.name) {
     case 'SwipeNavigator':
-      return {}
+      return {};
     case 'Likes':
-      return {}
+      return {};
     case 'Group':
-      return {}
+      return {};
   }
-}
+};
 
 const tabBarConfig = ({ route, navigation }) => {
   switch (route.name) {
     case 'SwipeNavigator':
-      return {}
+      return {};
     case 'Likes':
-      return {}
+      return {};
     case 'Group':
       return {
         // showLabel: false,
@@ -343,9 +353,10 @@ const tabBarConfig = ({ route, navigation }) => {
   }
 };
 
-const Tab = Platform.OS === 'android'
-? createMaterialBottomTabNavigator()
-: createBottomTabNavigator();
+const Tab =
+  Platform.OS === 'android'
+    ? createMaterialBottomTabNavigator()
+    : createBottomTabNavigator();
 
 const ToogetherTab = () => {
   return (
@@ -358,43 +369,35 @@ const ToogetherTab = () => {
       inactiveColor={Colors.white}
       // tabBarOptions={tabBarConfig}
       // screenOptions={Header}
-    > 
-      <Tab.Screen 
-        name="SwipeNavigator" 
+    >
+      <Tab.Screen
+        name="SwipeNavigator"
         component={SwipeNavigator}
         options={{
           tabBarIcon: (tabInfo) => {
             return (
-              <Ionicons 
-                name="home-outline" 
-                size={25} 
-                color={tabInfo.color} 
-              />
+              <Ionicons name="home-outline" size={25} color={tabInfo.color} />
             );
           },
           tabBarColor: Colors.orange,
           tabBarLabel: Platform.OS === 'android' ? <Text>Swipe</Text> : 'Swipe',
-        }} 
+        }}
       />
-      <Tab.Screen 
-        name="Likes" 
+      <Tab.Screen
+        name="Likes"
         component={LikeNavigator}
         options={{
           tabBarIcon: (tabInfo) => {
-            return <AntDesign 
-                    color={tabInfo.color} 
-                    name="hearto" 
-                    size={25} 
-                  />;
+            return <AntDesign color={tabInfo.color} name="hearto" size={25} />;
           },
           tabBarColor: Colors.orange,
           tabBarLabel: Platform.OS === 'android' ? <Text>Likes</Text> : 'Likes',
-        }} 
+        }}
       />
-      <Tab.Screen 
-        name="GroupNavigator" 
-        component={GroupNavigator} 
-        options={{ 
+      <Tab.Screen
+        name="GroupNavigator"
+        component={GroupNavigator}
+        options={{
           tabBarIcon: (tabInfo) => {
             return (
               <MaterialCommunityIcons
@@ -411,7 +414,7 @@ const ToogetherTab = () => {
       />
     </Tab.Navigator>
   );
-}
+};
 
 const HomeNavigator = () => {
   return (
@@ -432,7 +435,7 @@ const HomeNavigator = () => {
 const AppNavigator = () => {
   return (
     <Stack.Navigator
-      initialRouteName='SwipeScreen'
+      initialRouteName="SwipeScreen"
       screenOptions={{
         headerShown: false,
       }}
@@ -459,7 +462,7 @@ const MainNavigator = createSwitchNavigator(
 function App() {
   return (
     <NavigationContainer>
-      <MainNavigator/>
+      <MainNavigator />
     </NavigationContainer>
   );
 }
