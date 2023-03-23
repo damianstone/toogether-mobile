@@ -23,6 +23,7 @@ import Avatar from '../../components/UI/Avatar';
 import Colors from '../../constants/Colors';
 import sendimg from '../../assets/images/send-button.png';
 import Message from '../../components/Message';
+import ChatHeader from '../../components/ChatHeader';
 
 const ChatScreen = (props) => {
   const chatId = props.navigation.getParam('chatId');
@@ -69,7 +70,7 @@ const ChatScreen = (props) => {
     return (
       <Message
         message={item.text}
-        isMyMessage={profileContext.id != item.sender.id ? false : true}
+        isMyMessage={profileContext?.id != item.sender.id ? false : true}
         ownProfile={profileContext}
         matchedProfile={matchedData?.matched_profile}
         onShowProfile={() => {
@@ -119,11 +120,10 @@ ChatScreen.navigationOptions = (navData) => {
       });
     }
   };
-  const matchedId = navData.navigation.getParam('matchedId');
-  const matchedName = navData.navigation.getParam('matchedName');
-  const isInGroup = navData.navigation.getParam('isInGroup');
+  const matchedData = navData.navigation.getParam('matchedData');
+
   return {
-    headerTitle: '  ',
+    headerTitle: '',
     headerLeft: () => (
       <View style={styles.titleContainer}>
         <HeaderButtons HeaderButtonComponent={HeaderButtom}>
@@ -137,19 +137,14 @@ ChatScreen.navigationOptions = (navData) => {
             }}
           />
         </HeaderButtons>
-        <View
-          style={{
-            marginTop: 5,
-            marginLeft: 10,
-            flex: 2,
-            flexDirection: 'row',
-          }}>
-          <Avatar
-            id={matchedId}
-            onPress={() => handleShowProfile(matchedId, isInGroup)}
+        {matchedData && (
+          <ChatHeader
+            matchedData={matchedData}
+            onShowProfile={() => {
+              handleShowProfile(matchedData?.matched_profile.id, false);
+            }}
           />
-          <Text style={styles.matched_Name}>{matchedName}</Text>
-        </View>
+        )}
       </View>
     ),
   };
@@ -167,15 +162,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     width: '100%',
     height: 50,
-  },
-
-  matched_Name: {
-    fontSize: 18,
-    color: 'white',
-    marginLeft: 30,
-    marginTop: 5,
-    paddingBottom: 5,
-    fontWeight: 'bold',
   },
 
   messages_Container: {
