@@ -113,3 +113,10 @@ export const checkMemberInGroup = (memberId, groupMembers) => {
 
   return false;
 };
+
+export const checkPhoto = (profile) => {
+  if (profile && profile.photos.length > 0) {
+    return { uri: `${getImage(profile.photos[0]?.image)}` };
+  }
+  return require('../assets/images/placeholder-profile.png');
+};

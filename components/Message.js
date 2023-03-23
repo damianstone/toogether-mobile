@@ -7,34 +7,31 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
+import { checkPhoto } from '../utils/checks';
+
 import Colors from '../constants/Colors';
 
 const Message = (props) => {
-  const { sender, message, onShowProfile, matchedProfile, ownProfile } = props;
+  const { isMyMessage, message, onShowProfile, matchedProfile, ownProfile } =
+    props;
 
-  const checkPhoto = (profile) => {
-    if (profile && profile.photos.length > 0) {
-      return { uri: `${getImage(profile.photos[0]?.image)}` };
-    }
-    return require('../assets/images/placeholder-profile.png');
-  };
   return (
     <View
       style={[
         styles.container,
-        sender ? styles.senderMessage : styles.myMessage,
+        isMyMessage ? styles.myMessage : styles.senderMessage,
       ]}>
       <View
         style={[
           styles.messageContainer,
-          sender ? styles.senderMessageBG : styles.myMessageBG,
+          isMyMessage ? styles.myMessageBG : styles.senderMessageBG,
         ]}>
         <Text style={styles.textMessage}>{message}</Text>
         <Text style={styles.time}>19:30</Text>
       </View>
       <TouchableOpacity onPress={onShowProfile}>
         <ImageBackground
-          source={checkPhoto(sender ? matchedProfile : ownProfile)}
+          source={checkPhoto(isMyMessage ? ownProfile : matchedProfile)}
           imageStyle={styles.img}
           style={styles.singleImageContainer}></ImageBackground>
       </TouchableOpacity>
@@ -81,7 +78,6 @@ const styles = StyleSheet.create({
   },
   textMessage: {
     fontSize: 16,
-    fontWeight: 'bold',
     color: Colors.white,
   },
 

@@ -69,7 +69,7 @@ const ChatScreen = (props) => {
     return (
       <Message
         message={item.text}
-        sender={profileContext.id != item.sender.id ? true : false}
+        isMyMessage={profileContext.id != item.sender.id ? false : true}
         ownProfile={profileContext}
         matchedProfile={matchedData?.matched_profile}
         onShowProfile={() => {
