@@ -312,7 +312,7 @@ const MainNavigator = createSwitchNavigator(
     Swipe: AppNavigator,
   },
   {
-    initialRouteName: 'Startup'
+    initialRouteName: 'Startup',
   }
 );
 

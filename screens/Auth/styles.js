@@ -21,20 +21,6 @@ export default StyleSheet.create({
     alignItems: 'center',
   },
 
-  scrollview_style: {
-    flexGrow: 1,
-    backgroundColor: Colors.white,
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-    paddingBottom: 0,
-  },
-
-  scrollview_content_container: {
-    flexDirection: 'column', // inner items will be added vertically
-    flexGrow: 1, // all the available vertical space will be occupied by it
-    justifyContent: 'space-between', // will create the gutter between body and footer
-  },
-
   auth_text_view: {
     marginTop: Platform.OS === 'ios' ? 80 : 40,
     padding: 15,
@@ -55,6 +41,20 @@ export default StyleSheet.create({
   auth_text_small: {
     color: Colors.white,
     fontSize: 28,
+  },
+
+  scrollview_style: {
+    flexGrow: 1,
+    backgroundColor: Colors.white,
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    paddingBottom: 0,
+  },
+
+  scrollview_content_container: {
+    flexDirection: 'column', // inner items will be added vertically
+    flexGrow: 1, // all the available vertical space will be occupied by it
+    justifyContent: 'space-between', // will create the gutter between body and footer
   },
 
   auth_input_container: {

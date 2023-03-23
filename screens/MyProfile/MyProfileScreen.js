@@ -10,7 +10,7 @@ import {
   TouchableOpacity,
   View,
   Alert,
-  RefreshControl
+  RefreshControl,
 } from 'react-native';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { useDispatch, useSelector } from 'react-redux';
@@ -197,6 +197,7 @@ const MyProfileScreen = (props) => {
     props.navigation.navigate('SwipeProfile', {
       mainProfileId: userProfile.id,
       isInGroup: userProfile.is_in_group,
+      isMyProfile: true,
     });
   };
 
