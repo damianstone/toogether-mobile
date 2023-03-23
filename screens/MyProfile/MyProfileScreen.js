@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-curly-brace-presence */
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback, useContext } from 'react';
 import {
   FlatList,
   Image,
@@ -18,7 +18,7 @@ import { useActionSheet } from '@expo/react-native-action-sheet';
 import * as ImagePicker from 'expo-image-picker';
 import { LinearGradient } from 'expo-linear-gradient';
 import { MaterialIcons, Feather } from '@expo/vector-icons';
-import { useNetInfo } from '@react-native-community/netinfo';
+import { Context } from '../../context/ContextProvider';
 import { getNameInitials, getImage } from '../../utils/getMethods';
 
 import HeaderButtom from '../../components/UI/HeaderButton';
@@ -34,38 +34,13 @@ import {
 } from '../../store/actions/user';
 import { checkServerError, check400Error } from '../../utils/errors';
 import { verifyPermissions } from '../../utils/permissions';
+import { BASE_PHOTOS } from '../../data/base_fotos';
 import styles from './styles';
 
-const BASE_PHOTOS = [
-  {
-    id: 1,
-    text: 'Add 📸',
-  },
-  {
-    id: 2,
-    text: 'Add 📸',
-  },
-  {
-    id: 3,
-    text: 'Add 📸',
-  },
-  {
-    id: 4,
-    text: 'Add photo',
-  },
-  {
-    id: 5,
-    text: 'Add photo',
-  },
-  {
-    id: 6,
-    text: 'Add photo',
-  },
-];
-
 const MyProfileScreen = (props) => {
+  const { profileContext, updateProfileContext } = useContext(Context);
+
   const dispatch = useDispatch();
-  const netInfo = useNetInfo();
   const { showActionSheetWithOptions } = useActionSheet();
   const [refreshing, setRefreshing] = useState(false);
   const [photoId, setPhotoId] = useState('');
@@ -105,6 +80,9 @@ const MyProfileScreen = (props) => {
     }
     if (errorProfile) {
       checkServerError(errorProfile);
+    }
+    if (userProfile) {
+      updateProfileContext(userProfile);
     }
   }, [photos, userProfile]);
 
@@ -218,6 +196,7 @@ const MyProfileScreen = (props) => {
     props.navigation.navigate('SwipeProfile', {
       mainProfileId: userProfile.id,
       isInGroup: userProfile.is_in_group,
+      isMyProfile: true,
     });
   };
 
@@ -305,13 +284,14 @@ const MyProfileScreen = (props) => {
                   style={styles.image}
                 />
               )}
-              {(!photos || Object.values(photos).length === 0) && userProfile && (
-                <View style={styles.avatar_view}>
-                  <Text style={styles.avatar_initials}>
-                    {getNameInitials(userProfile.name)}
-                  </Text>
-                </View>
-              )}
+              {(!photos || Object.values(photos).length === 0) &&
+                userProfile && (
+                  <View style={styles.avatar_view}>
+                    <Text style={styles.avatar_initials}>
+                      {getNameInitials(userProfile.name)}
+                    </Text>
+                  </View>
+                )}
             </TouchableOpacity>
             <View style={styles.nameView}>
               {userProfile && userProfile.name && (

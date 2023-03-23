@@ -13,9 +13,11 @@ import Colors from '../../constants/Colors';
 
 const ProfileScreen = (props) => {
   const dispatch = useDispatch();
+
   const profile = props.route.params.profile;
   const isGroup = props.route.params.isGroup;
   const preview = props.route.params.preview;
+  const isMyProfile = props.route.params.isMyProfile;
   const currentRef = props.route.params.currentRef;
 
   const blockProfileReducer = useSelector((state) => state.blockProfile);
@@ -150,6 +152,7 @@ const ProfileScreen = (props) => {
           handleLike={() => handleLike(profile.id)}
           handleDislike={() => handleDislike(profile.id)}
           openAlert={openAlert}
+          isMyProfile={isMyProfile}
           isGroup={isGroup}
           preview={preview}
           name={profile.name}

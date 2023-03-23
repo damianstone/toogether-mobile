@@ -16,6 +16,7 @@ import * as w from '../../constants/swipe';
 
 const SwipeProfileScreen = (props) => {
   const dispatch = useDispatch();
+  const isMyProfile = props.route.params.isMyProfile;
   const mainProfileId = props.route.params.mainProfileId;
   const isInGroup = props.route.params.isInGroup;
 
@@ -52,6 +53,7 @@ const SwipeProfileScreen = (props) => {
         profile: profile,
         isGroup: isGroup,
         preview: true,
+        isMyProfile: isMyProfile,
       });
     }
   };

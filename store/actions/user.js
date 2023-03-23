@@ -3,9 +3,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import * as Location from 'expo-location';
 import * as c from '../../constants/user';
-import getEnvVars from '../../environment';
+import { ENV } from '../../environment';
 
-const { API_URL: BASE_URL } = getEnvVars();
+const BASE_URL = ENV.API_URL;
 
 // -------------------------------- LOCATION --------------------------------
 
