@@ -26,7 +26,9 @@ const Message = (props) => {
           styles.messageContainer,
           isMyMessage ? styles.myMessageBG : styles.senderMessageBG,
         ]}>
-        <Text style={styles.textMessage}>{message}</Text>
+        <View style={styles.textMessageContainer}>
+          <Text style={styles.textMessage}>{message}</Text>
+        </View>
         <Text style={styles.time}>19:30</Text>
       </View>
       <TouchableOpacity onPress={onShowProfile}>
@@ -49,7 +51,7 @@ const styles = StyleSheet.create({
     marginVertical: 5,
     marginHorizontal: 5,
     borderRadius: 10,
-    width: '65%',
+    width: '75%',
     flex: 2,
     flexDirection: 'row',
     alignItems: 'center',
@@ -64,9 +66,10 @@ const styles = StyleSheet.create({
 
   messageContainer: {
     flex: 2,
+    flexDirection: 'row',
     borderRadius: 15,
-    paddingVertical: 7,
-    paddingLeft: 10,
+    paddingVertical: 5,
+    paddingHorizontal: 10,
     marginEnd: 5,
     width: '85%',
   },
@@ -77,13 +80,21 @@ const styles = StyleSheet.create({
     marginStart: 10,
     backgroundColor: Colors.blue,
   },
+  textMessageContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+
   textMessage: {
     fontSize: 16,
     color: Colors.white,
+    margin: 0,
+    paddingVertical: 2.5,
   },
 
   time: {
-    fontSize: 10,
+    fontSize: 9,
     color: Colors.grey,
     alignSelf: 'flex-end',
     marginHorizontal: 5,

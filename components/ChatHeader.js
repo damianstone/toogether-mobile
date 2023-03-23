@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import Constants from 'expo-constants';
 import {
   Text,
   View,
@@ -18,7 +19,7 @@ const ChatHeader = (props) => {
   const { matched_profile: matchedProfile } = matchedData;
 
   return (
-    <View style={styles.titleContainer}>
+    <View style={styles.headerContainer}>
       <HeaderButtons HeaderButtonComponent={HeaderButtom}>
         <Item
           iconName={
@@ -45,19 +46,17 @@ const ChatHeader = (props) => {
 export default ChatHeader;
 
 const styles = StyleSheet.create({
-  titleContainer: {
+  headerContainer: {
     flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: Colors.primary,
-    height: 100,
-    marginTop: 10,
-    paddingTop: 50,
+    paddingTop: Constants.statusBarHeight + 15,
+    paddingBottom: 5,
     width: '100%',
+    // alignItems: 'flex-end',
   },
 
   singleImageContainer: {
-    width: 50,
-    height: 50,
+    width: 40,
+    height: 40,
     borderRadius: 100,
     justifyContent: 'center',
     alignItems: 'center',

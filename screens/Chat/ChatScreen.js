@@ -140,7 +140,7 @@ ChatScreen.navigationOptions = (navData) => {
 
 const styles = StyleSheet.create({
   screen: {
-    flex: 3,
+    flex: 1,
     backgroundColor: Colors.bg,
     height: '100%',
     width: '100%',
