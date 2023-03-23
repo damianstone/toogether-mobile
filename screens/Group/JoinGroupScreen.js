@@ -22,6 +22,7 @@ import AuthButton from '../../components/UI/AuthButton';
 import AuthInput from '../../components/UI/AuthInput';
 import Colors from '../../constants/Colors';
 import * as g from '../../constants/group';
+import { StackActions } from '@react-navigation/native';
 
 const FORM_UPDATE = 'FORM_UPDATE';
 
@@ -85,7 +86,7 @@ const JoinGroupScreen = (props) => {
     if (dataJoin) {
       updateGroupContext(dataJoin);
       dispatch({ type: g.JOIN_GROUP_RESET });
-      props.navigation.navigate('Group');
+      StackActions.navigate('Group');
     }
   }, [errorJoin, dataJoin]);
 
