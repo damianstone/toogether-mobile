@@ -194,7 +194,9 @@ const AuthStartScreen = (props) => {
         <ScrollView
           style={styles.scrollview_style}
           contentContainerStyle={styles.scrollview_content_container}
-          automaticallyAdjustKeyboardInsets>
+          automaticallyAdjustKeyboardInsets={
+            Platform.OS == 'ios' ? false : true
+          }>
           <View style={styles.auth_input_container}>
             <AuthInput
               id="email"
@@ -213,7 +215,7 @@ const AuthStartScreen = (props) => {
             <AuthInput
               secureTextEntry
               textContentType={
-                Platform.OS === 'ios' ? 'newPassword' : 'newPassword'
+                Platform.OS === 'ios' ? 'password' : 'newPassword'
               }
               id="password"
               label="Password"
