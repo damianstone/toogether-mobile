@@ -16,13 +16,13 @@ import { StatusBar } from 'expo-status-bar';
 import { Context } from '../../context/ContextProvider';
 import { joinGroup } from '../../store/actions/group';
 import { check400Error, checkServerError } from '../../utils/errors';
-import { StackActions } from 'react-navigation';
 
 import HeaderButtom from '../../components/UI/HeaderButton';
 import AuthButton from '../../components/UI/AuthButton';
 import AuthInput from '../../components/UI/AuthInput';
 import Colors from '../../constants/Colors';
 import * as g from '../../constants/group';
+import { StackActions } from '@react-navigation/native';
 
 const { width, height } = Dimensions.get('window');
 
@@ -88,7 +88,7 @@ const JoinGroupScreen = (props) => {
     if (dataJoin) {
       updateGroupContext(dataJoin);
       dispatch({ type: g.JOIN_GROUP_RESET });
-      props.navigation.navigate('Group');
+      StackActions.navigate('Group');
     }
   }, [errorJoin, dataJoin]);
 

@@ -206,7 +206,7 @@ const EditProfileScreen = (props) => {
     <View style={styles.screen}>
       <KeyboardAvoidingView
         style={{ flex: 1, flexDirection: 'column', justifyContent: 'center' }}
-        behavior="padding"
+        behavior={ Platform.OS === 'ios' ? "padding" : "height"}
         enabled
         keyboardVerticalOffset={100}
       >
