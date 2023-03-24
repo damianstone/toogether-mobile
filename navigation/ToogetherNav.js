@@ -19,12 +19,12 @@ const ToogetherNav = () => {
       console.log(userData);
       const tokenDecoded = jwt_decode(userData.token);
       const refreshTokenDecoded = jwt_decode(userData.refresh_token);
-      const isTokenExpired = tokenDecoded.exp < Date.now() / 1000;
-      const isRefreshTokenExpired = refreshTokenDecoded.exp < Date.now() / 1000;
+      const isTokenExpired = tokenDecoded.exp < (Date.now() / 1000);
+      const isRefreshTokenExpired = refreshTokenDecoded.exp < (Date.now() / 1000);
 
       console.log('Change screen');
-      console.log(isTokenExpired);
-      console.log(isRefreshTokenExpired);
+      console.log(tokenDecoded.exp, isTokenExpired, (Date.now() / 1000));
+      console.log(refreshTokenDecoded.exp, isRefreshTokenExpired, (Date.now() / 1000));
 
       if (isTokenExpired && !isRefreshTokenExpired) {
         console.log('refresh');
