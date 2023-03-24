@@ -166,15 +166,16 @@ const styles = StyleSheet.create({
     height: '10%',
     width: '100%',
     alignItems: 'center',
+    marginBottom: 10,
   },
 
   inputMessage: {
     backgroundColor: Colors.white,
     borderRadius: 50,
     marginTop: 2.5,
-    marginBottom: 10,
     paddingLeft: 10,
     width: '85%',
+    height: 40,
   },
   imgContainer: {
     backgroundColor: Colors.orange,
@@ -187,7 +188,6 @@ const styles = StyleSheet.create({
   image: {
     width: '100%',
     height: '100%',
-    alignSelf: 'center',
   },
 });
 

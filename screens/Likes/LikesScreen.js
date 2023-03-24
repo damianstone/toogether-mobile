@@ -5,6 +5,8 @@ import {
   View,
   Image,
   RefreshControl,
+  SafeAreaView,
+  StatusBar,
   Text,
 } from 'react-native';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
@@ -18,6 +20,7 @@ import HeaderButtom from '../../components/UI/HeaderButton';
 import LikeCard from '../../components/LikeCard';
 import Avatar from '../../components/UI/Avatar';
 import Loader from '../../components/UI/Loader';
+import ActivityModal from '../../components/UI/ActivityModal';
 import Colors from '../../constants/Colors';
 
 const LikesScreen = (props) => {
@@ -118,6 +121,26 @@ const LikesScreen = (props) => {
     return members[Math.floor(Math.random() * members.length)];
   };
 
+  if (likesLoading || removeLikeLoading || likeLoading) {
+    return (
+      <SafeAreaView style={styles.safe}>
+        <StatusBar style="light" />
+        <View style={styles.screen}>
+          <ActivityModal
+            loading
+            title="Loading"
+            size="small"
+            activityColor="white"
+            titleColor="white"
+            activityWrapperStyle={{
+              backgroundColor: 'transparent',
+            }}
+          />
+        </View>
+      </SafeAreaView>
+    );
+  }
+
   const renderLikeCard = ({ item }) => {
     if (item.hasOwnProperty('members')) {
       const member = getRandomMember(item.members);
@@ -162,8 +185,7 @@ const LikesScreen = (props) => {
           width: '100%',
           height: '100%',
           textAlign: 'center',
-        }}
-      >
+        }}>
         <View style={{ width: 200, height: 200 }}>
           <Image
             source={require('../../assets/images/no-likes.png')}
@@ -236,6 +258,11 @@ LikesScreen.navigationOptions = (navData) => {
 export default LikesScreen;
 
 const styles = StyleSheet.create({
+  safe: {
+    flex: 1,
+    backgroundColor: Colors.bg,
+  },
+
   screen: {
     backgroundColor: Colors.bg,
     flex: 1,

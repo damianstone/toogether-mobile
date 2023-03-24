@@ -112,11 +112,19 @@ const MyProfileNavigatorWithModal = createStackNavigator(
 
 const ChatNavigator = createStackNavigator(
   {
-    Chats: ChatsScreen,
+    Chats: {
+      screen: ChatsScreen,
+      navigationOptions: {
+        ...defaultNavOptions,
+        gestureDirection: 'horizontal-inverted',
+      },
+    },
     Chat: {
       screen: ChatScreen,
       navigationOptions: {
+        ...defaultNavOptions,
         headerShown: false,
+        gestureDirection: 'horizontal',
       },
     },
     SwipeProfile: {

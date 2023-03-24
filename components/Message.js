@@ -51,8 +51,9 @@ const styles = StyleSheet.create({
     marginVertical: 5,
     marginHorizontal: 5,
     borderRadius: 10,
-    width: '75%',
-    flex: 2,
+    flex: 1,
+    alignContent: 'center',
+    maxWidth: '75%',
     flexDirection: 'row',
     alignItems: 'center',
   },
@@ -65,13 +66,12 @@ const styles = StyleSheet.create({
   },
 
   messageContainer: {
-    flex: 2,
+    flex: 1,
     flexDirection: 'row',
     borderRadius: 15,
     paddingVertical: 5,
     paddingHorizontal: 10,
     marginEnd: 5,
-    width: '85%',
   },
   myMessageBG: {
     backgroundColor: Colors.orange,
@@ -94,10 +94,12 @@ const styles = StyleSheet.create({
   },
 
   time: {
+    position: 'absolute',
     fontSize: 9,
     color: Colors.grey,
     alignSelf: 'flex-end',
-    marginHorizontal: 5,
+    bottom: 5,
+    right: 10,
   },
   singleImageContainer: {
     width: 35,

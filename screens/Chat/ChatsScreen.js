@@ -21,6 +21,7 @@ import { StatusBar } from 'expo-status-bar';
 import HeaderButtom from '../../components/UI/HeaderButton';
 import Colors from '../../constants/Colors';
 import { listMatches, deleteMatch } from '../../store/actions/swipe';
+import { listChats } from '../../store/actions/chat';
 import { checkServerError, check400Error } from '../../utils/errors';
 import no_chats from '../../assets/images/no-chats.png';
 import SwipeError from '../../components/SwipeError';
@@ -59,6 +60,16 @@ const ChatsScreen = (props) => {
     setLocalLoading(true);
     try {
       dispatch(listMatches());
+    } catch (err) {
+      console.log(err);
+    }
+    setLocalLoading(false);
+  }, [dispatch]);
+
+  const reloadChats = useCallback(async () => {
+    setLocalLoading(true);
+    try {
+      dispatch(listChats());
     } catch (err) {
       console.log(err);
     }
@@ -111,7 +122,7 @@ const ChatsScreen = (props) => {
     return null;
   };
 
-  if (loadingListMatches) {
+  if (loadingListMatches || loadingDeleteMatch || localLoading) {
     return (
       <SafeAreaView style={styles.safe}>
         <StatusBar style="light" />
@@ -202,6 +213,7 @@ const ChatsScreen = (props) => {
                   refreshing={refreshing}
                   onRefresh={reload}
                   tintColor={Colors.white}
+                  horizontal
                 />
               }
               initialNumToRender={4}
@@ -220,7 +232,7 @@ const ChatsScreen = (props) => {
             refreshControl={
               <RefreshControl
                 refreshing={refreshing}
-                onRefresh={reload}
+                onRefresh={reloadChats}
                 tintColor={Colors.white}
               />
             }
@@ -242,7 +254,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.bg,
   },
   screen: {
-    flex: 2,
+    flex: 1,
     backgroundColor: Colors.bg,
     justifyContent: 'flex-start',
     flexDirection: 'column',
@@ -292,6 +304,13 @@ const styles = StyleSheet.create({
     marginTop: 10,
     flexDirection: 'column',
     backgroundColor: Colors.bg,
+  },
+  chat_preview: {
+    overflow: 'hidden',
+    marginTop: 10,
+    flexDirection: 'column',
+    backgroundColor: Colors.bg,
+    flex: 1,
   },
 });
 
