@@ -186,8 +186,6 @@ export const updateToken = () => {
       dispatch({ type: c.REFRESH_TOKEN_REQUEST });
       const userData = JSON.parse(await AsyncStorage.getItem('@userData'));
 
-      console.log({ ...userData });
-
       const config = {
         'Content-Type': 'application/json',
         Accept: 'application/json',

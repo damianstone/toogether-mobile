@@ -12,27 +12,40 @@ const ToogetherNav = () => {
   const dispatch = useDispatch();
   const navRef = useRef();
 
-  const tryLogin = async () => {
+  const checkToken = async () => {
     const userData = JSON.parse(await AsyncStorage.getItem('@userData'));
-    const tokenDecoded = jwt_decode(userData.token);
-    const isTokenExpired = tokenDecoded.exp < Date.now() / 1000;
-    
-    console.log('Change screen');
 
-    if (isTokenExpired) {
-      dispatch(logout());
-      console.log('expired');
-      navRef.current.dispatch(
-        NavigationActions.navigate({
-          routeName: 'AuthStart',
-        })
-      )
+    if (userData) {
+      console.log(userData);
+      const tokenDecoded = jwt_decode(userData.token);
+      const refreshTokenDecoded = jwt_decode(userData.refresh_token);
+      const isTokenExpired = tokenDecoded.exp < Date.now() / 1000;
+      const isRefreshTokenExpired = refreshTokenDecoded.exp < Date.now() / 1000;
+
+      console.log('Change screen');
+      console.log(isTokenExpired);
+      console.log(isRefreshTokenExpired);
+
+      if (isTokenExpired && !isRefreshTokenExpired) {
+        console.log('refresh');
+        dispatch(updateToken());
+      }
+
+      if (isTokenExpired && isRefreshTokenExpired) {
+        console.log('expired');
+        dispatch(logout());
+        navRef.current.dispatch(
+          NavigationActions.navigate({
+            routeName: 'AuthStart',
+          })
+        )
+      }
     }
   }
 
   return (
     <TooNavigation
-      onNavigationStateChange={ () => tryLogin() }
+      onNavigationStateChange={ () => checkToken() }
       ref={navRef}
     />
   )
