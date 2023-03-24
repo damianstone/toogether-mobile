@@ -10,13 +10,28 @@ import Colors from '../../constants/Colors';
 const Header = (props) => {
   const navData = useNavigation();
   const screenName = props.route.name;
+  console.log(screenName)
 
   const headerTitleComponent = () => {
     switch (screenName) {
-      case 'MyProfileScreen':
-        return <Text style={styles.textContainer}>My Profile</Text>;
-      case 'LikesScreen':
-        return <Text style={styles.textContainer}>Likes</Text>;
+      case ("StartGroup" || "Group"):
+        return (
+          <Text style={styles.textContainer}>
+            Group
+          </Text>
+        );
+      case "MyProfileScreen":
+        return (
+          <Text style={styles.textContainer}>
+            My Profile
+          </Text>
+        );
+      case "LikesScreen":
+        return (
+          <Text style={styles.textContainer}>
+            Likes
+          </Text>
+        );
       default:
         return (
           <View style={styles.logoContainer}>

@@ -190,10 +190,7 @@ const GroupNavigator = () => {
       <Stack.Screen
         name="StartGroup"
         component={StartGroupScreen}
-        options={{
-          ...defaultNavOptions,
-          gestureDirection: 'horizontal-inverted',
-        }}
+        options={Header}
       />
       <Stack.Screen name="JoinGroup" component={JoinGroupScreen} />
       <Stack.Screen
