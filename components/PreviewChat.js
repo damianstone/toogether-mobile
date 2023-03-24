@@ -19,7 +19,6 @@ const PreviewChat = (props) => {
     data,
     matchedProfilePhoto,
     matchedProfileHasPhoto,
-    onOpenActionSheet,
     onShowChat,
   } = props;
 
@@ -41,10 +40,7 @@ const PreviewChat = (props) => {
             onPress={onShowProfile}></ImageBackground>
         </TouchableOpacity>
       </View>
-      <TouchableOpacity
-        onLongPress={onOpenActionSheet}
-        onPress={onShowChat}
-        style={styles.cardContainer}>
+      <TouchableOpacity onPress={onShowChat} style={styles.cardContainer}>
         <View style={styles.chat_preview}>
           <Text style={styles.matched_name}>{matchedProfile.name}</Text>
           <View style={styles.lastMessagesContainer}>

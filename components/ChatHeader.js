@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import Constants from 'expo-constants';
 import {
   Text,
   View,
@@ -6,23 +7,28 @@ import {
   StyleSheet,
   TouchableOpacity,
   Image,
+  Platform,
 } from 'react-native';
 import { Entypo } from '@expo/vector-icons';
 import { checkPhoto } from '../utils/checks';
 import Colors from '../constants/Colors';
-
+import { HeaderButtons, Item } from 'react-navigation-header-buttons';
+import HeaderButtom from './UI/HeaderButton';
 const ChatHeader = (props) => {
-  const { matchedData, onShowProfile } = props;
+  const { matchedData, onShowProfile, onGoBack } = props;
   const { matched_profile: matchedProfile } = matchedData;
 
   return (
-    <View
-      style={{
-        marginTop: 5,
-        marginLeft: 10,
-        flex: 3,
-        flexDirection: 'row',
-      }}>
+    <View style={styles.headerContainer}>
+      <HeaderButtons HeaderButtonComponent={HeaderButtom}>
+        <Item
+          iconName={
+            Platform.OS === 'android' ? 'ios-arrow-back' : 'ios-arrow-back'
+          }
+          title="Back"
+          onPress={onGoBack}
+        />
+      </HeaderButtons>
       <TouchableOpacity onPress={onShowProfile}>
         <ImageBackground
           source={checkPhoto(matchedProfile)}
@@ -30,11 +36,9 @@ const ChatHeader = (props) => {
           style={styles.singleImageContainer}></ImageBackground>
       </TouchableOpacity>
       <Text style={styles.matched_Name}>{matchedProfile.name}</Text>
-      <View style={styles.menuIcon}>
-        <TouchableOpacity>
-          <Entypo name="dots-three-vertical" size={24} color="grey" />
-        </TouchableOpacity>
-      </View>
+      <TouchableOpacity style={styles.menuIcon}>
+        <Entypo name="dots-three-vertical" size={24} color="grey" />
+      </TouchableOpacity>
     </View>
   );
 };
@@ -42,13 +46,21 @@ const ChatHeader = (props) => {
 export default ChatHeader;
 
 const styles = StyleSheet.create({
+  headerContainer: {
+    flexDirection: 'row',
+    paddingTop: Constants.statusBarHeight + 15,
+    paddingBottom: 5,
+    width: '100%',
+    // alignItems: 'flex-end',
+  },
+
   singleImageContainer: {
-    width: 50,
-    height: 50,
+    width: 40,
+    height: 40,
     borderRadius: 100,
     justifyContent: 'center',
     alignItems: 'center',
-    marginHorizontal: 10,
+    marginHorizontal: 20,
   },
 
   img: {
@@ -67,12 +79,11 @@ const styles = StyleSheet.create({
   },
   menuIcon: {
     alignSelf: 'center',
-    marginLeft: 80,
   },
   matched_Name: {
+    width: '50%',
     fontSize: 18,
     color: 'white',
-    marginLeft: 10,
     marginTop: 5,
     paddingBottom: 5,
     fontWeight: 'bold',
