@@ -27,14 +27,13 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 const { width, height } = Dimensions.get('window');
 
 const StartGroupScreen = (props) => {
-
   const { groupContext, updateGroupContext } = useContext(Context);
 
   useEffect(() => {
     if (groupContext) {
-      props.navigation.navigate('Group')
+      props.navigation.navigate('Group');
     }
-  }, [])
+  }, []);
 
   /* set to true to have time to check if there is a group in the context and be able to redirect 
   the user to the group screen in a smooth way */
@@ -50,7 +49,7 @@ const StartGroupScreen = (props) => {
   } = createGroupReducer;
 
   // * this function replaces the first screen on the GroupNavigato stack
-  const replaceAction = StackActions.replace("Group", {});
+  const replaceAction = StackActions.replace('Group', {});
 
   // * if the user is already in a group
   useEffect(() => {
