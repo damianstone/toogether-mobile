@@ -16,9 +16,9 @@ import * as w from '../../constants/swipe';
 
 const SwipeProfileScreen = (props) => {
   const dispatch = useDispatch();
-  const mainProfileId = props.navigation.getParam('mainProfileId');
-  const isInGroup = props.navigation.getParam('isInGroup');
-  const isMyProfile = props.navigation.getParam('isMyProfile');
+  const isMyProfile = props.route.params.isMyProfile;
+  const mainProfileId = props.route.params.mainProfileId;
+  const isInGroup = props.route.params.isInGroup;
 
   const currentSwipeProfile = useSelector((state) => state.getSwipeProfile);
 

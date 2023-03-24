@@ -9,7 +9,6 @@ import {
 } from 'react-native';
 import { useNetInfo } from '@react-native-community/netinfo';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
-import { withNavigation, withNavigationFocus } from 'react-navigation';
 import { StatusBar } from 'expo-status-bar';
 import { useSelector, useDispatch } from 'react-redux';
 import { verifyLocationPermissions } from '../../utils/permissions';
@@ -34,7 +33,7 @@ import styles from './styles';
 */
 
 const SwipeScreen = (props) => {
-  const topProfile = props.navigation.getParam('topProfile');
+  const topProfile = props.route.params?.topProfile;
 
   const dispatch = useDispatch();
   const netInfo = useNetInfo();
