@@ -94,10 +94,12 @@ const styles = StyleSheet.create({
   },
 
   time: {
+    position: 'absolute',
     fontSize: 9,
     color: Colors.grey,
     alignSelf: 'flex-end',
-    marginHorizontal: 5,
+    bottom: 5,
+    right: 10,
   },
   singleImageContainer: {
     width: 35,
