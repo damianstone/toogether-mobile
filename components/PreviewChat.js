@@ -9,7 +9,6 @@ import {
 
 import { getNameInitials, getImage } from '../utils/getMethods';
 import Colors from '../constants/Colors';
-import ChatAvatar from './ChatAvatar';
 
 const PreviewChat = (props) => {
   const {
