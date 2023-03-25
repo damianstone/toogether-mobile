@@ -50,17 +50,6 @@ export const userLocation = () => {
         },
       });
 
-      await AsyncStorage.setItem(
-        '@userData',
-        JSON.stringify({
-          id: data.id,
-          token: data.token,
-          access_token: data.access,
-          refresh_token: data.refresh,
-          has_account: data.has_account,
-        })
-      );
-
       dispatch({
         type: c.USER_LOCATION_SUCCESS,
         payload: data,
@@ -88,7 +77,7 @@ export const userRegister = (email, password, repeated_password) => {
       dispatch({ type: c.USER_REGISTER_REQUEST });
 
       const config = {
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/json'
       };
 
       const { data } = await axios({
@@ -98,8 +87,8 @@ export const userRegister = (email, password, repeated_password) => {
         data: {
           email,
           password,
-          repeated_password,
-        },
+          repeated_password
+        }
       });
 
       await AsyncStorage.setItem(
@@ -107,18 +96,18 @@ export const userRegister = (email, password, repeated_password) => {
         JSON.stringify({
           id: data.id,
           token: data.token,
-          has_account: data.has_account,
+          has_account: data.has_account
         })
       );
 
       dispatch({
         type: c.USER_REGISTER_SUCCESS,
-        payload: data,
+        payload: data
       });
     } catch (error) {
       dispatch({
         type: c.USER_REGISTER_FAIL,
-        payload: error,
+        payload: error
       });
     }
   };
@@ -131,7 +120,7 @@ export const userLogin = (email, password) => {
 
       const config = {
         'Content-Type': 'application/json',
-        Accept: 'application/json',
+        Accept: 'application/json'
       };
 
       const { data } = await axios({
@@ -140,8 +129,8 @@ export const userLogin = (email, password) => {
         headers: config,
         data: {
           email,
-          password,
-        },
+          password
+        }
       });
 
       await AsyncStorage.setItem(
@@ -150,6 +139,7 @@ export const userLogin = (email, password) => {
           id: data.id,
           token: data.token,
           has_account: data.has_account,
+          refresh_token: data.refresh
         })
       );
 
@@ -203,11 +193,11 @@ export const updateToken = () => {
         '@userData',
         JSON.stringify({
           ...userData,
-          token: data.token,
-          access_token: data.access.token,
+          token: data.access,
           refresh_token: data.refresh,
         })
       );
+
       dispatch({ type: c.REFRESH_TOKEN_SUCCESS, payload: data });
     } catch (error) {
       logout();
