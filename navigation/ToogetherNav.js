@@ -13,12 +13,12 @@ const ToogetherNav = () => {
 
   const checkToken = async () => {
     const userData = JSON.parse(await AsyncStorage.getItem('@userData'));
-    
+
     if (userData && userData.has_account) {
       const tokenDecoded = jwt_decode(userData.token);
       const refreshTokenDecoded = jwt_decode(userData.refresh_token);
-      const isTokenExpired = tokenDecoded.exp < (Date.now() / 1000);
-      const isRefreshTokenExpired = refreshTokenDecoded.exp < (Date.now() / 1000);
+      const isTokenExpired = tokenDecoded.exp < Date.now() / 1000;
+      const isRefreshTokenExpired = refreshTokenDecoded.exp < Date.now() / 1000;
 
       if (isTokenExpired && !isRefreshTokenExpired) {
         dispatch(updateToken());
@@ -28,19 +28,16 @@ const ToogetherNav = () => {
         dispatch(logout());
         navRef.current.dispatch(
           NavigationActions.navigate({
-            routeName: 'AuthStart'
+            routeName: 'AuthStart',
           })
-        )
+        );
       }
     }
-  }
+  };
 
   return (
-    <TooNavigation
-      onNavigationStateChange={ () => checkToken() }
-      ref={navRef}
-    />
-  )
+    <TooNavigation onNavigationStateChange={() => checkToken()} ref={navRef} />
+  );
 };
 
 export default ToogetherNav;
