@@ -263,25 +263,6 @@ const SettingScreen = (props) => {
   );
 };
 
-SettingScreen.navigationOptions = (navData) => {
-  return {
-    headerTitle: 'Settings',
-    headerLeft: () => (
-      <HeaderButtons HeaderButtonComponent={HeaderButtom}>
-        <Item
-          iconName={
-            Platform.OS === 'android' ? 'ios-arrow-back' : 'ios-arrow-back'
-          }
-          onPress={() => {
-            navData.navigation.navigate('MyProfile');
-          }}
-          title="Back arrow"
-        />
-      </HeaderButtons>
-    ),
-  };
-};
-
 export default SettingScreen;
 
 const styles = StyleSheet.create({

@@ -167,25 +167,6 @@ const JoinGroupScreen = (props) => {
   );
 };
 
-JoinGroupScreen.navigationOptions = (navData) => {
-  return {
-    headerTitle: 'Join a group',
-    headerLeft: () => (
-      <HeaderButtons HeaderButtonComponent={HeaderButtom}>
-        <Item
-          iconName={
-            Platform.OS === 'android' ? 'ios-arrow-back' : 'ios-arrow-back'
-          }
-          onPress={() => {
-            navData.navigation.goBack();
-          }}
-          title="Back arrow"
-        />
-      </HeaderButtons>
-    ),
-  };
-};
-
 export default JoinGroupScreen;
 
 const styles = StyleSheet.create({

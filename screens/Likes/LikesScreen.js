@@ -203,36 +203,6 @@ const LikesScreen = (props) => {
   );
 };
 
-LikesScreen.navigationOptions = (navData) => {
-  return {
-    headerTitle: 'Likes',
-    headerLeft: () => (
-      <Avatar
-        onPress={() => {
-          navData.navigation.navigate('MyProfile');
-        }}
-      />
-    ),
-    headerRight: () => (
-      <HeaderButtons HeaderButtonComponent={HeaderButtom}>
-        <Item
-          title="Chat"
-          iconName={
-            Platform.OS === 'android'
-              ? 'chatbubble-outline'
-              : 'chatbubble-outline'
-          }
-          onPress={() => {
-            navData.navigation.navigate('Match', {
-              screen: 'Likes',
-            });
-          }}
-        />
-      </HeaderButtons>
-    ),
-  };
-};
-
 export default LikesScreen;
 
 const styles = StyleSheet.create({

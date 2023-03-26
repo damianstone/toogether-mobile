@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Platform, Switch, Text, View, Image } from 'react-native';
+import { Context } from '../context/ContextProvider';
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createSwitchNavigator } from '@react-navigation/compat';
@@ -39,20 +40,18 @@ import LikesScreen from '../screens/Likes/LikesScreen';
 import BlockProfilesScreen from '../screens/BlockProfiles/BlockProfilesScreen';
 import InstagramScreen from '../screens/CreateProfile/InstagramScreen';
 
-import Deck from '../screens/Swipe/Deck';
+import Avatar from '../components/UI/Avatar';
+import HeaderButtom from '../components/UI/HeaderButton';
+import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import Header from '../components/UI/Header';
 
 const Stack = createStackNavigator();
 
 const defaultNavOptions = {
-  // headerShown: false,
   headerStyle: {
     backgroundColor: Colors.bg,
     shadowColor: 'transparent',
   },
-  // headerTitleStyle: {},
-  // headerBackTitleStyle: {},
-  // statusBarStyle: Colors.bg,
   headerTintColor: Colors.white,
   headerTitleAlign: 'center',
 };
@@ -75,29 +74,134 @@ const MyProfileNavigator = () => {
     <Stack.Navigator
       screenOptions={{
         ...defaultNavOptions,
-      }}
-    >
+      }}>
       <Stack.Screen
         name="MyProfileScreen"
         component={MyProfileScreen}
-        // options={[{
-        //   gestureDirection: 'horizontal-inverted',
-        // }, Header]}
-        options={Header}
+        options={({ navigation }) => ({
+          title: 'My Profile',
+          headerRight: () => (
+            <HeaderButtons HeaderButtonComponent={HeaderButtom}>
+              <Item
+                iconName={
+                  Platform.OS === 'android'
+                    ? 'settings-sharp'
+                    : 'settings-sharp'
+                }
+                onPress={() => {
+                  navigation.navigate('Settings');
+                }}
+                title="Back arrow"
+              />
+            </HeaderButtons>
+          ),
+          headerLeft: () => (
+            <HeaderButtons HeaderButtonComponent={HeaderButtom}>
+              <Item
+                iconName={
+                  Platform.OS === 'android'
+                    ? 'ios-arrow-back'
+                    : 'ios-arrow-back'
+                }
+                onPress={() => {
+                  navigation.goBack();
+                }}
+                title="Back arrow"
+              />
+            </HeaderButtons>
+          ),
+        })}
       />
       <Stack.Screen
         name="SwipeProfile"
         component={SwipeProfileScreen}
-        options={{
+        options={({ navigation }) => ({
           ...defaultNavOptions,
           title: 'Profile Preview',
           gestureDirection: 'horizontal',
-          // headerShown: false,
-        }}
+          headerLeft: () => (
+            <HeaderButtons HeaderButtonComponent={HeaderButtom}>
+              <Item
+                iconName={
+                  Platform.OS === 'android'
+                    ? 'ios-arrow-back'
+                    : 'ios-arrow-back'
+                }
+                onPress={() => {
+                  navigation.goBack();
+                }}
+                title="Back arrow"
+              />
+            </HeaderButtons>
+          ),
+        })}
       />
-      <Stack.Screen name="EditProfile" component={EditProfileScreen} />
-      <Stack.Screen name="Settings" component={SettingScreen} options={{}} />
-      <Stack.Screen name="Blocked" component={BlockProfilesScreen} />
+      <Stack.Screen
+        name="EditProfile"
+        component={EditProfileScreen}
+        options={({ navigation }) => ({
+          title: 'Edit profile',
+          headerLeft: () => (
+            <HeaderButtons HeaderButtonComponent={HeaderButtom}>
+              <Item
+                iconName={
+                  Platform.OS === 'android'
+                    ? 'ios-arrow-back'
+                    : 'ios-arrow-back'
+                }
+                onPress={() => {
+                  navigation.goBack();
+                }}
+                title="Back arrow"
+              />
+            </HeaderButtons>
+          ),
+        })}
+      />
+      <Stack.Screen
+        name="Settings"
+        component={SettingScreen}
+        options={({ navigation }) => ({
+          title: 'Settings',
+          headerLeft: () => (
+            <HeaderButtons HeaderButtonComponent={HeaderButtom}>
+              <Item
+                iconName={
+                  Platform.OS === 'android'
+                    ? 'ios-arrow-back'
+                    : 'ios-arrow-back'
+                }
+                onPress={() => {
+                  navigation.goBack();
+                }}
+                title="Back arrow"
+              />
+            </HeaderButtons>
+          ),
+        })}
+      />
+      <Stack.Screen
+        name="Blocked"
+        component={BlockProfilesScreen}
+        options={({ navigation }) => ({
+          title: 'Blocked profiles',
+          headerLeft: () => (
+            <HeaderButtons HeaderButtonComponent={HeaderButtom}>
+              <Item
+                iconName={
+                  Platform.OS === 'android'
+                    ? 'ios-arrow-back'
+                    : 'ios-arrow-back'
+                }
+                onPress={() => {
+                  navigation.goBack();
+                }}
+                title="Back arrow"
+              />
+            </HeaderButtons>
+          ),
+        })}
+      />
     </Stack.Navigator>
   );
 };
@@ -105,14 +209,8 @@ const MyProfileNavigator = () => {
 const MyProfileNavigatorWithModal = () => {
   return (
     <Stack.Navigator
-      presentation="modal"
-      screenOptions={{ headerShown: false }}
-    >
-      <Stack.Screen
-        name="MyProfileNavigator"
-        component={MyProfileNavigator}
-        options={{}}
-      />
+      screenOptions={{ headerShown: false, presentation: 'modal' }}>
+      <Stack.Screen name="MyProfileNavigator" component={MyProfileNavigator} />
       <Stack.Screen name="ProfileModal" component={ProfileModalScreen} />
     </Stack.Navigator>
   );
@@ -124,11 +222,53 @@ const ChatNavigator = () => {
       screenOptions={{
         ...defaultNavOptions,
         gestureDirection: 'horizontal',
-        // title: null,
-      }}
-    >
-      <Stack.Screen name="ChatScreen" component={ChatScreen} />
-      <Stack.Screen name="SwipeProfile" component={SwipeProfileScreen} />
+      }}>
+      <Stack.Screen
+        name="Match"
+        component={ChatScreen}
+        options={({ navigation }) => ({
+          title: 'Matches',
+          headerLeft: () => (
+            <HeaderButtons HeaderButtonComponent={HeaderButtom}>
+              <Item
+                iconName={
+                  Platform.OS === 'android'
+                    ? 'ios-arrow-back'
+                    : 'ios-arrow-back'
+                }
+                onPress={() => {
+                  navigation.goBack();
+                }}
+                title="Back arrow"
+              />
+            </HeaderButtons>
+          ),
+        })}
+      />
+      <Stack.Screen
+        name="SwipeProfile"
+        component={SwipeProfileScreen}
+        options={({ navigation }) => ({
+          ...defaultNavOptions,
+          title: 'Swipe profile',
+          gestureDirection: 'horizontal',
+          headerLeft: () => (
+            <HeaderButtons HeaderButtonComponent={HeaderButtom}>
+              <Item
+                iconName={
+                  Platform.OS === 'android'
+                    ? 'ios-arrow-back'
+                    : 'ios-arrow-back'
+                }
+                onPress={() => {
+                  navigation.goBack();
+                }}
+                title="Back arrow"
+              />
+            </HeaderButtons>
+          ),
+        })}
+      />
     </Stack.Navigator>
   );
 };
@@ -138,12 +278,35 @@ const LikeNavigator = () => {
     <Stack.Navigator
       screenOptions={{
         ...defaultNavOptions,
-      }}
-    >
+      }}>
       <Stack.Screen
         name="LikesScreen"
         component={LikesScreen}
-        options={Header}
+        options={({ navigation }) => ({
+          headerTitle: 'Likes',
+          headerLeft: () => (
+            <Avatar
+              onPress={() => {
+                navigation.navigate('MyProfile');
+              }}
+            />
+          ),
+          headerRight: () => (
+            <HeaderButtons HeaderButtonComponent={HeaderButtom}>
+              <Item
+                title="Chat"
+                iconName={
+                  Platform.OS === 'android'
+                    ? 'chatbubble-outline'
+                    : 'chatbubble-outline'
+                }
+                onPress={() => {
+                  navigation.navigate('Match');
+                }}
+              />
+            </HeaderButtons>
+          ),
+        })}
       />
     </Stack.Navigator>
   );
@@ -154,12 +317,42 @@ const SwipeNavigator = () => {
     <Stack.Navigator
       screenOptions={{
         ...defaultNavOptions,
-      }}
-    >
+      }}>
       <Stack.Screen
         name="SwipeScreen"
         component={SwipeScreen}
-        options={Header}
+        options={({ navigation }) => ({
+          headerTitle: () => (
+            <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+              <Image
+                source={require('../assets/images/logo-1.png')}
+                style={{ width: 57, height: 35 }}
+              />
+            </View>
+          ),
+          headerLeft: () => (
+            <Avatar
+              onPress={() => {
+                navigation.navigate('MyProfile');
+              }}
+            />
+          ),
+          headerRight: () => (
+            <HeaderButtons HeaderButtonComponent={HeaderButtom}>
+              <Item
+                title="Chat"
+                iconName={
+                  Platform.OS === 'android'
+                    ? 'chatbubble-outline'
+                    : 'chatbubble-outline'
+                }
+                onPress={() => {
+                  navigation.navigate('Match');
+                }}
+              />
+            </HeaderButtons>
+          ),
+        })}
       />
     </Stack.Navigator>
   );
@@ -168,186 +361,99 @@ const SwipeNavigator = () => {
 const MatchNavigator = () => {
   return (
     <Stack.Navigator
-      presentation="modal"
-      headerShown={false}
-      screenOptions={defaultNavOptions}
-    >
-      <Stack.Screen name="Chat" component={ChatNavigator} />
-      <Stack.Screen name="ProfileModal" component={ProfileModalScreen} />
+      screenOptions={{ ...defaultNavOptions, presentation: 'modal' }}>
+      <Stack.Screen
+        name="Chat"
+        component={ChatNavigator}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="ProfileModal"
+        component={ProfileModalScreen}
+        options={{ headerShown: false, presentation: 'modal' }}
+      />
     </Stack.Navigator>
   );
 };
 
 const GroupNavigator = () => {
+  const { groupContext } = useContext(Context);
   return (
     <Stack.Navigator
       initialRouteName="StartGroup"
       screenOptions={{
         ...defaultNavOptions,
         gestureDirection: 'horizontal-inverted',
-      }}
-    >
-      <Stack.Screen
-        name="StartGroup"
-        component={StartGroupScreen}
-        options={Header}
-      />
-      <Stack.Screen name="JoinGroup" component={JoinGroupScreen} />
-      <Stack.Screen
-        name="Group"
-        component={GroupScreen}
-        options={{
-          ...defaultNavOptions,
-          gestureDirection: 'horizontal',
-        }}
-      />
+      }}>
+      {groupContext ? (
+        <Stack.Screen
+          name="Group"
+          component={GroupScreen}
+          options={({ navigation }) => ({
+            ...defaultNavOptions,
+            gestureDirection: 'horizontal',
+            headerTitle: 'Likes',
+            headerLeft: () => (
+              <Avatar
+                onPress={() => {
+                  navigation.navigate('MyProfile');
+                }}
+              />
+            ),
+            headerRight: () => (
+              <HeaderButtons HeaderButtonComponent={HeaderButtom}>
+                <Item
+                  title="Chat"
+                  iconName={
+                    Platform.OS === 'android'
+                      ? 'chatbubble-outline'
+                      : 'chatbubble-outline'
+                  }
+                  onPress={() => {
+                    navigation.navigate('Match');
+                  }}
+                />
+              </HeaderButtons>
+            ),
+          })}
+        />
+      ) : (
+        <>
+          <Stack.Screen
+            name="StartGroup"
+            component={StartGroupScreen}
+            options={({ navigation }) => ({
+              headerTitle: 'Start group',
+            })}
+          />
+          <Stack.Screen
+            name="JoinGroup"
+            component={JoinGroupScreen}
+            options={({ navigation }) => ({
+              ...defaultNavOptions,
+              gestureDirection: 'horizontal',
+              headerTitle: 'Join',
+              headerLeft: () => (
+                <HeaderButtons HeaderButtonComponent={HeaderButtom}>
+                  <Item
+                    iconName={
+                      Platform.OS === 'android'
+                        ? 'ios-arrow-back'
+                        : 'ios-arrow-back'
+                    }
+                    onPress={() => {
+                      navigation.goBack();
+                    }}
+                    title="Back arrow"
+                  />
+                </HeaderButtons>
+              ),
+            })}
+          />
+        </>
+      )}
     </Stack.Navigator>
   );
-};
-
-// CREAR NAVBAR
-// const tabScreenCnfig = {
-//   // CONFIG
-//   Swipe: {
-//     screen: SwipeNavigator, // STACK NAVIGATOR
-//     navigationOptions: {
-//       // poner un icono en la navbar
-//       tabBarIcon: (tabInfo) => {
-//         return (
-//           <Ionicons name="home-outline" size={25} color={tabInfo.tintColor} />
-//         );
-//       },
-//       tabBarColor: Colors.orange,
-//       tabBarLabel: Platform.OS === 'android' ? <Text>Swipe</Text> : 'Swipe',
-//     },
-//   },
-//   Likes: {
-//     screen: LikeNavigator, // STACK NAVIGATOR
-//     navigationOptions: {
-//       tabBarIcon: (tabInfo) => {
-//         return <AntDesign color={tabInfo.tintColor} name="hearto" size={25} />;
-//       },
-//       tabBarColor: Colors.orange,
-//       tabBarLabel: Platform.OS === 'android' ? <Text>Likes</Text> : 'Likes',
-//     },
-//   },
-//   Group: {
-//     screen: GroupNavigator,
-//     navigationOptions: ({ navigation }) => {
-//       return {
-//         tabBarIcon: (tabInfo) => {
-//           return (
-//             <MaterialCommunityIcons
-//               name="account-group"
-//               size={25}
-//               color={tabInfo.tintColor}
-//             />
-//           );
-//         },
-//         tabBarColor: Colors.orange,
-//         tabBarLabel:
-//           Platform.OS === 'android' ? <Text>Create group</Text> : null,
-//         tabBarOptions: {
-//           showLabel: false,
-//           activeTintColor: Colors.orange,
-//           style: {
-//             backgroundColor:
-//               navigation.state.routes &&
-//               navigation.state.routes[navigation.state.index].routeName ===
-//                 'Group'
-//                 ? Colors.bgCard
-//                 : Colors.bg,
-//             borderTopWidth: 0,
-//           },
-//           tabStyle: {
-//             backgroundColor:
-//               navigation.state.routes &&
-//               navigation.state.routes[navigation.state.index].routeName ===
-//                 'Group'
-//                 ? Colors.bgCard
-//                 : Colors.bg,
-//             statusBarStyle: Colors.bg,
-//           },
-//         },
-//       };
-//     },
-//   },
-// };
-
-// NAVBAR
-// Poner secciones en la parte de abajo, en otras palabras lo que en el celular seria la navbar
-// const ToogetherTab =
-//   Platform.OS === 'android'
-//     ? createMaterialBottomTabNavigator(tabScreenCnfig, {
-//         activeTintColor: Colors.orange,
-//         showLabel: false,
-//         shifting: true, // la navbar cambia de color al seleccion alguna opcion
-//         barStyle: {
-//           backgroundColor: Colors.bg,
-//           statusBarStyle: Colors.bg,
-//         },
-//         style: {
-//           backgroundColor: Colors.bg,
-//           borderTopWidth: 0,
-//         },
-//       })
-//     : createBottomTabNavigator(tabScreenCnfig, {
-//         tabBarOptions: {
-//           showLabel: false,
-//           shifting: true,
-//           activeTintColor: Colors.orange,
-//           tabStyle: {
-//             backgroundColor: Colors.bg,
-//             statusBarStyle: Colors.bg,
-//           },
-//           style: {
-//             backgroundColor: Colors.bg,
-//             borderTopWidth: 0,
-//           },
-//         },
-//       });
-
-const tabScreenConfig = ({ route, navigation }) => {
-  switch (route.name) {
-    case 'SwipeNavigator':
-      return {};
-    case 'Likes':
-      return {};
-    case 'Group':
-      return {};
-  }
-};
-
-const tabBarConfig = ({ route, navigation }) => {
-  switch (route.name) {
-    case 'SwipeNavigator':
-      return {};
-    case 'Likes':
-      return {};
-    case 'Group':
-      return {
-        // showLabel: false,
-        // activeTintColor: Colors.orange,
-        // style: {
-        //   backgroundColor:
-        //     navigation.getState.routes &&
-        //     navigation.getState.routes[navigation.getState.index].routeName ===
-        //       'Group'
-        //       ? Colors.bgCard
-        //       : Colors.bg,
-        //   borderTopWidth: 0,
-        // },
-        // tabBarStyle: {
-        //   backgroundColor:
-        //     navigation.getState.routes &&
-        //     navigation.getState.routes[navigation.getState.index].routeName ===
-        //       'Group'
-        //       ? Colors.bgCard
-        //       : Colors.bg,
-        //   statusBarStyle: Colors.bg,
-        // },
-      };
-  }
 };
 
 const Tab =
@@ -355,18 +461,32 @@ const Tab =
     ? createMaterialBottomTabNavigator()
     : createBottomTabNavigator();
 
-const ToogetherTab = () => {
+const ToogetherTab = (props) => {
+  const { groupContext } = useContext(Context);
   return (
     <Tab.Navigator
       shifting={true}
-      // sceneAnimationEnabled={false}
       initialRoute="SwipeNavigator"
-      barStyle={{ backgroundColor: Colors.bg }}
-      activeColor={Platform.OS === 'ios' ? Colors.orange : Colors.white}
-      inactiveColor={Colors.white}
-      // tabBarOptions={tabBarConfig}
-      // screenOptions={Header}
-    >
+      barStyle={{
+        backgroundColor: Colors.bg,
+        borderColor: Colors.bg,
+      }}
+      screenOptions={({ navigation, route }) => {
+        const isGroupNavigator = route.name === 'GroupNavigator';
+        const bgCard = groupContext && isGroupNavigator;
+
+        return {
+          headerShown: false,
+          tabBarInactiveBackgroundColor: bgCard ? Colors.bgCard : Colors.bg,
+          tabBarActiveBackgroundColor: bgCard ? Colors.bgCard : Colors.bg,
+          tabBarActiveTintColor: Colors.orange,
+          tabBarStyle: {
+            backgroundColor: bgCard ? Colors.bgCard : Colors.bg,
+            borderColor: bgCard ? Colors.bgCard : Colors.bg,
+            borderTopColor: bgCard ? Colors.bgCard : Colors.bg,
+          },
+        };
+      }}>
       <Tab.Screen
         name="SwipeNavigator"
         component={SwipeNavigator}
@@ -377,7 +497,7 @@ const ToogetherTab = () => {
             );
           },
           tabBarColor: Colors.orange,
-          tabBarLabel: Platform.OS === 'android' ? <Text>Swipe</Text> : 'Swipe',
+          tabBarLabel: Platform.OS === 'android' ? <Text>Swipe</Text> : '',
         }}
       />
       <Tab.Screen
@@ -388,13 +508,13 @@ const ToogetherTab = () => {
             return <AntDesign color={tabInfo.color} name="hearto" size={25} />;
           },
           tabBarColor: Colors.orange,
-          tabBarLabel: Platform.OS === 'android' ? <Text>Likes</Text> : 'Likes',
+          tabBarLabel: Platform.OS === 'android' ? <Text>Likes</Text> : '',
         }}
       />
       <Tab.Screen
         name="GroupNavigator"
         component={GroupNavigator}
-        options={{
+        options={({ navigation, route }) => ({
           tabBarIcon: (tabInfo) => {
             return (
               <MaterialCommunityIcons
@@ -406,8 +526,8 @@ const ToogetherTab = () => {
           },
           tabBarColor: Colors.orange,
           tabBarLabel:
-            Platform.OS === 'android' ? <Text>Create group</Text> : 'Group',
-        }}
+            Platform.OS === 'android' ? <Text>Create group</Text> : '',
+        })}
       />
     </Tab.Navigator>
   );
@@ -419,12 +539,14 @@ const HomeNavigator = () => {
       initialRouteName="Main"
       screenOptions={{
         headerShown: false,
-      }}
-      presentation="modal"
-    >
+      }}>
       <Stack.Screen name="Main" component={ToogetherTab} />
       <Stack.Screen name="ProfileModal" component={ProfileModalScreen} />
-      <Stack.Screen name="SwipeMatch" component={MatchScreen} />
+      <Stack.Screen
+        name="SwipeMatch"
+        component={MatchScreen}
+        options={{ presentation: 'modal' }}
+      />
     </Stack.Navigator>
   );
 };
@@ -435,8 +557,7 @@ const AppNavigator = () => {
       initialRouteName="SwipeScreen"
       screenOptions={{
         headerShown: false,
-      }}
-    >
+      }}>
       <Stack.Screen name="SwipeScreen" component={HomeNavigator} />
       <Stack.Screen name="Match" component={MatchNavigator} />
       <Stack.Screen name="GroupNavigator" component={GroupNavigator} />

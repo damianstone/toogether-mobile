@@ -435,36 +435,4 @@ const MyProfileScreen = (props) => {
   );
 };
 
-MyProfileScreen.navigationOptions = (navData) => {
-  return {
-    headerTitle: <Text>'My Profile'</Text>,
-    headerRight: () => (
-      <HeaderButtons HeaderButtonComponent={HeaderButtom}>
-        <Item
-          iconName={
-            Platform.OS === 'android' ? 'settings-sharp' : 'settings-sharp'
-          }
-          onPress={() => {
-            navData.navigation.navigate('Setting');
-          }}
-          title="Back arrow"
-        />
-      </HeaderButtons>
-    ),
-    headerLeft: () => (
-      <HeaderButtons HeaderButtonComponent={HeaderButtom}>
-        <Item
-          iconName={
-            Platform.OS === 'android' ? 'ios-arrow-back' : 'ios-arrow-back'
-          }
-          onPress={() => {
-            navData.navigation.navigate('Swipe');
-          }}
-          title="Back arrow"
-        />
-      </HeaderButtons>
-    ),
-  };
-};
-
 export default MyProfileScreen;

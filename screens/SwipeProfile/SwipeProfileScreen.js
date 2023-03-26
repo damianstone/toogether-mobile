@@ -163,24 +163,6 @@ const SwipeProfileScreen = (props) => {
   );
 };
 
-SwipeProfileScreen.navigationOptions = (navData) => {
-  return {
-    headerLeft: () => (
-      <HeaderButtons HeaderButtonComponent={HeaderButtom}>
-        <Item
-          iconName={
-            Platform.OS === 'android' ? 'ios-arrow-back' : 'ios-arrow-back'
-          }
-          onPress={() => {
-            navData.navigation.pop();
-          }}
-          title="Back arrow"
-        />
-      </HeaderButtons>
-    ),
-  };
-};
-
 export default SwipeProfileScreen;
 
 const styles = StyleSheet.create({

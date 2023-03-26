@@ -372,19 +372,6 @@ const GroupScreen = (props) => {
   );
 };
 
-GroupScreen.navigationOptions = (navData) => {
-  return {
-    headerTitle: 'Group',
-    headerLeft: () => (
-      <Avatar
-        onPress={() => {
-          navData.navigation.navigate('MyProfile');
-        }}
-      />
-    ),
-  };
-};
-
 export default GroupScreen;
 
 const styles = StyleSheet.create({

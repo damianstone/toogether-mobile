@@ -215,39 +215,4 @@ const SwipeScreen = (props) => {
   );
 };
 
-SwipeScreen.navigationOptions = (navData) => {
-  return {
-    headerTitle: () => (
-      <View style={styles.logoContainer}>
-        <Image
-          source={require('../../assets/images/logo-1.png')}
-          style={styles.logo}
-        />
-      </View>
-    ),
-    headerLeft: () => (
-      <Avatar
-        onPress={() => {
-          navData.navigation.navigate('MyProfile');
-        }}
-      />
-    ),
-    headerRight: () => (
-      <HeaderButtons HeaderButtonComponent={HeaderButtom}>
-        <Item
-          title="Chat"
-          iconName={
-            Platform.OS === 'android'
-              ? 'chatbubble-outline'
-              : 'chatbubble-outline'
-          }
-          onPress={() => {
-            navData.navigation.navigate('Match');
-          }}
-        />
-      </HeaderButtons>
-    ),
-  };
-};
-
 export default SwipeScreen;
