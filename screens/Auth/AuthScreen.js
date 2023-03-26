@@ -50,7 +50,7 @@ const formReducer = (state, action) => {
 };
 
 const AuthStartScreen = (props) => {
-  const register = props.navigation.getParam('register');
+  const register = props.route.params.register;
   const dispatch = useDispatch();
 
   const [formState, dispatchFormState] = useReducer(formReducer, {
@@ -147,9 +147,9 @@ const AuthStartScreen = (props) => {
 
   const handleSwitch = () => {
     if (register) {
-      props.navigation.navigate('Auth', { register: false });
+      props.navigation.navigate('AuthLogin', { register: false });
     } else {
-      props.navigation.navigate('Auth', { register: true });
+      props.navigation.navigate('AuthLogin', { register: true });
     }
   };
 
