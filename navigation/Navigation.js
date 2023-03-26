@@ -210,7 +210,11 @@ const MyProfileNavigatorWithModal = () => {
   return (
     <Stack.Navigator
       screenOptions={{ headerShown: false, presentation: 'modal' }}>
-      <Stack.Screen name="MyProfileNavigator" component={MyProfileNavigator} />
+      <Stack.Screen
+        name="MyProfileNavigator"
+        component={MyProfileNavigator}
+        options={{ gestureDirection: 'horizontal-inverted' }}
+      />
       <Stack.Screen name="ProfileModal" component={ProfileModalScreen} />
     </Stack.Navigator>
   );
@@ -561,7 +565,11 @@ const AppNavigator = () => {
       <Stack.Screen name="SwipeScreen" component={HomeNavigator} />
       <Stack.Screen name="Match" component={MatchNavigator} />
       <Stack.Screen name="GroupNavigator" component={GroupNavigator} />
-      <Stack.Screen name="MyProfile" component={MyProfileNavigatorWithModal} />
+      <Stack.Screen
+        name="MyProfile"
+        component={MyProfileNavigatorWithModal}
+        options={{ gestureDirection: 'horizontal-inverted' }}
+      />
     </Stack.Navigator>
   );
 };
