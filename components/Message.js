@@ -12,7 +12,7 @@ import { checkPhoto } from '../utils/checks';
 import Colors from '../constants/Colors';
 
 const Message = (props) => {
-  const { isMyMessage, message, onShowProfile, matchedProfile, ownProfile } =
+  const { isMyMessage, message, onShowProfile, receiverData, ownProfile } =
     props;
 
   return (
@@ -27,13 +27,13 @@ const Message = (props) => {
           isMyMessage ? styles.myMessageBG : styles.senderMessageBG,
         ]}>
         <View style={styles.textMessageContainer}>
-          <Text style={styles.textMessage}>{message}</Text>
+          <Text style={styles.textMessage}>{message.message}</Text>
         </View>
-        <Text style={styles.time}>19:30</Text>
+        <Text style={styles.time}>{message.sent_at}</Text>
       </View>
       <TouchableOpacity onPress={onShowProfile}>
         <ImageBackground
-          source={checkPhoto(isMyMessage ? ownProfile : matchedProfile)}
+          source={checkPhoto(isMyMessage ? ownProfile : receiverData)}
           imageStyle={styles.img}
           style={styles.singleImageContainer}></ImageBackground>
       </TouchableOpacity>

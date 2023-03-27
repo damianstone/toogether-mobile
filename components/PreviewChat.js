@@ -11,15 +11,7 @@ import { getNameInitials, getImage } from '../utils/getMethods';
 import Colors from '../constants/Colors';
 
 const PreviewChat = (props) => {
-  const {
-    matchedData,
-    matchedProfile,
-    onShowProfile,
-    data,
-    matchedProfilePhoto,
-    matchedProfileHasPhoto,
-    onShowChat,
-  } = props;
+  const { receiverProfile, onShowProfile, data, onShowChat } = props;
 
   const checkPhoto = (profile) => {
     if (profile.photos.length > 0) {
@@ -33,7 +25,7 @@ const PreviewChat = (props) => {
       <View>
         <TouchableOpacity onPress={onShowProfile}>
           <ImageBackground
-            source={checkPhoto(matchedProfile)}
+            source={require('../assets/images/placeholder-profile.png')}
             imageStyle={styles.img}
             style={styles.singleImageContainer}
             onPress={onShowProfile}></ImageBackground>
@@ -41,9 +33,11 @@ const PreviewChat = (props) => {
       </View>
       <TouchableOpacity onPress={onShowChat} style={styles.cardContainer}>
         <View style={styles.chat_preview}>
-          <Text style={styles.matched_name}>{matchedProfile.name}</Text>
+          <Text style={styles.matched_name}>{receiverProfile.name}</Text>
           <View style={styles.lastMessagesContainer}>
-            <Text style={styles.last_message}>{data.messages[0].text}</Text>
+            <Text style={styles.last_message}>
+              {data?.last_message.message}
+            </Text>
             <Text style={styles.messageCount}>1</Text>
           </View>
         </View>
