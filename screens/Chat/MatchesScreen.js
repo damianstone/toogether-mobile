@@ -21,7 +21,7 @@ import { StatusBar } from 'expo-status-bar';
 import HeaderButtom from '../../components/UI/HeaderButton';
 import Colors from '../../constants/Colors';
 import { listMatches, deleteMatch } from '../../store/actions/swipe';
-import { listChats } from '../../store/actions/chat';
+import { listChats } from '../../store/actions/conversation';
 import { checkServerError, check400Error } from '../../utils/errors';
 import no_chats from '../../assets/images/no-chats.png';
 import SwipeError from '../../components/SwipeError';
@@ -248,6 +248,25 @@ const MatchesScreen = (props) => {
   );
 };
 
+MatchesScreen.navigationOptions = (navData) => {
+  return {
+    headerTitle: 'Matches',
+    headerLeft: () => (
+      <HeaderButtons HeaderButtonComponent={HeaderButtom}>
+        <Item
+          iconName={
+            Platform.OS === 'android' ? 'ios-arrow-back' : 'ios-arrow-back'
+          }
+          onPress={() => {
+            navData.navigation.navigate('Swipe');
+          }}
+          title="Back arrow"
+        />
+      </HeaderButtons>
+    ),
+  };
+};
+
 const styles = StyleSheet.create({
   safe: {
     flex: 1,
@@ -314,22 +333,4 @@ const styles = StyleSheet.create({
   },
 });
 
-MatchesScreen.navigationOptions = (navData) => {
-  return {
-    headerTitle: 'Matches',
-    headerLeft: () => (
-      <HeaderButtons HeaderButtonComponent={HeaderButtom}>
-        <Item
-          iconName={
-            Platform.OS === 'android' ? 'ios-arrow-back' : 'ios-arrow-back'
-          }
-          onPress={() => {
-            navData.navigation.navigate('Swipe');
-          }}
-          title="Back arrow"
-        />
-      </HeaderButtons>
-    ),
-  };
-};
 export default MatchesScreen;

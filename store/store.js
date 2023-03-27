@@ -38,10 +38,11 @@ import {
   deleteMatchReducer,
 } from './reducers/swipe';
 import {
-  listChatsReducer,
-  getChatReducer,
-  getReceiverProfile,
-} from './reducers/chat';
+  listMyConversationsReducer,
+  listConversationMessagesReducer,
+  createConversationReducer,
+  deleteConversationReducer,
+} from './reducers/conversation';
 
 const reducer = combineReducers({
   // profile API
@@ -78,10 +79,11 @@ const reducer = combineReducers({
   removeLike: removeLikeReducer,
   listMatches: listMatchesReducer,
   deleteMatch: deleteMatchReducer,
-  // Chats Test
-  listChats: listChatsReducer,
-  getChat: getChatReducer,
-  receiverProfile: getReceiverProfile,
+  // Conversations API
+  listConversations: listMyConversationsReducer,
+  listConversationMessages: listConversationMessagesReducer,
+  deleteConversation: deleteConversationReducer,
+  createConversation: createConversationReducer,
 });
 
 const initialState = {};
