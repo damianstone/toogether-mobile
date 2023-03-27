@@ -50,17 +50,6 @@ export const userLocation = () => {
         },
       });
 
-      await AsyncStorage.setItem(
-        '@userData',
-        JSON.stringify({
-          id: data.id,
-          token: data.token,
-          access_token: data.access,
-          refresh_token: data.refresh,
-          has_account: data.has_account,
-        })
-      );
-
       dispatch({
         type: c.USER_LOCATION_SUCCESS,
         payload: data,
@@ -150,6 +139,7 @@ export const userLogin = (email, password) => {
           id: data.id,
           token: data.token,
           has_account: data.has_account,
+          refresh_token: data.refresh,
         })
       );
 
@@ -203,11 +193,11 @@ export const updateToken = () => {
         '@userData',
         JSON.stringify({
           ...userData,
-          token: data.token,
-          access_token: data.access.token,
+          token: data.access,
           refresh_token: data.refresh,
         })
       );
+
       dispatch({ type: c.REFRESH_TOKEN_SUCCESS, payload: data });
     } catch (error) {
       logout();
