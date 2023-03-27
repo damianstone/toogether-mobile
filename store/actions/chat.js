@@ -115,7 +115,7 @@ export const createChat = (matchId) => {
 
       const { data } = await axios({
         method: 'POST',
-        url: `${BASE_URL}/api/v1/conversations/${id}/start/`,
+        url: `${BASE_URL}/api/v1/conversations/${matchId}/start/`,
         headers: config,
       });
 
