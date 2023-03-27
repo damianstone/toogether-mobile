@@ -12,7 +12,7 @@ Mobile app build with React Native Expo, Redux and Axios
 The following command allows you to install all the requirements using the exact same versions specified in the `package.json`
 
 ```bash
-npm ci
+npm ci --legacy-peer-deps
 ```
 
 ### Create an .env file
