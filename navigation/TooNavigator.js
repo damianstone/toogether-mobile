@@ -17,7 +17,6 @@ import SwipeProfileScreen from '../screens/SwipeProfile/SwipeProfileScreen';
 import ProfileModalScreen from '../screens/SwipeProfile/ProfileModalScreen';
 import MatchScreen from '../screens/Match/MatchScreen';
 
-import StartupScreen from '../screens/StartupScreen';
 import AuthScreen from '../screens/Auth/AuthScreen';
 import AuthStartScreen from '../screens/Auth/AuthStartScreen';
 import AuthSucess from '../screens/Auth/AuthSuccess';
