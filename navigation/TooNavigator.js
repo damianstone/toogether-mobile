@@ -1,9 +1,7 @@
 import React, { useContext } from 'react';
-import { Platform, Switch, Text, View, Image } from 'react-native';
+import { Platform, Text, View, Image } from 'react-native';
 import { Context } from '../context/ContextProvider';
 
-import { NavigationContainer } from '@react-navigation/native';
-import { createSwitchNavigator } from '@react-navigation/compat';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -44,6 +42,9 @@ import Avatar from '../components/UI/Avatar';
 import HeaderButtom from '../components/UI/HeaderButton';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import Header from '../components/UI/Header';
+import { getNavHeader } from './getNavHeader';
+
+console.log('GET NAV -> ', getNavHeader(1, 'X')); // TODO: for some reason this is undefined
 
 const Stack = createStackNavigator();
 
@@ -56,26 +57,12 @@ const defaultNavOptions = {
   headerTitleAlign: 'center',
 };
 
-const AuthNavigator = () => {
-  return (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="AuthStart" component={AuthStartScreen} />
-      <Stack.Screen name="AuthLogin" component={AuthScreen} />
-      <Stack.Screen name="Instagram" component={InstagramScreen} />
-      <Stack.Screen name="Create" component={CreateProfileScreen} />
-      <Stack.Screen name="AddPhoto" component={AddProfilePhotoScreen} />
-      <Stack.Screen name="Success" component={AuthSucess} />
-    </Stack.Navigator>
-  );
-};
-
 const MyProfileNavigator = () => {
   return (
     <Stack.Navigator
       screenOptions={{
         ...defaultNavOptions,
-      }}
-    >
+      }}>
       <Stack.Screen
         name="MyProfileScreen"
         component={MyProfileScreen}
@@ -228,8 +215,7 @@ const ChatNavigator = () => {
       screenOptions={{
         ...defaultNavOptions,
         gestureDirection: 'horizontal',
-      }}
-    >
+      }}>
       <Stack.Screen
         name="Match"
         component={ChatScreen}
@@ -285,8 +271,7 @@ const LikeNavigator = () => {
     <Stack.Navigator
       screenOptions={{
         ...defaultNavOptions,
-      }}
-    >
+      }}>
       <Stack.Screen
         name="LikesScreen"
         component={LikesScreen}
@@ -325,8 +310,7 @@ const SwipeNavigator = () => {
     <Stack.Navigator
       screenOptions={{
         ...defaultNavOptions,
-      }}
-    >
+      }}>
       <Stack.Screen
         name="SwipeScreen"
         component={SwipeScreen}
@@ -370,8 +354,7 @@ const SwipeNavigator = () => {
 const MatchNavigator = () => {
   return (
     <Stack.Navigator
-      screenOptions={{ ...defaultNavOptions, presentation: 'modal' }}
-    >
+      screenOptions={{ ...defaultNavOptions, presentation: 'modal' }}>
       <Stack.Screen
         name="Chat"
         component={ChatNavigator}
@@ -394,8 +377,7 @@ const GroupNavigator = () => {
       screenOptions={{
         ...defaultNavOptions,
         gestureDirection: 'horizontal-inverted',
-      }}
-    >
+      }}>
       {groupContext ? (
         <Stack.Screen
           name="Group"
@@ -497,8 +479,7 @@ const ToogetherTab = (props) => {
             borderTopColor: bgCard ? Colors.bgCard : Colors.bg,
           },
         };
-      }}
-    >
+      }}>
       <Tab.Screen
         name="SwipeNavigator"
         component={SwipeNavigator}
@@ -551,8 +532,7 @@ const HomeNavigator = () => {
       initialRouteName="Main"
       screenOptions={{
         headerShown: false,
-      }}
-    >
+      }}>
       <Stack.Screen name="Main" component={ToogetherTab} />
       <Stack.Screen name="ProfileModal" component={ProfileModalScreen} />
       <Stack.Screen
@@ -564,14 +544,13 @@ const HomeNavigator = () => {
   );
 };
 
-const AppNavigator = () => {
+export const TooNavigator = () => {
   return (
     <Stack.Navigator
       initialRouteName="SwipeScreen"
       screenOptions={{
         headerShown: false,
-      }}
-    >
+      }}>
       <Stack.Screen name="SwipeScreen" component={HomeNavigator} />
       <Stack.Screen name="Match" component={MatchNavigator} />
       <Stack.Screen name="GroupNavigator" component={GroupNavigator} />
@@ -584,23 +563,15 @@ const AppNavigator = () => {
   );
 };
 
-const MainNavigator = createSwitchNavigator(
-  {
-    Startup: StartupScreen,
-    Auth: AuthNavigator,
-    Swipe: AppNavigator,
-  },
-  {
-    initialRouteName: 'Startup',
-  }
-);
-
-function App() {
+export const AuthNavigator = () => {
   return (
-    <NavigationContainer>
-      <MainNavigator />
-    </NavigationContainer>
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="AuthStart" component={AuthStartScreen} />
+      <Stack.Screen name="AuthLogin" component={AuthScreen} />
+      <Stack.Screen name="Instagram" component={InstagramScreen} />
+      <Stack.Screen name="Create" component={CreateProfileScreen} />
+      <Stack.Screen name="AddPhoto" component={AddProfilePhotoScreen} />
+      <Stack.Screen name="Success" component={AuthSucess} />
+    </Stack.Navigator>
   );
-}
-
-export default App;
+};
