@@ -19,14 +19,7 @@ const Avatar = (props) => {
     error: errorProfile,
     data: dataProfile,
   } = userProfile;
-  //Chat profile
-  const receiverProfile = useSelector((state) => state.receiverProfile);
-  const {
-    loading: loadingReceiverProfile,
-    error: errorReceiverProfile,
-    data: dataReceiverProfile,
-  } = receiverProfile;
-  ////////////////
+
   useEffect(() => {
     if (!dataProfile && !profileContext /* chat test */ && !id) {
       dispatch(getUserProfile());

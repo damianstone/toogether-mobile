@@ -32,7 +32,7 @@ import EditProfileScreen from '../screens/MyProfile/EditProfileScreen';
 
 import SwipeScreen from '../screens/Swipe/SwipeScreen';
 import ChatScreen from '../screens/Chat/ChatScreen';
-import ChatsScreen from '../screens/Chat/ChatsScreen';
+import MatchesScreen from '../screens/Chat/MatchesScreen';
 import LikesScreen from '../screens/Likes/LikesScreen';
 import BlockProfilesScreen from '../screens/BlockProfiles/BlockProfilesScreen';
 import InstagramScreen from '../screens/CreateProfile/InstagramScreen';
@@ -112,8 +112,8 @@ const MyProfileNavigatorWithModal = createStackNavigator(
 
 const ChatNavigator = createStackNavigator(
   {
-    Chats: {
-      screen: ChatsScreen,
+    Matches: {
+      screen: MatchesScreen,
       navigationOptions: {
         ...defaultNavOptions,
         gestureDirection: 'horizontal-inverted',

@@ -7,38 +7,6 @@ import { ENV } from '../../environment';
 import chats from '../../data/chats.json';
 
 const BASE_URL = ENV.API_URL;
-//CHAT TEST
-export const getReceiverProfile = (profile_id) => {
-  return async (dispatch) => {
-    try {
-      dispatch({ type: c.GET_RECEIVER_PROFILE_REQUEST });
-      let id;
-
-      const userData = JSON.parse(await AsyncStorage.getItem('@userData'));
-
-      const config = {
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
-        Authorization: 'Bearer ' + userData.token,
-      };
-      const { data } = await axios({
-        method: 'get',
-        url: `${BASE_URL}/api/v1/profiles/${profile_id}/`,
-        headers: config,
-      });
-
-      dispatch({
-        type: c.GET_RECEIVER_PROFILE_SUCCESS,
-        payload: data,
-      });
-    } catch (error) {
-      dispatch({
-        type: c.GET_RECEIVER_PROFILE_FAIL,
-        payload: error,
-      });
-    }
-  };
-};
 
 // -------------------------------- CHAT --------------------------------
 export const listChats = () => {
@@ -54,12 +22,11 @@ export const listChats = () => {
         Authorization: 'Bearer ' + userData.token,
       };
 
-      /* const { data } = await axios({
+      const { data } = await axios({
         method: 'get',
-        url: `${BASE_URL}/api/v1/chats/`,
+        url: `${BASE_URL}/api/v1/conversations/`,
         headers: config,
-      }); */
-      const data = chats;
+      });
 
       dispatch({
         type: c.LIST_CHATS_SUCCESS,
@@ -87,13 +54,12 @@ export const getChat = (id) => {
         Authorization: 'Bearer ' + userData.token,
       };
 
-      /* const { data } = await axios({
+      const { data } = await axios({
         method: 'get',
-        url: `${BASE_URL}/api/v1/chats/${id}`,
+        url: `${BASE_URL}/api/v1/conversations/${id}/messages/`,
         headers: config,
-      }); */
+      });
 
-      const data = chats.results.find((chat) => chat.id === id);
       dispatch({
         type: c.GET_CHAT_SUCCESS,
         payload: data,
@@ -121,7 +87,7 @@ export const deleteChat = (id) => {
 
       const { data } = await axios({
         method: 'delete',
-        url: `${BASE_URL}/api/v1/chats/${id}`,
+        url: `${BASE_URL}/api/v1/conversations/${id}`,
         headers: config,
       });
 
@@ -132,6 +98,34 @@ export const deleteChat = (id) => {
     } catch (error) {
       dispatch({
         type: c.DELETE_CHAT_FAIL,
+        payload: error,
+      });
+    }
+  };
+};
+
+export const createChat = (matchId) => {
+  return async (dispatch) => {
+    try {
+      dispatch({ type: c.CREATE_CHAT_REQUEST });
+
+      const config = {
+        'Content-Type': 'application/json',
+      };
+
+      const { data } = await axios({
+        method: 'POST',
+        url: `${BASE_URL}/api/v1/conversations/${id}/start/`,
+        headers: config,
+      });
+
+      dispatch({
+        type: c.CREATE_CHAT_SUCCESS,
+        payload: data,
+      });
+    } catch (error) {
+      dispatch({
+        type: c.CREATE_CHAT_FAIL,
         payload: error,
       });
     }

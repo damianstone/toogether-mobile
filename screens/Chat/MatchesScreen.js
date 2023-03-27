@@ -34,7 +34,7 @@ import PreviewChat from '../../components/PreviewChat';
 /* For test purposes */
 import chats from '../../data/chats.json';
 
-const ChatsScreen = (props) => {
+const MatchesScreen = (props) => {
   const { showActionSheetWithOptions } = useActionSheet();
   const dispatch = useDispatch();
   const [localLoading, setLocalLoading] = useState(false);
@@ -314,9 +314,9 @@ const styles = StyleSheet.create({
   },
 });
 
-ChatsScreen.navigationOptions = (navData) => {
+MatchesScreen.navigationOptions = (navData) => {
   return {
-    headerTitle: 'Chats',
+    headerTitle: 'Matches',
     headerLeft: () => (
       <HeaderButtons HeaderButtonComponent={HeaderButtom}>
         <Item
@@ -332,4 +332,4 @@ ChatsScreen.navigationOptions = (navData) => {
     ),
   };
 };
-export default ChatsScreen;
+export default MatchesScreen;
