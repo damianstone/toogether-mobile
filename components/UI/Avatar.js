@@ -5,8 +5,6 @@ import { Context } from '../../context/ContextProvider';
 import Colors from '../../constants/Colors';
 import { getUserProfile } from '../../store/actions/user';
 import { getNameInitials, getImage } from '../../utils/getMethods';
-//Chat
-import { getReceiverProfile } from '../../store/actions/chat';
 import Loader from './Loader';
 
 const Avatar = (props) => {
@@ -38,44 +36,6 @@ const Avatar = (props) => {
       updateProfileContext(dataProfile);
     }
   }, []);
-  //Chat profile
-  useEffect(() => {
-    if (id) {
-      dispatch(getReceiverProfile(id));
-    }
-  }, [id]);
-
-  //Chat TEST
-  if (id) {
-    return (
-      <TouchableOpacity onPress={onPress} style={styles.imgContainer}>
-        {loadingProfile ||
-          (typeof errorReceiverProfile != 'undefined' && (
-            <View style={styles.error_avatar_view}>
-              <Loader />
-            </View>
-          ))}
-        {dataReceiverProfile && dataReceiverProfile.photos.length > 0 && (
-          <View style={styles.avatar_view}>
-            <Image
-              source={{
-                uri: `${getImage(dataReceiverProfile.photos[0].image)}`,
-              }}
-              style={styles.img}
-            />
-          </View>
-        )}
-        {dataReceiverProfile?.photos?.length === 0 && (
-          <View style={styles.avatar_view}>
-            <Text style={styles.avatar_initials}>
-              {getNameInitials(dataReceiverProfile.name)}
-            </Text>
-          </View>
-        )}
-      </TouchableOpacity>
-    );
-  }
-  /////////////////////////////////////////
 
   return (
     <TouchableOpacity onPress={onPress} style={styles.imgContainer}>
