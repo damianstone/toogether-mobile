@@ -15,7 +15,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import chat from '../../data/chats.json';
 import HeaderButtom from '../../components/UI/HeaderButton';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
-import { getChat } from '../../store/actions/chat';
 import { Context } from '../../context/ContextProvider';
 
 import ActivityModal from '../../components/UI/ActivityModal';
@@ -34,7 +33,7 @@ const ChatScreen = (props) => {
   const [localLoading, setLocalLoading] = useState(false);
   const [chatMessage, setChatMessage] = useState('');
   const dispatch = useDispatch();
-  const chatReducer = useSelector((state) => state.getChat);
+  const chatReducer = useSelector((state) => state.listConversationMessages);
   const {
     error: errorChat,
     loading: loadingChat,
