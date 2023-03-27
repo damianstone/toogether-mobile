@@ -9,7 +9,6 @@ import {
 } from 'react-native';
 import { useNetInfo } from '@react-native-community/netinfo';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
-import { withNavigation, withNavigationFocus } from 'react-navigation';
 import { StatusBar } from 'expo-status-bar';
 import { useSelector, useDispatch } from 'react-redux';
 import { verifyLocationPermissions } from '../../utils/permissions';
@@ -34,7 +33,7 @@ import styles from './styles';
 */
 
 const SwipeScreen = (props) => {
-  const topProfile = props.navigation.getParam('topProfile');
+  const topProfile = props.route.params?.topProfile;
 
   const dispatch = useDispatch();
   const netInfo = useNetInfo();
@@ -214,41 +213,6 @@ const SwipeScreen = (props) => {
       </View>
     </SafeAreaView>
   );
-};
-
-SwipeScreen.navigationOptions = (navData) => {
-  return {
-    headerTitle: () => (
-      <View style={styles.logoContainer}>
-        <Image
-          source={require('../../assets/images/logo-1.png')}
-          style={styles.logo}
-        />
-      </View>
-    ),
-    headerLeft: () => (
-      <Avatar
-        onPress={() => {
-          navData.navigation.navigate('MyProfile');
-        }}
-      />
-    ),
-    headerRight: () => (
-      <HeaderButtons HeaderButtonComponent={HeaderButtom}>
-        <Item
-          title="Chat"
-          iconName={
-            Platform.OS === 'android'
-              ? 'chatbubble-outline'
-              : 'chatbubble-outline'
-          }
-          onPress={() => {
-            navData.navigation.navigate('Match');
-          }}
-        />
-      </HeaderButtons>
-    ),
-  };
 };
 
 export default SwipeScreen;

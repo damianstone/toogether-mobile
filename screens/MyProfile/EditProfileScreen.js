@@ -206,7 +206,7 @@ const EditProfileScreen = (props) => {
     <View style={styles.screen}>
       <KeyboardAvoidingView
         style={{ flex: 1, flexDirection: 'column', justifyContent: 'center' }}
-        behavior="padding"
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         enabled
         keyboardVerticalOffset={100}
       >
@@ -317,25 +317,6 @@ const EditProfileScreen = (props) => {
       </KeyboardAvoidingView>
     </View>
   );
-};
-
-EditProfileScreen.navigationOptions = (navData) => {
-  return {
-    headerTitle: 'Edit Profile',
-    headerLeft: () => (
-      <HeaderButtons HeaderButtonComponent={HeaderButtom}>
-        <Item
-          iconName={
-            Platform.OS === 'android' ? 'ios-arrow-back' : 'ios-arrow-back'
-          }
-          onPress={() => {
-            navData.navigation.navigate('MyProfile');
-          }}
-          title="Back arrow"
-        />
-      </HeaderButtons>
-    ),
-  };
 };
 
 export default EditProfileScreen;
