@@ -8,7 +8,7 @@ import SwipeMatch from '../../components/SwipeMatch';
 
 const MatchScreen = (props) => {
   const dispatch = useDispatch();
-  const likeData = props.navigation.getParam('likeData');
+  const likeData = props.route.params.likeData;
 
   const handleGoToMatches = () => {
     props.navigation.goBack(null);

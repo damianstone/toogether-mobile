@@ -19,7 +19,7 @@ const StartupScreen = (props) => {
       if (userData && userData.has_account) {
         props.navigation.navigate('Swipe');
       } else {
-        props.navigation.navigate('AuthStart');
+        props.navigation.navigate('Auth');
       }
 
       // // if there is no user data
