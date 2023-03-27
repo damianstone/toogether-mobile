@@ -27,7 +27,7 @@ export default () => ({
     ios: {
       supportsTablet: false,
       bundleIdentifier: 'toogether.app',
-      buildNumber: '1.0.3',
+      buildNumber: '1.0.4',
     },
     android: {
       adaptiveIcon: {
@@ -36,7 +36,7 @@ export default () => ({
       },
       permissions: ['ACCESS_FINE_LOCATION', 'CAMERA', 'WRITE_EXTERNAL_STORAGE'],
       package: 'toogether.app',
-      versionCode: 202303190, // Using the date + T (try number) format YYYYMMDDT as version code.
+      versionCode: 202303270, // Using the date + T (try number) format YYYYMMDDT as version code.
     },
     web: {
       favicon: './assets/images/toogether-icon.png',
