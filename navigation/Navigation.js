@@ -19,6 +19,9 @@ import StartupScreen from '../screens/StartupScreen';
 import AuthScreen from '../screens/Auth/AuthScreen';
 import AuthStartScreen from '../screens/Auth/AuthStartScreen';
 import AuthSucess from '../screens/Auth/AuthSuccess';
+import RecoveryScreen from '../screens/Auth/RecoveryScreen'
+import ChangePasswordScreen from '../screens/Auth/ChangePasswordScreen';
+
 import CreateProfileScreen from '../screens/CreateProfile/CreateProfileScreen';
 import AddProfilePhotoScreen from '../screens/CreateProfile/AddProfilePhotoScreen';
 
@@ -57,6 +60,8 @@ const AuthNavigator = createStackNavigator(
     Create: CreateProfileScreen,
     AddPhoto: AddProfilePhotoScreen,
     Success: AuthSucess,
+    Recovery: RecoveryScreen,
+    ChangePassword: ChangePasswordScreen,
   },
   {
     defaultNavigationOptions: {
