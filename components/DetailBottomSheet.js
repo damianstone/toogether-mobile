@@ -215,8 +215,7 @@ const styles = StyleSheet.create({
   },
   blockButtonText: {
     color: Colors.red,
-    fontSize: 16,
-    fontWeight: 'bold',
+    fontSize: 15,
   },
   redText: {
     color: Colors.red,
