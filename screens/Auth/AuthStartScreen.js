@@ -26,11 +26,11 @@ const AuthStartScreen = (props) => {
   }
 
   const handleRegister = () => {
-    props.navigation.navigate('Auth', { register: true });
+    props.navigation.navigate('AuthLogin', { register: true });
   };
 
   const handleLogin = () => {
-    props.navigation.navigate('Auth', { register: false });
+    props.navigation.navigate('AuthLogin', { register: false });
   };
 
   return (

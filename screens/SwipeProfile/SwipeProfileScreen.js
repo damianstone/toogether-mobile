@@ -16,9 +16,9 @@ import * as w from '../../constants/swipe';
 
 const SwipeProfileScreen = (props) => {
   const dispatch = useDispatch();
-  const mainProfileId = props.navigation.getParam('mainProfileId');
-  const isInGroup = props.navigation.getParam('isInGroup');
-  const isMyProfile = props.navigation.getParam('isMyProfile');
+  const isMyProfile = props.route.params.isMyProfile;
+  const mainProfileId = props.route.params.mainProfileId;
+  const isInGroup = props.route.params.isInGroup;
 
   const currentSwipeProfile = useSelector((state) => state.getSwipeProfile);
 
@@ -161,24 +161,6 @@ const SwipeProfileScreen = (props) => {
       </View>
     </View>
   );
-};
-
-SwipeProfileScreen.navigationOptions = (navData) => {
-  return {
-    headerLeft: () => (
-      <HeaderButtons HeaderButtonComponent={HeaderButtom}>
-        <Item
-          iconName={
-            Platform.OS === 'android' ? 'ios-arrow-back' : 'ios-arrow-back'
-          }
-          onPress={() => {
-            navData.navigation.pop();
-          }}
-          title="Back arrow"
-        />
-      </HeaderButtons>
-    ),
-  };
 };
 
 export default SwipeProfileScreen;

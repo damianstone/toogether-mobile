@@ -8,7 +8,7 @@ import AppLoading from 'expo-app-loading';
 import * as Font from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 
-import ToogetherNav from './navigation/ToogetherNav';
+import AppNavigator from './navigation/AppNavigator';
 import { ContextProvider } from './context/ContextProvider';
 import store from './store/store';
 
@@ -48,7 +48,7 @@ const App = () => {
     <Provider store={store}>
       <ActionSheetProvider>
         <ContextProvider>
-          <ToogetherNav theme="dark" />
+          <AppNavigator theme="dark" />
         </ContextProvider>
       </ActionSheetProvider>
     </Provider>

@@ -13,12 +13,12 @@ import Colors from '../../constants/Colors';
 
 const ProfileScreen = (props) => {
   const dispatch = useDispatch();
-  const profile = props.navigation.getParam('profile');
-  const isGroup = props.navigation.getParam('isGroup');
-  const preview = props.navigation.getParam('preview');
-  const isMyProfile = props.navigation.getParam('isMyProfile');
 
-  const currentRef = props.navigation.getParam('currentRef');
+  const profile = props.route.params.profile;
+  const isGroup = props.route.params.isGroup;
+  const preview = props.route.params.preview;
+  const isMyProfile = props.route.params.isMyProfile;
+  const currentRef = props.route.params.currentRef;
 
   const blockProfileReducer = useSelector((state) => state.blockProfile);
   const {
