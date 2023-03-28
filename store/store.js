@@ -37,6 +37,7 @@ import {
   listMatchesReducer,
   deleteMatchReducer,
 } from './reducers/swipe';
+import { reportProfileReducer } from './reducers/report';
 
 const reducer = combineReducers({
   // profile API
@@ -73,6 +74,8 @@ const reducer = combineReducers({
   removeLike: removeLikeReducer,
   listMatches: listMatchesReducer,
   deleteMatch: deleteMatchReducer,
+  // Report API
+  reportProfile: reportProfileReducer,
 });
 
 const initialState = {};

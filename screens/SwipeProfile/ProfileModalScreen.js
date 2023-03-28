@@ -1,15 +1,19 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { StyleSheet, View, ImageBackground, Alert } from 'react-native';
 import Swiper from 'react-native-swiper';
 import { useDispatch, useSelector } from 'react-redux';
 import { blockProfile } from '../../store/actions/block';
-import { like } from '../../store/actions/swipe';
+import { like, listSwipe } from '../../store/actions/swipe';
 import { checkServerError, check400Error } from '../../utils/errors';
 import { getImage } from '../../utils/getMethods';
 import * as b from '../../constants/block';
+import * as r from '../../constants/report';
+import { userLocation } from '../../store/actions/user';
 
 import DetailBottomSheet from '../../components/DetailBottomSheet';
 import Colors from '../../constants/Colors';
+import { reportProfile } from '../../store/actions/report';
+import Loader from '../../components/UI/Loader';
 
 const ProfileScreen = (props) => {
   const dispatch = useDispatch();
@@ -26,6 +30,24 @@ const ProfileScreen = (props) => {
     error: blockError,
     data: blockData,
   } = blockProfileReducer;
+
+  const reportProfileReducer = useSelector((state) => state.reportProfile);
+  const {
+    loading: reportLoading,
+    error: reportError,
+    data: reportData,
+  } = reportProfileReducer;
+
+  // reload function then redirect to swipe screen
+  const reloadAndRedirectToSwipe = async () => {
+    try {
+      await dispatch(userLocation());
+      await dispatch(listSwipe());
+    } catch (err) {
+      console.log(err);
+    }
+    props.navigation.navigate('Swipe');
+  };
 
   const handleClose = () => {
     props.navigation.goBack();
@@ -52,19 +74,45 @@ const ProfileScreen = (props) => {
     }
   };
 
-  const openAlert = () => {
+  const handleReportProfile = () => {
+    if (profile.id) {
+      dispatch(reportProfile(profile.id));
+    }
+  };
+
+  const blockProfileAlert = () => {
     Alert.alert(
       'Do you want to block this profile?',
       'If you block this profile, none of you will be able to see their profiles',
       [
         {
-          text: 'No',
+          text: 'Cancel',
           style: 'cancel',
         },
         {
           text: 'Block profile',
           onPress: () => {
             handleBlockProfile();
+          },
+          style: 'destructive',
+        },
+      ]
+    );
+  };
+
+  const reportProfileAlert = () => {
+    Alert.alert(
+      'Are you sure you want to report this profile?',
+      `We will review this profile, and won't tell ${profile.name}`,
+      [
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+        {
+          text: 'Submit',
+          onPress: () => {
+            handleReportProfile();
           },
           style: 'destructive',
         },
@@ -88,16 +136,40 @@ const ProfileScreen = (props) => {
       [
         {
           text: 'OK',
-          onPress: () => props.navigation.navigate('Swipe'),
+          onPress: () => reloadAndRedirectToSwipe(),
         },
       ]
     );
     dispatch({ type: b.BLOCK_PROFILE_RESET });
   }
 
+  if (reportError) {
+    if (reportError?.response?.status === 400) {
+      check400Error(reportError);
+    } else {
+      checkServerError(reportError);
+    }
+    checkServerError(blockError);
+  }
+
+  if (reportData) {
+    Alert.alert(
+      'Profile reported',
+      'The profile will be reviewed and handeled by our dev team shortly.',
+      [
+        {
+          text: 'OK',
+          onPress: () => reloadAndRedirectToSwipe(),
+        },
+      ]
+    );
+    dispatch({ type: r.REPORT_PROFILE_RESET });
+  }
+
   return (
     <View style={{ flex: 1, backgroundColor: Colors.bgCard }}>
       <>
+        {reportLoading && <Loader />}
         <Swiper
           style={styles.wrapper}
           removeClippedSubviews={false}
@@ -151,7 +223,8 @@ const ProfileScreen = (props) => {
           handleClose={handleClose}
           handleLike={() => handleLike(profile.id)}
           handleDislike={() => handleDislike(profile.id)}
-          openAlert={openAlert}
+          blockProfileAlert={blockProfileAlert}
+          reportProfileAlert={reportProfileAlert}
           isMyProfile={isMyProfile}
           isGroup={isGroup}
           preview={preview}
