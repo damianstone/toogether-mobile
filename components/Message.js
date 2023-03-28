@@ -12,7 +12,7 @@ import { checkPhoto } from '../utils/checks';
 import Colors from '../constants/Colors';
 
 const Message = (props) => {
-  const { isMyMessage, message, onShowProfile, matchedProfile, ownProfile } =
+  const { isMyMessage, message, onShowProfile, receiverData, ownProfile } =
     props;
 
   return (
@@ -27,13 +27,13 @@ const Message = (props) => {
           isMyMessage ? styles.myMessageBG : styles.senderMessageBG,
         ]}>
         <View style={styles.textMessageContainer}>
-          <Text style={styles.textMessage}>{message}</Text>
+          <Text style={styles.textMessage}>{message.message}</Text>
         </View>
-        <Text style={styles.time}>19:30</Text>
+        <Text style={styles.time}>{message.sent_at}</Text>
       </View>
       <TouchableOpacity onPress={onShowProfile}>
         <ImageBackground
-          source={checkPhoto(isMyMessage ? ownProfile : matchedProfile)}
+          source={checkPhoto(isMyMessage ? ownProfile : receiverData)}
           imageStyle={styles.img}
           style={styles.singleImageContainer}></ImageBackground>
       </TouchableOpacity>
@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     flex: 1,
     alignContent: 'center',
-    maxWidth: '75%',
+    maxWidth: '70%',
     flexDirection: 'row',
     alignItems: 'center',
   },
@@ -66,14 +66,15 @@ const styles = StyleSheet.create({
   },
 
   messageContainer: {
-    flex: 1,
+    flexShrink: 1,
     flexDirection: 'row',
     borderRadius: 15,
-    paddingVertical: 5,
+    paddingTop: 3,
+    paddingBottom: 6,
     paddingHorizontal: 10,
-    marginEnd: 5,
   },
   myMessageBG: {
+    marginEnd: 5,
     backgroundColor: Colors.orange,
   },
   senderMessageBG: {
@@ -81,25 +82,20 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.blue,
   },
   textMessageContainer: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexShrink: 3,
   },
 
   textMessage: {
     fontSize: 16,
     color: Colors.white,
     margin: 0,
-    paddingVertical: 2.5,
   },
 
   time: {
-    position: 'absolute',
-    fontSize: 9,
+    fontSize: 8.5,
     color: Colors.grey,
+    marginStart: 4,
     alignSelf: 'flex-end',
-    bottom: 5,
-    right: 10,
   },
   singleImageContainer: {
     width: 35,

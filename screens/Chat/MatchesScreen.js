@@ -21,7 +21,7 @@ import { StatusBar } from 'expo-status-bar';
 import HeaderButtom from '../../components/UI/HeaderButton';
 import Colors from '../../constants/Colors';
 import { listMatches, deleteMatch } from '../../store/actions/swipe';
-import { listChats } from '../../store/actions/conversation';
+import { listMyConversations } from '../../store/actions/conversation';
 import { checkServerError, check400Error } from '../../utils/errors';
 import no_chats from '../../assets/images/no-chats.png';
 import SwipeError from '../../components/SwipeError';
@@ -45,7 +45,14 @@ const MatchesScreen = (props) => {
     loading: loadingListMatches,
     data: matches,
   } = listMatchesReducer;
-
+  const listConversationsReducer = useSelector(
+    (state) => state.listConversations
+  );
+  const {
+    error: errorListConversations,
+    loading: loadingListConversations,
+    data: conversations,
+  } = listConversationsReducer;
   const deleteMatchReducer = useSelector((state) => state.deleteMatch);
   const {
     error: errorDeleteMatch,
@@ -55,7 +62,9 @@ const MatchesScreen = (props) => {
 
   useEffect(() => {
     dispatch(listMatches());
+    dispatch(listMyConversations());
   }, []);
+
   const reload = useCallback(async () => {
     setLocalLoading(true);
     try {
@@ -69,7 +78,7 @@ const MatchesScreen = (props) => {
   const reloadChats = useCallback(async () => {
     setLocalLoading(true);
     try {
-      dispatch(listChats());
+      dispatch(listMyConversations());
     } catch (err) {
       console.log(err);
     }
@@ -87,7 +96,10 @@ const MatchesScreen = (props) => {
       }
       checkServerError(errorDeleteMatch);
     }
-  }, [errorDeleteMatch, errorListMatches]);
+    if (errorListConversations) {
+      checkServerError(errorListConversations);
+    }
+  }, [errorDeleteMatch, errorListMatches, errorListConversations]);
 
   const handleShowProfile = (profile, isInGroup) => {
     if (profile) {
@@ -97,19 +109,27 @@ const MatchesScreen = (props) => {
       });
     }
   };
-  const handleShowChat = (chat, matchedData) => {
-    if (chat) {
+
+  const handleShowChatbyMatch = (receiverProfile) => {
+    props.navigation.navigate({
+      routeName: 'Chat',
+      params: {
+        receiverProfile,
+      },
+    });
+  };
+
+  const handleShowChatbyId = (conversationId, receiverProfile) => {
+    if (conversationId) {
       props.navigation.navigate({
         routeName: 'Chat',
         params: {
-          chatId: chat.id,
-          isInGroup: matchedData.matched_profile.is_in_group,
-          matchedData: matchedData,
+          conversationId,
+          receiverProfile,
         },
       });
     }
   };
-
   const handleDeleteMatch = async (matchId) => {
     if (matchId) {
       await dispatch(deleteMatch(matchId));
@@ -122,7 +142,12 @@ const MatchesScreen = (props) => {
     return null;
   };
 
-  if (loadingListMatches || loadingDeleteMatch || localLoading) {
+  if (
+    loadingListMatches ||
+    loadingDeleteMatch ||
+    localLoading ||
+    loadingListConversations
+  ) {
     return (
       <SafeAreaView style={styles.safe}>
         <StatusBar style="light" />
@@ -150,12 +175,11 @@ const MatchesScreen = (props) => {
   };
 
   const renderBubblesMatches = ({ item }) => {
-    const matchedData = item.matched_data;
     const matchedProfile = item.matched_data.matched_profile;
     return (
       <View style={styles.new_matches}>
         <MatchAvatar
-          onShowChat={() => handleShowChat(item, matchedData)}
+          onShowChat={() => handleShowChatbyMatch(matchedProfile)}
           matchedProfile={matchedProfile}
           matchedProfileHasPhoto={matchedProfile.photos.length > 0}
           matchedProfilePhoto={
@@ -167,6 +191,7 @@ const MatchesScreen = (props) => {
       </View>
     );
   };
+
   const renderNoChats = () => {
     return (
       <View style={styles.no_chats}>
@@ -177,23 +202,12 @@ const MatchesScreen = (props) => {
   };
 
   const renderPreviewChats = ({ item }) => {
-    const matchedData = item.matched_data;
-    const matchedProfile = item.matched_data.matched_profile;
     return (
       <PreviewChat
-        onShowChat={() => handleShowChat(item, matchedData)}
-        matchedProfileHasPhoto={matchedProfile.photos.length > 0}
-        matchedProfilePhoto={
-          matchedProfile.photos.length > 0
-            ? matchedProfile.photos[0].image
-            : null
-        }
+        onShowChat={() => handleShowChatbyId(item.id, item.receiver)}
         data={item}
-        matchedData={matchedData}
-        matchedProfile={matchedProfile}
-        onShowProfile={() =>
-          handleShowProfile(matchedProfile, matchedProfile.is_in_group)
-        }
+        receiverProfile={item.receiver}
+        onShowProfile={() => handleShowProfile(item.receiver, item.receiver.id)}
       />
     );
   };
@@ -228,20 +242,22 @@ const MatchesScreen = (props) => {
         </View>
         <View style={styles.chat_preview}>
           <Text style={styles.title}> Chats</Text>
-          <FlatList
-            refreshControl={
-              <RefreshControl
-                refreshing={refreshing}
-                onRefresh={reloadChats}
-                tintColor={Colors.white}
-              />
-            }
-            keyExtractor={(item) => item.id.toString()}
-            contentContainerStyle={styles.chats}
-            data={chats.results}
-            renderItem={renderPreviewChats}
-            ListEmptyComponent={renderNoChats}
-          />
+          {!loadingListConversations && conversations && (
+            <FlatList
+              refreshControl={
+                <RefreshControl
+                  refreshing={refreshing}
+                  onRefresh={reloadChats}
+                  tintColor={Colors.white}
+                />
+              }
+              keyExtractor={(item) => item?.id.toString()}
+              contentContainerStyle={styles.chats}
+              data={conversations?.results}
+              renderItem={renderPreviewChats}
+              ListEmptyComponent={renderNoChats}
+            />
+          )}
         </View>
       </View>
     </SafeAreaView>
@@ -272,6 +288,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: Colors.bg,
   },
+
   screen: {
     flex: 1,
     backgroundColor: Colors.bg,
@@ -324,6 +341,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     backgroundColor: Colors.bg,
   },
+
   chat_preview: {
     overflow: 'hidden',
     marginTop: 10,

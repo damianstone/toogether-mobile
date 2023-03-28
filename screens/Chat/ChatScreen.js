@@ -23,27 +23,38 @@ import Colors from '../../constants/Colors';
 import sendimg from '../../assets/images/send-button.png';
 import Message from '../../components/Message';
 import ChatHeader from '../../components/ChatHeader';
+import {
+  createConversation,
+  listConversationMessages,
+} from '../../store/actions/conversation';
 
 const ChatScreen = (props) => {
-  const chatId = props.navigation.getParam('chatId');
-  const matchedData = props.navigation.getParam('matchedData');
-  const isInGroup = props.navigation.getParam('isInGroup');
+  const conversationId = props.navigation.getParam('conversationId');
+  const receiverData = props.navigation.getParam('receiverProfile');
   const { profileContext, updateProfileContext } = useContext(Context);
   const [refreshing, setRefreshing] = useState(false);
   const [localLoading, setLocalLoading] = useState(false);
   const [chatMessage, setChatMessage] = useState('');
   const dispatch = useDispatch();
-  const chatReducer = useSelector((state) => state.listConversationMessages);
+  const conversationReducer = useSelector(
+    (state) => state.listConversationMessages
+  );
   const {
-    error: errorChat,
-    loading: loadingChat,
-    data: dataChat,
-  } = chatReducer;
+    error: errorMessages,
+    loading: loadingMessages,
+    data: messages,
+  } = conversationReducer;
+  useEffect(() => {
+    if (conversationId) {
+      dispatch(listConversationMessages(conversationId));
+    }
+  }, [conversationId]);
 
   useEffect(() => {
-    dispatch(getChat(chatId));
-  }, [chatId]);
-
+    if (errorMessages) {
+      checkServerError(errorMessages);
+    }
+  }, [errorMessages]);
   const handleShowProfile = (profile, isInGroup) => {
     if (profile) {
       props.navigation.navigate('SwipeProfile', {
@@ -54,10 +65,10 @@ const ChatScreen = (props) => {
   };
 
   const handleGoBack = () => {
-    props.navigation.navigate('Chats');
+    props.navigation.navigate('Matches');
   };
 
-  if (loadingChat || localLoading) {
+  if (loadingMessages || localLoading) {
     <ActivityModal
       loading
       title="Please wait"
@@ -72,36 +83,34 @@ const ChatScreen = (props) => {
   const renderMessages = ({ item }) => {
     return (
       <Message
-        message={item.text}
-        isMyMessage={profileContext?.id != item.sender.id ? false : true}
+        message={item}
+        isMyMessage={item.sent_by_current ? true : false}
         ownProfile={profileContext}
-        matchedProfile={matchedData?.matched_profile}
+        matchedProfile={receiverData}
         onShowProfile={() => {
-          handleShowProfile(item.sender.id, isInGroup);
+          handleShowProfile(item.sender, receiverData.isInGroup);
         }}
       />
     );
   };
   return (
     <View style={styles.screen}>
-      {matchedData && (
+      {!loadingMessages && (
         <ChatHeader
           onGoBack={() => handleGoBack()}
-          matchedData={matchedData}
+          receiverData={receiverData}
           onShowProfile={() =>
-            handleShowProfile(
-              matchedData.matched_profile,
-              matchedData.matched_profile.is_in_group
-            )
+            handleShowProfile(receiverData, receiverData.is_in_group)
           }
         />
       )}
       <View style={styles.messages_Container}>
         <FlatList
           inverted={true}
-          data={chat.results[0].messages}
+          data={messages?.results}
           keyExtractor={(item) => item.id.toString()}
           renderItem={renderMessages}
+          contentContainerStyle={{ flexDirection: 'column-reverse' }}
         />
       </View>
       <View style={styles.sendMessage}>

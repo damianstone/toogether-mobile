@@ -15,8 +15,7 @@ import Colors from '../constants/Colors';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import HeaderButtom from './UI/HeaderButton';
 const ChatHeader = (props) => {
-  const { matchedData, onShowProfile, onGoBack } = props;
-  const { matched_profile: matchedProfile } = matchedData;
+  const { receiverData, onShowProfile, onGoBack } = props;
 
   return (
     <View style={styles.headerContainer}>
@@ -31,11 +30,11 @@ const ChatHeader = (props) => {
       </HeaderButtons>
       <TouchableOpacity onPress={onShowProfile}>
         <ImageBackground
-          source={checkPhoto(matchedProfile)}
+          source={require('../assets/images/placeholder-profile.png')}
           imageStyle={styles.img}
           style={styles.singleImageContainer}></ImageBackground>
       </TouchableOpacity>
-      <Text style={styles.matched_Name}>{matchedProfile.name}</Text>
+      <Text style={styles.matched_Name}>{receiverData?.name}</Text>
       <TouchableOpacity style={styles.menuIcon}>
         <Entypo name="dots-three-vertical" size={24} color="grey" />
       </TouchableOpacity>

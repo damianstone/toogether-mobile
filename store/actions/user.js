@@ -26,7 +26,7 @@ export const userLocation = () => {
       //   accuracy: Platform.OS === 'ios' ? 3 : Location.Accuracy.High,
       // });
       // If you are getting stuck and not getting location (on Android uncomment this to get default location so that you can continue working)
-      /* let location;
+      let location;
       if (Platform.OS === 'ios') {
         location = await Location.getCurrentPositionAsync({
           accuracy: Platform.OS === 'ios' ? 3 : Location.Accuracy.Highest,
@@ -38,7 +38,7 @@ export const userLocation = () => {
             longitude: -122.406417,
           },
         };
-      } */
+      }
 
       const { data } = await axios({
         method: 'POST',
@@ -49,17 +49,6 @@ export const userLocation = () => {
           lon: location.coords.longitude,
         },
       });
-
-      await AsyncStorage.setItem(
-        '@userData',
-        JSON.stringify({
-          id: data.id,
-          token: data.token,
-          access_token: data.access,
-          refresh_token: data.refresh,
-          has_account: data.has_account,
-        })
-      );
 
       dispatch({
         type: c.USER_LOCATION_SUCCESS,
@@ -150,6 +139,7 @@ export const userLogin = (email, password) => {
           id: data.id,
           token: data.token,
           has_account: data.has_account,
+          refresh_token: data.refresh,
         })
       );
 
@@ -203,11 +193,11 @@ export const updateToken = () => {
         '@userData',
         JSON.stringify({
           ...userData,
-          token: data.token,
-          access_token: data.access.token,
+          token: data.access,
           refresh_token: data.refresh,
         })
       );
+
       dispatch({ type: c.REFRESH_TOKEN_SUCCESS, payload: data });
     } catch (error) {
       logout();
