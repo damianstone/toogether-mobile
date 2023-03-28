@@ -50,6 +50,7 @@ const reducer = combineReducers({
   userCreateProfile: userCreateProfileReducer,
   userUpdateProfile: userUpdateProfileReducer,
   userGetProfile: userGetProfileReducer,
+  reportProfile: reportProfileReducer,
   // photos API
   userAddPhoto: userAddPhotoReducer,
   userRemovePhoto: userRemovePhotoReducer,
@@ -74,8 +75,6 @@ const reducer = combineReducers({
   removeLike: removeLikeReducer,
   listMatches: listMatchesReducer,
   deleteMatch: deleteMatchReducer,
-  // Report API
-  reportProfile: reportProfileReducer,
 });
 
 const initialState = {};
