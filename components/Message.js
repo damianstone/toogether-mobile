@@ -12,14 +12,21 @@ import { checkPhoto } from '../utils/checks';
 import Colors from '../constants/Colors';
 
 const Message = (props) => {
-  const { isMyMessage, message, onShowProfile, receiverData, ownProfile } =
-    props;
+  const {
+    isMyMessage,
+    message,
+    onShowProfile,
+    receiverData,
+    ownProfile,
+    isPrevMessageFromCurrentUser,
+  } = props;
 
   return (
     <View
       style={[
         styles.container,
         isMyMessage ? styles.myMessage : styles.senderMessage,
+        isPrevMessageFromCurrentUser ? styles.sameSender : null,
       ]}>
       <View
         style={[
@@ -47,7 +54,8 @@ const styles = StyleSheet.create({
   container: {
     fontSize: 16,
     lineHeight: '100%',
-    padding: 10,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
     marginVertical: 5,
     marginHorizontal: 5,
     borderRadius: 10,
@@ -56,6 +64,9 @@ const styles = StyleSheet.create({
     maxWidth: '70%',
     flexDirection: 'row',
     alignItems: 'center',
+  },
+  sameSender: {
+    marginTop: 0,
   },
   myMessage: {
     alignSelf: 'flex-end',

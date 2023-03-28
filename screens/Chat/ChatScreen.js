@@ -24,6 +24,7 @@ import sendimg from '../../assets/images/send-button.png';
 import Message from '../../components/Message';
 import ChatHeader from '../../components/ChatHeader';
 import {
+  addConversationMessage,
   createConversation,
   listConversationMessages,
 } from '../../store/actions/conversation';
@@ -35,7 +36,9 @@ const ChatScreen = (props) => {
   const [refreshing, setRefreshing] = useState(false);
   const [localLoading, setLocalLoading] = useState(false);
   const [chatMessage, setChatMessage] = useState('');
+  const [chatSocket, setChatSocket] = useState(null);
   const dispatch = useDispatch();
+
   const conversationReducer = useSelector(
     (state) => state.listConversationMessages
   );
@@ -49,6 +52,45 @@ const ChatScreen = (props) => {
       dispatch(listConversationMessages(conversationId));
     }
   }, [conversationId]);
+
+  useEffect(() => {
+    if (conversationId) {
+      const wsUrl = encodeURI(
+        `ws://10.0.2.2:8000/ws/chat/${conversationId}/?sender_id=${profileContext.id}`
+      );
+      const newChatSocket = new WebSocket(wsUrl);
+
+      newChatSocket.onopen = () => {
+        console.log('Socket opened');
+      };
+
+      newChatSocket.onclose = (e) => {
+        console.log('Socket closed', e);
+      };
+
+      setChatSocket(newChatSocket);
+    }
+    return () => {
+      if (chatSocket) {
+        chatSocket.close();
+      }
+    };
+  }, [conversationId, dispatch]);
+
+  const handleSendMessage = () => {
+    if (chatSocket && chatMessage) {
+      chatSocket.send(chatMessage);
+      dispatch(
+        addConversationMessage({
+          id: Math.random() * 10,
+          sender: profileContext.id,
+          message: chatMessage,
+        })
+      );
+      console.log(messages);
+      setChatMessage('');
+    }
+  };
 
   useEffect(() => {
     if (errorMessages) {
@@ -68,18 +110,6 @@ const ChatScreen = (props) => {
     props.navigation.navigate('Matches');
   };
 
-  if (loadingMessages || localLoading) {
-    <ActivityModal
-      loading
-      title="Please wait"
-      size="large"
-      activityColor="white"
-      titleColor="white"
-      activityWrapperStyle={{
-        backgroundColor: Colors.bg,
-      }}
-    />;
-  }
   const renderMessages = ({ item }) => {
     return (
       <Message
@@ -110,7 +140,8 @@ const ChatScreen = (props) => {
           data={messages?.results}
           keyExtractor={(item) => item.id.toString()}
           renderItem={renderMessages}
-          contentContainerStyle={{ flexDirection: 'column-reverse' }}
+          contentContainerStyle={{ flexDirection: 'column' }}
+          extraData={conversationReducer}
         />
       </View>
       <View style={styles.sendMessage}>
@@ -125,7 +156,9 @@ const ChatScreen = (props) => {
             }}
             value={chatMessage}
           />
-          <TouchableOpacity style={styles.imgContainer}>
+          <TouchableOpacity
+            onPress={() => handleSendMessage()}
+            style={styles.imgContainer}>
             <Image source={sendimg} style={styles.image} />
           </TouchableOpacity>
           <View />

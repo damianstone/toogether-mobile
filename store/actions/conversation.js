@@ -108,8 +108,11 @@ export const createConversation = (matchId) => {
     try {
       dispatch({ type: c.CREATE_CONVERSATION_REQUEST });
 
+      const userData = JSON.parse(await AsyncStorage.getItem('@userData'));
+
       const config = {
         'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + userData.token,
       };
 
       const { data } = await axios({
@@ -117,11 +120,11 @@ export const createConversation = (matchId) => {
         url: `${BASE_URL}/api/v1/conversations/${matchId}/start/`,
         headers: config,
       });
-
       dispatch({
         type: c.CREATE_CONVERSATION_SUCCESS,
         payload: data,
       });
+      return data;
     } catch (error) {
       dispatch({
         type: c.CREATE_CONVERSATION_FAIL,
@@ -129,4 +132,8 @@ export const createConversation = (matchId) => {
       });
     }
   };
+};
+
+export const addConversationMessage = (message) => (dispatch) => {
+  dispatch({ type: c.ADD_CONVERSATION_MESSAGE, payload: message });
 };

@@ -32,6 +32,13 @@ export const listConversationMessagesReducer = (state = {}, action) => {
     case c.LIST_CONVERSATION_MESSAGES_FAIL:
       return { loading: false, error: action.payload };
 
+    case c.ADD_CONVERSATION_MESSAGE:
+      const newData = { ...state.data };
+      newData.results.unshift(action.payload);
+      return {
+        ...state,
+        data: newData, // Append the new message to the existing list
+      };
     default:
       return state;
   }
