@@ -40,14 +40,21 @@ const ChatScreen = (props) => {
     (state) => state.listConversationMessages
   );
   const {
-    error: errorConversation,
-    loading: loadingConversation,
-    data: conversation,
+    error: errorMessages,
+    loading: loadingMessages,
+    data: messages,
   } = conversationReducer;
   useEffect(() => {
-    if (conversationId) dispatch(listConversationMessages(conversationId));
+    if (conversationId) {
+      dispatch(listConversationMessages(conversationId));
+    }
   }, [conversationId]);
 
+  useEffect(() => {
+    if (errorMessages) {
+      checkServerError(errorMessages);
+    }
+  }, [errorMessages]);
   const handleShowProfile = (profile, isInGroup) => {
     if (profile) {
       props.navigation.navigate('SwipeProfile', {
@@ -61,7 +68,7 @@ const ChatScreen = (props) => {
     props.navigation.navigate('Matches');
   };
 
-  if (loadingConversation || localLoading) {
+  if (loadingMessages || localLoading) {
     <ActivityModal
       loading
       title="Please wait"
@@ -88,7 +95,7 @@ const ChatScreen = (props) => {
   };
   return (
     <View style={styles.screen}>
-      {!loadingConversation && (
+      {!loadingMessages && (
         <ChatHeader
           onGoBack={() => handleGoBack()}
           receiverData={receiverData}
@@ -100,7 +107,7 @@ const ChatScreen = (props) => {
       <View style={styles.messages_Container}>
         <FlatList
           inverted={true}
-          data={conversation?.results}
+          data={messages?.results}
           keyExtractor={(item) => item.id.toString()}
           renderItem={renderMessages}
           contentContainerStyle={{ flexDirection: 'column-reverse' }}

@@ -26,7 +26,7 @@ export const userLocation = () => {
       //   accuracy: Platform.OS === 'ios' ? 3 : Location.Accuracy.High,
       // });
       // If you are getting stuck and not getting location (on Android uncomment this to get default location so that you can continue working)
-      /* let location;
+      let location;
       if (Platform.OS === 'ios') {
         location = await Location.getCurrentPositionAsync({
           accuracy: Platform.OS === 'ios' ? 3 : Location.Accuracy.Highest,
@@ -38,7 +38,7 @@ export const userLocation = () => {
             longitude: -122.406417,
           },
         };
-      } */
+      }
 
       const { data } = await axios({
         method: 'POST',

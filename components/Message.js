@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     flex: 1,
     alignContent: 'center',
-    maxWidth: '75%',
+    maxWidth: '70%',
     flexDirection: 'row',
     alignItems: 'center',
   },
@@ -66,14 +66,15 @@ const styles = StyleSheet.create({
   },
 
   messageContainer: {
-    flex: 1,
+    flexShrink: 1,
     flexDirection: 'row',
     borderRadius: 15,
-    paddingVertical: 5,
+    paddingTop: 3,
+    paddingBottom: 6,
     paddingHorizontal: 10,
-    marginEnd: 5,
   },
   myMessageBG: {
+    marginEnd: 5,
     backgroundColor: Colors.orange,
   },
   senderMessageBG: {
@@ -81,25 +82,20 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.blue,
   },
   textMessageContainer: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexShrink: 3,
   },
 
   textMessage: {
     fontSize: 16,
     color: Colors.white,
     margin: 0,
-    paddingVertical: 2.5,
   },
 
   time: {
-    position: 'absolute',
-    fontSize: 9,
+    fontSize: 8.5,
     color: Colors.grey,
+    marginStart: 4,
     alignSelf: 'flex-end',
-    bottom: 5,
-    right: 10,
   },
   singleImageContainer: {
     width: 35,
