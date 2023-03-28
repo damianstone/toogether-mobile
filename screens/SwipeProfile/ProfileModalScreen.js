@@ -12,7 +12,7 @@ import { userLocation } from '../../store/actions/user';
 
 import DetailBottomSheet from '../../components/DetailBottomSheet';
 import Colors from '../../constants/Colors';
-import { reportProfile } from '../../store/actions/report';
+import { reportProfile } from '../../store/actions/user';
 import Loader from '../../components/UI/Loader';
 
 const ProfileScreen = (props) => {

@@ -1,4 +1,5 @@
 import * as c from '../../constants/user';
+import * as r from '../../constants/report';
 
 export const userLocationReducer = (state = {}, action) => {
   switch (action.type) {
@@ -243,6 +244,29 @@ export const userListPhotosReducer = (state = {}, action) => {
         loading: false,
         error: action.payload,
       };
+    default:
+      return state;
+  }
+};
+
+// report profile reducer
+export const reportProfileReducer = (state = {}, action) => {
+  switch (action.type) {
+    case r.REPORT_PROFILE_REQUEST:
+      return {
+        loading: true,
+      };
+    case r.REPORT_PROFILE_SUCCESS:
+      return {
+        data: { ...action.payload },
+      };
+    case r.REPORT_PROFILE_FAIL:
+      return {
+        loading: false,
+        error: action.payload,
+      };
+    case r.REPORT_PROFILE_RESET:
+      return {};
     default:
       return state;
   }

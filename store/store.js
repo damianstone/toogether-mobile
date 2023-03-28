@@ -13,6 +13,7 @@ import {
   userRegisterReducer,
   userDeleteReducer,
   userGetProfileReducer,
+  reportProfileReducer,
 } from './reducers/user';
 import {
   listBlockedProfilesReducer,
@@ -37,7 +38,6 @@ import {
   listMatchesReducer,
   deleteMatchReducer,
 } from './reducers/swipe';
-import { reportProfileReducer } from './reducers/report';
 
 const reducer = combineReducers({
   // profile API
