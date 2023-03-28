@@ -44,7 +44,7 @@ export const listConversationMessagesReducer = (state = {}, action) => {
   }
 };
 
-export const createConversationReducer = (state = {}, action) => {
+export const startConversationReducer = (state = {}, action) => {
   switch (action.type) {
     case c.CREATE_CONVERSATION_REQUEST:
       return { loading: true };

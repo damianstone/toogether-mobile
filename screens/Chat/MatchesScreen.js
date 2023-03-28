@@ -22,7 +22,7 @@ import HeaderButtom from '../../components/UI/HeaderButton';
 import Colors from '../../constants/Colors';
 import { listMatches, deleteMatch } from '../../store/actions/swipe';
 import {
-  createConversation,
+  startConversation,
   listMyConversations,
 } from '../../store/actions/conversation';
 import { checkServerError, check400Error } from '../../utils/errors';
@@ -67,8 +67,12 @@ const MatchesScreen = (props) => {
     data: matchDeleted,
   } = deleteMatchReducer;
 
-  const startConversation = useSelector((state) => state.createConversation);
-  const { error, loading, data } = startConversation;
+  const startedConversation = useSelector((state) => state.startConversation);
+  const {
+    error: errorStartedConversations,
+    loading: loadingStartedConservation,
+    data: dataStartedConversation,
+  } = startedConversation;
 
   useEffect(() => {
     dispatch(listMatches());
@@ -95,24 +99,24 @@ const MatchesScreen = (props) => {
   }, [errorListConversations]);
 
   useEffect(() => {
-    if (data) {
+    if (dataStartedConversation) {
       dispatch({ type: conv.CREATE_CONVERSATION_RESET });
       props.navigation.navigate({
         routeName: 'Chat',
         params: {
-          receiverProfile: data.receiver,
-          conversationId: data.id,
+          receiverProfile: dataStartedConversation.receiver,
+          conversationId: dataStartedConversation.id,
         },
       });
     }
 
-    if (error) {
-      if (error?.response?.status === 400) {
-        check400Error(error);
+    if (errorStartedConversations) {
+      if (errorStartedConversations?.response?.status === 400) {
+        check400Error(errorStartedConversations);
       }
-      checkServerError(error);
+      checkServerError(errorStartedConversations);
     }
-  }, [data, error]);
+  }, [dataStartedConversation, errorStartedConversations]);
 
   const reload = useCallback(async () => {
     setLocalLoading(true);
@@ -145,7 +149,7 @@ const MatchesScreen = (props) => {
 
   const handleShowChatbyMatch = (matchId) => {
     if (matchId) {
-      dispatch(createConversation(matchId));
+      dispatch(startConversation(matchId));
     }
   };
 

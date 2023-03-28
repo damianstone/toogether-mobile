@@ -40,7 +40,7 @@ export const listMyConversations = () => {
   };
 };
 
-export const listConversationMessages = (id) => {
+export const listMessages = (id) => {
   return async (dispatch) => {
     try {
       dispatch({ type: c.LIST_CONVERSATION_MESSAGES_REQUEST });
@@ -103,7 +103,7 @@ export const deleteConversation = (id) => {
   };
 };
 
-export const createConversation = (matchId) => {
+export const startConversation = (matchId) => {
   return async (dispatch) => {
     try {
       dispatch({ type: c.CREATE_CONVERSATION_REQUEST });
