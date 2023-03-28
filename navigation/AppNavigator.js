@@ -14,7 +14,7 @@ const AppNavigator = (props) => {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator screenOptions={{headerShown: false}} >
+      <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen name="Swipe" component={TooNavigator} />
         <Stack.Screen name="Auth" component={AuthNavigator} />
         <Stack.Screen name="StartScreen" component={StartupScreen} />
