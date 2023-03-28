@@ -28,16 +28,20 @@ import {
   createConversation,
   listConversationMessages,
 } from '../../store/actions/conversation';
+import { ENV } from '../../environment';
+
+const API_URL = ENV.API_URL;
 
 const ChatScreen = (props) => {
+  const dispatch = useDispatch();
   const conversationId = props.navigation.getParam('conversationId');
   const receiverData = props.navigation.getParam('receiverProfile');
   const { profileContext, updateProfileContext } = useContext(Context);
+
   const [refreshing, setRefreshing] = useState(false);
   const [localLoading, setLocalLoading] = useState(false);
   const [chatMessage, setChatMessage] = useState('');
   const [chatSocket, setChatSocket] = useState(null);
-  const dispatch = useDispatch();
 
   const conversationReducer = useSelector(
     (state) => state.listConversationMessages
@@ -47,6 +51,8 @@ const ChatScreen = (props) => {
     loading: loadingMessages,
     data: messages,
   } = conversationReducer;
+
+
   useEffect(() => {
     if (conversationId) {
       dispatch(listConversationMessages(conversationId));
@@ -54,9 +60,15 @@ const ChatScreen = (props) => {
   }, [conversationId]);
 
   useEffect(() => {
+    if (errorMessages) {
+      checkServerError(errorMessages);
+    }
+  }, [errorMessages]);
+
+  useEffect(() => {
     if (conversationId) {
       const wsUrl = encodeURI(
-        `ws://10.0.2.2:8000/ws/chat/${conversationId}/?sender_id=${profileContext.id}`
+        `ws://127.0.0.1:8000/ws/chat/${conversationId}/?sender_id=${profileContext.id}`
       );
       const newChatSocket = new WebSocket(wsUrl);
 
@@ -92,11 +104,6 @@ const ChatScreen = (props) => {
     }
   };
 
-  useEffect(() => {
-    if (errorMessages) {
-      checkServerError(errorMessages);
-    }
-  }, [errorMessages]);
   const handleShowProfile = (profile, isInGroup) => {
     if (profile) {
       props.navigation.navigate('SwipeProfile', {
@@ -107,7 +114,7 @@ const ChatScreen = (props) => {
   };
 
   const handleGoBack = () => {
-    props.navigation.navigate('Matches');
+    props.navigation.navigate("Matches");
   };
 
   const renderMessages = ({ item }) => {
@@ -127,7 +134,7 @@ const ChatScreen = (props) => {
     <View style={styles.screen}>
       {!loadingMessages && (
         <ChatHeader
-          onGoBack={() => handleGoBack()}
+          onGoBack={handleGoBack}
           receiverData={receiverData}
           onShowProfile={() =>
             handleShowProfile(receiverData, receiverData.is_in_group)
@@ -168,16 +175,6 @@ const ChatScreen = (props) => {
   );
 };
 
-ChatScreen.navigationOptions = (navData) => {
-  const handleShowProfile = (profileid, isInGroup) => {
-    if (profileid) {
-      navData.navigation.navigate('SwipeProfile', {
-        mainProfileId: profileid,
-        isInGroup: isInGroup,
-      });
-    }
-  };
-};
 
 const styles = StyleSheet.create({
   screen: {

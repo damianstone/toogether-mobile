@@ -212,8 +212,7 @@ const ChatScreen = (props) => {
           />
           <TouchableOpacity
             onPress={() => onOpenActionSheet(matchedProfile, item.id)}
-            style={styles.cardContainer}
-          >
+            style={styles.cardContainer}>
             <Text style={styles.instagramText}>
               {matchedProfile.instagram
                 ? `@ ${matchedProfile.instagram}`
@@ -222,8 +221,7 @@ const ChatScreen = (props) => {
             {matchedProfile.instagram ? (
               <TouchableOpacity
                 onPress={() => handleInstagram(matchedProfile.instagram)}
-                style={styles.sendButtonContainer}
-              >
+                style={styles.sendButtonContainer}>
                 <Image
                   source={require('../assets/images/send-button.png')}
                   style={styles.img}
@@ -246,8 +244,7 @@ const ChatScreen = (props) => {
           width: '100%',
           height: '100%',
           textAlign: 'center',
-        }}
-      >
+        }}>
         <View style={{ width: 200, height: 200 }}>
           <Image
             source={require('../assets/images/no-chats.png')}

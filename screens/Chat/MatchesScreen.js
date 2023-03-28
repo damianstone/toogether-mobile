@@ -33,6 +33,7 @@ import ChatAvatar from '../../components/ChatAvatar';
 import MatchCounter from '../../components/MatchCounter';
 import MatchAvatar from '../../components/MatchAvatar';
 import PreviewChat from '../../components/PreviewChat';
+import * as conv from '../../constants/conversation';
 
 /* For test purposes */
 import chats from '../../data/chats.json';
@@ -42,12 +43,14 @@ const MatchesScreen = (props) => {
   const dispatch = useDispatch();
   const [localLoading, setLocalLoading] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
+
   const listMatchesReducer = useSelector((state) => state.listMatches);
   const {
     error: errorListMatches,
     loading: loadingListMatches,
     data: matches,
   } = listMatchesReducer;
+
   const listConversationsReducer = useSelector(
     (state) => state.listConversations
   );
@@ -56,6 +59,7 @@ const MatchesScreen = (props) => {
     loading: loadingListConversations,
     data: conversations,
   } = listConversationsReducer;
+
   const deleteMatchReducer = useSelector((state) => state.deleteMatch);
   const {
     error: errorDeleteMatch,
@@ -63,10 +67,52 @@ const MatchesScreen = (props) => {
     data: matchDeleted,
   } = deleteMatchReducer;
 
+  const startConversation = useSelector((state) => state.createConversation);
+  const { error, loading, data } = startConversation;
+
   useEffect(() => {
     dispatch(listMatches());
     dispatch(listMyConversations());
   }, []);
+
+  useEffect(() => {
+    if (errorDeleteMatch) {
+      if (errorDeleteMatch?.response?.status === 400) {
+        check400Error(errorDeleteMatch);
+      }
+      checkServerError(errorDeleteMatch);
+    }
+
+    if (errorListMatches) {
+      checkServerError(errorListMatches);
+    }
+  }, [errorDeleteMatch, errorListMatches]);
+
+  useEffect(() => {
+    if (errorListConversations) {
+      checkServerError(errorListConversations);
+    }
+  }, [errorListConversations]);
+
+  useEffect(() => {
+    if (data) {
+      dispatch({ type: conv.CREATE_CONVERSATION_RESET });
+      props.navigation.navigate({
+        routeName: 'Chat',
+        params: {
+          receiverProfile: data.receiver,
+          conversationId: data.id,
+        },
+      });
+    }
+
+    if (error) {
+      if (error?.response?.status === 400) {
+        check400Error(error);
+      }
+      checkServerError(error);
+    }
+  }, [data, error]);
 
   const reload = useCallback(async () => {
     setLocalLoading(true);
@@ -88,22 +134,6 @@ const MatchesScreen = (props) => {
     setLocalLoading(false);
   }, [dispatch]);
 
-  useEffect(() => {
-    if (errorListMatches) {
-      checkServerError(errorListMatches);
-    }
-
-    if (errorDeleteMatch) {
-      if (errorDeleteMatch?.response?.status === 400) {
-        check400Error(errorDeleteMatch);
-      }
-      checkServerError(errorDeleteMatch);
-    }
-    if (errorListConversations) {
-      checkServerError(errorListConversations);
-    }
-  }, [errorDeleteMatch, errorListMatches, errorListConversations]);
-
   const handleShowProfile = (profile, isInGroup) => {
     if (profile) {
       props.navigation.navigate('SwipeProfile', {
@@ -113,15 +143,10 @@ const MatchesScreen = (props) => {
     }
   };
 
-  const handleShowChatbyMatch = async (receiverProfile, matchId) => {
-    const { id } = await dispatch(createConversation(matchId));
-    props.navigation.navigate({
-      routeName: 'Chat',
-      params: {
-        receiverProfile,
-        conversationId: id,
-      },
-    });
+  const handleShowChatbyMatch = (matchId) => {
+    if (matchId) {
+      dispatch(createConversation(matchId));
+    }
   };
 
   const handleShowChatbyId = (conversationId, receiverProfile) => {
@@ -184,7 +209,7 @@ const MatchesScreen = (props) => {
     return (
       <View style={styles.new_matches}>
         <MatchAvatar
-          onShowChat={() => handleShowChatbyMatch(matchedProfile, item.id)}
+          onShowChat={() => handleShowChatbyMatch(item.id)}
           matchedProfile={matchedProfile}
           matchedProfileHasPhoto={matchedProfile.photos.length > 0}
           matchedProfilePhoto={

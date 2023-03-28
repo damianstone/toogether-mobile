@@ -57,7 +57,7 @@ export const createConversationReducer = (state = {}, action) => {
     case c.CREATE_CONVERSATION_FAIL:
       return { loading: false, error: action.payload };
 
-    case c.CREATE_CHAT_RESET:
+    case c.CREATE_CONVERSATION_RESET:
       return {};
 
     default:
