@@ -3,6 +3,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import * as Location from 'expo-location';
 import * as c from '../../constants/user';
+import * as r from '../../constants/report';
 import { ENV } from '../../environment';
 
 const BASE_URL = ENV.API_URL;
@@ -518,6 +519,40 @@ export const listUserPhotos = () => {
     } catch (error) {
       dispatch({
         type: c.USER_LIST_PHOTOS_FAIL,
+        payload: error,
+      });
+    }
+  };
+};
+
+// -------------------------------- REPORT ACTION --------------------------------
+
+export const reportProfile = (id) => {
+  return async (dispatch) => {
+    try {
+      dispatch({ type: r.REPORT_PROFILE_REQUEST });
+
+      const userData = JSON.parse(await AsyncStorage.getItem('@userData'));
+
+      const config = {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+        Authorization: `Bearer ${userData.token}`,
+      };
+
+      const { data } = await axios({
+        method: 'POST',
+        url: `${BASE_URL}/api/v1/profiles/${id}/actions/report-profile/`,
+        headers: config,
+      });
+
+      dispatch({
+        type: r.REPORT_PROFILE_SUCCESS,
+        payload: data,
+      });
+    } catch (error) {
+      dispatch({
+        type: r.REPORT_PROFILE_FAIL,
         payload: error,
       });
     }

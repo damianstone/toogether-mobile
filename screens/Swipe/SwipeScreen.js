@@ -23,6 +23,7 @@ import ActivityModal from '../../components/UI/ActivityModal';
 import Avatar from '../../components/UI/Avatar';
 import SwipeError from '../../components/SwipeError';
 import styles from './styles';
+import TransparentLoader from '../../components/UI/TransparentLoader';
 
 /*
   * show modes:
@@ -169,23 +170,7 @@ const SwipeScreen = (props) => {
   };
 
   if (loadingSwipe || localLoading || postLocationLoading) {
-    return (
-      <SafeAreaView style={styles.safe}>
-        <StatusBar style="light" />
-        <View style={styles.screen}>
-          <ActivityModal
-            loading
-            title="Loading"
-            size="small"
-            activityColor="white"
-            titleColor="white"
-            activityWrapperStyle={{
-              backgroundColor: 'transparent',
-            }}
-          />
-        </View>
-      </SafeAreaView>
-    );
+    return <TransparentLoader />;
   }
 
   // console.log('Show mode & results ', showMode, swipe?.results.length);
