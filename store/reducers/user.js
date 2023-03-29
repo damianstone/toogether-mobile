@@ -292,7 +292,7 @@ export const validateCodeReducer = (state = {}, action) => {
   }
 };
 
-export const ChangePasswordReducer = (state = {}, action) => {
+export const changePasswordReducer = (state = {}, action) => {
   switch (action.type) {
     case c.CHANGE_PASSWORD_REQUEST:
       return {
