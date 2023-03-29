@@ -106,7 +106,7 @@ export const deleteConversation = (id) => {
 export const startConversation = (matchId) => {
   return async (dispatch) => {
     try {
-      dispatch({ type: c.CREATE_CONVERSATION_REQUEST });
+      dispatch({ type: c.START_CONVERSATION_REQUEST });
 
       const userData = JSON.parse(await AsyncStorage.getItem('@userData'));
 
@@ -121,13 +121,13 @@ export const startConversation = (matchId) => {
         headers: config,
       });
       dispatch({
-        type: c.CREATE_CONVERSATION_SUCCESS,
+        type: c.START_CONVERSATION_SUCCESS,
         payload: data,
       });
-      return data;
+      dispatch({ type: c.START_CONVERSATION_RESET });
     } catch (error) {
       dispatch({
-        type: c.CREATE_CONVERSATION_FAIL,
+        type: c.START_CONVERSATION_FAIL,
         payload: error,
       });
     }

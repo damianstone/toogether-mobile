@@ -46,18 +46,18 @@ export const listConversationMessagesReducer = (state = {}, action) => {
 
 export const startConversationReducer = (state = {}, action) => {
   switch (action.type) {
-    case c.CREATE_CONVERSATION_REQUEST:
+    case c.START_CONVERSATION_REQUEST:
       return { loading: true };
 
-    case c.CREATE_CONVERSATION_SUCCESS:
+    case c.START_CONVERSATION_SUCCESS:
       return {
         data: { ...action.payload },
       };
 
-    case c.CREATE_CONVERSATION_FAIL:
+    case c.START_CONVERSATION_FAIL:
       return { loading: false, error: action.payload };
 
-    case c.CREATE_CONVERSATION_RESET:
+    case c.START_CONVERSATION_RESET:
       return {};
 
     default:

@@ -114,6 +114,18 @@ const ChatScreen = (props) => {
     props.navigation.navigate('Matches');
   };
 
+  if (loadingMessages || localLoading) {
+    <ActivityModal
+      loading
+      title="Please wait"
+      size="large"
+      activityColor="white"
+      titleColor="white"
+      activityWrapperStyle={{
+        backgroundColor: Colors.bg,
+      }}
+    />;
+  }
   const renderMessages = ({ item }) => {
     return (
       <Message

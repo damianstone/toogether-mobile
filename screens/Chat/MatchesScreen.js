@@ -100,7 +100,7 @@ const MatchesScreen = (props) => {
 
   useEffect(() => {
     if (dataStartedConversation) {
-      dispatch({ type: conv.CREATE_CONVERSATION_RESET });
+      dispatch({ type: conv.START_CONVERSATION_RESET });
       props.navigation.navigate({
         routeName: 'Chat',
         params: {
