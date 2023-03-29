@@ -86,7 +86,7 @@ export const deleteConversation = (id) => {
 
       const { data } = await axios({
         method: 'delete',
-        url: `${BASE_URL}/api/v1/conversations/${id}`,
+        url: `${BASE_URL}/api/v1/conversations/${id}/`,
         headers: config,
       });
 

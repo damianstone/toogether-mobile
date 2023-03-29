@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback, useContext } from 'react';
 import {
+  Alert,
   View,
   Text,
   StyleSheet,
@@ -17,6 +18,7 @@ import HeaderButtom from '../../components/UI/HeaderButton';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { Context } from '../../context/ContextProvider';
 
+import { useActionSheet } from '@expo/react-native-action-sheet';
 import ActivityModal from '../../components/UI/ActivityModal';
 import Avatar from '../../components/UI/Avatar';
 import Colors from '../../constants/Colors';
@@ -26,7 +28,9 @@ import ChatHeader from '../../components/ChatHeader';
 import {
   addConversationMessage,
   listMessages,
+  deleteConversation,
 } from '../../store/actions/conversation';
+import { blockProfile } from '../../store/actions/block';
 import { ENV } from '../../environment';
 
 const BASE_URL = ENV.API_URL;
@@ -34,6 +38,7 @@ const BASE_URL = ENV.API_URL;
 API_URL = BASE_URL.replace('http://', '');
 
 const ChatScreen = (props) => {
+  const { showActionSheetWithOptions } = useActionSheet();
   const conversationId = props.navigation.getParam('conversationId');
   const receiverData = props.navigation.getParam('receiverProfile');
   const { profileContext, updateProfileContext } = useContext(Context);
@@ -82,6 +87,12 @@ const ChatScreen = (props) => {
     };
   }, [conversationId, dispatch]);
 
+  useEffect(() => {
+    if (errorMessages) {
+      checkServerError(errorMessages);
+    }
+  }, [errorMessages]);
+
   const handleSendMessage = () => {
     if (chatSocket && chatMessage) {
       chatSocket.send(chatMessage);
@@ -96,11 +107,6 @@ const ChatScreen = (props) => {
     }
   };
 
-  useEffect(() => {
-    if (errorMessages) {
-      checkServerError(errorMessages);
-    }
-  }, [errorMessages]);
   const handleShowProfile = (profile, isInGroup) => {
     if (profile) {
       props.navigation.navigate('SwipeProfile', {
@@ -112,6 +118,85 @@ const ChatScreen = (props) => {
 
   const handleGoBack = () => {
     props.navigation.navigate('Matches');
+  };
+
+  const handleBlockProfile = (profileId) => {
+    if (!profileId) {
+      return;
+    }
+    Alert.alert(
+      `Are you sure you want to block this profile?`,
+      'This profile will not be able to see you and neither will you',
+      [
+        {
+          text: 'No',
+          onPress: () => {
+            props.navigation.navigate('Chat');
+          },
+          style: 'cancel',
+        },
+        {
+          text: 'Yes',
+          onPress: () => {
+            dispatch(blockProfile(profileId));
+            props.navigation.navigate('Matches');
+          },
+        },
+      ]
+    );
+  };
+
+  const handleDeleteChat = (chatId) => {
+    if (!chatId) {
+      return;
+    }
+    Alert.alert(
+      `Are you sure you want to delete this chat?`,
+      'This profile will not be able to see you and neither will you',
+      [
+        {
+          text: 'No',
+          onPress: () => {
+            props.navigation.navigate('Chat');
+          },
+          style: 'cancel',
+        },
+        {
+          text: 'Yes',
+          onPress: () => {
+            dispatch(deleteConversation(chatId));
+            props.navigation.navigate('Matches');
+          },
+        },
+      ]
+    );
+  };
+
+  const onOpenActionSheet = (profile, chatId) => {
+    // Same interface as https://facebook.github.io/react-native/docs/actionsheetios.html
+    const options = ['View Profile', 'Delete chat', 'Block profile', 'Cancel'];
+    const destructiveButtonIndex = [1, 2];
+    const cancelButtonIndex = 3;
+
+    showActionSheetWithOptions(
+      {
+        options,
+        cancelButtonIndex,
+        destructiveButtonIndex,
+      },
+      (buttonIndex) => {
+        if (buttonIndex === 0) {
+          handleShowProfile(profile, profile.is_in_group);
+        }
+        if (buttonIndex === 1) {
+          handleDeleteChat(chatId);
+        }
+        if (buttonIndex === 2) {
+          handleBlockProfile(profile.id);
+        }
+        return null;
+      }
+    );
   };
 
   if (loadingMessages || localLoading) {
@@ -148,6 +233,7 @@ const ChatScreen = (props) => {
           onShowProfile={() =>
             handleShowProfile(receiverData, receiverData.is_in_group)
           }
+          onActionSheet={() => onOpenActionSheet(receiverData, conversationId)}
         />
       )}
       <View style={styles.messages_Container}>
