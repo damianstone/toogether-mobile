@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
 
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
+import AuthInput from '../../components/UI/AuthInput';
 import HeaderButtom from '../../components/UI/HeaderButton';
 
 import { recoveryPassword } from '../../store/actions/user';
@@ -29,11 +30,19 @@ const RecoveryScreen = (props) => {
         <Text>Change your password</Text>
       </View>
       <View style={styles.container}>
-        <TextInput
-          value={inputEmail}
-          placeholder="hello@gmail.com"
+        <AuthInput
+          id="email"
+          label="Email"
+          textContentType="emailAddress"
+          keyboardType="email-address"
+          required
+          autoComplete="email"
+          autoCapitalize="none"
+          errorText="Enter your email"
+          placeholder="your-email@gmail.com"
           placeholderTextColor="#D8D8D8"
-          onChangeText={(text) => setInputEmail(text)}
+          autoCorrect={false}
+          onInputChange={inputChangeHandler}
         />
         <Button
           title="send email"
@@ -44,7 +53,6 @@ const RecoveryScreen = (props) => {
     </>
   );
 };
-
 
 RecoveryScreen.navigationOptions = (navData) => {
   return {
