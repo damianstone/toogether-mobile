@@ -220,7 +220,8 @@ const MyProfileScreen = (props) => {
       <TouchableOpacity
         key={photo.id}
         onPress={() => onOpenActionSheet(photo.id)}
-        style={{ ...stylesObj }}>
+        style={{ ...stylesObj }}
+      >
         {loadingPhotos ||
         loadingRemovePhoto ||
         (loadingAddPhoto && photo.id === photoId) ? (
@@ -249,7 +250,8 @@ const MyProfileScreen = (props) => {
             <View style={styles.body}>
               <TouchableOpacity
                 style={styles.profilePictureContainer}
-                onPress={handleOpenPreview}>
+                onPress={handleOpenPreview}
+              >
                 {typeof userProfile === 'undefined' && (
                   <View
                     style={{
@@ -260,7 +262,8 @@ const MyProfileScreen = (props) => {
                       borderRadius: 100,
                       justifyContent: 'center',
                       alignItems: 'center',
-                    }}>
+                    }}
+                  >
                     <Loader />
                   </View>
                 )}
@@ -286,7 +289,8 @@ const MyProfileScreen = (props) => {
                   <>
                     <Text style={styles.name}>{userProfile.name}</Text>
                     <TouchableOpacity
-                      onPress={() => handleNavigate('EditProfile')}>
+                      onPress={() => handleNavigate('EditProfile')}
+                    >
                       <MaterialIcons name="edit" size={20} color="white" />
                     </TouchableOpacity>
                   </>
@@ -335,14 +339,16 @@ const MyProfileScreen = (props) => {
                         style={{
                           ...styles.myphotosItemView,
                           backgroundColor: Colors.bgCard,
-                        }}>
+                        }}
+                      >
                         <View
                           style={{
                             width: '100%',
                             height: '100%',
                             justifyContent: 'center',
                             alignItems: 'center',
-                          }}>
+                          }}
+                        >
                           {loadingAddPhoto && item.id === photoId ? (
                             <Loader size="small" />
                           ) : (
@@ -368,7 +374,8 @@ const MyProfileScreen = (props) => {
                     alignItems: 'center',
                     borderRadius: 10,
                     padding: 7,
-                  }}>
+                  }}
+                >
                   <LinearGradient
                     colors={['#ED665A', '#CF2A6E', '#BA007C']}
                     style={styles.linearCircle}
@@ -379,7 +386,8 @@ const MyProfileScreen = (props) => {
                         color: Colors.white,
                         fontSize: 20,
                         fontWeight: '500',
-                      }}>
+                      }}
+                    >
                       Profile Preview
                     </Text>
                   </View>
@@ -390,7 +398,8 @@ const MyProfileScreen = (props) => {
                       justifyContent: 'center',
                       alignItems: 'center',
                       marginHorizontal: 10,
-                    }}>
+                    }}
+                  >
                     <Feather
                       name="arrow-right"
                       size={35}
@@ -404,7 +413,8 @@ const MyProfileScreen = (props) => {
                     marginTop: 2,
                     marginBottom: 35,
                     padding: 10,
-                  }}>
+                  }}
+                >
                   <View style={styles.logoContainer}>
                     <Image
                       source={require('../../assets/images/logo-2.png')}

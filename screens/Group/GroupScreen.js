@@ -307,9 +307,8 @@ const GroupScreen = (props) => {
             <View style={styles.nameView}>
               {groupContext?.owner && (
                 <Text
-                  style={
-                    styles.name
-                  }>{`${groupContext.owner.name}'s group`}</Text>
+                  style={styles.name}
+                >{`${groupContext.owner.name}'s group`}</Text>
               )}
             </View>
           </View>
@@ -342,7 +341,8 @@ const GroupScreen = (props) => {
           </View>
         </View>
         <View
-          style={{ ...styles.members_view, ...HEIGHT_MEMBER_CARD_CONTAINER }}>
+          style={{ ...styles.members_view, ...HEIGHT_MEMBER_CARD_CONTAINER }}
+        >
           {groupContext && (
             <FlatList
               style={{ flex: 1 }}
