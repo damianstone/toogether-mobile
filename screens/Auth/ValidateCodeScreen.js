@@ -7,7 +7,6 @@ import HeaderButtom from '../../components/UI/HeaderButton';
 
 import { recoveryPassword } from '../../store/actions/user';
 
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -16,55 +15,53 @@ const styles = StyleSheet.create({
   },
 });
 
-const ValidateScreen = (props) => {
+const ValidateCodeScreen = (props) => {
   const [inputCode, setInputCode] = useState('');
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   const recoverycode = useSelector((state) => state.recoverycode);
   const { data } = recoverycode;
-  console.log(recoverycode)
+  console.log(recoverycode);
 
   return (
-    <><View>
-      <Text>Change 
-        your 
-        password</Text>
-    </View ><View style={styles.container}>
-    <TextInput
-    value={inputCode}
-    keyboardType='numeric'
-    placeholderTextColor="#D8D8D8"
-    onChangeText={text => setInputCode(text)}
-    />
-    <Button
-    title="send email"
-    onPress={() => dispatch(recoveryPassword(inputEmail))}
-    />
-    <Text>{data}</Text>
-    </View></>
-    
-    );
+    <>
+      <View>
+        <Text>Change your password</Text>
+      </View>
+      <View style={styles.container}>
+        <TextInput
+          value={inputCode}
+          keyboardType="numeric"
+          placeholderTextColor="#D8D8D8"
+          onChangeText={(text) => setInputCode(text)}
+        />
+        <Button
+          title="send email"
+          onPress={() => dispatch(recoveryPassword(inputEmail))}
+        />
+        <Text>{data}</Text>
+      </View>
+    </>
+  );
+};
 
-
+ValidateCodeScreen.navigationOptions = (navData) => {
+  return {
+    headerTitle: 'Change Password',
+    headerLeft: () => (
+      <HeaderButtons HeaderButtonComponent={HeaderButtom}>
+        <Item
+          iconName={
+            Platform.OS === 'android' ? 'ios-arrow-back' : 'ios-arrow-back'
+          }
+          onPress={() => {
+            navData.navigation.navigate('MyProfile');
+          }}
+          title="Back arrow"
+        />
+      </HeaderButtons>
+    ),
   };
-    RecoveryScreen.navigationOptions = (navData) => {
-      return {
-        headerTitle: 'Change Password',
-        headerLeft: () => (
-          <HeaderButtons HeaderButtonComponent={HeaderButtom}>
-            <Item
-              iconName={
-                Platform.OS === 'android' ? 'ios-arrow-back' : 'ios-arrow-back'
-              }
-              onPress={() => {
-                navData.navigation.navigate('MyProfile');
-              }}
-              title="Back arrow"
-            />
-          </HeaderButtons>
-        ),
-      };
-  };
-  
+};
 
-export default ValidateScreen;
+export default ValidateCodeScreen;

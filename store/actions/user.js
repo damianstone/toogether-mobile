@@ -524,15 +524,35 @@ export const listUserPhotos = () => {
   };
 };
 
-export const recoveryPassword = (email) =>{
-  return async function(dispatch){
+
+export const sendRecoveryCode = (email) => {
+  return async (dispatch) => {
     try {
-      const { data } = await axios.post(`${BASE_URL}/api/v1/users/recovery-code/`, { email:email })
-        dispatch({ type: c.GET_RECOVERY_CODE,
-        payload: data.detail})
-      
-      }catch (error) {
-        dispatch({ type: c.GET_RECOVERY_CODE,
-        payload: data.detail })
+      dispatch({ type: c.RECOVER_CODE_REQUEST });
+
+      const config = {
+        'Content-Type': 'application/json',
+      };
+
+      const { data } = await axios({
+        method: 'POST',
+        url: `${BASE_URL}/api/v1/users/recovery-code/`,
+        headers: config,
+        data: {
+          email,
+        },
+      });
+
+      dispatch({
+        type: c.RECOVERY_CODE_SUCCESS,
+        payload: data,
+      });
+
+    } catch (error) {
+      dispatch({
+        type: c.RECOVERY_CODE_FAIL,
+        payload: error,
+      });
     }
-}}
+  };
+};

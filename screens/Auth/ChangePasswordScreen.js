@@ -31,5 +31,4 @@ ChangePasswordScreen.navigationOptions = (navData) => {
   };
 };
 
-
 export default ChangePasswordScreen;

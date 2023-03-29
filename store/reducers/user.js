@@ -248,12 +248,23 @@ export const userListPhotosReducer = (state = {}, action) => {
   }
 };
 
-export const recoverycodeReducer = (state = {}, action) => {
+export const sendRecoveryCodeReducer = (state = {}, action) => {
   switch (action.type) {
-    case c.GET_RECOVERY_CODE:
+    case c.RECOVER_CODE_REQUEST:
       return {
-        data: action.payload,
+        loading: true,
       };
+    case c.RECOVERY_CODE_SUCCESS:
+      return {
+        data: { ...action.payload },
+      };
+    case c.RECOVERY_CODE_FAIL:
+      return {
+        loading: false,
+        error: action.payload,
+      };
+    case c.RECOVERY_CODE_RESET:
+      return {};
     default:
       return state;
   }
