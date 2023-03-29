@@ -24,9 +24,14 @@ import sendimg from '../../assets/images/send-button.png';
 import Message from '../../components/Message';
 import ChatHeader from '../../components/ChatHeader';
 import {
-  createConversation,
-  listConversationMessages,
+  addConversationMessage,
+  listMessages,
 } from '../../store/actions/conversation';
+import { ENV } from '../../environment';
+
+const BASE_URL = ENV.API_URL;
+
+API_URL = BASE_URL.replace('http://', '');
 
 const ChatScreen = (props) => {
   const conversationId = props.navigation.getParam('conversationId');
@@ -35,7 +40,9 @@ const ChatScreen = (props) => {
   const [refreshing, setRefreshing] = useState(false);
   const [localLoading, setLocalLoading] = useState(false);
   const [chatMessage, setChatMessage] = useState('');
+  const [chatSocket, setChatSocket] = useState(null);
   const dispatch = useDispatch();
+
   const conversationReducer = useSelector(
     (state) => state.listConversationMessages
   );
@@ -46,9 +53,48 @@ const ChatScreen = (props) => {
   } = conversationReducer;
   useEffect(() => {
     if (conversationId) {
-      dispatch(listConversationMessages(conversationId));
+      dispatch(listMessages(conversationId));
     }
   }, [conversationId]);
+
+  useEffect(() => {
+    if (conversationId) {
+      const wsUrl = encodeURI(
+        `ws://${API_URL}/ws/chat/${conversationId}/?sender_id=${profileContext.id}`
+      );
+      const newChatSocket = new WebSocket(wsUrl);
+
+      newChatSocket.onopen = () => {
+        console.log('Socket opened');
+      };
+
+      newChatSocket.onclose = (e) => {
+        console.log('Socket closed', e);
+      };
+
+      setChatSocket(newChatSocket);
+    }
+    return () => {
+      if (chatSocket) {
+        chatSocket.close();
+      }
+      setChatMessage('');
+    };
+  }, [conversationId, dispatch]);
+
+  const handleSendMessage = () => {
+    if (chatSocket && chatMessage) {
+      chatSocket.send(chatMessage);
+      dispatch(
+        addConversationMessage({
+          id: Math.random() * 10,
+          sent_by_current: true,
+          message: chatMessage,
+        })
+      );
+      setChatMessage('');
+    }
+  };
 
   useEffect(() => {
     if (errorMessages) {
@@ -88,7 +134,7 @@ const ChatScreen = (props) => {
         ownProfile={profileContext}
         matchedProfile={receiverData}
         onShowProfile={() => {
-          handleShowProfile(item.sender, receiverData.isInGroup);
+          handleShowProfile(receiverData, receiverData.isInGroup);
         }}
       />
     );
@@ -110,7 +156,8 @@ const ChatScreen = (props) => {
           data={messages?.results}
           keyExtractor={(item) => item.id.toString()}
           renderItem={renderMessages}
-          contentContainerStyle={{ flexDirection: 'column-reverse' }}
+          contentContainerStyle={{ flexDirection: 'column' }}
+          extraData={conversationReducer}
         />
       </View>
       <View style={styles.sendMessage}>
@@ -125,7 +172,9 @@ const ChatScreen = (props) => {
             }}
             value={chatMessage}
           />
-          <TouchableOpacity style={styles.imgContainer}>
+          <TouchableOpacity
+            onPress={() => handleSendMessage()}
+            style={styles.imgContainer}>
             <Image source={sendimg} style={styles.image} />
           </TouchableOpacity>
           <View />

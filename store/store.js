@@ -40,7 +40,7 @@ import {
 import {
   listMyConversationsReducer,
   listConversationMessagesReducer,
-  createConversationReducer,
+  startConversationReducer,
   deleteConversationReducer,
 } from './reducers/conversation';
 
@@ -83,7 +83,7 @@ const reducer = combineReducers({
   listConversations: listMyConversationsReducer,
   listConversationMessages: listConversationMessagesReducer,
   deleteConversation: deleteConversationReducer,
-  createConversation: createConversationReducer,
+  startConversation: startConversationReducer,
 });
 
 const initialState = {};

@@ -21,7 +21,10 @@ import { StatusBar } from 'expo-status-bar';
 import HeaderButtom from '../../components/UI/HeaderButton';
 import Colors from '../../constants/Colors';
 import { listMatches, deleteMatch } from '../../store/actions/swipe';
-import { listMyConversations } from '../../store/actions/conversation';
+import {
+  startConversation,
+  listMyConversations,
+} from '../../store/actions/conversation';
 import { checkServerError, check400Error } from '../../utils/errors';
 import no_chats from '../../assets/images/no-chats.png';
 import SwipeError from '../../components/SwipeError';
@@ -30,6 +33,7 @@ import ChatAvatar from '../../components/ChatAvatar';
 import MatchCounter from '../../components/MatchCounter';
 import MatchAvatar from '../../components/MatchAvatar';
 import PreviewChat from '../../components/PreviewChat';
+import * as conv from '../../constants/conversation';
 
 /* For test purposes */
 import chats from '../../data/chats.json';
@@ -39,12 +43,14 @@ const MatchesScreen = (props) => {
   const dispatch = useDispatch();
   const [localLoading, setLocalLoading] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
+
   const listMatchesReducer = useSelector((state) => state.listMatches);
   const {
     error: errorListMatches,
     loading: loadingListMatches,
     data: matches,
   } = listMatchesReducer;
+
   const listConversationsReducer = useSelector(
     (state) => state.listConversations
   );
@@ -53,6 +59,7 @@ const MatchesScreen = (props) => {
     loading: loadingListConversations,
     data: conversations,
   } = listConversationsReducer;
+
   const deleteMatchReducer = useSelector((state) => state.deleteMatch);
   const {
     error: errorDeleteMatch,
@@ -60,10 +67,56 @@ const MatchesScreen = (props) => {
     data: matchDeleted,
   } = deleteMatchReducer;
 
+  const startedConversation = useSelector((state) => state.startConversation);
+  const {
+    error: errorStartedConversations,
+    loading: loadingStartedConservation,
+    data: dataStartedConversation,
+  } = startedConversation;
+
   useEffect(() => {
     dispatch(listMatches());
     dispatch(listMyConversations());
   }, []);
+
+  useEffect(() => {
+    if (errorDeleteMatch) {
+      if (errorDeleteMatch?.response?.status === 400) {
+        check400Error(errorDeleteMatch);
+      }
+      checkServerError(errorDeleteMatch);
+    }
+
+    if (errorListMatches) {
+      checkServerError(errorListMatches);
+    }
+  }, [errorDeleteMatch, errorListMatches]);
+
+  useEffect(() => {
+    if (errorListConversations) {
+      checkServerError(errorListConversations);
+    }
+  }, [errorListConversations]);
+
+  useEffect(() => {
+    if (dataStartedConversation) {
+      dispatch({ type: conv.START_CONVERSATION_RESET });
+      props.navigation.navigate({
+        routeName: 'Chat',
+        params: {
+          receiverProfile: dataStartedConversation.receiver,
+          conversationId: dataStartedConversation.id,
+        },
+      });
+    }
+
+    if (errorStartedConversations) {
+      if (errorStartedConversations?.response?.status === 400) {
+        check400Error(errorStartedConversations);
+      }
+      checkServerError(errorStartedConversations);
+    }
+  }, [dataStartedConversation, errorStartedConversations]);
 
   const reload = useCallback(async () => {
     setLocalLoading(true);
@@ -85,22 +138,6 @@ const MatchesScreen = (props) => {
     setLocalLoading(false);
   }, [dispatch]);
 
-  useEffect(() => {
-    if (errorListMatches) {
-      checkServerError(errorListMatches);
-    }
-
-    if (errorDeleteMatch) {
-      if (errorDeleteMatch?.response?.status === 400) {
-        check400Error(errorDeleteMatch);
-      }
-      checkServerError(errorDeleteMatch);
-    }
-    if (errorListConversations) {
-      checkServerError(errorListConversations);
-    }
-  }, [errorDeleteMatch, errorListMatches, errorListConversations]);
-
   const handleShowProfile = (profile, isInGroup) => {
     if (profile) {
       props.navigation.navigate('SwipeProfile', {
@@ -110,13 +147,10 @@ const MatchesScreen = (props) => {
     }
   };
 
-  const handleShowChatbyMatch = (receiverProfile) => {
-    props.navigation.navigate({
-      routeName: 'Chat',
-      params: {
-        receiverProfile,
-      },
-    });
+  const handleShowChatbyMatch = (matchId) => {
+    if (matchId) {
+      dispatch(startConversation(matchId));
+    }
   };
 
   const handleShowChatbyId = (conversationId, receiverProfile) => {
@@ -179,7 +213,7 @@ const MatchesScreen = (props) => {
     return (
       <View style={styles.new_matches}>
         <MatchAvatar
-          onShowChat={() => handleShowChatbyMatch(matchedProfile)}
+          onShowChat={() => handleShowChatbyMatch(item.id)}
           matchedProfile={matchedProfile}
           matchedProfileHasPhoto={matchedProfile.photos.length > 0}
           matchedProfilePhoto={
@@ -207,7 +241,9 @@ const MatchesScreen = (props) => {
         onShowChat={() => handleShowChatbyId(item.id, item.receiver)}
         data={item}
         receiverProfile={item.receiver}
-        onShowProfile={() => handleShowProfile(item.receiver, item.receiver.id)}
+        onShowProfile={() =>
+          handleShowProfile(item.receiver, item.receiver.is_in_group)
+        }
       />
     );
   };

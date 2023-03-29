@@ -32,25 +32,32 @@ export const listConversationMessagesReducer = (state = {}, action) => {
     case c.LIST_CONVERSATION_MESSAGES_FAIL:
       return { loading: false, error: action.payload };
 
+    case c.ADD_CONVERSATION_MESSAGE:
+      const newData = { ...state.data };
+      newData.results.unshift(action.payload);
+      return {
+        ...state,
+        data: newData, // Append the new message to the existing list
+      };
     default:
       return state;
   }
 };
 
-export const createConversationReducer = (state = {}, action) => {
+export const startConversationReducer = (state = {}, action) => {
   switch (action.type) {
-    case c.CREATE_CONVERSATION_REQUEST:
+    case c.START_CONVERSATION_REQUEST:
       return { loading: true };
 
-    case c.CREATE_CONVERSATION_SUCCESS:
+    case c.START_CONVERSATION_SUCCESS:
       return {
         data: { ...action.payload },
       };
 
-    case c.CREATE_CONVERSATION_FAIL:
+    case c.START_CONVERSATION_FAIL:
       return { loading: false, error: action.payload };
 
-    case c.CREATE_CHAT_RESET:
+    case c.START_CONVERSATION_RESET:
       return {};
 
     default:
