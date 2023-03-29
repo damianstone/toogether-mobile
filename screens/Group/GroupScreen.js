@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { useActionSheet } from '@expo/react-native-action-sheet';
-import { StackActions } from 'react-navigation';
+import { SafeAreaView, StackActions } from 'react-navigation';
 import {
   getGroup,
   leaveGroup,
@@ -258,7 +258,7 @@ const GroupScreen = (props) => {
     );
   };
 
-  if (loadingDelete || loadingLeave) {
+  if (loadingDelete || loadingLeave || loadingRemoveMember || loadingGroup) {
     return (
       <View style={styles.loadingScreen}>
         <ActivityIndicator color={Colors.white} size="large" />
@@ -283,91 +283,112 @@ const GroupScreen = (props) => {
 
   return (
     <ScrollView
-      style={{ flex: 1, backgroundColor: Colors.bg }}
-      contentContainerStyle={styles.screen}
-      nestedScrollEnabled
+      style={styles.screen}
       refreshControl={
         <RefreshControl
           refreshing={refreshing}
           onRefresh={loadGroup}
           tintColor={Colors.white}
         />
-      }
-    >
-      <View style={{ ...styles.action_view, ...HEIGHT_ACTION_CONTAINER }}>
-        <View style={styles.profile_photo_container}>
-          {!groupContext && <Loader />}
-          {groupContext &&
-            groupContext.owner.photos &&
-            groupContext.owner.photos.length > 0 && (
-              <Image
-                source={{
-                  uri: `${getImage(groupContext.owner.photos[0].image)}`,
-                }}
-                style={{ width: 150, height: 150, borderRadius: 100 }}
+      }>
+      <SafeAreaView style={styles.safeAreaContainer}>
+        <View style={{ ...styles.action_view, ...HEIGHT_ACTION_CONTAINER }}>
+          <View style={styles.profile_photo_container}>
+            {!groupContext && <Loader />}
+            {groupContext &&
+              groupContext.owner.photos &&
+              groupContext.owner.photos.length > 0 && (
+                <Image
+                  source={{
+                    uri: `${getImage(groupContext.owner.photos[0].image)}`,
+                  }}
+                  style={{ width: 150, height: 150, borderRadius: 100 }}
+                />
+              )}
+            {(groupContext && !groupContext.owner.photos) ||
+              (groupContext?.owner.photos.length === 0 && (
+                <View style={styles.avatar_view}>
+                  <Text style={styles.avatar_initials}>
+                    {getNameInitials(groupContext.owner.name)}
+                  </Text>
+                </View>
+              ))}
+            <View style={styles.nameView}>
+              {groupContext?.owner && (
+                <Text
+                  style={
+                    styles.name
+                  }>{`${groupContext.owner.name}'s group`}</Text>
+              )}
+            </View>
+          </View>
+          <View style={styles.buttons_container}>
+            {isOwnerGroup && groupContext?.share_link && (
+              <ClipBoard
+                text={groupContext.share_link}
+                backgroundColor={Colors.white}
               />
             )}
-          {(groupContext && !groupContext.owner.photos) ||
-            (groupContext?.owner.photos.length === 0 && (
-              <View style={styles.avatar_view}>
-                <Text style={styles.avatar_initials}>
-                  {getNameInitials(groupContext.owner.name)}
-                </Text>
-              </View>
-            ))}
-          <View style={styles.nameView}>
-            {groupContext?.owner && (
-              <Text
-                style={styles.name}
-              >{`${groupContext.owner.name}'s group`}</Text>
-            )}
-          </View>
-        </View>
-        <View style={styles.buttons_container}>
-          {isOwnerGroup && groupContext?.share_link && (
-            <ClipBoard
-              text={groupContext.share_link}
-              backgroundColor={Colors.white}
-            />
-          )}
-          {/* <ActionButton
+            {/* <ActionButton
             onPress={() => handleNavigate('Swipe')}
             text="Group chat"
             backgroundColor={Colors.blue}
           /> */}
-          {isOwnerGroup && (
-            <ActionButton
-              onPress={handleDeleteGroup}
-              text="Delete group"
-              backgroundColor={Colors.orange}
-            />
-          )}
-          {!isOwnerGroup && (
-            <ActionButton
-              onPress={handleLeaveGroup}
-              text="Leave group"
-              backgroundColor={Colors.orange}
-            />
+            {isOwnerGroup && (
+              <ActionButton
+                onPress={handleDeleteGroup}
+                text="Delete group"
+                backgroundColor={Colors.orange}
+              />
+            )}
+            {!isOwnerGroup && (
+              <ActionButton
+                onPress={handleLeaveGroup}
+                text="Leave group"
+                backgroundColor={Colors.orange}
+              />
+            )}
+          </View>
+        </View>
+        <View
+          style={{ ...styles.members_view, ...HEIGHT_MEMBER_CARD_CONTAINER }}>
+          {groupContext && (
+            <View style={{ flexDirection: 'row', flexWrap: 'wrap', flex: 1 }}>
+              {groupContext.members.map((member, index) => {
+                return (
+                  <View style={styles.flatlist_item_container} key={index}>
+                    <MemberAvatar
+                      name={member.name}
+                      photos={member.photos}
+                      onPress={() =>
+                        isOwnerGroup
+                          ? handleOpenActionSheet(member.id, member.name)
+                          : null
+                      }
+                    />
+                    <Text style={styles.name_text}>
+                      {getCardName(member.name)}
+                    </Text>
+                  </View>
+                );
+              })}
+            </View>
+            //  <FlatList
+            //   style={{ flex: 1 }}
+            //   contentContainerStyle={{
+            //     justifyContent: 'center',
+            //     paddingBottom: 20,
+            //   }}
+            //   nestedScrollEnabled
+            //   horizontal={false}
+            //   numColumns={3}
+            //   data={groupContext.members}
+            //   renderItem={renderMemberItem}
+            //   keyExtractor={(item) => item.id}
+            // />
           )}
         </View>
-      </View>
-      <View style={{ ...styles.members_view, ...HEIGHT_MEMBER_CARD_CONTAINER }}>
-        {groupContext && (
-          <FlatList
-            style={{ flex: 1 }}
-            contentContainerStyle={{
-              justifyContent: 'center',
-              paddingBottom: 20,
-            }}
-            nestedScrollEnabled
-            horizontal={false}
-            numColumns={3}
-            data={groupContext.members}
-            renderItem={renderMemberItem}
-            keyExtractor={(item) => item.id}
-          />
-        )}
-      </View>
+      </SafeAreaView>
     </ScrollView>
   );
 };
@@ -391,10 +412,14 @@ const styles = StyleSheet.create({
   screen: {
     flex: 1,
     width: '100%',
-    height: '100%',
     backgroundColor: Colors.bg,
+  },
+  safeAreaContainer: {
+    flex: 1,
+    width: '100%',
+    backgroundColor: Colors.bg,
+    alignContent: 'center',
     justifyContent: 'space-between',
-    alignItems: 'center',
   },
   loadingScreen: {
     backgroundColor: Colors.bg,
@@ -406,9 +431,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'column',
     width: '100%',
+    marginBottom: 10,
   },
   profile_photo_container: {
-    marginTop: 20,
+    marginTop: 5,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -438,7 +464,7 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   buttons_container: {
-    marginTop: 20,
+    marginTop: 15,
     flexDirection: 'column',
     width: '90%',
     alignItems: 'center',
@@ -459,13 +485,16 @@ const styles = StyleSheet.create({
     height: 70,
     flexDirection: 'column',
     alignItems: 'center',
+    justifyContent: 'center',
+    paddingTop: 5,
   },
   name_text: {
-    padding: 5,
+    paddingBottom: 10,
     width: '100%',
     textAlign: 'center',
     fontSize: 12,
     color: Colors.white,
     fontWeight: '400',
+    paddingLeft: 5,
   },
 });
