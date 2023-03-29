@@ -427,7 +427,6 @@ const MyProfileScreen = (props) => {
       refreshControl={
         <RefreshControl refreshing={refreshing} onRefresh={loadProfile} />
       }
-      scrollEnabled={false}
     />
   );
 };

@@ -367,7 +367,6 @@ const GroupScreen = (props) => {
     <FlatList
       data={[{ key: 'groupScreen' }]}
       renderItem={renderGroupScreen}
-      scrollEnabled={false}
       refreshControl={
         <RefreshControl refreshing={refreshing} onRefresh={loadGroup} />
       }
