@@ -280,95 +280,97 @@ const GroupScreen = (props) => {
       </View>
     );
   };
-
-  return (
-    <ScrollView
-      style={{ flex: 1, backgroundColor: Colors.bg }}
-      contentContainerStyle={styles.screen}
-      nestedScrollEnabled
-      refreshControl={
-        <RefreshControl
-          refreshing={refreshing}
-          onRefresh={loadGroup}
-          tintColor={Colors.white}
-        />
-      }
-    >
-      <View style={{ ...styles.action_view, ...HEIGHT_ACTION_CONTAINER }}>
-        <View style={styles.profile_photo_container}>
-          {!groupContext && <Loader />}
-          {groupContext &&
-            groupContext.owner.photos &&
-            groupContext.owner.photos.length > 0 && (
-              <Image
-                source={{
-                  uri: `${getImage(groupContext.owner.photos[0].image)}`,
-                }}
-                style={{ width: 150, height: 150, borderRadius: 100 }}
+  const renderGroupScreen = () => {
+    return (
+      <View style={styles.screen}>
+        <View style={{ ...styles.action_view, ...HEIGHT_ACTION_CONTAINER }}>
+          <View style={styles.profile_photo_container}>
+            {!groupContext && <Loader />}
+            {groupContext &&
+              groupContext.owner.photos &&
+              groupContext.owner.photos.length > 0 && (
+                <Image
+                  source={{
+                    uri: `${getImage(groupContext.owner.photos[0].image)}`,
+                  }}
+                  style={{ width: 150, height: 150, borderRadius: 100 }}
+                />
+              )}
+            {(groupContext && !groupContext.owner.photos) ||
+              (groupContext?.owner.photos.length === 0 && (
+                <View style={styles.avatar_view}>
+                  <Text style={styles.avatar_initials}>
+                    {getNameInitials(groupContext.owner.name)}
+                  </Text>
+                </View>
+              ))}
+            <View style={styles.nameView}>
+              {groupContext?.owner && (
+                <Text
+                  style={
+                    styles.name
+                  }>{`${groupContext.owner.name}'s group`}</Text>
+              )}
+            </View>
+          </View>
+          <View style={styles.buttons_container}>
+            {isOwnerGroup && groupContext?.share_link && (
+              <ClipBoard
+                text={groupContext.share_link}
+                backgroundColor={Colors.white}
               />
             )}
-          {(groupContext && !groupContext.owner.photos) ||
-            (groupContext?.owner.photos.length === 0 && (
-              <View style={styles.avatar_view}>
-                <Text style={styles.avatar_initials}>
-                  {getNameInitials(groupContext.owner.name)}
-                </Text>
-              </View>
-            ))}
-          <View style={styles.nameView}>
-            {groupContext?.owner && (
-              <Text
-                style={styles.name}
-              >{`${groupContext.owner.name}'s group`}</Text>
-            )}
-          </View>
-        </View>
-        <View style={styles.buttons_container}>
-          {isOwnerGroup && groupContext?.share_link && (
-            <ClipBoard
-              text={groupContext.share_link}
-              backgroundColor={Colors.white}
-            />
-          )}
-          {/* <ActionButton
+            {/* <ActionButton
             onPress={() => handleNavigate('Swipe')}
             text="Group chat"
             backgroundColor={Colors.blue}
           /> */}
-          {isOwnerGroup && (
-            <ActionButton
-              onPress={handleDeleteGroup}
-              text="Delete group"
-              backgroundColor={Colors.orange}
-            />
-          )}
-          {!isOwnerGroup && (
-            <ActionButton
-              onPress={handleLeaveGroup}
-              text="Leave group"
-              backgroundColor={Colors.orange}
+            {isOwnerGroup && (
+              <ActionButton
+                onPress={handleDeleteGroup}
+                text="Delete group"
+                backgroundColor={Colors.orange}
+              />
+            )}
+            {!isOwnerGroup && (
+              <ActionButton
+                onPress={handleLeaveGroup}
+                text="Leave group"
+                backgroundColor={Colors.orange}
+              />
+            )}
+          </View>
+        </View>
+        <View
+          style={{ ...styles.members_view, ...HEIGHT_MEMBER_CARD_CONTAINER }}>
+          {groupContext && (
+            <FlatList
+              style={{ flex: 1 }}
+              contentContainerStyle={{
+                justifyContent: 'center',
+                paddingBottom: 20,
+              }}
+              nestedScrollEnabled
+              horizontal={false}
+              numColumns={3}
+              data={groupContext.members}
+              renderItem={renderMemberItem}
+              keyExtractor={(item) => item.id}
             />
           )}
         </View>
       </View>
-      <View style={{ ...styles.members_view, ...HEIGHT_MEMBER_CARD_CONTAINER }}>
-        {groupContext && (
-          <FlatList
-            style={{ flex: 1 }}
-            contentContainerStyle={{
-              justifyContent: 'center',
-              paddingBottom: 20,
-            }}
-            nestedScrollEnabled
-            horizontal={false}
-            numColumns={3}
-            data={groupContext.members}
-            renderItem={renderMemberItem}
-            keyExtractor={(item) => item.id}
-          />
-        )}
-      </View>
-    </ScrollView>
+    );
+  };
+
+  return (
+    <FlatList
+      data={[{ key: 'groupScreen' }]}
+      renderItem={renderGroupScreen}
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={loadGroup} />
+      }
+    />
   );
 };
 
