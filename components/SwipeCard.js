@@ -104,7 +104,7 @@ const SwipeCard = (props) => {
           showsButtons
           buttonWrapperStyle={{ color: Colors.placeholder }}
           style={styles.wrapper}>
-          {isGroup && members ? (
+          {isGroup ? (
             members?.map((profile) => {
               return (
                 <ImageBackground

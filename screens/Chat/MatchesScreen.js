@@ -241,7 +241,9 @@ const MatchesScreen = (props) => {
         onShowChat={() => handleShowChatbyId(item.id, item.receiver)}
         data={item}
         receiverProfile={item.receiver}
-        onShowProfile={() => handleShowProfile(item.receiver, item.receiver.id)}
+        onShowProfile={() =>
+          handleShowProfile(item.receiver, item.receiver.is_in_group)
+        }
       />
     );
   };
