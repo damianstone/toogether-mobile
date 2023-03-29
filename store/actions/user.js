@@ -556,3 +556,69 @@ export const sendRecoveryCode = (email) => {
     }
   };
 };
+
+export const validateCode = (code) => {
+  return async (dispatch) => {
+    try {
+      dispatch({ type: c.VALIDATE_CODE_REQUEST });
+
+      const config = {
+        'Content-Type': 'application/json',
+      };
+
+      const { data } = await axios({
+        method: 'POST',
+        url: `${BASE_URL}/api/v1/users/validate-code/`,
+        headers: config,
+        data: {
+          code,
+        },
+      });
+
+      dispatch({
+        type: c.VALIDATE_CODE_SUCCESS,
+        payload: data,
+      });
+
+    } catch (error) {
+      dispatch({
+        type: c.VALIDATE_CODE_FAIL,
+        payload: error,
+      });
+    }
+  };
+};
+
+export const changePassword = (email, password, newPassword) => {
+  return async (dispatch) => {
+    try {
+      dispatch({ type: c.CHANGE_PASSWORD_REQUEST });
+
+      const config = {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+        Authorization: `Bearer ${userData.token}`,
+      };
+
+      const { data } = await axios({
+        method: 'POST',
+        url: `${BASE_URL}/api/v1/users/reset-password/`,
+        headers: config,
+        data: {
+          email, password, newPassword
+        },
+      });
+
+      dispatch({
+        type: c.CHANGE_PASSWORD_SUCCESS,
+        payload: data,
+      });
+      dispatch({ type: c.CHANGE_PASSWORD_RESET });
+    } catch (error) {
+      dispatch({
+        type: c.CHANGE_PASSWORD_FAIL,
+        payload: error,
+      });
+    }
+  };
+};
