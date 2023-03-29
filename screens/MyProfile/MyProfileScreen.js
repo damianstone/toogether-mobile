@@ -422,7 +422,7 @@ const MyProfileScreen = (props) => {
 
   return (
     <FlatList
-      data={[{ key: 'mainContent' }]}
+      data={[{ key: 'myProfileScreen' }]}
       renderItem={renderMYProfileSreen}
       refreshControl={
         <RefreshControl refreshing={refreshing} onRefresh={loadProfile} />
