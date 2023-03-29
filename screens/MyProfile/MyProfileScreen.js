@@ -220,7 +220,8 @@ const MyProfileScreen = (props) => {
       <TouchableOpacity
         key={photo.id}
         onPress={() => onOpenActionSheet(photo.id)}
-        style={{ ...stylesObj }}>
+        style={{ ...stylesObj }}
+      >
         {loadingPhotos ||
         loadingRemovePhoto ||
         (loadingAddPhoto && photo.id === photoId) ? (
@@ -245,133 +246,135 @@ const MyProfileScreen = (props) => {
     return (
       <View style={styles.screen}>
         <SafeAreaView style={styles.safeAreaContainer}>
-            <TouchableOpacity
-              style={styles.profilePictureContainer}
-              onPress={handleOpenPreview}>
-              {!userProfile && (
-                <View style={styles.mainPhotoPlaceholder}>
-                  <Loader />
-                </View>
-              )}
-              {photos && Object.values(photos).length > 0 && (
-                <Image
-                  source={{
-                    uri: `${getImage(Object.values(photos)[0].image)}`,
-                  }}
-                  style={styles.image}
-                />
-              )}
-              {(!photos || Object.values(photos).length === 0) &&
-                userProfile && (
-                  <View style={styles.avatar_view}>
-                    <Text style={styles.avatar_initials}>
-                      {getNameInitials(userProfile.name)}
-                    </Text>
-                  </View>
-                )}
-            </TouchableOpacity>
-            <View style={styles.nameView}>
-              {userProfile && userProfile.name && (
-                <>
-                  <Text style={styles.name}>{userProfile.name}</Text>
-                  <TouchableOpacity
-                    onPress={() => handleNavigate('EditProfile')}>
-                    <MaterialIcons name="edit" size={20} color="white" />
-                  </TouchableOpacity>
-                </>
-              )}
-            </View>
-            <View style={styles.counterContainer}>
-              <View style={styles.counterView}>
-                <Text style={styles.likesNumber}>
-                  {typeof userProfile !== 'undefined'
-                    ? userProfile?.total_likes
-                    : ''}
-                </Text>
-                <Text style={styles.counterText}>Likes</Text>
+          <TouchableOpacity
+            style={styles.profilePictureContainer}
+            onPress={handleOpenPreview}
+          >
+            {!userProfile && (
+              <View style={styles.mainPhotoPlaceholder}>
+                <Loader />
               </View>
-              <View style={styles.counterView}>
-                <Text style={styles.matchesNumber}>
-                  {typeof userProfile !== 'undefined'
-                    ? userProfile.total_matches
-                    : ''}
-                </Text>
-                <Text style={styles.counterText}>matches</Text>
-              </View>
-            </View>
-            <View style={styles.myphotosView}>
-              <View style={styles.itemView}>
-                <Text style={styles.photoTitleLabel}>My Photos</Text>
-              </View>
-              <FlatList
-                style={styles.flatlist_photos_style}
-                contentContainerStyle={styles.flatlist_photos_container_style}
-                data={BASE_PHOTOS}
-                horizontal={false}
-                keyExtractor={(photo) => photo.id}
-                nestedScrollEnabled
-                numColumns={3}
-                renderItem={({ item, index }) =>
-                  photos && photos[index] ? (
-                    renderPhoto(photos[index], item.id)
-                  ) : (
-                    <TouchableOpacity
-                      key={item.id}
-                      onPress={() => {
-                        handleAddPhoto();
-                        setPhotoId(item.id);
-                      }}
-                      style={{
-                        ...styles.myphotosItemView,
-                        backgroundColor: Colors.bgCard,
-                      }}>
-                      <View
-                        style={{
-                          width: '100%',
-                          height: '100%',
-                          justifyContent: 'center',
-                          alignItems: 'center',
-                        }}>
-                        {loadingAddPhoto && item.id === photoId ? (
-                          <Loader size="small" />
-                        ) : (
-                          <Text style={{ color: Colors.white }}>
-                            Add Photo 📸
-                          </Text>
-                        )}
-                      </View>
-                    </TouchableOpacity>
-                  )
-                }
-                scrollEnabled={false}
+            )}
+            {photos && Object.values(photos).length > 0 && (
+              <Image
+                source={{
+                  uri: `${getImage(Object.values(photos)[0].image)}`,
+                }}
+                style={styles.image}
               />
+            )}
+            {(!photos || Object.values(photos).length === 0) && userProfile && (
+              <View style={styles.avatar_view}>
+                <Text style={styles.avatar_initials}>
+                  {getNameInitials(userProfile.name)}
+                </Text>
+              </View>
+            )}
+          </TouchableOpacity>
+          <View style={styles.nameView}>
+            {userProfile && userProfile.name && (
+              <>
+                <Text style={styles.name}>{userProfile.name}</Text>
+                <TouchableOpacity onPress={() => handleNavigate('EditProfile')}>
+                  <MaterialIcons name="edit" size={20} color="white" />
+                </TouchableOpacity>
+              </>
+            )}
+          </View>
+          <View style={styles.counterContainer}>
+            <View style={styles.counterView}>
+              <Text style={styles.likesNumber}>
+                {typeof userProfile !== 'undefined'
+                  ? userProfile?.total_likes
+                  : ''}
+              </Text>
+              <Text style={styles.counterText}>Likes</Text>
             </View>
+            <View style={styles.counterView}>
+              <Text style={styles.matchesNumber}>
+                {typeof userProfile !== 'undefined'
+                  ? userProfile.total_matches
+                  : ''}
+              </Text>
+              <Text style={styles.counterText}>matches</Text>
+            </View>
+          </View>
+          <View style={styles.myphotosView}>
+            <View style={styles.itemView}>
+              <Text style={styles.photoTitleLabel}>My Photos</Text>
+            </View>
+            <FlatList
+              style={styles.flatlist_photos_style}
+              contentContainerStyle={styles.flatlist_photos_container_style}
+              data={BASE_PHOTOS}
+              horizontal={false}
+              keyExtractor={(photo) => photo.id}
+              nestedScrollEnabled
+              numColumns={3}
+              renderItem={({ item, index }) =>
+                photos && photos[index] ? (
+                  renderPhoto(photos[index], item.id)
+                ) : (
+                  <TouchableOpacity
+                    key={item.id}
+                    onPress={() => {
+                      handleAddPhoto();
+                      setPhotoId(item.id);
+                    }}
+                    style={{
+                      ...styles.myphotosItemView,
+                      backgroundColor: Colors.bgCard,
+                    }}
+                  >
+                    <View
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                      }}
+                    >
+                      {loadingAddPhoto && item.id === photoId ? (
+                        <Loader size="small" />
+                      ) : (
+                        <Text style={{ color: Colors.white }}>
+                          Add Photo 📸
+                        </Text>
+                      )}
+                    </View>
+                  </TouchableOpacity>
+                )
+              }
+              scrollEnabled={false}
+            />
+          </View>
 
-            <View style={styles.footer}>
-              <TouchableOpacity
-                onPress={handleOpenPreview}
-                style={styles.previewButton}>
-                <LinearGradient
-                  colors={['#ED665A', '#CF2A6E', '#BA007C']}
-                  style={styles.linearCircle}
+          <View style={styles.footer}>
+            <TouchableOpacity
+              onPress={handleOpenPreview}
+              style={styles.previewButton}
+            >
+              <LinearGradient
+                colors={['#ED665A', '#CF2A6E', '#BA007C']}
+                style={styles.linearCircle}
+              />
+              <View style={styles.textButtonContainer}>
+                <Text style={styles.textButton}>Profile Preview</Text>
+              </View>
+              <View style={styles.iconButtonContainer}>
+                <Feather name="arrow-right" size={35} color={Colors.white} />
+              </View>
+            </TouchableOpacity>
+
+            <View style={styles.logoSection}>
+              <View style={styles.logoContainer}>
+                <Image
+                  source={require('../../assets/images/logo-2.png')}
+                  style={styles.logo}
                 />
-                <View style={styles.textButtonContainer}>
-                  <Text style={styles.textButton}>Profile Preview</Text>
-                </View>
-                <View style={styles.iconButtonContainer}>
-                  <Feather name="arrow-right" size={35} color={Colors.white} />
-                </View>
-              </TouchableOpacity>
-
-              <View style={styles.logoSection}>
-                <View style={styles.logoContainer}>
-                  <Image
-                    source={require('../../assets/images/logo-2.png')}
-                    style={styles.logo}
-                  />
-                </View>
               </View>
             </View>
+          </View>
         </SafeAreaView>
       </View>
     );
