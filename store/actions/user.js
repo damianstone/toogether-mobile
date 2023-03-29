@@ -3,7 +3,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import * as Location from 'expo-location';
 import * as c from '../../constants/user';
-import * as r from '../../constants/report';
 import { ENV } from '../../environment';
 
 const BASE_URL = ENV.API_URL;
@@ -530,7 +529,7 @@ export const listUserPhotos = () => {
 export const reportProfile = (id) => {
   return async (dispatch) => {
     try {
-      dispatch({ type: r.REPORT_PROFILE_REQUEST });
+      dispatch({ type: c.REPORT_PROFILE_REQUEST });
 
       const userData = JSON.parse(await AsyncStorage.getItem('@userData'));
 
@@ -547,12 +546,12 @@ export const reportProfile = (id) => {
       });
 
       dispatch({
-        type: r.REPORT_PROFILE_SUCCESS,
+        type: c.REPORT_PROFILE_SUCCESS,
         payload: data,
       });
     } catch (error) {
       dispatch({
-        type: r.REPORT_PROFILE_FAIL,
+        type: c.REPORT_PROFILE_FAIL,
         payload: error,
       });
     }

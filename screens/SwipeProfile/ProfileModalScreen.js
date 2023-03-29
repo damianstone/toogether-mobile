@@ -7,9 +7,9 @@ import { like, listSwipe } from '../../store/actions/swipe';
 import { checkServerError, check400Error } from '../../utils/errors';
 import { getImage } from '../../utils/getMethods';
 import * as b from '../../constants/block';
-import * as r from '../../constants/report';
+import * as r from '../../constants/user';
 import { userLocation } from '../../store/actions/user';
-import TransparentLoader from '../../components/UI/TransparentLoader';
+import ActivityModal from '../../components/UI/ActivityModal';
 
 import DetailBottomSheet from '../../components/DetailBottomSheet';
 import Colors from '../../constants/Colors';
@@ -41,7 +41,6 @@ const ProfileScreen = (props) => {
   // reload function then redirect to swipe screen
   const reloadAndRedirectToSwipe = async () => {
     try {
-      await dispatch(userLocation());
       await dispatch(listSwipe());
     } catch (err) {
       console.log(err);
@@ -126,7 +125,6 @@ const ProfileScreen = (props) => {
     } else {
       checkServerError(blockError);
     }
-    checkServerError(blockError);
   }
 
   if (blockData) {
@@ -149,7 +147,6 @@ const ProfileScreen = (props) => {
     } else {
       checkServerError(reportError);
     }
-    checkServerError(blockError);
   }
 
   if (reportData) {
@@ -169,7 +166,16 @@ const ProfileScreen = (props) => {
   return (
     <View style={{ flex: 1, backgroundColor: Colors.bgCard }}>
       <>
-        {reportLoading && <TransparentLoader />}
+        <ActivityModal
+          loading={reportLoading || blockLoading}
+          title="Loading"
+          size="small"
+          activityColor="white"
+          titleColor="white"
+          activityWrapperStyle={{
+            backgroundColor: 'transparent',
+          }}
+        />
         <Swiper
           style={styles.wrapper}
           removeClippedSubviews={false}
