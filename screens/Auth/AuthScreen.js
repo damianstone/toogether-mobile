@@ -153,6 +153,10 @@ const AuthStartScreen = (props) => {
     }
   };
 
+  const handlerecovery = () =>{
+    props.navigation.navigate('Recovery', { register: false });
+  }
+
   const handleRegister = () => {
     if (formIsValid) {
       dispatch(
@@ -244,6 +248,12 @@ const AuthStartScreen = (props) => {
                 onInputChange={inputChangeHandler}
               />
             )}
+                <ButtonAndroid
+                  style={styles.auth_text_button}
+                  color={Colors.bgCard}
+                  title={'You forgot your password?'}
+                  onPress={handlerecovery}
+                />
             {registerLoading || loginLoading ? (
               <View style={styles.auth_loader_container}>
                 <ActivityIndicator size="large" />
@@ -252,8 +262,8 @@ const AuthStartScreen = (props) => {
               <AuthButton
                 text={register ? 'Create account' : 'Login'}
                 onPress={register ? handleRegister : handleLogin}
-              />
-            )}
+                />
+                )}
             <ButtonAndroid
               style={styles.auth_text_button}
               color={Colors.bgCard}

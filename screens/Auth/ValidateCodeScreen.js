@@ -16,8 +16,8 @@ const styles = StyleSheet.create({
   },
 });
 
-const RecoveryScreen = (props) => {
-  const [inputEmail, setInputEmail] = useState('');
+const ValidateScreen = (props) => {
+  const [inputCode, setInputCode] = useState('');
   const dispatch = useDispatch()
 
   const recoverycode = useSelector((state) => state.recoverycode);
@@ -31,10 +31,10 @@ const RecoveryScreen = (props) => {
         password</Text>
     </View ><View style={styles.container}>
     <TextInput
-    value={inputEmail}
-    placeholder="hello@gmail.com"
+    value={inputCode}
+    keyboardType='numeric'
     placeholderTextColor="#D8D8D8"
-    onChangeText={text => setInputEmail(text)}
+    onChangeText={text => setInputCode(text)}
     />
     <Button
     title="send email"
@@ -67,4 +67,4 @@ const RecoveryScreen = (props) => {
   };
   
 
-export default RecoveryScreen;
+export default ValidateScreen;

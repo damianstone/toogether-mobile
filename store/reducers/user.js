@@ -247,3 +247,14 @@ export const userListPhotosReducer = (state = {}, action) => {
       return state;
   }
 };
+
+export const recoverycodeReducer = (state = {}, action) => {
+  switch (action.type) {
+    case c.GET_RECOVERY_CODE:
+      return {
+        data: action.payload,
+      };
+    default:
+      return state;
+  }
+};
