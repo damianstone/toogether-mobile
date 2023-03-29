@@ -220,8 +220,7 @@ const MyProfileScreen = (props) => {
       <TouchableOpacity
         key={photo.id}
         onPress={() => onOpenActionSheet(photo.id)}
-        style={{ ...stylesObj }}
-      >
+        style={{ ...stylesObj }}>
         {loadingPhotos ||
         loadingRemovePhoto ||
         (loadingAddPhoto && photo.id === photoId) ? (
@@ -242,38 +241,15 @@ const MyProfileScreen = (props) => {
     );
   };
 
-  return (
-    <View style={styles.MainContainer}>
-      <SafeAreaView style={styles.safeAreaContainer}>
-        <View style={styles.MainContainer}>
-          <ScrollView
-            style={styles.body}
-            nestedScrollEnabled
-            contentContainerStyle={styles.scroll_container_style}
-            refreshControl={
-              <RefreshControl
-                refreshing={refreshing}
-                onRefresh={loadProfile}
-                tintColor={Colors.white}
-              />
-            }
-          >
+  const renderMYProfileSreen = () => {
+    return (
+      <View style={styles.screen}>
+        <SafeAreaView style={styles.safeAreaContainer}>
             <TouchableOpacity
               style={styles.profilePictureContainer}
-              onPress={handleOpenPreview}
-            >
-              {typeof userProfile === 'undefined' && (
-                <View
-                  style={{
-                    backgroundColor: Colors.bgCard,
-                    opacity: 0.5,
-                    width: 150,
-                    height: 150,
-                    borderRadius: 100,
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                  }}
-                >
+              onPress={handleOpenPreview}>
+              {!userProfile && (
+                <View style={styles.mainPhotoPlaceholder}>
                   <Loader />
                 </View>
               )}
@@ -299,8 +275,7 @@ const MyProfileScreen = (props) => {
                 <>
                   <Text style={styles.name}>{userProfile.name}</Text>
                   <TouchableOpacity
-                    onPress={() => handleNavigate('EditProfile')}
-                  >
+                    onPress={() => handleNavigate('EditProfile')}>
                     <MaterialIcons name="edit" size={20} color="white" />
                   </TouchableOpacity>
                 </>
@@ -349,16 +324,14 @@ const MyProfileScreen = (props) => {
                       style={{
                         ...styles.myphotosItemView,
                         backgroundColor: Colors.bgCard,
-                      }}
-                    >
+                      }}>
                       <View
                         style={{
                           width: '100%',
                           height: '100%',
                           justifyContent: 'center',
                           alignItems: 'center',
-                        }}
-                      >
+                        }}>
                         {loadingAddPhoto && item.id === photoId ? (
                           <Loader size="small" />
                         ) : (
@@ -374,53 +347,23 @@ const MyProfileScreen = (props) => {
               />
             </View>
 
-            <View style={styles.circle}>
+            <View style={styles.footer}>
               <TouchableOpacity
                 onPress={handleOpenPreview}
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  width: '70%',
-                  alignItems: 'center',
-                  borderRadius: 10,
-                  padding: 7,
-                }}
-              >
+                style={styles.previewButton}>
                 <LinearGradient
                   colors={['#ED665A', '#CF2A6E', '#BA007C']}
                   style={styles.linearCircle}
                 />
-                <View style={{ padding: 10 }}>
-                  <Text
-                    style={{
-                      color: Colors.white,
-                      fontSize: 20,
-                      fontWeight: '500',
-                    }}
-                  >
-                    Profile Preview
-                  </Text>
+                <View style={styles.textButtonContainer}>
+                  <Text style={styles.textButton}>Profile Preview</Text>
                 </View>
-                <View
-                  style={{
-                    borderRadius: 100,
-                    padding: 3,
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    marginHorizontal: 10,
-                  }}
-                >
+                <View style={styles.iconButtonContainer}>
                   <Feather name="arrow-right" size={35} color={Colors.white} />
                 </View>
               </TouchableOpacity>
 
-              <View
-                style={{
-                  marginTop: 2,
-                  marginBottom: 35,
-                  padding: 10,
-                }}
-              >
+              <View style={styles.logoSection}>
                 <View style={styles.logoContainer}>
                   <Image
                     source={require('../../assets/images/logo-2.png')}
@@ -429,10 +372,19 @@ const MyProfileScreen = (props) => {
                 </View>
               </View>
             </View>
-          </ScrollView>
-        </View>
-      </SafeAreaView>
-    </View>
+        </SafeAreaView>
+      </View>
+    );
+  };
+
+  return (
+    <FlatList
+      data={[{ key: 'myProfileScreen' }]}
+      renderItem={renderMYProfileSreen}
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={loadProfile} />
+      }
+    />
   );
 };
 
