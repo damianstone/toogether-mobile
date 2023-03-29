@@ -6,13 +6,14 @@ import ActivityModal from '../components/UI/ActivityModal';
 import Colors from '../constants/Colors';
 
 const StartupScreen = (props) => {
+  console.log('STARTUP SCREEN');
   useEffect(() => {
     const tryLogin = async () => {
       // get the user data as a promise
       const userData = JSON.parse(await AsyncStorage.getItem('@userData'));
 
       if (userData && userData.has_account) {
-        props.navigation.navigate('Swipe');
+        props.navigation.navigate('Home');
       } else {
         props.navigation.navigate('Auth');
       }
@@ -25,7 +26,7 @@ const StartupScreen = (props) => {
     <View style={styles.screen}>
       <ActivityModal
         loading
-        title="Loading"
+        title="Loading startup screen"
         size="small"
         activityColor="white"
         titleColor="white"
