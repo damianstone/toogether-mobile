@@ -9,11 +9,11 @@ import { getImage } from '../../utils/getMethods';
 import * as b from '../../constants/block';
 import * as r from '../../constants/report';
 import { userLocation } from '../../store/actions/user';
+import TransparentLoader from '../../components/UI/TransparentLoader';
 
 import DetailBottomSheet from '../../components/DetailBottomSheet';
 import Colors from '../../constants/Colors';
 import { reportProfile } from '../../store/actions/user';
-import Loader from '../../components/UI/Loader';
 
 const ProfileScreen = (props) => {
   const dispatch = useDispatch();
@@ -169,7 +169,7 @@ const ProfileScreen = (props) => {
   return (
     <View style={{ flex: 1, backgroundColor: Colors.bgCard }}>
       <>
-        {reportLoading && <Loader />}
+        {reportLoading && <TransparentLoader />}
         <Swiper
           style={styles.wrapper}
           removeClippedSubviews={false}
@@ -197,8 +197,7 @@ const ProfileScreen = (props) => {
                 margin: 4,
               }}
             />
-          }
-        >
+          }>
           {profile?.photos?.length > 0 ? (
             profile.photos.map((photo) => (
               <ImageBackground
