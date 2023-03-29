@@ -221,7 +221,8 @@ const MyProfileScreen = (props) => {
       <TouchableOpacity
         key={photo.id}
         onPress={() => onOpenActionSheet(photo.id)}
-        style={{ ...stylesObj }}>
+        style={{ ...stylesObj }}
+      >
         {loadingPhotos ||
         loadingRemovePhoto ||
         (loadingAddPhoto && photo.id === photoId) ? (
@@ -246,11 +247,13 @@ const MyProfileScreen = (props) => {
       refreshControl={
         <RefreshControl refreshing={refreshing} onRefresh={loadProfile} />
       }
-      style={styles.screen}>
+      style={styles.screen}
+    >
       <SafeAreaView style={styles.safeAreaContainer}>
         <TouchableOpacity
           style={styles.profilePictureContainer}
-          onPress={handleOpenPreview}>
+          onPress={handleOpenPreview}
+        >
           {!userProfile && (
             <View style={styles.mainPhotoPlaceholder}>
               <Loader />
