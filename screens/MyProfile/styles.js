@@ -7,19 +7,21 @@ const { width } = Dimensions.get('window');
 export default StyleSheet.create({
   /* ----------------------- PROFILE DATA ----------------------  */
 
-  scroll_container_style: {
-    flex: 1,
-  },
-
-  scrollview_style: {
+  screen: {
     flex: 1,
     backgroundColor: Colors.bg,
+  },
+
+  scroll_container_style: {
+    width: '100%',
+    flexDirection: 'column', // inner items will be added vertically
+    flexGrow: 1, // all the available vertical space will be occupied by it
+    justifyContent: 'space-between', // will create the gutter between body and footer
   },
 
   safeAreaContainer: {
+    flex: 1,
     backgroundColor: Colors.bg,
-    flexDirection: 'column', // inner items will be added vertically
-    justifyContent: 'space-between', // will create the gutter between body and footer
   },
 
   photoView: {
@@ -148,7 +150,6 @@ export default StyleSheet.create({
     borderRadius: 15,
     justifyContent: 'space-between',
     alignItems: 'center',
-    backgroundColor: 'grey',
     overflow: 'hidden',
   },
   optionView: {

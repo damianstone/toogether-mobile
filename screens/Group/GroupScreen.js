@@ -269,6 +269,7 @@ const GroupScreen = (props) => {
 
   return (
     <ScrollView
+      styles={{ flex: 1, backgroundColor: Colors.bg }}
       contentContainerStyle={styles.screen}
       nestedScrollEnabled
       refreshControl={
@@ -277,8 +278,7 @@ const GroupScreen = (props) => {
           onRefresh={loadGroup}
           tintColor={Colors.white}
         />
-      }
-    >
+      }>
       <SafeAreaView style={styles.safeAreaContainer}>
         <View style={{ ...styles.action_view, ...HEIGHT_ACTION_CONTAINER }}>
           <View style={styles.profile_photo_container}>
@@ -302,8 +302,9 @@ const GroupScreen = (props) => {
             <View style={styles.nameView}>
               {groupContext?.owner && (
                 <Text
-                  style={styles.name}
-                >{`${groupContext.owner.name}'s group`}</Text>
+                  style={
+                    styles.name
+                  }>{`${groupContext.owner.name}'s group`}</Text>
               )}
             </View>
           </View>
@@ -336,8 +337,7 @@ const GroupScreen = (props) => {
           </View>
         </View>
         <View
-          style={{ ...styles.members_view, ...HEIGHT_MEMBER_CARD_CONTAINER }}
-        >
+          style={{ ...styles.members_view, ...HEIGHT_MEMBER_CARD_CONTAINER }}>
           {groupContext && (
             <View style={{ flexDirection: 'row', flexWrap: 'wrap', flex: 1 }}>
               {groupContext.members.map((member, index) => {
