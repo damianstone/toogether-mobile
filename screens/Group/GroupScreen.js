@@ -32,6 +32,7 @@ import Colors from '../../constants/Colors';
 import ClipBoard from '../../components/UI/ClipBoard';
 import MemberAvatar from '../../components/MemberAvatar';
 import Device from '../../theme/Device';
+import ActivityModal from '../../components/UI/ActivityModal';
 
 const GroupScreen = (props) => {
   const { groupContext, isOwnerGroup, updateGroupContext } =
@@ -258,7 +259,7 @@ const GroupScreen = (props) => {
     );
   };
 
-  if (loadingDelete || loadingLeave || loadingRemoveMember || loadingGroup) {
+  if (loadingDelete || loadingLeave) {
     return (
       <View style={styles.loadingScreen}>
         <ActivityIndicator color={Colors.white} size="large" />
@@ -266,24 +267,10 @@ const GroupScreen = (props) => {
     );
   }
 
-  const renderMemberItem = ({ item, index, separators }) => {
-    return (
-      <View style={styles.flatlist_item_container}>
-        <MemberAvatar
-          name={item.name}
-          photos={item.photos}
-          onPress={() =>
-            isOwnerGroup ? handleOpenActionSheet(item.id, item.name) : null
-          }
-        />
-        <Text style={styles.name_text}>{getCardName(item.name)}</Text>
-      </View>
-    );
-  };
-
   return (
     <ScrollView
-      style={styles.screen}
+      contentContainerStyle={styles.screen}
+      nestedScrollEnabled
       refreshControl={
         <RefreshControl
           refreshing={refreshing}
@@ -295,16 +282,14 @@ const GroupScreen = (props) => {
         <View style={{ ...styles.action_view, ...HEIGHT_ACTION_CONTAINER }}>
           <View style={styles.profile_photo_container}>
             {!groupContext && <Loader />}
-            {groupContext &&
-              groupContext.owner.photos &&
-              groupContext.owner.photos.length > 0 && (
-                <Image
-                  source={{
-                    uri: `${getImage(groupContext.owner.photos[0].image)}`,
-                  }}
-                  style={{ width: 150, height: 150, borderRadius: 100 }}
-                />
-              )}
+            {groupContext?.owner?.photos?.length > 0 && (
+              <Image
+                source={{
+                  uri: `${getImage(groupContext.owner.photos[0].image)}`,
+                }}
+                style={{ width: 150, height: 150, borderRadius: 100 }}
+              />
+            )}
             {(groupContext && !groupContext.owner.photos) ||
               (groupContext?.owner.photos.length === 0 && (
                 <View style={styles.avatar_view}>
@@ -431,7 +416,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'column',
     width: '100%',
-    marginBottom: 10,
   },
   profile_photo_container: {
     marginTop: 5,
@@ -464,7 +448,6 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   buttons_container: {
-    marginTop: 15,
     flexDirection: 'column',
     width: '90%',
     alignItems: 'center',

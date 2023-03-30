@@ -1,22 +1,15 @@
 import React from 'react';
 import {
-  FlatList,
-  Image,
-  Platform,
-  SafeAreaView,
-  ScrollView,
   Text,
   TouchableOpacity,
   View,
-  Alert,
   StyleSheet,
-  RefreshControl,
   Dimensions,
 } from 'react-native';
 import Colors from '../../constants/Colors';
-const { width } = Dimensions.get('window');
 import { BASE_PHOTOS } from '../../data/base_fotos';
 
+const { width } = Dimensions.get('window');
 const ProfileGallery = (props) => {
   const {
     photos,
@@ -32,7 +25,7 @@ const ProfileGallery = (props) => {
       <View style={styles.itemView}>
         <Text style={styles.photoTitleLabel}>My Photos</Text>
       </View>
-      <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
+      <View style={styles.myPhotosContainer}>
         {BASE_PHOTOS.map((item, index) =>
           photos && photos[index] ? (
             renderPhoto(photos[index], item.id)
@@ -43,19 +36,14 @@ const ProfileGallery = (props) => {
                 onAddPhoto();
                 setPhotoId(item.id);
               }}
-              style={{
-                ...styles.myphotosItemView,
-                backgroundColor: Colors.bgCard,
-              }}
-            >
+              style={styles.myphotosItemView}>
               <View
                 style={{
                   width: '100%',
                   height: '100%',
                   justifyContent: 'center',
                   alignItems: 'center',
-                }}
-              >
+                }}>
                 {loadingAddPhoto && item.id === photoId ? (
                   <Loader size="small" />
                 ) : (
@@ -88,6 +76,12 @@ const styles = StyleSheet.create({
     marginTop: 20,
     marginBottom: 15,
     alignItems: 'center',
+  },
+  myPhotosContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    flex: 1,
+    width: '100%',
   },
   itemView: {
     width: '100%',
