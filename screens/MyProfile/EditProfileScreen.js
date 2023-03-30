@@ -319,23 +319,4 @@ const EditProfileScreen = (props) => {
   );
 };
 
-EditProfileScreen.navigationOptions = (navData) => {
-  return {
-    headerTitle: 'Edit Profile',
-    headerLeft: () => (
-      <HeaderButtons HeaderButtonComponent={HeaderButtom}>
-        <Item
-          iconName={
-            Platform.OS === 'android' ? 'ios-arrow-back' : 'ios-arrow-back'
-          }
-          onPress={() => {
-            navData.navigation.navigate('MyProfile');
-          }}
-          title="Back arrow"
-        />
-      </HeaderButtons>
-    ),
-  };
-};
-
 export default EditProfileScreen;

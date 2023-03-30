@@ -13,7 +13,7 @@ import { StatusBar } from 'expo-status-bar';
 import Colors from '../../constants/Colors';
 
 const AuthSucess = (props) => {
-  const register = props.navigation.getParam('register');
+  const register = props.route.params.register;
 
   return (
     <View style={[styles.screen, Platform.OS === 'ios' ? {} : { flex: 1 }]}>
