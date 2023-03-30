@@ -92,4 +92,5 @@ export default StyleSheet.create({
     color: '#4A4A4A',
     fontSize: Platform.OS === 'ios' ? 15 : 18,
   },
+  
 });

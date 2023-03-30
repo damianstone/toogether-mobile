@@ -154,7 +154,7 @@ const AuthStartScreen = (props) => {
   };
 
   const handlerecovery = () =>{
-    props.navigation.navigate('Recovery', { register: false });
+    props.navigation.navigate('Recovery');
   }
 
   const handleRegister = () => {

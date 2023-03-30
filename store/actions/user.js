@@ -589,7 +589,7 @@ export const validateCode = (code) => {
   };
 };
 
-export const changePassword = (email, password, newPassword) => {
+export const changePassword = (email, password, newPassword, token) => {
   return async (dispatch) => {
     try {
       dispatch({ type: c.CHANGE_PASSWORD_REQUEST });
@@ -597,7 +597,7 @@ export const changePassword = (email, password, newPassword) => {
       const config = {
         'Content-Type': 'application/json',
         Accept: 'application/json',
-        Authorization: `Bearer ${userData.token}`,
+        Authorization: `Bearer ${token}`,
       };
 
       const { data } = await axios({
