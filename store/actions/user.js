@@ -22,23 +22,23 @@ export const userLocation = () => {
         Authorization: `Bearer ${userData.token}`,
       };
 
-      let location = await Location.getCurrentPositionAsync({
-        accuracy: Platform.OS === 'ios' ? 3 : Location.Accuracy.High,
-      });
+      // let location = await Location.getCurrentPositionAsync({
+      //   accuracy: Platform.OS === 'ios' ? 3 : Location.Accuracy.High,
+      // });
       // If you are getting stuck and not getting location (on Android uncomment this to get default location so that you can continue working)
-      // let location;
-      // if (Platform.OS === 'ios') {
-      //   location = await Location.getCurrentPositionAsync({
-      //     accuracy: Platform.OS === 'ios' ? 3 : Location.Accuracy.Highest,
-      //   });
-      // } else {
-      //   location = {
-      //     coords: {
-      //       latitude: 37.785834,
-      //       longitude: -122.406417,
-      //     },
-      //   };
-      // }
+      let location;
+      if (Platform.OS === 'ios') {
+        location = await Location.getCurrentPositionAsync({
+          accuracy: Platform.OS === 'ios' ? 3 : Location.Accuracy.Highest,
+        });
+      } else {
+        location = {
+          coords: {
+            latitude: 37.785834,
+            longitude: -122.406417,
+          },
+        };
+      }
 
       const { data } = await axios({
         method: 'POST',
@@ -518,6 +518,105 @@ export const listUserPhotos = () => {
     } catch (error) {
       dispatch({
         type: c.USER_LIST_PHOTOS_FAIL,
+        payload: error,
+      });
+    }
+  };
+};
+
+
+export const sendRecoveryCode = (email) => {
+  return async (dispatch) => {
+    try {
+      dispatch({ type: c.RECOVER_CODE_REQUEST });
+
+      const config = {
+        'Content-Type': 'application/json',
+      };
+
+      const { data } = await axios({
+        method: 'POST',
+        url: `${BASE_URL}/api/v1/users/recovery-code/`,
+        headers: config,
+        data: {
+          email,
+        },
+      });
+
+      dispatch({
+        type: c.RECOVERY_CODE_SUCCESS,
+        payload: data,
+      });
+
+    } catch (error) {
+      dispatch({
+        type: c.RECOVERY_CODE_FAIL,
+        payload: error,
+      });
+    }
+  };
+};
+
+export const validateCode = (code) => {
+  return async (dispatch) => {
+    try {
+      dispatch({ type: c.VALIDATE_CODE_REQUEST });
+
+      const config = {
+        'Content-Type': 'application/json',
+      };
+
+      const { data } = await axios({
+        method: 'POST',
+        url: `${BASE_URL}/api/v1/users/validate-code/`,
+        headers: config,
+        data: {
+          code,
+        },
+      });
+
+      dispatch({
+        type: c.VALIDATE_CODE_SUCCESS,
+        payload: data,
+      });
+
+    } catch (error) {
+      dispatch({
+        type: c.VALIDATE_CODE_FAIL,
+        payload: error,
+      });
+    }
+  };
+};
+
+export const changePassword = (email, password, newPassword, token) => {
+  return async (dispatch) => {
+    try {
+      dispatch({ type: c.CHANGE_PASSWORD_REQUEST });
+
+      const config = {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+        Authorization: `Bearer ${token}`,
+      };
+
+      const { data } = await axios({
+        method: 'POST',
+        url: `${BASE_URL}/api/v1/users/reset-password/`,
+        headers: config,
+        data: {
+          email, password, newPassword
+        },
+      });
+
+      dispatch({
+        type: c.CHANGE_PASSWORD_SUCCESS,
+        payload: data,
+      });
+      dispatch({ type: c.CHANGE_PASSWORD_RESET });
+    } catch (error) {
+      dispatch({
+        type: c.CHANGE_PASSWORD_FAIL,
         payload: error,
       });
     }
