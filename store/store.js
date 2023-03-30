@@ -13,6 +13,7 @@ import {
   userRegisterReducer,
   userDeleteReducer,
   userGetProfileReducer,
+  reportProfileReducer,
 } from './reducers/user';
 import {
   listBlockedProfilesReducer,
@@ -49,6 +50,7 @@ const reducer = combineReducers({
   userCreateProfile: userCreateProfileReducer,
   userUpdateProfile: userUpdateProfileReducer,
   userGetProfile: userGetProfileReducer,
+  reportProfile: reportProfileReducer,
   // photos API
   userAddPhoto: userAddPhotoReducer,
   userRemovePhoto: userRemovePhotoReducer,
