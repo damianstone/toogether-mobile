@@ -27,10 +27,12 @@ const AppNavigator = (props) => {
     console.log('USER DATA ----> ', userData);
 
     if (userData && userData.has_account) {
+      // Avoids possible ambiguity
+      const currentTime = Date.now()
       const tokenDecoded = jwt_decode(userData.token);
       const refreshTokenDecoded = jwt_decode(userData.refresh_token);
-      const isTokenExpired = tokenDecoded.exp < Date.now() / 1000;
-      const isRefreshTokenExpired = refreshTokenDecoded.exp < Date.now() / 1000;
+      const isTokenExpired = tokenDecoded.exp < currentTime / 1000;
+      const isRefreshTokenExpired = refreshTokenDecoded.exp < currentTime / 1000;
 
       if (isTokenExpired && isRefreshTokenExpired) {
         await dispatch(logout());
