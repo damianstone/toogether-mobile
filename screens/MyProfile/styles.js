@@ -6,17 +6,15 @@ const { width } = Dimensions.get('window');
 
 export default StyleSheet.create({
   /* ----------------------- PROFILE DATA ----------------------  */
-  
+
   scroll_container_style: {
     flex: 1,
   },
 
-  
   scrollview_style: {
     flex: 1,
     backgroundColor: Colors.bg,
   },
-
 
   safeAreaContainer: {
     backgroundColor: Colors.bg,

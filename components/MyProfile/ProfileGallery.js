@@ -37,14 +37,16 @@ const ProfileGallery = (props) => {
                 onAddPhoto();
                 setPhotoId(item.id);
               }}
-              style={styles.myphotosItemView}>
+              style={styles.myphotosItemView}
+            >
               <View
                 style={{
                   width: '100%',
                   height: '100%',
                   justifyContent: 'center',
                   alignItems: 'center',
-                }}>
+                }}
+              >
                 {loadingAddPhoto && item.id === photoId ? (
                   <Loader size="small" />
                 ) : (
@@ -108,7 +110,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 
-
   photos_grid_view: {
     flex: 2,
     justifyContent: 'center',
@@ -117,7 +118,6 @@ const styles = StyleSheet.create({
     marginHorizontal: 'auto',
   },
 
-  
   myphotosItemView: {
     width: Math.floor(width * 0.29),
     height: Math.floor(width * 0.29),
