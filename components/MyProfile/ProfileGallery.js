@@ -1,3 +1,4 @@
+import noColorLiterals from 'eslint-plugin-react-native/lib/rules/no-color-literals';
 import React from 'react';
 import {
   Text,
@@ -36,16 +37,14 @@ const ProfileGallery = (props) => {
                 onAddPhoto();
                 setPhotoId(item.id);
               }}
-              style={styles.myphotosItemView}
-            >
+              style={styles.myphotosItemView}>
               <View
                 style={{
                   width: '100%',
                   height: '100%',
                   justifyContent: 'center',
                   alignItems: 'center',
-                }}
-              >
+                }}>
                 {loadingAddPhoto && item.id === photoId ? (
                   <Loader size="small" />
                 ) : (
@@ -69,7 +68,7 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     justifyContent: 'space-between',
     alignItems: 'center',
-    backgroundColor: 'grey',
+    backgroundColor: Colors.bgCard,
     overflow: 'hidden',
   },
   myphotosView: {
@@ -82,7 +81,6 @@ const styles = StyleSheet.create({
   myPhotosContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    flex: 1,
     width: '100%',
   },
   itemView: {
@@ -109,13 +107,17 @@ const styles = StyleSheet.create({
   flatlist_photos_container_style: {
     justifyContent: 'center',
   },
+
+
   photos_grid_view: {
-    flex: 3,
+    flex: 2,
     justifyContent: 'center',
     flexDirection: 'row',
     width: '100%',
     marginHorizontal: 'auto',
   },
+
+  
   myphotosItemView: {
     width: Math.floor(width * 0.29),
     height: Math.floor(width * 0.29),
@@ -124,7 +126,7 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     justifyContent: 'space-between',
     alignItems: 'center',
-    backgroundColor: 'grey',
+    backgroundColor: Colors.bgCard,
     overflow: 'hidden',
   },
   optionView: {
@@ -152,26 +154,6 @@ const styles = StyleSheet.create({
     fontSize: 17,
     paddingLeft: 22,
     color: Colors.white,
-  },
-  inactiveDot: {
-    backgroundColor: Colors.white,
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    marginLeft: 3,
-    marginRight: 3,
-    marginTop: 3,
-    marginBottom: 3,
-  },
-  buttonText: {
-    fontSize: 17,
-    color: Colors.white,
-    fontWeight: '500',
-  },
-  linearGradientButton: {
-    position: 'absolute',
-    width: 250,
-    height: 40,
   },
 });
 export default ProfileGallery;

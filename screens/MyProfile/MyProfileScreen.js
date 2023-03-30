@@ -247,8 +247,8 @@ const MyProfileScreen = (props) => {
       refreshControl={
         <RefreshControl refreshing={refreshing} onRefresh={loadProfile} />
       }
-      nestedScrollEnabled
-      style={styles.screen}
+      contentContainerStyle={styles.scroll_container_style}
+      style={styles.scrollview_style}
     >
       <SafeAreaView style={styles.safeAreaContainer}>
         <TouchableOpacity

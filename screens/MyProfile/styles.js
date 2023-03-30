@@ -6,19 +6,21 @@ const { width } = Dimensions.get('window');
 
 export default StyleSheet.create({
   /* ----------------------- PROFILE DATA ----------------------  */
-  screen: {
+  
+  scroll_container_style: {
     flex: 1,
-    backgroundColor: Colors.bg,
   },
-  safeAreaContainer: {
+
+  
+  scrollview_style: {
     flex: 1,
     backgroundColor: Colors.bg,
   },
 
-  scroll_container_style: {
-    width: '100%',
+
+  safeAreaContainer: {
+    backgroundColor: Colors.bg,
     flexDirection: 'column', // inner items will be added vertically
-    flexGrow: 1, // all the available vertical space will be occupied by it
     justifyContent: 'space-between', // will create the gutter between body and footer
   },
 
