@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { View, Text, TextInput, Button, StyleSheet, KeyboardAvoidingView } from 'react-native';
-import ButtonAndroid from '../../components/UI/ButtonAndroid';
+import { View, Text, StyleSheet} from 'react-native';
+import AuthButton from '../../components/UI/AuthButton';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import AuthInput from '../../components/UI/AuthInput';
 import HeaderButtom from '../../components/UI/HeaderButton';
@@ -9,13 +9,8 @@ import { recoveryPassword } from '../../store/actions/user';
 import Device from '../../theme/Device';
 import { Platform } from 'react-native';
 import Colors from '../../constants/Colors';
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     justifyContent: 'center',
-//     alignItems: 'center',
-//   },
-// });
+import AuthStartScreen from '../Auth/AuthScreen'
+
 
 const RecoveryScreen = (props) => {
   return (
@@ -30,18 +25,25 @@ const RecoveryScreen = (props) => {
       </Text> 
     </View>
       <View style={styles.auth_button_email}>
-      
-      <TextInput keyboardType="email-address"
-       placeholder="your-email@gmail.com" style={styles.input}>
-        
-      </TextInput>
+      <Text style={styles.auth_text_small}>
+          E-mail
+      </Text> 
+      <AuthInput
+              id="email"
+              textContentType="emailAddress"
+              keyboardType="email-address"
+              required
+              autoComplete="email"
+              autoCapitalize="none"
+              errorText="Enter your email"
+              placeholder="my-email@gmail.com"
+              placeholderTextColor="#B0B3B8"
+              autoCorrect={false}
+              border-radius= '10'
+              />
       </View>
         <View style={styles.button_container}>
-        <ButtonAndroid
-              title="Login"
-              color={Platform.OS === 'ios' ? Colors.white : Colors.bg}
-              
-            />
+        <AuthButton text="Send recovery code" />
           </View>
       </View>
     </>
@@ -58,7 +60,7 @@ RecoveryScreen.navigationOptions = (navData) => {
             Platform.OS === 'android' ? 'ios-arrow-back' : 'ios-arrow-back'
           }
           onPress={() => {
-            navData.navigation.navigate('MyProfile');
+            navData.navigation.navigate('Auth');
           }}
           title="Back arrow"
         />
@@ -96,20 +98,20 @@ const styles = StyleSheet.create({
     border: 2,
     width: '80%',
     paddingVertical: 0,
-    paddingLeft: 20 ,
-    position: 'relative',
+    paddingLeft: '10%' ,
     // fixes styling for Android and should be default for iOS
   },
   auth_button_email:{
     padding:0,
     margin:0,
     flex:1,
+    width:"90%",
     flexDirection:'column',
-    alignItems:"center",
-    justifyContent:'center',
-    position:'relative',
-    bottom:150
+    alignItems:'flex-start',
+    paddingLeft:'10%',
+    border:'2, solid, salmon'
   },
+  
   input: {
     height: 40,
     width: 308,
@@ -121,8 +123,15 @@ const styles = StyleSheet.create({
     // otros estilos para el campo de entrada
   },
   button_container:{
-    backgroundColor:'#494863'
-
-  }
+    
+      alignSelf: 'center',
+      justifyContent: 'center',
+      alignItems: 'center',
+      width: '90%',
+      padding: Platform.OS === 'ios' ? 20 : 0,
+      paddingHorizontal: Platform.OS === 'ios' ? 0 : 20,
+      paddingVertical: Platform.OS === 'ios' ? '7%' : 0,
+      paddingBottom: Platform.OS === 'ios' ? '7%' : 0.09 * Device.height,
+  },
 });
 
