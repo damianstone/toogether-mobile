@@ -211,7 +211,8 @@ const MyProfileScreen = (props) => {
       <TouchableOpacity
         key={photo.id}
         onPress={() => onOpenActionSheet(photo.id)}
-        style={styles.myphotosItemView}>
+        style={styles.myphotosItemView}
+      >
         {loadingPhotos ||
         loadingRemovePhoto ||
         (loadingAddPhoto && photo.id === photoId) ? (
@@ -238,11 +239,13 @@ const MyProfileScreen = (props) => {
       }
       contentContainerStyle={styles.scroll_container_style}
       style={styles.screen}
-      nestedScrollEnabled>
+      nestedScrollEnabled
+    >
       <SafeAreaView style={styles.safeAreaContainer}>
         <TouchableOpacity
           style={styles.profilePictureContainer}
-          onPress={handleOpenPreview}>
+          onPress={handleOpenPreview}
+        >
           {photos && Object.values(photos).length > 0 && (
             <Image
               source={{
