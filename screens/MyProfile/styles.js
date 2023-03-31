@@ -11,16 +11,14 @@ export default StyleSheet.create({
     flex: 1,
     width: '100%',
     height: '100%',
-    flexDirection: 'column', 
+    flexDirection: 'column',
   },
 
   scrollview_style: {
-
     backgroundColor: Colors.bg,
     height: '100%',
-    width: '100%'
+    width: '100%',
   },
-
 
   photoView: {
     top: Platform.OS === 'ios' ? '4%' : '1%',
@@ -197,7 +195,6 @@ export default StyleSheet.create({
     width: 250,
     height: 40,
   },
- 
 
   /* ----------------------- EDIT PROFILE SCREEN -----------------------  */
 
