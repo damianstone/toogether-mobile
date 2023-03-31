@@ -28,7 +28,7 @@ const AppNavigator = (props) => {
 
     if (userData && userData.has_account) {
       // Avoids possible ambiguity
-      const currentTime = Date.now()
+      const currentTime = Date.now();
       const tokenDecoded = jwt_decode(userData.token);
       const refreshTokenDecoded = jwt_decode(userData.refresh_token);
       const isTokenExpired = tokenDecoded.exp < currentTime / 1000;
