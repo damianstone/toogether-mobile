@@ -34,5 +34,6 @@ export const getImage = (backend_image) => {
   } else {
     image = `${backend_image}`;
   }
+  console.log(image);
   return image;
 };

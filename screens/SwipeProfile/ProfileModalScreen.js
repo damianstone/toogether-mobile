@@ -1,5 +1,12 @@
+import md5 from 'crypto-js/md5';
 import React from 'react';
-import { StyleSheet, View, ImageBackground, Alert } from 'react-native';
+import {
+  StyleSheet,
+  View,
+  ImageBackground,
+  Alert,
+  ActivityIndicator,
+} from 'react-native';
 import Swiper from 'react-native-swiper';
 import { useDispatch, useSelector } from 'react-redux';
 import { blockProfile } from '../../store/actions/block';
@@ -7,6 +14,7 @@ import { like } from '../../store/actions/swipe';
 import { checkServerError, check400Error } from '../../utils/errors';
 import { getImage } from '../../utils/getMethods';
 import * as b from '../../constants/block';
+import CachedImage from 'expo-cached-image';
 
 import DetailBottomSheet from '../../components/DetailBottomSheet';
 import Colors from '../../constants/Colors';
@@ -125,17 +133,45 @@ const ProfileScreen = (props) => {
                 margin: 4,
               }}
             />
-          }
-        >
+          }>
           {profile?.photos?.length > 0 ? (
             profile.photos.map((photo) => (
-              <ImageBackground
-                key={profile.id}
+              <CachedImage
+                source={{ uri: `(${getImage(photo.image)}` }}
+                // source={{
+                //   uri: 'http://192.168.10.38:8000/images/E0BCE603-1C01-4945-8357-133A2777AA9C.jpg',
+                // }}
+                // cacheKey={`zabroni`}
+                cacheKey={`${md5(photo.id).toString()}`}
                 style={styles.image}
                 imageStyle={styles.imageStyle}
-                source={{ uri: `${getImage(photo.image)}` }}
                 resizeMode="cover"
               />
+              // <CachedImage
+              //   source={{ uri: `(${getImage(photo.image)}` }}
+              //   cacheKey={`zabron`}
+              //   style={styles.image}
+              //   placeholderContent={
+              //     // (optional) -- shows while the image is loading
+              //     <ActivityIndicator // can be any react-native tag
+              //       color={Colors.placeholder}
+              //       size="small"
+              //       style={{
+              //         flex: 1,
+              //         justifyContent: 'center',
+              //       }}
+              //     />
+              //   }
+              //   imageStyle={styles.imageStyle}
+              //   resizeMode="cover"
+              // />
+              // <ImageBackground
+              //   key={profile.id}
+              //   style={styles.image}
+              //   imageStyle={styles.imageStyle}
+              //   source={{ uri: `${getImage(photo.image)}` }}
+              //   resizeMode="cover"
+              // />
             ))
           ) : (
             <ImageBackground
