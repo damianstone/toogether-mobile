@@ -32,8 +32,7 @@ const RecoveryScreen = (props) => {
       <View style={styles.auth_text_container}>
         <Text style={styles.auth_text_big}>Recovery code</Text>
         <Text style={styles.auth_text_small}>
-          We will send you a recover code to your email so you can change your
-          password
+          We will send you a recover code to your email so you can change your password
         </Text>
       </View>
       <View style={styles.auth_input_email}>

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { View, Text, StyleSheet, Alert } from 'react-native';
+import { View, Text, StyleSheet, Alert, TouchableOpacity, TextInput, KeyboardAvoidingView, ScrollView } from 'react-native';
 import AuthButton from '../../components/UI/AuthButton';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import AuthInput from '../../components/UI/AuthInput';
@@ -26,8 +26,28 @@ const ValidateCodeScreen = (props) => {
     );
   };
 
+
+  const [value, setValue] = useState('');
+
+  const formatCode = (text) => {
+    // Elimina cualquier guión existente
+    text = text.replace(/-/g, '');
+    // Inserta guiones después de cada 3 caracteres
+    text = text.replace(/(.{2})/g, '$1-');
+    // Elimina el guión adicional al final
+    text = text.replace(/-$/, '');
+    return text;
+  }
+
+  const handleChange = (text) => {
+    // Formatea el texto ingresado
+    const formattedText = formatCode(text);
+    setValue(formattedText);
+  }
+
+
   return (
-    <View style={styles.screen}>
+      <KeyboardAvoidingView style={styles.screen} keyboardVerticalOffset={-300} behavior="padding">
       <View style={styles.auth_text_container}>
         <Text style={styles.auth_text_big}>Validate code</Text>
         <Text style={styles.auth_text_small}>
@@ -35,25 +55,27 @@ const ValidateCodeScreen = (props) => {
         </Text>
       </View>
       <View style={styles.auth_button_email}>
-        <AuthInput
-          id="email"
-          textContentType="emailAddress"
-          keyboardType="email-address"
-          required
-          autoComplete="email"
-          autoCapitalize="none"
-          errorText="Enter your email"
-          placeholder="my-email@gmail.com"
-          placeholderTextColor="#B0B3B8"
-          autoCorrect={false}
-          border-radius="10"
-        />
+      <TextInput style={styles.code_container}
+      value={value}
+      onChangeText={handleChange}
+      placeholderTextColor="#B0B3B8"
+      placeholder="NN-NN-NN"
+      maxLength={8} // Establece la longitud máxima del texto en 11 caracteres
+      keyboardType='numeric'
+    />
+        
+      <TouchableOpacity onPress={props.onPress}>
+        <Text style={styles.auth_text_small}>Resend code</Text>
+      </TouchableOpacity>
+      
       </View>
       <View style={styles.button_container}>
         <AuthButton text="Confirm" 
-        onPress={handlePress}/>
+        onPress={handlePress}
+        backgroundColor={Colors.bg}/>
       </View>
-    </View>
+
+      </KeyboardAvoidingView>
   );
 };
 
@@ -96,6 +118,7 @@ const styles = StyleSheet.create({
   auth_text_small: {
     color: Colors.white,
     fontSize: 20,
+    
   },
   auth_text_container: {
     flexDirection: 'column',
@@ -108,21 +131,11 @@ const styles = StyleSheet.create({
   auth_button_email: {
     padding: 0,
     margin: 0,
-    width: '90%',
+    width: '100%',
+    height:'18%',
     flexDirection: 'column',
-    alignItems: 'flex-start',
-    border: '2, solid, salmon',
-  },
-
-  input: {
-    height: 40,
-    width: "90%",
-    borderWidth: 1,
-    borderRadius: 10,
-    backgroundColor: '#494863',
-    paddingHorizontal: 10,
-    marginBottom: 20,
-    // otros estilos para el campo de entrada
+    alignItems: 'center',
+    justifyContent:'space-around'
   },
   button_container: {
     alignSelf: 'center',
@@ -133,6 +146,15 @@ const styles = StyleSheet.create({
     paddingHorizontal: Platform.OS === 'ios' ? 0 : 20,
     paddingVertical: Platform.OS === 'ios' ? '7%' : 0,
     paddingBottom: Platform.OS === 'ios' ? '7%' : 0.09 * Device.height,
+  },
+  code_container:{
+    backgroundColor: '#494863',
+    borderRadius: 10,
+    height:'40%',
+    width:'60%',
+    textAlign: 'center',
+    fontSize: 20,
+    color: Colors.white
   },
 });
 
