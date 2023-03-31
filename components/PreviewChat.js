@@ -13,13 +13,6 @@ import Colors from '../constants/Colors';
 const PreviewChat = (props) => {
   const { receiverProfile, onShowProfile, data, onShowChat } = props;
 
-  const checkPhoto = (profile) => {
-    if (profile.photos.length > 0) {
-      return { uri: `${getImage(profile.photos[0]?.image)}` };
-    }
-    return require('../assets/images/placeholder-profile.png');
-  };
-
   return (
     <View style={styles.container}>
       <View>
@@ -36,7 +29,7 @@ const PreviewChat = (props) => {
           <Text style={styles.matched_name}>{receiverProfile.name}</Text>
           <View style={styles.lastMessagesContainer}>
             <Text style={styles.last_message}>
-              {data?.last_message.message}
+              {data?.last_message?.message}
             </Text>
             <Text style={styles.messageCount}>1</Text>
           </View>

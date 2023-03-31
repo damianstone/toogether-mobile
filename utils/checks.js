@@ -1,5 +1,5 @@
 import * as r from '../constants/responses/match';
-
+import { getImage } from './getMethods';
 /*
  * check if the value exists
  * @param {any} value - any value that we need to check if its exist
@@ -117,6 +117,9 @@ export const checkMemberInGroup = (memberId, groupMembers) => {
 export const checkPhoto = (profile) => {
   if (profile && profile.photos.length > 0) {
     return { uri: `${getImage(profile.photos[0]?.image)}` };
+  }
+  if (profile && profile?.photo) {
+    return { uri: `${getImage(profile.photo)}` };
   }
   return require('../assets/images/placeholder-profile.png');
 };

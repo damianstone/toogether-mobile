@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { exist } from '../../utils/checks';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import {
   FlatList,
@@ -34,9 +33,6 @@ import MatchCounter from '../../components/MatchCounter';
 import MatchAvatar from '../../components/MatchAvatar';
 import PreviewChat from '../../components/PreviewChat';
 import * as conv from '../../constants/conversation';
-
-/* For test purposes */
-import chats from '../../data/chats.json';
 
 const MatchesScreen = (props) => {
   const { showActionSheetWithOptions } = useActionSheet();
@@ -77,7 +73,7 @@ const MatchesScreen = (props) => {
   useEffect(() => {
     dispatch(listMatches());
     dispatch(listMyConversations());
-  }, []);
+  }, [matchDeleted]);
 
   useEffect(() => {
     if (errorDeleteMatch) {
@@ -200,13 +196,6 @@ const MatchesScreen = (props) => {
       </SafeAreaView>
     );
   }
-  const renderNoMatches = () => {
-    return (
-      <View style={styles.noMatches}>
-        <Text style={styles.noMatchesText}>You have no matches yet.</Text>
-      </View>
-    );
-  };
 
   const renderBubblesMatches = ({ item }) => {
     const matchedProfile = item.matched_data.matched_profile;
@@ -228,9 +217,22 @@ const MatchesScreen = (props) => {
 
   const renderNoChats = () => {
     return (
-      <View style={styles.no_chats}>
-        <Image source={no_chats} style={styles.no_chats_image} />
-        <Text style={styles.no_chats_text}>You have no chats yet.</Text>
+      <View
+        style={{
+          backgroundColor: Colors.bg,
+          justifyContent: 'center',
+          alignItems: 'center',
+          width: '100%',
+          height: '100%',
+          textAlign: 'center',
+        }}>
+        <View style={{ width: 250, height: 250 }}>
+          <Image
+            source={no_chats}
+            style={{ resizeMode: 'contain', flex: 1, aspectRatio: 1 }}
+          />
+        </View>
+        <Text style={{ color: Colors.white, fontSize: 15 }}>No chats yet</Text>
       </View>
     );
   };
@@ -238,11 +240,11 @@ const MatchesScreen = (props) => {
   const renderPreviewChats = ({ item }) => {
     return (
       <PreviewChat
-        onShowChat={() => handleShowChatbyId(item.id, item.receiver)}
+        onShowChat={() => handleShowChatbyId(item?.id, item?.receiver)}
         data={item}
-        receiverProfile={item.receiver}
+        receiverProfile={item?.receiver}
         onShowProfile={() =>
-          handleShowProfile(item.receiver, item.receiver.is_in_group)
+          handleShowProfile(item?.receiver, item?.receiver.is_in_group)
         }
       />
     );
@@ -272,7 +274,6 @@ const MatchesScreen = (props) => {
               data={matches?.results}
               keyExtractor={(item) => item.id.toString()}
               renderItem={renderBubblesMatches}
-              ListEmptyComponent={renderNoMatches}
             />
           )}
         </View>
@@ -384,6 +385,16 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     backgroundColor: Colors.bg,
     flex: 1,
+  },
+  noChatsImage: {
+    width: 100,
+    height: 100,
+    resizeMode: 'contain',
+  },
+  no_chats_text: {
+    color: Colors.white,
+    fontSize: 16,
+    justifyContent: 'center',
   },
 });
 

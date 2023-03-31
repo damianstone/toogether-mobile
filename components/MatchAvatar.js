@@ -11,13 +11,7 @@ import { checkPhoto } from '../utils/checks';
 import Colors from '../constants/Colors';
 
 const MatchAvatar = (props) => {
-  const {
-    matchedProfile,
-    matchedProfileHasPhoto,
-    matchedProfilePhoto,
-    onShowChat,
-  } = props;
-
+  const { matchedProfile, onShowChat } = props;
   return (
     <TouchableOpacity onPress={onShowChat}>
       <ImageBackground
