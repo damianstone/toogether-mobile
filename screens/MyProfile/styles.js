@@ -145,11 +145,12 @@ export default StyleSheet.create({
   myphotosItemView: {
     width: Math.floor(width * 0.29),
     height: Math.floor(width * 0.29),
-    marginHorizontal: 8,
-    marginVertical: 8,
+    marginHorizontal: 4,
+    marginVertical: 4,
     borderRadius: 15,
     justifyContent: 'space-between',
     alignItems: 'center',
+    backgroundColor: Colors.bgCard,
     overflow: 'hidden',
   },
   optionView: {

@@ -207,21 +207,11 @@ const MyProfileScreen = (props) => {
   };
 
   const renderPhoto = (photo) => {
-    let stylesObj = {
-      ...styles.myphotosItemView,
-      backgroundColor: 'transparent',
-    };
-    if (loadingRemovePhoto || loadingAddPhoto || loadingPhotos) {
-      stylesObj = {
-        ...styles.myphotosItemView,
-        backgroundColor: 'transparent',
-      };
-    }
     return (
       <TouchableOpacity
         key={photo.id}
         onPress={() => onOpenActionSheet(photo.id)}
-        style={{ ...stylesObj }}>
+        style={styles.myphotosItemView}>
         {loadingPhotos ||
         loadingRemovePhoto ||
         (loadingAddPhoto && photo.id === photoId) ? (

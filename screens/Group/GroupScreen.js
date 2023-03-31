@@ -269,8 +269,8 @@ const GroupScreen = (props) => {
 
   return (
     <ScrollView
-      styles={{ flex: 1, backgroundColor: Colors.bg }}
-      contentContainerStyle={styles.screen}
+      styles={styles.screen}
+      contentContainerStyle={styles.scroll_container_style}
       nestedScrollEnabled
       refreshControl={
         <RefreshControl
@@ -397,15 +397,18 @@ export default GroupScreen;
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    width: '100%',
     backgroundColor: Colors.bg,
   },
+  scroll_container_style: {
+    width: '100%',
+    flexDirection: 'column', // inner items will be added vertically
+    flexGrow: 1, // all the available vertical space will be occupied by it
+    justifyContent: 'space-between', // will create the gutter between body and footer
+  },
+
   safeAreaContainer: {
     flex: 1,
-    width: '100%',
     backgroundColor: Colors.bg,
-    alignContent: 'center',
-    justifyContent: 'space-between',
   },
   loadingScreen: {
     backgroundColor: Colors.bg,
