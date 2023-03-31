@@ -52,7 +52,7 @@ const RecoveryScreen = (props) => {
 
 RecoveryScreen.navigationOptions = (navData) => {
   return {
-    headerTitle: 'Change Password',
+    headerTitle: '',
     headerLeft: () => (
       <HeaderButtons HeaderButtonComponent={HeaderButtom}>
         <Item
@@ -83,13 +83,11 @@ const styles = StyleSheet.create({
     color: Colors.white,
     fontSize: 35,
     fontWeight: 'bold',
-    fontFamily: Platform.OS === 'ios' ? 'Poppins-Bold' : 'Poppins-Regular',
   },
 
   auth_text_small: {
     color: Colors.white,
     fontSize: 20,
-    fontFamily: Platform.OS === 'ios' ? 'Poppins-Bold' : 'Poppins-Regular',
   },
   auth_text_container: {
     flex:1,
