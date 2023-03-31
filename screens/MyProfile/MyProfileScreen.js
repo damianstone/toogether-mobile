@@ -206,45 +206,16 @@ const MyProfileScreen = (props) => {
     props.navigation.navigate(screen);
   };
 
-  const renderPhoto = (photo) => {
-    return (
-      <TouchableOpacity
-        key={photo.id}
-        onPress={() => onOpenActionSheet(photo.id)}
-        style={styles.myphotosItemView}
-      >
-        {loadingPhotos ||
-        loadingRemovePhoto ||
-        (loadingAddPhoto && photo.id === photoId) ? (
-          <Loader size="small" />
-        ) : (
-          <Image
-            source={{
-              uri: `${getImage(photo.image)}`,
-            }}
-            style={{
-              width: '100%',
-              height: '100%',
-              backgroundColor: 'transparent',
-            }}
-          />
-        )}
-      </TouchableOpacity>
-    );
-  };
   return (
     <ScrollView
       refreshControl={
         <RefreshControl refreshing={refreshing} onRefresh={loadProfile} />
       }
       contentContainerStyle={styles.scroll_container_style}
-      nestedScrollEnabled
-      style={styles.scrollview_style}
-    >
+      style={styles.scrollview_style}>
       <TouchableOpacity
         style={styles.profilePictureContainer}
-        onPress={handleOpenPreview}
-      >
+        onPress={handleOpenPreview}>
         {photos && Object.values(photos).length > 0 && (
           <Image
             source={{
@@ -287,14 +258,16 @@ const MyProfileScreen = (props) => {
           <Text style={styles.counterText}>matches</Text>
         </View>
       </View>
-      <ProfileGallery
-        photos={photos}
-        renderPhoto={renderPhoto}
-        onAddPhoto={handleAddPhoto}
-        setPhotoId={setPhotoId}
-        photoId={photoId}
-        loadingPhotos={loadingPhotos}
-      />
+      <View>
+        <ProfileGallery
+          photos={photos}
+          onAddPhoto={handleAddPhoto}
+          setPhotoId={setPhotoId}
+          photoId={photoId}
+          loadingPhotos={loadingPhotos}
+          handleActionSheet={onOpenActionSheet}
+        />
+      </View>
       <FooterProfile handleOpenPreview={handleOpenPreview} />
     </ScrollView>
   );

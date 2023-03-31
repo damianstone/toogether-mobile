@@ -21,8 +21,7 @@ const FooterProfile = (props) => {
     <View style={styles.footer}>
       <TouchableOpacity
         onPress={handleOpenPreview}
-        style={styles.previewButton}
-      >
+        style={styles.previewButton}>
         <LinearGradient
           colors={['#ED665A', '#CF2A6E', '#BA007C']}
           style={styles.linearCircle}
@@ -50,7 +49,6 @@ const FooterProfile = (props) => {
 const styles = StyleSheet.create({
   footer: {
     width: '100%',
-    alignSelf: 'flex-end',
     alignItems: 'center',
     flexDirection: 'column',
   },

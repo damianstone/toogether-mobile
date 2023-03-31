@@ -7,17 +7,15 @@ const { width } = Dimensions.get('window');
 export default StyleSheet.create({
   /* ----------------------- PROFILE DATA ----------------------  */
 
-  scroll_container_style: {
-    flex: 1,
-    width: '100%',
-    height: '100%',
-    flexDirection: 'column',
-  },
-
   scrollview_style: {
     backgroundColor: Colors.bg,
     height: '100%',
     width: '100%',
+  },
+  scroll_container_style: {
+    width: '100%',
+    flexDirection: 'column',
+    flexGrow: 1,
   },
 
   photoView: {

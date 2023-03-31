@@ -45,9 +45,6 @@ const GroupScreen = (props) => {
   const HEIGHT_ACTION_CONTAINER = isOwnerGroup
     ? { height: 0.45 * Device.height }
     : { height: 0.35 * Device.height };
-  const HEIGHT_MEMBER_CARD_CONTAINER = isOwnerGroup
-    ? { minHeight: 0.4 * Device.height, maxHeight: 0.6 * Device.height }
-    : { minHeight: 0.6 * Device.height, maxHeight: 0.7 * Device.height };
 
   const getGroupReducer = useSelector((state) => state.getGroup);
   const {
@@ -271,15 +268,13 @@ const GroupScreen = (props) => {
     <ScrollView
       styles={styles.screen}
       contentContainerStyle={styles.scroll_container_style}
-      nestedScrollEnabled
       refreshControl={
         <RefreshControl
           refreshing={refreshing}
           onRefresh={loadGroup}
           tintColor={Colors.white}
         />
-      }
-    >
+      }>
       <SafeAreaView style={styles.safeAreaContainer}>
         <View style={{ ...styles.action_view, ...HEIGHT_ACTION_CONTAINER }}>
           <View style={styles.profile_photo_container}>
@@ -303,8 +298,9 @@ const GroupScreen = (props) => {
             <View style={styles.nameView}>
               {groupContext?.owner && (
                 <Text
-                  style={styles.name}
-                >{`${groupContext.owner.name}'s group`}</Text>
+                  style={
+                    styles.name
+                  }>{`${groupContext.owner.name}'s group`}</Text>
               )}
             </View>
           </View>
@@ -336,9 +332,7 @@ const GroupScreen = (props) => {
             )}
           </View>
         </View>
-        <View
-          style={{ ...styles.members_view, ...HEIGHT_MEMBER_CARD_CONTAINER }}
-        >
+        <View style={styles.members_view}>
           {groupContext && (
             <View style={{ flexDirection: 'row', flexWrap: 'wrap', flex: 1 }}>
               {groupContext.members.map((member, index) => {
@@ -462,9 +456,10 @@ const styles = StyleSheet.create({
     minWidth: '100%',
     justifyContent: 'center',
     backgroundColor: Colors.bgCard,
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-    padding: 10,
+    border: 1,
+    borderRadius: 20,
+    paddingTop: 5,
+    marginBottom: 10,
     zIndex: -1,
   },
   flatlist_item_container: {
@@ -474,10 +469,9 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingTop: 5,
+    paddingVertical: 5,
   },
   name_text: {
-    paddingBottom: 10,
     width: '100%',
     textAlign: 'center',
     fontSize: 12,

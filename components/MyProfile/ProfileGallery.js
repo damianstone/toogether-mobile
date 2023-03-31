@@ -6,10 +6,11 @@ import {
   StyleSheet,
   Dimensions,
   FlatList,
+  Image,
 } from 'react-native';
 import Colors from '../../constants/Colors';
 import { BASE_PHOTOS } from '../../data/base_fotos';
-
+import { getImage } from '../../utils/getMethods';
 const { width } = Dimensions.get('window');
 const ProfileGallery = (props) => {
   const {
@@ -18,8 +19,32 @@ const ProfileGallery = (props) => {
     onAddPhoto,
     setPhotoId,
     photoId,
-    renderPhoto,
+    handleActionSheet,
   } = props;
+
+  const renderPhoto = (photo) => {
+    return (
+      <TouchableOpacity
+        key={photo.id}
+        onPress={() => handleActionSheet(photo.id)}
+        style={[styles.myphotosItemView]}>
+        {loadingAddPhoto && photo.id === photoId ? (
+          <Loader size="small" />
+        ) : (
+          <Image
+            source={{
+              uri: `${getImage(photo.image)}`,
+            }}
+            style={{
+              width: '100%',
+              height: '100%',
+              backgroundColor: 'red',
+            }}
+          />
+        )}
+      </TouchableOpacity>
+    );
+  };
 
   return (
     <View style={styles.myphotosView}>
@@ -37,16 +62,14 @@ const ProfileGallery = (props) => {
                 onAddPhoto();
                 setPhotoId(item.id);
               }}
-              style={styles.myphotosItemView}
-            >
+              style={styles.myphotosItemView}>
               <View
                 style={{
                   width: '100%',
                   height: '100%',
                   justifyContent: 'center',
                   alignItems: 'center',
-                }}
-              >
+                }}>
                 {loadingAddPhoto && item.id === photoId ? (
                   <Loader size="small" />
                 ) : (
@@ -63,6 +86,7 @@ const ProfileGallery = (props) => {
 
 const styles = StyleSheet.create({
   myphotosView: {
+    height: '40%',
     width: '100%',
     paddingHorizontal: 2,
     marginTop: 20,
