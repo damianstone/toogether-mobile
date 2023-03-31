@@ -50,17 +50,6 @@ export const userLocation = () => {
         },
       });
 
-      await AsyncStorage.setItem(
-        '@userData',
-        JSON.stringify({
-          id: data.id,
-          token: data.token,
-          access_token: data.access,
-          refresh_token: data.refresh,
-          has_account: data.has_account,
-        })
-      );
-
       dispatch({
         type: c.USER_LOCATION_SUCCESS,
         payload: data,
@@ -150,6 +139,7 @@ export const userLogin = (email, password) => {
           id: data.id,
           token: data.token,
           has_account: data.has_account,
+          refresh_token: data.refresh,
         })
       );
 
@@ -203,11 +193,11 @@ export const updateToken = () => {
         '@userData',
         JSON.stringify({
           ...userData,
-          token: data.token,
-          access_token: data.access.token,
+          token: data.access,
           refresh_token: data.refresh,
         })
       );
+
       dispatch({ type: c.REFRESH_TOKEN_SUCCESS, payload: data });
     } catch (error) {
       logout();
@@ -528,6 +518,40 @@ export const listUserPhotos = () => {
     } catch (error) {
       dispatch({
         type: c.USER_LIST_PHOTOS_FAIL,
+        payload: error,
+      });
+    }
+  };
+};
+
+// -------------------------------- REPORT ACTION --------------------------------
+
+export const reportProfile = (id) => {
+  return async (dispatch) => {
+    try {
+      dispatch({ type: c.REPORT_PROFILE_REQUEST });
+
+      const userData = JSON.parse(await AsyncStorage.getItem('@userData'));
+
+      const config = {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+        Authorization: `Bearer ${userData.token}`,
+      };
+
+      const { data } = await axios({
+        method: 'POST',
+        url: `${BASE_URL}/api/v1/profiles/${id}/actions/report-profile/`,
+        headers: config,
+      });
+
+      dispatch({
+        type: c.REPORT_PROFILE_SUCCESS,
+        payload: data,
+      });
+    } catch (error) {
+      dispatch({
+        type: c.REPORT_PROFILE_FAIL,
         payload: error,
       });
     }
