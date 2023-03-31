@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Alert } from 'react-native';
 import AuthButton from '../../components/UI/AuthButton';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import AuthInput from '../../components/UI/AuthInput';
@@ -12,6 +12,21 @@ import Colors from '../../constants/Colors';
 import AuthStartScreen from '../Auth/AuthScreen';
 
 const RecoveryScreen = (props) => {
+
+  const handlePress = () => {
+    Alert.alert(
+      'Code sent',
+      'Please check your email and get the code :)',
+      [
+        {
+          text: 'Continuar',
+          onPress: () => props.navigation.navigate('ValidateCode'),
+        },
+      ],
+      { cancelable: false }
+    );
+  };
+
   return (
     <View style={styles.screen}>
       <View style={styles.auth_text_container}>
@@ -21,7 +36,7 @@ const RecoveryScreen = (props) => {
           password
         </Text>
       </View>
-      <View style={styles.auth_button_email}>
+      <View style={styles.auth_input_email}>
         <Text style={styles.auth_text_small}>E-mail</Text>
         <AuthInput
           id="email"
@@ -38,7 +53,8 @@ const RecoveryScreen = (props) => {
         />
       </View>
       <View style={styles.button_container}>
-        <AuthButton text="Send recovery code" />
+        <AuthButton text="Send recovery code" 
+        onPress={handlePress}/>
       </View>
     </View>
   );
@@ -92,13 +108,9 @@ const styles = StyleSheet.create({
     padding: 10,
     // fixes styling for Android and should be default for iOS
   },
-  auth_button_email: {
-    padding: 0,
-    margin: 0,
+  auth_input_email: {
     width: '90%',
     flexDirection: 'column',
-    alignItems: 'flex-start',
-    border: '2, solid, salmon',
   },
 
   input: {
