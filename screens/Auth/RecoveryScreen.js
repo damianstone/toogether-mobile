@@ -16,10 +16,10 @@ const RecoveryScreen = (props) => {
   const handlePress = () => {
     Alert.alert(
       'Code sent',
-      'Please check your email and get the code :)',
+      'Please check you email to get the code',
       [
         {
-          text: 'Continuar',
+          text: 'Continue',
           onPress: () => props.navigation.navigate('ValidateCode'),
         },
       ],
