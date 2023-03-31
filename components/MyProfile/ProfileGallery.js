@@ -27,7 +27,8 @@ const ProfileGallery = (props) => {
       <TouchableOpacity
         key={photo.id}
         onPress={() => handleActionSheet(photo.id)}
-        style={[styles.myphotosItemView]}>
+        style={[styles.myphotosItemView]}
+      >
         {loadingAddPhoto && photo.id === photoId ? (
           <Loader size="small" />
         ) : (
@@ -62,14 +63,16 @@ const ProfileGallery = (props) => {
                 onAddPhoto();
                 setPhotoId(item.id);
               }}
-              style={styles.myphotosItemView}>
+              style={styles.myphotosItemView}
+            >
               <View
                 style={{
                   width: '100%',
                   height: '100%',
                   justifyContent: 'center',
                   alignItems: 'center',
-                }}>
+                }}
+              >
                 {loadingAddPhoto && item.id === photoId ? (
                   <Loader size="small" />
                 ) : (

@@ -212,10 +212,12 @@ const MyProfileScreen = (props) => {
         <RefreshControl refreshing={refreshing} onRefresh={loadProfile} />
       }
       contentContainerStyle={styles.scroll_container_style}
-      style={styles.scrollview_style}>
+      style={styles.scrollview_style}
+    >
       <TouchableOpacity
         style={styles.profilePictureContainer}
-        onPress={handleOpenPreview}>
+        onPress={handleOpenPreview}
+      >
         {photos && Object.values(photos).length > 0 && (
           <Image
             source={{
