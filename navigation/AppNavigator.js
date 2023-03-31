@@ -32,7 +32,8 @@ const AppNavigator = (props) => {
       const tokenDecoded = jwt_decode(userData.token);
       const refreshTokenDecoded = jwt_decode(userData.refresh_token);
       const isTokenExpired = tokenDecoded.exp < currentTime / 1000;
-      const isRefreshTokenExpired = refreshTokenDecoded.exp < currentTime / 1000;
+      const isRefreshTokenExpired =
+        refreshTokenDecoded.exp < currentTime / 1000;
 
       if (isTokenExpired && isRefreshTokenExpired) {
         await dispatch(logout());
@@ -46,7 +47,7 @@ const AppNavigator = (props) => {
 
       // is there is userData and the token is not expired, then the user is clearly authenticated
       setIsAuth(true);
-      return
+      return;
     }
 
     // if there is no user data in the local storage, then the user is clearly not authenticated
@@ -64,7 +65,8 @@ const AppNavigator = (props) => {
       <Stack.Navigator
         screenOptions={{
           headerShown: false,
-        }}>
+        }}
+      >
         {isAuth && (
           <>
             <Stack.Screen name="Home" component={TooNavigator} />
