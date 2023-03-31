@@ -25,7 +25,7 @@ export const userLocation = () => {
       let location = await Location.getCurrentPositionAsync({
         accuracy: Platform.OS === 'ios' ? 3 : Location.Accuracy.High,
       });
-      // If you are getting stuck and not getting location (on Android uncomment this to get default location so that you can continue working)
+      // // If you are getting stuck and not getting location (on Android uncomment this to get default location so that you can continue working)
       // let location;
       // if (Platform.OS === 'ios') {
       //   location = await Location.getCurrentPositionAsync({
