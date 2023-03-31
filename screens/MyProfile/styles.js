@@ -7,22 +7,20 @@ const { width } = Dimensions.get('window');
 export default StyleSheet.create({
   /* ----------------------- PROFILE DATA ----------------------  */
 
-  screen: {
-    flex: 1,
-    backgroundColor: Colors.bg,
-  },
-
   scroll_container_style: {
+    flex: 1,
     width: '100%',
-    flexDirection: 'column', // inner items will be added vertically
-    flexGrow: 1, // all the available vertical space will be occupied by it
-    justifyContent: 'space-between', // will create the gutter between body and footer
+    height: '100%',
+    flexDirection: 'column', 
   },
 
-  safeAreaContainer: {
-    flex: 1,
+  scrollview_style: {
+
     backgroundColor: Colors.bg,
+    height: '100%',
+    width: '100%'
   },
+
 
   photoView: {
     top: Platform.OS === 'ios' ? '4%' : '1%',
@@ -199,67 +197,8 @@ export default StyleSheet.create({
     width: 250,
     height: 40,
   },
+ 
 
-  /* ----------------------- TOOGETHER FOOTER ----------------------  */
-  footer: {
-    width: '100%',
-    alignSelf: 'flex-end',
-    alignItems: 'center',
-    flexDirection: 'column',
-    justifyContent: 'space-between',
-  },
-
-  previewButton: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    width: '70%',
-    alignItems: 'center',
-    borderRadius: 10,
-    padding: 7,
-  },
-
-  textButtonContainer: {
-    padding: 10,
-  },
-
-  textButton: {
-    color: Colors.white,
-    fontSize: 20,
-    fontWeight: '500',
-  },
-
-  iconButtonContainer: {
-    borderRadius: 100,
-    padding: 3,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginHorizontal: 10,
-  },
-
-  linearCircle: {
-    position: 'absolute',
-    width: '100%',
-    height: '100%',
-    borderRadius: 10,
-    transform: [{ scaleX: 1 }],
-  },
-
-  logoSection: {
-    marginTop: 2,
-    marginBottom: 35,
-    padding: 10,
-  },
-  logoContainer: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    height: 25,
-    width: 120,
-  },
-  logo: {
-    alignSelf: 'center',
-    width: '100%',
-    height: '100%',
-  },
   /* ----------------------- EDIT PROFILE SCREEN -----------------------  */
 
   screen: {

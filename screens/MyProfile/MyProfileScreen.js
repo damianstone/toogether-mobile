@@ -211,8 +211,7 @@ const MyProfileScreen = (props) => {
       <TouchableOpacity
         key={photo.id}
         onPress={() => onOpenActionSheet(photo.id)}
-        style={styles.myphotosItemView}
-      >
+        style={styles.myphotosItemView}>
         {loadingPhotos ||
         loadingRemovePhoto ||
         (loadingAddPhoto && photo.id === photoId) ? (
@@ -238,71 +237,66 @@ const MyProfileScreen = (props) => {
         <RefreshControl refreshing={refreshing} onRefresh={loadProfile} />
       }
       contentContainerStyle={styles.scroll_container_style}
-      style={styles.screen}
       nestedScrollEnabled
-    >
-      <SafeAreaView style={styles.safeAreaContainer}>
-        <TouchableOpacity
-          style={styles.profilePictureContainer}
-          onPress={handleOpenPreview}
-        >
-          {photos && Object.values(photos).length > 0 && (
-            <Image
-              source={{
-                uri: `${getImage(Object.values(photos)[0].image)}`,
-              }}
-              style={styles.image}
-            />
-          )}
-          {(!photos || Object.values(photos).length === 0) && userProfile && (
-            <View style={styles.avatar_view}>
-              <Text style={styles.avatar_initials}>
-                {getNameInitials(userProfile.name)}
-              </Text>
-            </View>
-          )}
-        </TouchableOpacity>
-        <View style={styles.nameView}>
-          {userProfile && userProfile.name && (
-            <>
-              <Text style={styles.name}>{userProfile.name}</Text>
-              <TouchableOpacity onPress={() => handleNavigate('EditProfile')}>
-                <MaterialIcons name="edit" size={20} color="white" />
-              </TouchableOpacity>
-            </>
-          )}
-        </View>
-        <View style={styles.counterContainer}>
-          <View style={styles.counterView}>
-            <Text style={styles.likesNumber}>
-              {typeof userProfile !== 'undefined'
-                ? userProfile?.total_likes
-                : ''}
+      style={styles.scrollview_style}>
+      <TouchableOpacity
+        style={styles.profilePictureContainer}
+        onPress={handleOpenPreview}>
+        {photos && Object.values(photos).length > 0 && (
+          <Image
+            source={{
+              uri: `${getImage(Object.values(photos)[0].image)}`,
+            }}
+            style={styles.image}
+          />
+        )}
+        {(!photos || Object.values(photos).length === 0) && userProfile && (
+          <View style={styles.avatar_view}>
+            <Text style={styles.avatar_initials}>
+              {getNameInitials(userProfile.name)}
             </Text>
-            <Text style={styles.counterText}>Likes</Text>
           </View>
-          <View style={styles.counterView}>
-            <Text style={styles.matchesNumber}>
-              {typeof userProfile !== 'undefined'
-                ? userProfile.total_matches
-                : ''}
-            </Text>
-            <Text style={styles.counterText}>matches</Text>
-          </View>
+        )}
+      </TouchableOpacity>
+      <View style={styles.nameView}>
+        {userProfile && userProfile.name && (
+          <>
+            <Text style={styles.name}>{userProfile.name}</Text>
+            <TouchableOpacity onPress={() => handleNavigate('EditProfile')}>
+              <MaterialIcons name="edit" size={20} color="white" />
+            </TouchableOpacity>
+          </>
+        )}
+      </View>
+      <View style={styles.counterContainer}>
+        <View style={styles.counterView}>
+          <Text style={styles.likesNumber}>
+            {typeof userProfile !== 'undefined' ? userProfile?.total_likes : ''}
+          </Text>
+          <Text style={styles.counterText}>Likes</Text>
         </View>
-        <ProfileGallery
-          photos={photos}
-          renderPhoto={renderPhoto}
-          onAddPhoto={handleAddPhoto}
-          setPhotoId={setPhotoId}
-          photoId={photoId}
-          loadingPhotos={loadingPhotos}
-        />
-        <FooterProfile handleOpenPreview={handleOpenPreview} />
-      </SafeAreaView>
+        <View style={styles.counterView}>
+          <Text style={styles.matchesNumber}>
+            {typeof userProfile !== 'undefined'
+              ? userProfile.total_matches
+              : ''}
+          </Text>
+          <Text style={styles.counterText}>matches</Text>
+        </View>
+      </View>
+      <ProfileGallery
+        photos={photos}
+        renderPhoto={renderPhoto}
+        onAddPhoto={handleAddPhoto}
+        setPhotoId={setPhotoId}
+        photoId={photoId}
+        loadingPhotos={loadingPhotos}
+      />
+      <FooterProfile handleOpenPreview={handleOpenPreview} />
     </ScrollView>
   );
 };
+
 MyProfileScreen.navigationOptions = (navData) => {
   return {
     headerTitle: 'My Profile',

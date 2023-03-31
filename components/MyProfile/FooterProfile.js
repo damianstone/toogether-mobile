@@ -53,7 +53,6 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-end',
     alignItems: 'center',
     flexDirection: 'column',
-    justifyContent: 'space-between',
   },
 
   previewButton: {
