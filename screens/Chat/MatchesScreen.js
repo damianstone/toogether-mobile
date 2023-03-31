@@ -217,22 +217,11 @@ const MatchesScreen = (props) => {
 
   const renderNoChats = () => {
     return (
-      <View
-        style={{
-          backgroundColor: Colors.bg,
-          justifyContent: 'center',
-          alignItems: 'center',
-          width: '100%',
-          height: '100%',
-          textAlign: 'center',
-        }}>
-        <View style={{ width: 250, height: 250 }}>
-          <Image
-            source={no_chats}
-            style={{ resizeMode: 'contain', flex: 1, aspectRatio: 1 }}
-          />
+      <View style={styles.noChatsContainer}>
+        <View style={{ width: 200, height: 200 }}>
+          <Image source={no_chats} style={styles.noChatsImage} />
         </View>
-        <Text style={{ color: Colors.white, fontSize: 15 }}>No chats yet</Text>
+        <Text style={styles.noChatText}>No chats yet</Text>
       </View>
     );
   };
@@ -386,15 +375,22 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.bg,
     flex: 1,
   },
-  noChatsImage: {
-    width: 100,
-    height: 100,
-    resizeMode: 'contain',
+  noChatsContainer: {
+    paddingTop: 20,
+    backgroundColor: Colors.bg,
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '100%',
+    height: '100%',
   },
-  no_chats_text: {
+  noChatsImage: {
+    resizeMode: 'contain',
+    flex: 1,
+    aspectRatio: 1,
+  },
+  noChatText: {
     color: Colors.white,
     fontSize: 16,
-    justifyContent: 'center',
   },
 });
 

@@ -164,6 +164,7 @@ const ChatScreen = (props) => {
         {
           text: 'Yes',
           onPress: () => {
+            chatSocket.close();
             dispatch(deleteConversation(chatId));
             props.navigation.navigate('Matches');
           },
