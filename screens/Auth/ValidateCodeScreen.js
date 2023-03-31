@@ -14,11 +14,25 @@ import AuthStartScreen from '../Auth/AuthScreen';
 const ValidateCodeScreen = (props) => {
   const handlePress = () => {
     Alert.alert(
-      'Code sent',
-      'Please check your email and get the code :)',
+      'Valid code',
+      'Continue and change your password',
       [
         {
-          text: 'Continuar',
+          text: 'Continue',
+          onPress: () => props.navigation.navigate('ChangePassword'),
+        },
+      ],
+      { cancelable: false }
+    );
+  };
+
+  const handleResend = () => {
+    Alert.alert(
+      'Resent code',
+      'Please check you email to get the code',
+      [
+        {
+          text: 'Acept',
           onPress: () => props.navigation.navigate('ValidateCode'),
         },
       ],
@@ -64,7 +78,7 @@ const ValidateCodeScreen = (props) => {
       keyboardType='numeric'
     />
         
-      <TouchableOpacity onPress={props.onPress}>
+      <TouchableOpacity onPress={handleResend}>
         <Text style={styles.auth_text_small}>Resend code</Text>
       </TouchableOpacity>
       
@@ -89,7 +103,7 @@ ValidateCodeScreen.navigationOptions = (navData) => {
             Platform.OS === 'android' ? 'ios-arrow-back' : 'ios-arrow-back'
           }
           onPress={() => {
-            navData.navigation.navigate('Auth');
+            navData.navigation.navigate('Recovery');
           }}
           title="Back arrow"
         />

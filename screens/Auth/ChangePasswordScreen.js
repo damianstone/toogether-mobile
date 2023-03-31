@@ -22,7 +22,7 @@ ChangePasswordScreen.navigationOptions = (navData) => {
             Platform.OS === 'android' ? 'ios-arrow-back' : 'ios-arrow-back'
           }
           onPress={() => {
-            navData.navigation.navigate('MyProfile');
+            navData.navigation.navigate('ValidateCode');
           }}
           title="Back arrow"
         />
