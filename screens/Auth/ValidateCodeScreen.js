@@ -10,6 +10,8 @@ import Device from '../../theme/Device';
 import { Platform } from 'react-native';
 import Colors from '../../constants/Colors';
 import AuthStartScreen from '../Auth/AuthScreen';
+import style from './styles';
+
 
 const ValidateCodeScreen = (props) => {
   const handlePress = () => {
@@ -39,14 +41,13 @@ const ValidateCodeScreen = (props) => {
       { cancelable: false }
     );
   };
-
-
+    
   const [value, setValue] = useState('');
 
   const formatCode = (text) => {
     // Elimina cualquier guión existente
     text = text.replace(/-/g, '');
-    // Inserta guiones después de cada 3 caracteres
+    // Inserta guiones después de cada 2 caracteres
     text = text.replace(/(.{2})/g, '$1-');
     // Elimina el guión adicional al final
     text = text.replace(/-$/, '');
@@ -61,34 +62,36 @@ const ValidateCodeScreen = (props) => {
 
 
   return (
-      <KeyboardAvoidingView style={styles.screen} keyboardVerticalOffset={-300} behavior="padding">
+    <KeyboardAvoidingView style={styles.screen}>
+      <ScrollView contentContainerStyle={styles.scroll_container}>
       <View style={styles.auth_text_container}>
         <Text style={styles.auth_text_big}>Validate code</Text>
         <Text style={styles.auth_text_small}>
         Validate the recovery code we sent you to your email
         </Text>
       </View>
+  
       <View style={styles.auth_button_email}>
       <TextInput style={styles.code_container}
       value={value}
       onChangeText={handleChange}
       placeholderTextColor="#B0B3B8"
-      placeholder="NN-NN-NN"
+      placeholder="NN - NN - NN"
       maxLength={8} // Establece la longitud máxima del texto en 11 caracteres
       keyboardType='numeric'
-    />
-        
+    />  
       <TouchableOpacity onPress={handleResend}>
         <Text style={styles.auth_text_small}>Resend code</Text>
       </TouchableOpacity>
       
       </View>
+ 
       <View style={styles.button_container}>
         <AuthButton text="Confirm" 
         onPress={handlePress}
         backgroundColor={Colors.bg}/>
       </View>
-
+      </ScrollView>
       </KeyboardAvoidingView>
   );
 };
@@ -122,6 +125,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'column',
     height: '100%',
+  },
+  scroll_container:{
+    flexGrow:1,
+    flexDirection:'column',
+    justifyContent:'space-between'
   },
   auth_text_big: {
     color: Colors.white,
@@ -164,8 +172,9 @@ const styles = StyleSheet.create({
   code_container:{
     backgroundColor: '#494863',
     borderRadius: 10,
-    height:'40%',
     width:'60%',
+    paddingVertical:10,
+    marginBottom:10,
     textAlign: 'center',
     fontSize: 20,
     color: Colors.white
