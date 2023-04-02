@@ -39,6 +39,18 @@ export const authenticateReducer = (state = {}, action) => {
         ...state,
         didTryLogin: true,
       };
+    case c.LOGOUT:
+      return {
+        ...state,
+        loginAuth: false,
+        didTryLogin: false,
+      };
+    case c.LOGIN:
+      return {
+        ...state,
+        loginAuth: true,
+        didTryLogin: true,
+      };
     default:
       return state;
   }

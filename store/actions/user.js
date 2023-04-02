@@ -153,9 +153,10 @@ export const userLogin = (email, password) => {
           has_account: data.has_account,
           refresh_token: data.refresh,
           loginAuth: true,
-          didTryLogin: true,
+          didTryLogin: false,
         })
       );
+      dispatch({ type: c.DID_TRY_LOGIN });
 
       dispatch({
         type: c.USER_LOGIN_SUCCESS,
@@ -178,6 +179,7 @@ export const logout = () => {
       dispatch({ type: c.USER_LIST_PHOTOS_RESET });
       dispatch({ type: c.USER_GET_PROFILE_RESET });
       await AsyncStorage.removeItem('@userData');
+      dispatch({ type: c.AUTHENTICATELOGIN });
     } catch (e) {
       console.log(e);
     }

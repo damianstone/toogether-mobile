@@ -13,9 +13,9 @@ const StartupScreen = (props) => {
       const userData = JSON.parse(await AsyncStorage.getItem('@userData'));
 
       if (userData && userData.has_account) {
-        props.navigation.navigate('Home');
+        props.navigation.navigate('Swipe');
       } else {
-        props.navigation.navigate('Auth');
+        props.navigation.navigate('AuthStart');
       }
     };
 

@@ -121,8 +121,8 @@ const AuthStartScreen = (props) => {
     }
 
     if (loginSuccess && loginData.has_account) {
-      props.navigation.navigate('Swipe');
       dispatch({ type: c.USER_LOGIN_RESET });
+      props.navigation.navigate('Swipe');
     }
 
     if (loginSuccess && !loginData.has_account) {
@@ -130,7 +130,7 @@ const AuthStartScreen = (props) => {
       dispatch({ type: c.USER_LOGIN_RESET });
     }
 
-    dispatch({ type: c.USER_LOGIN_RESET });
+    dispatch({ type: c.USER_LOGIN_RESET }); 
   }, [loginError, loginSuccess]);
 
   const inputChangeHandler = useCallback(
@@ -168,6 +168,7 @@ const AuthStartScreen = (props) => {
   const handleLogin = () => {
     if (formIsValid) {
       dispatch(userLogin(inputValues.email, inputValues.password));
+      props.navigation.navigate('Swipe');
     }
   };
 

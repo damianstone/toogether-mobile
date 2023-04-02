@@ -22,6 +22,8 @@ const AppNavigator = (props) => {
   // const [didTryLogin, setDidTryLogin] = useState(false);
 
   // Change to isAuth
+  const fullState = useSelector(state => state);
+
   const state = useSelector((state) => state.auth.loginAuth);
 
   // Change to didTryLogin
@@ -48,6 +50,8 @@ const AppNavigator = (props) => {
         dispatch(authenticateLogin())
         dispatch(authDidTryLogin())
         setIsAuth(false);
+        console.log("isAuth: ",state);
+        console.log("didTryLogin: ",didTryLogin);
         return;
       }
 
@@ -58,6 +62,8 @@ const AppNavigator = (props) => {
       dispatch(authenticate(userData));
       // if there is userData and the token is not expired, then the user is clearly authenticated
       setIsAuth(true);
+      console.log("isAuth: ",state);
+      console.log("didTryLogin: ",didTryLogin);
       return;
     }
 
@@ -65,6 +71,8 @@ const AppNavigator = (props) => {
     setIsAuth(false);
     dispatch(authenticateLogin())
     dispatch(authDidTryLogin())
+    console.log("isAuth: ",state);
+    console.log("didTryLogin: ",didTryLogin);
   };
 
   useEffect(() => {
