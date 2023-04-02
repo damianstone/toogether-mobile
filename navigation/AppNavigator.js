@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { TooNavigator, AuthNavigator } from './TooNavigator';
-import { updateToken, logout } from '../store/actions/user';
+import { updateToken, logout, authenticate, authenticateLogin, authDidTryLogin } from '../store/actions/user';
 import StartupScreen from '../screens/StartupScreen';
 
 const jwt_decode = require('jwt-decode');
@@ -18,13 +18,21 @@ const AppNavigator = (props) => {
   // Is auth
   // didTryLogin
   const [isAuth, setIsAuth] = useState(false);
+  
+  // const [didTryLogin, setDidTryLogin] = useState(false);
 
-  console.log('APP NAVIGATOR');
+  // Change to isAuth
+  const state = useSelector((state) => state.auth.loginAuth);
+
+  // Change to didTryLogin
+  const didTryLogin = useSelector((state) => state.auth.didTryLogin)
+
+  // console.log('APP NAVIGATOR');
 
   const checkToken = async () => {
     const userData = JSON.parse(await AsyncStorage.getItem('@userData'));
 
-    console.log('USER DATA ----> ', userData);
+    // console.log('USER DATA ----> ', userData);
 
     if (userData && userData.has_account) {
       // Avoids possible ambiguity
@@ -37,6 +45,8 @@ const AppNavigator = (props) => {
 
       if (isTokenExpired && isRefreshTokenExpired) {
         await dispatch(logout());
+        dispatch(authenticateLogin())
+        dispatch(authDidTryLogin())
         setIsAuth(false);
         return;
       }
@@ -45,20 +55,24 @@ const AppNavigator = (props) => {
         await dispatch(updateToken());
       }
 
-      // is there is userData and the token is not expired, then the user is clearly authenticated
+      dispatch(authenticate(userData));
+      // if there is userData and the token is not expired, then the user is clearly authenticated
       setIsAuth(true);
       return;
     }
 
     // if there is no user data in the local storage, then the user is clearly not authenticated
     setIsAuth(false);
+    dispatch(authenticateLogin())
+    dispatch(authDidTryLogin())
   };
 
   useEffect(() => {
     checkToken();
-  }, []);
+    console.log("REFRESH")
+  }, [state, didTryLogin]);
 
-  console.log('IS AUTH ---> ', isAuth);
+  // console.log('IS AUTH ---> ', isAuth);
 
   return (
     <NavigationContainer onStateChange={checkToken}>
@@ -67,13 +81,9 @@ const AppNavigator = (props) => {
           headerShown: false,
         }}
       >
-        {isAuth && (
-          <>
-            <Stack.Screen name="Home" component={TooNavigator} />
-            <Stack.Screen name="StartupScreen" component={StartupScreen} />
-          </>
-        )}
-        {!isAuth && <Stack.Screen name="Auth" component={AuthNavigator} />}
+        {state  && <Stack.Screen name="Home" component={TooNavigator} />}
+        {!state && didTryLogin && <Stack.Screen name="Auth" component={AuthNavigator} />}
+        {!state && !didTryLogin && <Stack.Screen name="StartupScreen" component={StartupScreen} />}
       </Stack.Navigator>
     </NavigationContainer>
   );

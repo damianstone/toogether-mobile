@@ -66,8 +66,20 @@ export const userLocation = () => {
 // -------------------------------- LOGIN / REGISTER ACTIONS --------------------------------
 
 export const authenticate = (userDataObj) => {
-  return (dispatch) => {
+  return (dispatch, getState) => {
     dispatch({ type: c.AUTHENTICATE, payload: userDataObj });
+  };
+};
+
+export const authenticateLogin = () => {
+  return (dispatch) => {
+    dispatch({ type: c.AUTHENTICATELOGIN })
+  };
+};
+
+export const authDidTryLogin = () => {
+  return (dispatch) => {
+    dispatch({ type: c.DID_TRY_LOGIN })
   };
 };
 
@@ -140,6 +152,8 @@ export const userLogin = (email, password) => {
           token: data.token,
           has_account: data.has_account,
           refresh_token: data.refresh,
+          loginAuth: true,
+          didTryLogin: true,
         })
       );
 
@@ -159,10 +173,11 @@ export const userLogin = (email, password) => {
 export const logout = () => {
   return async (dispatch) => {
     try {
-      await AsyncStorage.removeItem('@userData');
+      // await AsyncStorage.removeItem('@userData');
       dispatch({ type: c.USER_LOGIN_RESET });
       dispatch({ type: c.USER_LIST_PHOTOS_RESET });
       dispatch({ type: c.USER_GET_PROFILE_RESET });
+      await AsyncStorage.removeItem('@userData');
     } catch (e) {
       console.log(e);
     }

@@ -26,6 +26,18 @@ export const authenticateReducer = (state = {}, action) => {
     case c.AUTHENTICATE:
       return {
         userData: { ...action.payload },
+        loginAuth: true,
+        didTryLogin: true,
+      };
+    case c.AUTHENTICATELOGIN:
+      return {
+        ...state,
+        loginAuth: false,
+      };
+    case c.DID_TRY_LOGIN:
+      return {
+        ...state,
+        didTryLogin: true,
       };
     default:
       return state;

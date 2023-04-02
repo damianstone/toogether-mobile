@@ -56,7 +56,7 @@ const SettingScreen = (props) => {
   const handleLogout = async () => {
     try {
       dispatch(logout());
-      props.navigation.navigate('Auth');
+      // props.navigation.navigate('Auth');
     } catch (error) {
       if (error) {
         if (error?.response?.status === 400) {
