@@ -93,12 +93,12 @@ const ChatScreen = (props) => {
     const unsubscribe = props.navigation.addListener('didFocus', () => {
       reload();
     });
-    
+
     return () => {
       if (unsubscribe.remove) {
         unsubscribe.remove();
       }
-    }
+    };
   }, [reload]);
 
   const reload = useCallback(async () => {

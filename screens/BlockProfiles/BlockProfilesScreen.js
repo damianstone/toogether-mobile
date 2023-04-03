@@ -67,7 +67,7 @@ const BlockProfilesScreen = (props) => {
       if (unsubscribe.remove) {
         unsubscribe.remove();
       }
-    }
+    };
   }, [reload]);
 
   const reload = useCallback(async () => {
