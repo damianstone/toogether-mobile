@@ -14,7 +14,6 @@ import {
 } from 'react-native';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { useDispatch, useSelector } from 'react-redux';
-import { withNavigationFocus } from 'react-navigation';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import * as ImagePicker from 'expo-image-picker';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -434,38 +433,6 @@ const MyProfileScreen = (props) => {
       </SafeAreaView>
     </View>
   );
-};
-
-MyProfileScreen.navigationOptions = (navData) => {
-  return {
-    headerTitle: 'My Profile',
-    headerRight: () => (
-      <HeaderButtons HeaderButtonComponent={HeaderButtom}>
-        <Item
-          iconName={
-            Platform.OS === 'android' ? 'settings-sharp' : 'settings-sharp'
-          }
-          onPress={() => {
-            navData.navigation.navigate('Setting');
-          }}
-          title="Back arrow"
-        />
-      </HeaderButtons>
-    ),
-    headerLeft: () => (
-      <HeaderButtons HeaderButtonComponent={HeaderButtom}>
-        <Item
-          iconName={
-            Platform.OS === 'android' ? 'ios-arrow-back' : 'ios-arrow-back'
-          }
-          onPress={() => {
-            navData.navigation.navigate('Swipe');
-          }}
-          title="Back arrow"
-        />
-      </HeaderButtons>
-    ),
-  };
 };
 
 export default MyProfileScreen;

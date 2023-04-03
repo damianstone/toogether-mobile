@@ -22,23 +22,23 @@ export const userLocation = () => {
         Authorization: `Bearer ${userData.token}`,
       };
 
-      let location = await Location.getCurrentPositionAsync({
-        accuracy: Platform.OS === 'ios' ? 3 : Location.Accuracy.High,
-      });
+      // let location = await Location.getCurrentPositionAsync({
+      //   accuracy: Platform.OS === 'ios' ? 3 : Location.Accuracy.High,
+      // });
       // If you are getting stuck and not getting location (on Android uncomment this to get default location so that you can continue working)
-      // let location;
-      // if (Platform.OS === 'ios') {
-      //   location = await Location.getCurrentPositionAsync({
-      //     accuracy: Platform.OS === 'ios' ? 3 : Location.Accuracy.Highest,
-      //   });
-      // } else {
-      //   location = {
-      //     coords: {
-      //       latitude: 37.785834,
-      //       longitude: -122.406417,
-      //     },
-      //   };
-      // }
+      let location;
+      if (Platform.OS === 'ios') {
+        location = await Location.getCurrentPositionAsync({
+          accuracy: Platform.OS === 'ios' ? 3 : Location.Accuracy.Highest,
+        });
+      } else {
+        location = {
+          coords: {
+            latitude: 37.4220936,
+            longitude: -122.083922,
+          },
+        };
+      }
 
       const { data } = await axios({
         method: 'POST',
@@ -66,8 +66,20 @@ export const userLocation = () => {
 // -------------------------------- LOGIN / REGISTER ACTIONS --------------------------------
 
 export const authenticate = (userDataObj) => {
-  return (dispatch) => {
+  return (dispatch, getState) => {
     dispatch({ type: c.AUTHENTICATE, payload: userDataObj });
+  };
+};
+
+export const authenticateLogin = () => {
+  return (dispatch) => {
+    dispatch({ type: c.AUTHENTICATELOGIN })
+  };
+};
+
+export const authDidTryLogin = () => {
+  return (dispatch) => {
+    dispatch({ type: c.DID_TRY_LOGIN })
   };
 };
 
@@ -140,8 +152,11 @@ export const userLogin = (email, password) => {
           token: data.token,
           has_account: data.has_account,
           refresh_token: data.refresh,
+          loginAuth: true,
+          didTryLogin: false,
         })
       );
+      dispatch({ type: c.DID_TRY_LOGIN });
 
       dispatch({
         type: c.USER_LOGIN_SUCCESS,
@@ -159,10 +174,12 @@ export const userLogin = (email, password) => {
 export const logout = () => {
   return async (dispatch) => {
     try {
-      await AsyncStorage.removeItem('@userData');
+      // await AsyncStorage.removeItem('@userData');
       dispatch({ type: c.USER_LOGIN_RESET });
       dispatch({ type: c.USER_LIST_PHOTOS_RESET });
       dispatch({ type: c.USER_GET_PROFILE_RESET });
+      await AsyncStorage.removeItem('@userData');
+      dispatch({ type: c.AUTHENTICATELOGIN });
     } catch (e) {
       console.log(e);
     }

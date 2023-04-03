@@ -163,25 +163,6 @@ const BlockProfilesScreen = (props) => {
   );
 };
 
-BlockProfilesScreen.navigationOptions = (navData) => {
-  return {
-    headerTitle: 'Blocked Users',
-    headerLeft: () => (
-      <HeaderButtons HeaderButtonComponent={HeaderButtom}>
-        <Item
-          iconName={
-            Platform.OS === 'android' ? 'ios-arrow-back' : 'ios-arrow-back'
-          }
-          onPress={() => {
-            navData.navigation.goBack();
-          }}
-          title="Back arrow"
-        />
-      </HeaderButtons>
-    ),
-  };
-};
-
 export default BlockProfilesScreen;
 
 const styles = StyleSheet.create({
