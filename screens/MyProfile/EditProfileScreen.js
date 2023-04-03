@@ -109,12 +109,12 @@ const EditProfileScreen = (props) => {
     const unsubscribe = props.navigation.addListener('focus', () => {
       loadProfile();
     });
-    
+
     return () => {
       if (unsubscribe.remove) {
         unsubscribe.remove();
       }
-    }
+    };
   }, [loadProfile]);
 
   const getInputValue = (value) => {
