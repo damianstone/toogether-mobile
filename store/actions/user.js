@@ -73,13 +73,13 @@ export const authenticate = (userDataObj) => {
 
 export const authenticateLogin = () => {
   return (dispatch) => {
-    dispatch({ type: c.AUTHENTICATELOGIN })
+    dispatch({ type: c.AUTHENTICATELOGIN });
   };
 };
 
 export const authDidTryLogin = () => {
   return (dispatch) => {
-    dispatch({ type: c.DID_TRY_LOGIN })
+    dispatch({ type: c.DID_TRY_LOGIN });
   };
 };
 

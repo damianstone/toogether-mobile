@@ -122,17 +122,17 @@ const AuthStartScreen = (props) => {
 
     if (loginSuccess && loginData.has_account) {
       dispatch({ type: c.USER_LOGIN_RESET });
-      dispatch({ type: c.LOGIN })
+      dispatch({ type: c.LOGIN });
       // props.navigation.navigate('Swipe');
     }
 
     if (loginSuccess && !loginData.has_account) {
       dispatch({ type: c.USER_LOGIN_RESET });
-      dispatch({ type: c.LOGIN })
+      dispatch({ type: c.LOGIN });
       props.navigation.navigate('Success', { register: register });
     }
 
-    dispatch({ type: c.USER_LOGIN_RESET }); 
+    dispatch({ type: c.USER_LOGIN_RESET });
   }, [loginError, loginSuccess]);
 
   const inputChangeHandler = useCallback(

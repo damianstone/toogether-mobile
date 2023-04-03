@@ -56,7 +56,7 @@ const AddProfilePhotoScreen = (props) => {
         {
           text: 'Later',
           onPress: async () => {
-            await dispatch({ type: c.LOGIN })
+            await dispatch({ type: c.LOGIN });
             // props.navigation.navigate('Swipe');
           },
           style: 'cancel',
