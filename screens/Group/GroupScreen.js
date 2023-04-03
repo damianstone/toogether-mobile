@@ -5,7 +5,6 @@ import {
   Text,
   View,
   Image,
-  ScrollView,
   ActivityIndicator,
   RefreshControl,
   Alert,
@@ -282,18 +281,7 @@ const GroupScreen = (props) => {
   };
 
   return (
-    <ScrollView
-      style={{ flex: 1, backgroundColor: Colors.bg }}
-      contentContainerStyle={styles.screen}
-      nestedScrollEnabled
-      refreshControl={
-        <RefreshControl
-          refreshing={refreshing}
-          onRefresh={loadGroup}
-          tintColor={Colors.white}
-        />
-      }
-    >
+    <View style={{ flex: 1, backgroundColor: Colors.bg }}>
       <View style={{ ...styles.action_view, ...HEIGHT_ACTION_CONTAINER }}>
         <View style={styles.profile_photo_container}>
           {!groupContext && <Loader />}
@@ -365,10 +353,17 @@ const GroupScreen = (props) => {
             data={groupContext.members}
             renderItem={renderMemberItem}
             keyExtractor={(item) => item.id}
+            refreshControl={
+              <RefreshControl
+                refreshing={refreshing}
+                onRefresh={loadGroup}
+                tintColor={Colors.white}
+              />
+            }
           />
         )}
       </View>
-    </ScrollView>
+    </View>
   );
 };
 
