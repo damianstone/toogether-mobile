@@ -62,9 +62,9 @@ const ValidateCodeScreen = (props) => {
 
 
   return (
-    <KeyboardAvoidingView style={styles.screen}>
-      <ScrollView contentContainerStyle={styles.scroll_container}>
-      <View style={styles.auth_text_container}>
+    <ScrollView contentContainerStyle={styles.scroll_container}>
+      <KeyboardAvoidingView style={styles.screen}>
+      <View style={styles.auth_text_container} >
         <Text style={styles.auth_text_big}>Validate code</Text>
         <Text style={styles.auth_text_small}>
         Validate the recovery code we sent you to your email
@@ -91,8 +91,8 @@ const ValidateCodeScreen = (props) => {
         onPress={handlePress}
         backgroundColor={Colors.bg}/>
       </View>
-      </ScrollView>
       </KeyboardAvoidingView>
+    </ScrollView>
   );
 };
 
@@ -129,7 +129,8 @@ const styles = StyleSheet.create({
   scroll_container:{
     flexGrow:1,
     flexDirection:'column',
-    justifyContent:'space-between'
+    justifyContent:'space-between',
+    backgroundColor:Colors.bg,
   },
   auth_text_big: {
     color: Colors.white,
@@ -163,7 +164,8 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     justifyContent: 'center',
     alignItems: 'center',
-    width: '90%',
+    width: '100%',
+    backgroundColor: Colors.bg,
     padding: Platform.OS === 'ios' ? 20 : 0,
     paddingHorizontal: Platform.OS === 'ios' ? 0 : 20,
     paddingVertical: Platform.OS === 'ios' ? '7%' : 0,

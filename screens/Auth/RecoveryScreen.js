@@ -27,6 +27,8 @@ const RecoveryScreen = (props) => {
     );
   };
 
+  const example = () =>{}
+
   return (
     <View style={styles.screen}>
       <View style={styles.auth_text_container}>
@@ -49,6 +51,7 @@ const RecoveryScreen = (props) => {
           placeholderTextColor="#B0B3B8"
           autoCorrect={false}
           border-radius="10"
+          onInputChange={example}
         />
       </View>
       <View style={styles.button_container}>
@@ -126,7 +129,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     justifyContent: 'center',
     alignItems: 'center',
-    width: '90%',
+    width: '100%',
     padding: Platform.OS === 'ios' ? 20 : 0,
     paddingHorizontal: Platform.OS === 'ios' ? 0 : 20,
     paddingVertical: Platform.OS === 'ios' ? '7%' : 0,
