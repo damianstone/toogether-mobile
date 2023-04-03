@@ -56,7 +56,8 @@ const AddProfilePhotoScreen = (props) => {
         {
           text: 'Later',
           onPress: () => {
-            props.navigation.navigate('Swipe');
+            dispatch({ type: c.LOGIN })
+            // props.navigation.navigate('Swipe');
           },
           style: 'cancel',
         },
@@ -70,6 +71,7 @@ const AddProfilePhotoScreen = (props) => {
   const handleAddPhoto = () => {
     if (image && image.uri) {
       dispatch(addPhoto(image));
+      dispatch({ type: c.LOGIN })
     }
     if (!image || !image.uri) {
       Alert.alert(

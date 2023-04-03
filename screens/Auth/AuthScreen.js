@@ -122,12 +122,14 @@ const AuthStartScreen = (props) => {
 
     if (loginSuccess && loginData.has_account) {
       dispatch({ type: c.USER_LOGIN_RESET });
-      props.navigation.navigate('Swipe');
+      dispatch({ type: c.LOGIN })
+      // props.navigation.navigate('Swipe');
     }
 
     if (loginSuccess && !loginData.has_account) {
-      props.navigation.navigate('Success', { register: register });
       dispatch({ type: c.USER_LOGIN_RESET });
+      dispatch({ type: c.LOGIN })
+      props.navigation.navigate('Success', { register: register });
     }
 
     dispatch({ type: c.USER_LOGIN_RESET }); 
@@ -168,7 +170,7 @@ const AuthStartScreen = (props) => {
   const handleLogin = () => {
     if (formIsValid) {
       dispatch(userLogin(inputValues.email, inputValues.password));
-      props.navigation.navigate('Swipe');
+      // props.navigation.navigate('Swipe');
     }
   };
 
