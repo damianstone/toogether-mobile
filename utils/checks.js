@@ -1,5 +1,6 @@
 import * as r from '../constants/responses/match';
 import { getImage } from './getMethods';
+
 /*
  * check if the value exists
  * @param {any} value - any value that we need to check if its exist
