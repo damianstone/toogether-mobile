@@ -2,24 +2,17 @@ import React, { useState, useEffect, useCallback, useContext } from 'react';
 import {
   Alert,
   View,
-  Text,
   StyleSheet,
   Image,
   TouchableOpacity,
   FlatList,
-  RefreshControl,
-  ScrollView,
-  Platform,
   TextInput,
 } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
-import HeaderButtom from '../../components/UI/HeaderButton';
-import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { Context } from '../../context/ContextProvider';
-
+import { checkServerError } from '../../utils/errors';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import ActivityModal from '../../components/UI/ActivityModal';
-import Avatar from '../../components/UI/Avatar';
 import Colors from '../../constants/Colors';
 import sendimg from '../../assets/images/send-button.png';
 import Message from '../../components/Message';
@@ -28,12 +21,13 @@ import {
   addConversationMessage,
   listMessages,
   deleteConversation,
-  listMyConversations,
 } from '../../store/actions/conversation';
 import { blockProfile } from '../../store/actions/block';
 import { reportProfile } from '../../store/actions/user';
 import { ENV } from '../../environment';
-
+import * as u from '../../constants/user';
+import * as b from '../../constants/block';
+import * as c from '../../constants/conversation';
 const BASE_URL = ENV.API_URL;
 
 API_URL = BASE_URL.replace('http://', '');
@@ -118,7 +112,16 @@ const ChatScreen = (props) => {
 
   useEffect(() => {
     if (conversationDeleted) {
+      Alert.alert('The conversation has been deleted', 'Press ok to continue', [
+        {
+          text: 'Ok',
+          onPress: () => {
+            return;
+          },
+        },
+      ]);
       props.navigation.navigate('Matches');
+      dispatch({ type: c.DELETE_CONVERSATION_RESET });
     }
   }, [conversationDeleted]);
 
@@ -134,7 +137,17 @@ const ChatScreen = (props) => {
     }
 
     if (profileReported) {
+      Alert.alert('The profile has been reported', 'Press ok to continue', [
+        {
+          text: 'Ok',
+          onPress: () => {
+            return;
+          },
+        },
+      ]);
+
       props.navigation.navigate('Matches');
+      dispatch({ type: u.REPORT_PROFILE_RESET });
     }
   }, [errorReportProfile, profileReported]);
 
@@ -144,7 +157,17 @@ const ChatScreen = (props) => {
     }
 
     if (profileBlocked) {
+      Alert.alert('The profile has been blocked', 'Press ok to continue', [
+        {
+          text: 'Ok',
+          onPress: () => {
+            return;
+          },
+        },
+      ]);
+
       props.navigation.navigate('Matches');
+      dispatch({ type: b.BLOCK_PROFILE_RESET });
     }
   }, [errorBlockProfile, profileBlocked]);
 
