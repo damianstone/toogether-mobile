@@ -47,6 +47,29 @@ const MatchesScreen = (props) => {
     data: matches,
   } = listMatchesReducer;
 
+  const deleteConversationReducer = useSelector(
+    (state) => state.deleteConversation
+  );
+  const {
+    error: errorDeleteConversation,
+    loading: loadingDeleteConversation,
+    data: conversationDeleted,
+  } = deleteConversationReducer;
+
+  const reportProfileReducer = useSelector((state) => state.reportProfile);
+  const {
+    error: errorReportProfile,
+    loading: loadingReportProfile,
+    data: profileReported,
+  } = reportProfileReducer;
+
+  const blockProfileReducer = useSelector((state) => state.blockProfile);
+  const {
+    error: errorBlockProfile,
+    loading: loadingBlockProfile,
+    data: profileBlocked,
+  } = blockProfileReducer;
+
   const listConversationsReducer = useSelector(
     (state) => state.listConversations
   );
@@ -72,8 +95,16 @@ const MatchesScreen = (props) => {
 
   useEffect(() => {
     dispatch(listMatches());
-    dispatch(listMyConversations());
   }, [matchDeleted]);
+
+  useEffect(() => {
+    dispatch(listMyConversations());
+  }, [conversationDeleted]);
+
+  useEffect(() => {
+    dispatch(listMatches());
+    dispatch(listMyConversations());
+  }, [profileBlocked, profileReported]);
 
   useEffect(() => {
     if (errorDeleteMatch) {
@@ -105,7 +136,6 @@ const MatchesScreen = (props) => {
         },
       });
     }
-
     if (errorStartedConversations) {
       if (errorStartedConversations?.response?.status === 400) {
         check400Error(errorStartedConversations);
@@ -176,7 +206,10 @@ const MatchesScreen = (props) => {
     loadingListMatches ||
     loadingDeleteMatch ||
     localLoading ||
-    loadingListConversations
+    loadingListConversations ||
+    loadingBlockProfile ||
+    loadingReportProfile ||
+    loadingStartedConservation
   ) {
     return (
       <SafeAreaView style={styles.safe}>
@@ -308,6 +341,7 @@ MatchesScreen.navigationOptions = (navData) => {
     ),
   };
 };
+export default MatchesScreen;
 
 const styles = StyleSheet.create({
   safe: {
@@ -393,5 +427,3 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
 });
-
-export default MatchesScreen;

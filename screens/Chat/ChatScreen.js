@@ -148,7 +148,6 @@ const ChatScreen = (props) => {
           onPress: () => {
             dispatch(blockProfile(profileId));
             props.navigation.navigate('Matches');
-            dispatch(listMyConversations());
           },
         },
       ]
@@ -175,7 +174,6 @@ const ChatScreen = (props) => {
           onPress: () => {
             dispatch(reportProfile(profileId));
             props.navigation.navigate('Matches');
-            dispatch(listMyConversations());
           },
         },
       ]
@@ -203,7 +201,6 @@ const ChatScreen = (props) => {
             chatSocket.close();
             dispatch(deleteConversation(chatId));
             props.navigation.navigate('Matches');
-            dispatch(listMyConversations());
           },
         },
       ]
