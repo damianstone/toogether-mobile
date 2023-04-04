@@ -19,7 +19,6 @@ const SwipeProfileScreen = (props) => {
   const mainProfileId = props.navigation.getParam('mainProfileId');
   const isInGroup = props.navigation.getParam('isInGroup');
   const isMyProfile = props.navigation.getParam('isMyProfile');
-
   const currentSwipeProfile = useSelector((state) => state.getSwipeProfile);
 
   const {

@@ -13,7 +13,6 @@ import {
   TextInput,
 } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
-import chat from '../../data/chats.json';
 import HeaderButtom from '../../components/UI/HeaderButton';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { Context } from '../../context/ContextProvider';
@@ -29,8 +28,10 @@ import {
   addConversationMessage,
   listMessages,
   deleteConversation,
+  listMyConversations,
 } from '../../store/actions/conversation';
 import { blockProfile } from '../../store/actions/block';
+import { reportProfile } from '../../store/actions/user';
 import { ENV } from '../../environment';
 
 const BASE_URL = ENV.API_URL;
@@ -107,8 +108,15 @@ const ChatScreen = (props) => {
     }
   };
 
-  const handleShowProfile = (profile, isInGroup) => {
+  const handleShowProfile = (profile, isInGroup, isMyProfile) => {
     if (profile) {
+      if (isMyProfile) {
+        props.navigation.navigate('Profile', {
+          mainProfileId: profileContext.id,
+          isInGroup: profileContext.is_in_group,
+          isMyProfile: true,
+        });
+      }
       props.navigation.navigate('SwipeProfile', {
         mainProfileId: profile.id,
         isInGroup: isInGroup,
@@ -140,6 +148,34 @@ const ChatScreen = (props) => {
           onPress: () => {
             dispatch(blockProfile(profileId));
             props.navigation.navigate('Matches');
+            dispatch(listMyConversations());
+          },
+        },
+      ]
+    );
+  };
+
+  const handleReportProfile = (profileId) => {
+    if (!profileId) {
+      return;
+    }
+    Alert.alert(
+      `Are you sure you want to report this profile?`,
+      'This profile will not be able to see you and neither will you',
+      [
+        {
+          text: 'No',
+          onPress: () => {
+            props.navigation.navigate('Chat');
+          },
+          style: 'cancel',
+        },
+        {
+          text: 'Yes',
+          onPress: () => {
+            dispatch(reportProfile(profileId));
+            props.navigation.navigate('Matches');
+            dispatch(listMyConversations());
           },
         },
       ]
@@ -167,6 +203,7 @@ const ChatScreen = (props) => {
             chatSocket.close();
             dispatch(deleteConversation(chatId));
             props.navigation.navigate('Matches');
+            dispatch(listMyConversations());
           },
         },
       ]
@@ -175,9 +212,15 @@ const ChatScreen = (props) => {
 
   const onOpenActionSheet = (profile, chatId) => {
     // Same interface as https://facebook.github.io/react-native/docs/actionsheetios.html
-    const options = ['View Profile', 'Delete chat', 'Block profile', 'Cancel'];
-    const destructiveButtonIndex = [1, 2];
-    const cancelButtonIndex = 3;
+    const options = [
+      'View Profile',
+      'Delete chat',
+      'Block profile',
+      'Report profile',
+      'Cancel',
+    ];
+    const destructiveButtonIndex = [1, 2, 3];
+    const cancelButtonIndex = 4;
 
     showActionSheetWithOptions(
       {
@@ -194,6 +237,9 @@ const ChatScreen = (props) => {
         }
         if (buttonIndex === 2) {
           handleBlockProfile(profile.id);
+        }
+        if (buttonIndex === 3) {
+          handleReportProfile(profile.id);
         }
         return null;
       }
@@ -212,6 +258,7 @@ const ChatScreen = (props) => {
       }}
     />;
   }
+
   const renderMessages = ({ item }) => {
     return (
       <Message
@@ -219,12 +266,19 @@ const ChatScreen = (props) => {
         isMyMessage={item.sent_by_current ? true : false}
         ownProfile={profileContext}
         matchedProfile={receiverData}
-        onShowProfile={() => {
-          handleShowProfile(receiverData, receiverData.isInGroup);
-        }}
+        onShowProfile={() =>
+          item.sent_by_current
+            ? handleShowProfile(
+                profileContext,
+                profileContext.is_in_group,
+                true
+              )
+            : handleShowProfile(receiverData, receiverData.is_in_group)
+        }
       />
     );
   };
+
   return (
     <View style={styles.screen}>
       {!loadingMessages && (
@@ -269,17 +323,6 @@ const ChatScreen = (props) => {
       </View>
     </View>
   );
-};
-
-ChatScreen.navigationOptions = (navData) => {
-  const handleShowProfile = (profileid, isInGroup) => {
-    if (profileid) {
-      navData.navigation.navigate('SwipeProfile', {
-        mainProfileId: profileid,
-        isInGroup: isInGroup,
-      });
-    }
-  };
 };
 
 const styles = StyleSheet.create({
