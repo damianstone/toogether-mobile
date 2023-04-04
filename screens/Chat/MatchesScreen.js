@@ -6,11 +6,8 @@ import {
   Image,
   Platform,
   SafeAreaView,
-  ScrollView,
   Text,
-  TouchableOpacity,
   View,
-  Alert,
   RefreshControl,
   StyleSheet,
 } from 'react-native';
@@ -26,9 +23,7 @@ import {
 } from '../../store/actions/conversation';
 import { checkServerError, check400Error } from '../../utils/errors';
 import no_chats from '../../assets/images/no-chats.png';
-import SwipeError from '../../components/SwipeError';
 import ActivityModal from '../../components/UI/ActivityModal';
-import ChatAvatar from '../../components/ChatAvatar';
 import MatchCounter from '../../components/MatchCounter';
 import MatchAvatar from '../../components/MatchAvatar';
 import PreviewChat from '../../components/PreviewChat';
