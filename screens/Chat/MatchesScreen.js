@@ -47,29 +47,6 @@ const MatchesScreen = (props) => {
     data: matches,
   } = listMatchesReducer;
 
-  const deleteConversationReducer = useSelector(
-    (state) => state.deleteConversation
-  );
-  const {
-    error: errorDeleteConversation,
-    loading: loadingDeleteConversation,
-    data: conversationDeleted,
-  } = deleteConversationReducer;
-
-  const reportProfileReducer = useSelector((state) => state.reportProfile);
-  const {
-    error: errorReportProfile,
-    loading: loadingReportProfile,
-    data: profileReported,
-  } = reportProfileReducer;
-
-  const blockProfileReducer = useSelector((state) => state.blockProfile);
-  const {
-    error: errorBlockProfile,
-    loading: loadingBlockProfile,
-    data: profileBlocked,
-  } = blockProfileReducer;
-
   const listConversationsReducer = useSelector(
     (state) => state.listConversations
   );
@@ -95,16 +72,8 @@ const MatchesScreen = (props) => {
 
   useEffect(() => {
     dispatch(listMatches());
+    dispatch(listMyConversations());
   }, [matchDeleted]);
-
-  useEffect(() => {
-    dispatch(listMyConversations());
-  }, [conversationDeleted]);
-
-  useEffect(() => {
-    dispatch(listMatches());
-    dispatch(listMyConversations());
-  }, [profileBlocked, profileReported]);
 
   useEffect(() => {
     if (errorDeleteMatch) {
@@ -206,10 +175,7 @@ const MatchesScreen = (props) => {
     loadingListMatches ||
     loadingDeleteMatch ||
     localLoading ||
-    loadingListConversations ||
-    loadingBlockProfile ||
-    loadingReportProfile ||
-    loadingStartedConservation
+    loadingListConversations
   ) {
     return (
       <SafeAreaView style={styles.safe}>

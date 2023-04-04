@@ -43,6 +43,28 @@ const ChatScreen = (props) => {
   const conversationId = props.navigation.getParam('conversationId');
   const receiverData = props.navigation.getParam('receiverProfile');
   const { profileContext, updateProfileContext } = useContext(Context);
+  const deleteConversationReducer = useSelector(
+    (state) => state.deleteConversation
+  );
+  const {
+    error: errorDeleteConversation,
+    loading: loadingDeleteConversation,
+    data: conversationDeleted,
+  } = deleteConversationReducer;
+
+  const reportProfileReducer = useSelector((state) => state.reportProfile);
+  const {
+    error: errorReportProfile,
+    loading: loadingReportProfile,
+    data: profileReported,
+  } = reportProfileReducer;
+
+  const blockProfileReducer = useSelector((state) => state.blockProfile);
+  const {
+    error: errorBlockProfile,
+    loading: loadingBlockProfile,
+    data: profileBlocked,
+  } = blockProfileReducer;
   const [refreshing, setRefreshing] = useState(false);
   const [localLoading, setLocalLoading] = useState(false);
   const [chatMessage, setChatMessage] = useState('');
@@ -94,6 +116,38 @@ const ChatScreen = (props) => {
     }
   }, [errorMessages]);
 
+  useEffect(() => {
+    if (conversationDeleted) {
+      props.navigation.navigate('Matches');
+    }
+  }, [conversationDeleted]);
+
+  useEffect(() => {
+    if (errorDeleteConversation) {
+      checkServerError(errorDeleteConversation);
+    }
+  }, [errorDeleteConversation]);
+
+  useEffect(() => {
+    if (errorReportProfile) {
+      checkServerError(errorReportProfile);
+    }
+
+    if (profileReported) {
+      props.navigation.navigate('Matches');
+    }
+  }, [errorReportProfile, profileReported]);
+
+  useEffect(() => {
+    if (errorBlockProfile) {
+      checkServerError(errorBlockProfile);
+    }
+
+    if (profileBlocked) {
+      props.navigation.navigate('Matches');
+    }
+  }, [errorBlockProfile, profileBlocked]);
+
   const handleSendMessage = () => {
     if (chatSocket && chatMessage) {
       chatSocket.send(chatMessage);
@@ -139,7 +193,7 @@ const ChatScreen = (props) => {
         {
           text: 'No',
           onPress: () => {
-            props.navigation.navigate('Chat');
+            return;
           },
           style: 'cancel',
         },
@@ -147,7 +201,6 @@ const ChatScreen = (props) => {
           text: 'Yes',
           onPress: () => {
             dispatch(blockProfile(profileId));
-            props.navigation.navigate('Matches');
           },
         },
       ]
@@ -165,7 +218,7 @@ const ChatScreen = (props) => {
         {
           text: 'No',
           onPress: () => {
-            props.navigation.navigate('Chat');
+            return;
           },
           style: 'cancel',
         },
@@ -173,7 +226,6 @@ const ChatScreen = (props) => {
           text: 'Yes',
           onPress: () => {
             dispatch(reportProfile(profileId));
-            props.navigation.navigate('Matches');
           },
         },
       ]
@@ -198,9 +250,7 @@ const ChatScreen = (props) => {
         {
           text: 'Yes',
           onPress: () => {
-            chatSocket.close();
             dispatch(deleteConversation(chatId));
-            props.navigation.navigate('Matches');
           },
         },
       ]
@@ -243,7 +293,13 @@ const ChatScreen = (props) => {
     );
   };
 
-  if (loadingMessages || localLoading) {
+  if (
+    loadingMessages ||
+    localLoading ||
+    loadingDeleteConversation ||
+    loadingReportProfile ||
+    loadingBlockProfile
+  ) {
     <ActivityModal
       loading
       title="Please wait"
