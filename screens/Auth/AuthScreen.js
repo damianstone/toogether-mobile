@@ -210,6 +210,7 @@ const AuthStartScreen = (props) => {
               textContentType="emailAddress"
               keyboardType="email-address"
               required
+              email
               autoComplete="email"
               autoCapitalize="none"
               errorText="Enter your email"

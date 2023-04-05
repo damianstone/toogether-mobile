@@ -1,33 +1,69 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { View, Text, StyleSheet, Alert } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import AuthButton from '../../components/UI/AuthButton';
-import { HeaderButtons, Item } from 'react-navigation-header-buttons';
+import { HeaderButtons, Item, } from 'react-navigation-header-buttons';
 import AuthInput from '../../components/UI/AuthInput';
 import HeaderButtom from '../../components/UI/HeaderButton';
-import { recoveryPassword } from '../../store/actions/user';
+import { sendRecoveryCode } from '../../store/actions/user';
 import Device from '../../theme/Device';
 import { Platform } from 'react-native';
 import Colors from '../../constants/Colors';
-import AuthStartScreen from '../Auth/AuthScreen';
+import { check400Error, checkServerError } from '../../utils/errors';
+import ActivityModal from '../../components/UI/ActivityModal';
+import * as c from '../../constants/user';
 
 const RecoveryScreen = (props) => {
 
-  const handlePress = () => {
-    Alert.alert(
-      'Code sent',
-      'Please check you email to get the code',
-      [
-        {
-          text: 'Continue',
-          onPress: () => props.navigation.navigate('ValidateCode'),
-        },
-      ],
-      { cancelable: false }
-    );
-  };
+  const [email, SetEmail] = useState('')
+  const [isValid, setIsvalid] = useState('')
+  const dispatch = useDispatch()
 
-  const example = () =>{}
+  const handlerEmail = (inputIdentifier, inputValue, inputValidity) => {
+    SetEmail(inputValue)
+    setIsvalid(inputValidity)
+  }
+
+  const { data, error, loading } = useSelector(state => state.sendRecoveryCode)
+
+  useEffect(() => {
+    if (error) {
+      if (error?.response?.status === 400) {
+        if (error?.response?.data?.detail) {
+          check400Error(error);
+        }
+      } else {
+        checkServerError(error);
+      }
+    }
+
+    if (data) {
+      props.navigation.navigate('ValidateCode', {email: email});
+    }
+
+    dispatch({ type: c.RECOVERY_CODE_RESET });
+  }, [dispatch, error, data]);
+
+  const handlePress = () => {
+    dispatch(sendRecoveryCode(email))
+  }
+
+  if (loading) {
+    return (
+      <View style={styles.screen}>
+        <ActivityModal
+          loading
+          title="Loading"
+          size="small"
+          activityColor="white"
+          titleColor="white"
+          activityWrapperStyle={{
+            backgroundColor: 'transparent',
+          }}
+        />
+      </View>
+    )
+  }
 
   return (
     <View style={styles.screen}>
@@ -44,6 +80,7 @@ const RecoveryScreen = (props) => {
           textContentType="emailAddress"
           keyboardType="email-address"
           required
+          email
           autoComplete="email"
           autoCapitalize="none"
           errorText="Enter your email"
@@ -51,12 +88,13 @@ const RecoveryScreen = (props) => {
           placeholderTextColor="#B0B3B8"
           autoCorrect={false}
           border-radius="10"
-          onInputChange={example}
+          onInputChange={handlerEmail}
+          initialValue={email}
         />
       </View>
       <View style={styles.button_container}>
-        <AuthButton text="Send recovery code" 
-        onPress={handlePress}/>
+        <AuthButton text="Send recovery code"
+          onPress={handlePress} />
       </View>
     </View>
   );
@@ -82,6 +120,7 @@ RecoveryScreen.navigationOptions = (navData) => {
 };
 
 export default RecoveryScreen;
+
 
 const styles = StyleSheet.create({
   screen: {

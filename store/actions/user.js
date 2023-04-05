@@ -557,7 +557,7 @@ export const sendRecoveryCode = (email) => {
   };
 };
 
-export const validateCode = (code) => {
+export const validateCode = (email, code) => {
   return async (dispatch) => {
     try {
       dispatch({ type: c.VALIDATE_CODE_REQUEST });
@@ -571,7 +571,7 @@ export const validateCode = (code) => {
         url: `${BASE_URL}/api/v1/users/validate-code/`,
         headers: config,
         data: {
-          code,
+          email, code
         },
       });
 
@@ -589,7 +589,8 @@ export const validateCode = (code) => {
   };
 };
 
-export const changePassword = (email, password, newPassword, token) => {
+export const changePassword = (email,password, repeated_password, token) => {
+
   return async (dispatch) => {
     try {
       dispatch({ type: c.CHANGE_PASSWORD_REQUEST });
@@ -602,13 +603,12 @@ export const changePassword = (email, password, newPassword, token) => {
 
       const { data } = await axios({
         method: 'POST',
-        url: `${BASE_URL}/api/v1/users/reset-password/`,
+        url: `${BASE_URL}/api/v1/profiles/actions/reset-password/`,
         headers: config,
         data: {
-          email, password, newPassword
+          email, password, repeated_password
         },
       });
-
       dispatch({
         type: c.CHANGE_PASSWORD_SUCCESS,
         payload: data,

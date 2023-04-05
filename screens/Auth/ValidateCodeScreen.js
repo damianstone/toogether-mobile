@@ -1,48 +1,32 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { View, Text, StyleSheet, Alert, TouchableOpacity, TextInput, KeyboardAvoidingView, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, TextInput, KeyboardAvoidingView, ScrollView } from 'react-native';
 import AuthButton from '../../components/UI/AuthButton';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
-import AuthInput from '../../components/UI/AuthInput';
 import HeaderButtom from '../../components/UI/HeaderButton';
-import { recoveryPassword } from '../../store/actions/user';
+import { validateCode } from '../../store/actions/user';
 import Device from '../../theme/Device';
 import { Platform } from 'react-native';
 import Colors from '../../constants/Colors';
-import AuthStartScreen from '../Auth/AuthScreen';
-import style from './styles';
+import { sendRecoveryCode } from '../../store/actions/user';
+import * as c from '../../constants/user';
+import { check400Error, checkServerError } from '../../utils/errors';
+import ActivityModal from '../../components/UI/ActivityModal'; 3
 
 
 const ValidateCodeScreen = (props) => {
-  const handlePress = () => {
-    Alert.alert(
-      'Valid code',
-      'Continue and change your password',
-      [
-        {
-          text: 'Continue',
-          onPress: () => props.navigation.navigate('ChangePassword'),
-        },
-      ],
-      { cancelable: false }
-    );
-  };
+
+  const [code, setCode] = useState('');
+  const email = props.navigation.getParam('email');
+  const dispatch = useDispatch()
+
+  const { data, error, loading } = useSelector(state => state.validateCode)
+
 
   const handleResend = () => {
-    Alert.alert(
-      'Resent code',
-      'Please check you email to get the code',
-      [
-        {
-          text: 'Acept',
-          onPress: () => props.navigation.navigate('ValidateCode'),
-        },
-      ],
-      { cancelable: false }
-    );
+    dispatch(sendRecoveryCode(email))
   };
-    
-  const [value, setValue] = useState('');
+
 
   const formatCode = (text) => {
     // Elimina cualquier guión existente
@@ -57,40 +41,80 @@ const ValidateCodeScreen = (props) => {
   const handleChange = (text) => {
     // Formatea el texto ingresado
     const formattedText = formatCode(text);
-    setValue(formattedText);
+    setCode(formattedText);
   }
 
+
+  useEffect(() => {
+    if (error) {
+      if (error?.response?.status === 400) {
+        if (error?.response?.data?.detail) {
+          check400Error(error);
+        }
+      } else {
+        checkServerError(error);
+      }
+    }
+
+    if (data) {
+      props.navigation.navigate('ChangePassword', {email: email, token: data.AccessToken},);
+    }
+
+    dispatch({ type: c.VALIDATE_CODE_RESET });
+  }, [dispatch, error, data]);
+
+  const handlePress = () => {
+    const fixedCode = code.replace(/-/g, "");
+    dispatch(validateCode(email, fixedCode))
+  }
+
+  if (loading) {
+    return (
+      <View style={styles.screen}>
+        <ActivityModal
+          loading
+          title="Loading"
+          size="small"
+          activityColor="white"
+          titleColor="white"
+          activityWrapperStyle={{
+            backgroundColor: 'transparent',
+          }}
+        />
+      </View>
+    )
+  }
 
   return (
     <ScrollView contentContainerStyle={styles.scroll_container}>
       <KeyboardAvoidingView style={styles.screen}>
-      <View style={styles.auth_text_container} >
-        <Text style={styles.auth_text_big}>Validate code</Text>
-        <Text style={styles.auth_text_small}>
-        Validate the recovery code we sent you to your email
-        </Text>
-      </View>
-  
-      <View style={styles.auth_button_email}>
-      <TextInput style={styles.code_container}
-      value={value}
-      onChangeText={handleChange}
-      placeholderTextColor="#B0B3B8"
-      placeholder="NN - NN - NN"
-      maxLength={8} // Establece la longitud máxima del texto en 11 caracteres
-      keyboardType='numeric'
-    />  
-      <TouchableOpacity onPress={handleResend}>
-        <Text style={styles.auth_text_small}>Resend code</Text>
-      </TouchableOpacity>
-      
-      </View>
- 
-      <View style={styles.button_container}>
-        <AuthButton text="Confirm" 
-        onPress={handlePress}
-        backgroundColor={Colors.bg}/>
-      </View>
+        <View style={styles.auth_text_container} >
+          <Text style={styles.auth_text_big}>Validate code</Text>
+          <Text style={styles.auth_text_small}>
+            Validate the recovery code we sent you to your email
+          </Text>
+        </View>
+
+        <View style={styles.auth_button_email}>
+          <TextInput style={styles.code_container}
+            value={code}
+            onChangeText={handleChange}
+            placeholderTextColor="#B0B3B8"
+            placeholder="NN - NN - NN"
+            maxLength={8} // Establece la longitud máxima del texto en 11 caracteres
+            keyboardType='numeric'
+          />
+          <TouchableOpacity onPress={handleResend}>
+            <Text style={styles.auth_text_small}>Resend code</Text>
+          </TouchableOpacity>
+
+        </View>
+
+        <View style={styles.button_container}>
+          <AuthButton text="Confirm"
+            onPress={handlePress}
+            backgroundColor={Colors.bg} />
+        </View>
       </KeyboardAvoidingView>
     </ScrollView>
   );
@@ -126,11 +150,11 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     height: '100%',
   },
-  scroll_container:{
-    flexGrow:1,
-    flexDirection:'column',
-    justifyContent:'space-between',
-    backgroundColor:Colors.bg,
+  scroll_container: {
+    flexGrow: 1,
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    backgroundColor: Colors.bg,
   },
   auth_text_big: {
     color: Colors.white,
@@ -141,7 +165,7 @@ const styles = StyleSheet.create({
   auth_text_small: {
     color: Colors.white,
     fontSize: 20,
-    
+
   },
   auth_text_container: {
     flexDirection: 'column',
@@ -155,10 +179,10 @@ const styles = StyleSheet.create({
     padding: 0,
     margin: 0,
     width: '100%',
-    height:'18%',
+    height: '18%',
     flexDirection: 'column',
     alignItems: 'center',
-    justifyContent:'space-around'
+    justifyContent: 'space-around'
   },
   button_container: {
     alignSelf: 'center',
@@ -171,12 +195,12 @@ const styles = StyleSheet.create({
     paddingVertical: Platform.OS === 'ios' ? '7%' : 0,
     paddingBottom: Platform.OS === 'ios' ? '7%' : 0.09 * Device.height,
   },
-  code_container:{
+  code_container: {
     backgroundColor: '#494863',
     borderRadius: 10,
-    width:'60%',
-    paddingVertical:10,
-    marginBottom:10,
+    width: '60%',
+    paddingVertical: 10,
+    marginBottom: 10,
     textAlign: 'center',
     fontSize: 20,
     color: Colors.white

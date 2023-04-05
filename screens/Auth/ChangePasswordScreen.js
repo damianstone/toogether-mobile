@@ -1,79 +1,131 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { View, Text, StyleSheet, Alert, KeyboardAvoidingView, ScrollView } from 'react-native';
 import AuthButton from '../../components/UI/AuthButton';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import AuthInput from '../../components/UI/AuthInput';
 import HeaderButtom from '../../components/UI/HeaderButton';
-import { recoveryPassword } from '../../store/actions/user';
+import { changePassword } from '../../store/actions/user';
 import Device from '../../theme/Device';
 import { Platform } from 'react-native';
 import Colors from '../../constants/Colors';
 import AuthStartScreen from '../Auth/AuthScreen';
+import * as c from '../../constants/user';
+import { check400Error, checkServerError } from '../../utils/errors';
+import ActivityModal from '../../components/UI/ActivityModal'; 3
 
 const ChangePasswordScreen = (props) => {
-  const handlePress = () => {
-    Alert.alert(
-      'Password changed',
-      'Your password was change successfully! :)',
-      [
-        {
-          text: 'Continue',
-          onPress: () => props.navigation.navigate('MyProfile'),
-        },
-      ],
-      { cancelable: false }
-    );
-  };
+  const [password, setPassword] = useState('')
+  const [repeated_password, setRepeated_password] = useState('')
+  const dispatch = useDispatch()
+  const email = props.navigation.getParam('email');
+  const token = props.navigation.getParam('token');
 
-  const example = ()=>{}
+  const handlerPassword = (inputIdentifier, inputValue, inputValidity) => {
+    setPassword(inputValue)
+  }
+
+  const handlerNewPassword = (inputIdentifier, inputValue, inputValidity) => {
+    setRepeated_password(inputValue)
+  }
+
+  const { data, error, loading } = useSelector(state => state.changePassword)
+
+  useEffect(() => {
+    if (error) {
+      if (error?.response?.status === 400) {
+        if (error?.response?.data?.detail) {
+          check400Error(error);
+        }
+      } else {
+        checkServerError(error);
+      }
+    }
+
+    if (data) {
+      props.navigation.navigate('MyProfile');
+    }
+
+    dispatch({ type: c.CHANGE_PASSWORD_RESET });
+  }, [dispatch, error, data]);
+
+  const handlePress = () => {
+    if (password === repeated_password) {
+      console.log(email, password, repeated_password, token)
+      dispatch(changePassword(email, password, repeated_password, token))
+    } else {
+      Alert.alert(
+        'Error',
+        'The passwords entered do not match. Please try again.',
+        [{ text: 'OK' }]
+      );
+    }
+  }
+
+  if (loading) {
+    return (
+      <View style={styles.screen}>
+        <ActivityModal
+          loading
+          title="Loading"
+          size="small"
+          activityColor="white"
+          titleColor="white"
+          activityWrapperStyle={{
+            backgroundColor: 'transparent',
+          }}
+        />
+      </View>
+    )
+  }
+  const example = () => { }
 
   return (
     <ScrollView contentContainerStyle={styles.scroll_container}>
       <KeyboardAvoidingView style={styles.screen}>
-      <View style={styles.auth_text_container}>
-        <Text style={styles.auth_text_big}>Change password</Text>
-        <Text style={styles.auth_text_small}>
-        Change your password and make sure you’ll remember it
-        </Text>
-      </View>
-      <View style={styles.auth_input_email}>
-        <Text style={styles.auth_text_small}>Password</Text>
-        <AuthInput
-              secureTextEntry
-              textContentType={
-                Platform.OS === 'ios' ? 'password' : 'newPassword'
-              }
-              id="password"
-              keyboardType="default"
-              required
-              autoCapitalize="none"
-              errorText="Enter your password"
-              autoCorrect={false}
-              onInputChange={example}
-            />
-        <Text style={styles.auth_text_small}>Confirm your password</Text>
-        <AuthInput
-              secureTextEntry
-              textContentType={
-                Platform.OS === 'ios' ? 'password' : 'newPassword'
-              }
-              id="password"
-              keyboardType="default"
-              required
-              autoCapitalize="none"
-              errorText="Enter your password"
-              autoCorrect={false}
-              onInputChange={example}
-            />
-      </View>
-      <View style={styles.button_container}>
-        <AuthButton text="Confirm" 
-        onPress={handlePress}
-        style={{backgroundColor:'#244344', width:"100%"}}/>
-      </View>
-        </KeyboardAvoidingView>
-      </ScrollView>
+        <View style={styles.auth_text_container}>
+          <Text style={styles.auth_text_big}>Change password</Text>
+          <Text style={styles.auth_text_small}>
+            Change your password and make sure you’ll remember it
+          </Text>
+        </View>
+        <View style={styles.auth_input_email}>
+          <Text style={styles.auth_text_small}>Password</Text>
+          <AuthInput
+            secureTextEntry
+            textContentType={
+              Platform.OS === 'ios' ? 'password' : 'newPassword'
+            }
+            id="password"
+            keyboardType="default"
+            required
+            autoCapitalize="none"
+            errorText="Enter your password"
+            autoCorrect={false}
+            onInputChange={handlerPassword}
+          />
+          <Text style={styles.auth_text_small}>Confirm your password</Text>
+          <AuthInput
+            secureTextEntry
+            textContentType={
+              Platform.OS === 'ios' ? 'password' : 'newPassword'
+            }
+            id="password"
+            keyboardType="default"
+            required
+            autoCapitalize="none"
+            errorText="Enter your password"
+            autoCorrect={false}
+            onInputChange={handlerNewPassword}
+          />
+        </View>
+        <View style={styles.button_container}>
+          <AuthButton text="Confirm"
+            onPress={handlePress}
+            style={{ backgroundColor: '#244344', width: "100%" }} />
+        </View>
+      </KeyboardAvoidingView>
+    </ScrollView>
   );
 };
 
@@ -101,12 +153,12 @@ export default ChangePasswordScreen;
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    backgroundColor:Colors.bg,
+    backgroundColor: Colors.bg,
     justifyContent: 'space-between',
     alignItems: 'center',
     flexDirection: 'column',
     height: '100%',
-    width:'100%'
+    width: '100%'
   },
   auth_text_big: {
     color: Colors.white,
@@ -117,7 +169,7 @@ const styles = StyleSheet.create({
   auth_text_small: {
     color: Colors.white,
     fontSize: 20,
-    paddingTop:20
+    paddingTop: 20
   },
   auth_text_container: {
     flexDirection: 'column',
@@ -130,7 +182,7 @@ const styles = StyleSheet.create({
   auth_input_email: {
     width: '100%',
     flexDirection: 'column',
-    paddingHorizontal:20
+    paddingHorizontal: 20
   },
 
   input: {
@@ -153,11 +205,11 @@ const styles = StyleSheet.create({
     paddingVertical: Platform.OS === 'ios' ? '7%' : 0,
     paddingBottom: Platform.OS === 'ios' ? '7%' : 0.09 * Device.height,
   },
-  scroll_container:{
-    flexGrow:1,
-    flexDirection:'column',
-    justifyContent:'space-between',
-    with:'100%',
+  scroll_container: {
+    flexGrow: 1,
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    with: '100%',
   },
 });
 
