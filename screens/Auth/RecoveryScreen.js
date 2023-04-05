@@ -1,30 +1,33 @@
 import React, { useState, useEffect } from 'react';
+import { 
+  View, 
+  Text, 
+  StyleSheet, 
+  Platform, 
+  Alert } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
-import { View, Text, StyleSheet } from 'react-native';
-import AuthButton from '../../components/UI/AuthButton';
 import { HeaderButtons, Item, } from 'react-navigation-header-buttons';
+import AuthButton from '../../components/UI/AuthButton';
 import AuthInput from '../../components/UI/AuthInput';
 import HeaderButtom from '../../components/UI/HeaderButton';
-import { sendRecoveryCode } from '../../store/actions/user';
 import Device from '../../theme/Device';
-import { Platform } from 'react-native';
 import Colors from '../../constants/Colors';
-import { check400Error, checkServerError } from '../../utils/errors';
 import ActivityModal from '../../components/UI/ActivityModal';
 import * as c from '../../constants/user';
+import { sendRecoveryCode } from '../../store/actions/user';
+import { check400Error, checkServerError } from '../../utils/errors';
 
 const RecoveryScreen = (props) => {
 
+  const { data, error, loading } = useSelector(state => state.sendRecoveryCode)
+  
   const [email, SetEmail] = useState('')
-  const [isValid, setIsvalid] = useState('')
+
   const dispatch = useDispatch()
 
-  const handlerEmail = (inputIdentifier, inputValue, inputValidity) => {
+  const handlerEmail = (inputIdentifier, inputValue) => {
     SetEmail(inputValue)
-    setIsvalid(inputValidity)
   }
-
-  const { data, error, loading } = useSelector(state => state.sendRecoveryCode)
 
   useEffect(() => {
     if (error) {
@@ -45,7 +48,15 @@ const RecoveryScreen = (props) => {
   }, [dispatch, error, data]);
 
   const handlePress = () => {
-    dispatch(sendRecoveryCode(email))
+    if(email){
+      dispatch(sendRecoveryCode(email))
+    }else{
+      Alert.alert(
+        'Error',
+        'Email field is required to send recovery code',
+        [{ text: 'OK' }]
+      );
+    }
   }
 
   if (loading) {

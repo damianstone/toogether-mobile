@@ -1,17 +1,25 @@
 import React, { useState, useEffect } from 'react';
+import { 
+  View, 
+  Text, 
+  StyleSheet, 
+  TouchableOpacity, 
+  TextInput, 
+  KeyboardAvoidingView, 
+  ScrollView,
+  Platform,
+  Alert } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
-import { View, Text, StyleSheet, TouchableOpacity, TextInput, KeyboardAvoidingView, ScrollView } from 'react-native';
-import AuthButton from '../../components/UI/AuthButton';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
+import AuthButton from '../../components/UI/AuthButton';
 import HeaderButtom from '../../components/UI/HeaderButton';
-import { validateCode } from '../../store/actions/user';
 import Device from '../../theme/Device';
-import { Platform } from 'react-native';
 import Colors from '../../constants/Colors';
-import { sendRecoveryCode } from '../../store/actions/user';
-import * as c from '../../constants/user';
-import { check400Error, checkServerError } from '../../utils/errors';
 import ActivityModal from '../../components/UI/ActivityModal'; 3
+import * as c from '../../constants/user';
+import { validateCode } from '../../store/actions/user';
+import { sendRecoveryCode } from '../../store/actions/user';
+import { check400Error, checkServerError } from '../../utils/errors';
 
 
 const ValidateCodeScreen = (props) => {
@@ -29,11 +37,11 @@ const ValidateCodeScreen = (props) => {
 
 
   const formatCode = (text) => {
-    // Elimina cualquier guión existente
+    // Remove existing hyphen
     text = text.replace(/-/g, '');
-    // Inserta guiones después de cada 2 caracteres
+    // Insert hyphen each 2 characters 
     text = text.replace(/(.{2})/g, '$1-');
-    // Elimina el guión adicional al final
+    // Remove last hyphen added to end 
     text = text.replace(/-$/, '');
     return text;
   }
@@ -65,7 +73,15 @@ const ValidateCodeScreen = (props) => {
 
   const handlePress = () => {
     const fixedCode = code.replace(/-/g, "");
-    dispatch(validateCode(email, fixedCode))
+    if(code){
+      dispatch(validateCode(email, fixedCode))
+    }else{
+      Alert.alert(
+        'Error',
+        'Code field is required to validate code',
+        [{ text: 'OK' }]
+      );
+    }
   }
 
   if (loading) {

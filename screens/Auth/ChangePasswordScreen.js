@@ -1,35 +1,44 @@
 import React, { useState, useEffect } from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Alert,
+  KeyboardAvoidingView,
+  ScrollView,
+  Platform
+} from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
-import { View, Text, StyleSheet, Alert, KeyboardAvoidingView, ScrollView } from 'react-native';
-import AuthButton from '../../components/UI/AuthButton';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
+import AuthButton from '../../components/UI/AuthButton';
 import AuthInput from '../../components/UI/AuthInput';
 import HeaderButtom from '../../components/UI/HeaderButton';
-import { changePassword } from '../../store/actions/user';
 import Device from '../../theme/Device';
-import { Platform } from 'react-native';
 import Colors from '../../constants/Colors';
-import AuthStartScreen from '../Auth/AuthScreen';
+import ActivityModal from '../../components/UI/ActivityModal';
 import * as c from '../../constants/user';
+import { changePassword } from '../../store/actions/user';
 import { check400Error, checkServerError } from '../../utils/errors';
-import ActivityModal from '../../components/UI/ActivityModal'; 3
 
 const ChangePasswordScreen = (props) => {
-  const [password, setPassword] = useState('')
-  const [repeated_password, setRepeated_password] = useState('')
-  const dispatch = useDispatch()
+  const { data, error, loading } = useSelector(state => state.changePassword)
   const email = props.navigation.getParam('email');
   const token = props.navigation.getParam('token');
 
-  const handlerPassword = (inputIdentifier, inputValue, inputValidity) => {
+  const [password, setPassword] = useState('')
+  const [repeated_password, setRepeated_password] = useState('')
+
+  const dispatch = useDispatch()
+
+
+  const handlerPassword = (inputIdentifier, inputValue) => {
     setPassword(inputValue)
   }
 
-  const handlerNewPassword = (inputIdentifier, inputValue, inputValidity) => {
+  const handlerNewPassword = (inputIdentifier, inputValue) => {
     setRepeated_password(inputValue)
   }
 
-  const { data, error, loading } = useSelector(state => state.changePassword)
 
   useEffect(() => {
     if (error) {
@@ -50,13 +59,12 @@ const ChangePasswordScreen = (props) => {
   }, [dispatch, error, data]);
 
   const handlePress = () => {
-    if (password === repeated_password) {
-      console.log(email, password, repeated_password, token)
+    if(password && repeated_password){
       dispatch(changePassword(email, password, repeated_password, token))
-    } else {
+    }else{
       Alert.alert(
         'Error',
-        'The passwords entered do not match. Please try again.',
+        'Password and repeated password fields are required to change password',
         [{ text: 'OK' }]
       );
     }
