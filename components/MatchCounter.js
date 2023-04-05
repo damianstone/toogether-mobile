@@ -17,7 +17,7 @@ const MatchCounter = (props) => {
         <Text style={styles.textCounter}>0</Text>
       ) : (
         <Text style={styles.textCounter}>
-          <Text style={styles.plus}>+</Text>
+          {/* <Text style={styles.plus}>+</Text> */}
           {matches?.count}
         </Text>
       )}

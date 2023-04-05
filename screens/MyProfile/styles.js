@@ -6,23 +6,18 @@ const { width } = Dimensions.get('window');
 
 export default StyleSheet.create({
   /* ----------------------- PROFILE DATA ----------------------  */
-  MainContainer: {
-    flex: 1,
+
+  scrollview_style: {
     backgroundColor: Colors.bg,
-  },
-  safeAreaContainer: {
-    flex: 1,
-    backgroundColor: Colors.bg,
-  },
-  body: {
+    height: '100%',
     width: '100%',
   },
   scroll_container_style: {
     width: '100%',
-    flexDirection: 'column', // inner items will be added vertically
-    flexGrow: 1, // all the available vertical space will be occupied by it
-    justifyContent: 'space-between', // will create the gutter between body and footer
+    flexDirection: 'column',
+    flexGrow: 1,
   },
+
   photoView: {
     top: Platform.OS === 'ios' ? '4%' : '1%',
     width: 150,
@@ -32,10 +27,22 @@ export default StyleSheet.create({
     overflow: 'hidden',
     alignSelf: 'center',
   },
+
   profilePictureContainer: {
     marginTop: 20,
     alignItems: 'center',
   },
+
+  mainPhotoPlaceholder: {
+    backgroundColor: Colors.bgCard,
+    opacity: 0.5,
+    width: 150,
+    height: 150,
+    borderRadius: 100,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
   image: {
     width: 150,
     height: 150,
@@ -132,12 +139,12 @@ export default StyleSheet.create({
   myphotosItemView: {
     width: Math.floor(width * 0.29),
     height: Math.floor(width * 0.29),
-    marginHorizontal: 8,
-    marginVertical: 8,
+    marginHorizontal: 4,
+    marginVertical: 4,
     borderRadius: 15,
     justifyContent: 'space-between',
     alignItems: 'center',
-    backgroundColor: 'grey',
+    backgroundColor: Colors.bgCard,
     overflow: 'hidden',
   },
   optionView: {
@@ -187,32 +194,6 @@ export default StyleSheet.create({
     height: 40,
   },
 
-  /* ----------------------- TOOGETHER PREMIUM-----------------------  */
-  circle: {
-    width: '100%',
-    alignSelf: 'flex-end',
-    alignItems: 'center',
-    flexDirection: 'column',
-    justifyContent: 'space-between',
-  },
-  linearCircle: {
-    position: 'absolute',
-    width: '100%',
-    height: '100%',
-    borderRadius: 10,
-    transform: [{ scaleX: 1 }],
-  },
-  logoContainer: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    height: 25,
-    width: 120,
-  },
-  logo: {
-    alignSelf: 'center',
-    width: '100%',
-    height: '100%',
-  },
   /* ----------------------- EDIT PROFILE SCREEN -----------------------  */
 
   screen: {

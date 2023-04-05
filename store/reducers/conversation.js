@@ -78,7 +78,7 @@ export const deleteConversationReducer = (state = {}, action) => {
     case c.DELETE_CONVERSATION_FAIL:
       return { loading: false, error: action.payload };
 
-    case c.DELETE_CHAT_RESET:
+    case c.DELETE_CONVERSATION_RESET:
       return {};
 
     default:

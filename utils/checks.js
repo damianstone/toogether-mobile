@@ -119,5 +119,8 @@ export const checkPhoto = (profile) => {
   if (profile && profile.photos.length > 0) {
     return { uri: `${getImage(profile.photos[0]?.image)}` };
   }
+  if (profile && profile?.photo) {
+    return { uri: `${getImage(profile.photo)}` };
+  }
   return require('../assets/images/placeholder-profile.png');
 };

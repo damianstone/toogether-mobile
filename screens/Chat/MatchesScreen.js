@@ -1,17 +1,13 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { exist } from '../../utils/checks';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import {
   FlatList,
   Image,
   Platform,
   SafeAreaView,
-  ScrollView,
   Text,
-  TouchableOpacity,
   View,
-  Alert,
   RefreshControl,
   StyleSheet,
 } from 'react-native';
@@ -27,16 +23,11 @@ import {
 } from '../../store/actions/conversation';
 import { checkServerError, check400Error } from '../../utils/errors';
 import no_chats from '../../assets/images/no-chats.png';
-import SwipeError from '../../components/SwipeError';
 import ActivityModal from '../../components/UI/ActivityModal';
-import ChatAvatar from '../../components/ChatAvatar';
 import MatchCounter from '../../components/MatchCounter';
 import MatchAvatar from '../../components/MatchAvatar';
 import PreviewChat from '../../components/PreviewChat';
 import * as conv from '../../constants/conversation';
-
-/* For test purposes */
-import chats from '../../data/chats.json';
 
 const MatchesScreen = (props) => {
   const { showActionSheetWithOptions } = useActionSheet();
@@ -77,7 +68,7 @@ const MatchesScreen = (props) => {
   useEffect(() => {
     dispatch(listMatches());
     dispatch(listMyConversations());
-  }, []);
+  }, [matchDeleted]);
 
   useEffect(() => {
     if (errorDeleteMatch) {
@@ -109,7 +100,6 @@ const MatchesScreen = (props) => {
         },
       });
     }
-
     if (errorStartedConversations) {
       if (errorStartedConversations?.response?.status === 400) {
         check400Error(errorStartedConversations);
@@ -200,13 +190,6 @@ const MatchesScreen = (props) => {
       </SafeAreaView>
     );
   }
-  const renderNoMatches = () => {
-    return (
-      <View style={styles.noMatches}>
-        <Text style={styles.noMatchesText}>You have no matches yet.</Text>
-      </View>
-    );
-  };
 
   const renderBubblesMatches = ({ item }) => {
     const matchedProfile = item.matched_data.matched_profile;
@@ -228,9 +211,11 @@ const MatchesScreen = (props) => {
 
   const renderNoChats = () => {
     return (
-      <View style={styles.no_chats}>
-        <Image source={no_chats} style={styles.no_chats_image} />
-        <Text style={styles.no_chats_text}>You have no chats yet.</Text>
+      <View style={styles.noChatsContainer}>
+        <View style={{ width: 200, height: 200 }}>
+          <Image source={no_chats} style={styles.noChatsImage} />
+        </View>
+        <Text style={styles.noChatText}>No chats yet</Text>
       </View>
     );
   };
@@ -238,11 +223,11 @@ const MatchesScreen = (props) => {
   const renderPreviewChats = ({ item }) => {
     return (
       <PreviewChat
-        onShowChat={() => handleShowChatbyId(item.id, item.receiver)}
+        onShowChat={() => handleShowChatbyId(item?.id, item?.receiver)}
         data={item}
-        receiverProfile={item.receiver}
+        receiverProfile={item?.receiver}
         onShowProfile={() =>
-          handleShowProfile(item.receiver, item.receiver.is_in_group)
+          handleShowProfile(item?.receiver, item?.receiver.is_in_group)
         }
       />
     );
@@ -272,7 +257,6 @@ const MatchesScreen = (props) => {
               data={matches?.results}
               keyExtractor={(item) => item.id.toString()}
               renderItem={renderBubblesMatches}
-              ListEmptyComponent={renderNoMatches}
             />
           )}
         </View>
@@ -318,6 +302,7 @@ MatchesScreen.navigationOptions = (navData) => {
     ),
   };
 };
+export default MatchesScreen;
 
 const styles = StyleSheet.create({
   safe: {
@@ -385,6 +370,21 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.bg,
     flex: 1,
   },
+  noChatsContainer: {
+    paddingTop: 20,
+    backgroundColor: Colors.bg,
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '100%',
+    height: '100%',
+  },
+  noChatsImage: {
+    resizeMode: 'contain',
+    flex: 1,
+    aspectRatio: 1,
+  },
+  noChatText: {
+    color: Colors.white,
+    fontSize: 16,
+  },
 });
-
-export default MatchesScreen;

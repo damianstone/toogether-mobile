@@ -1,24 +1,18 @@
 import React, { useState, useEffect, useCallback, useContext } from 'react';
 import {
+  Alert,
   View,
-  Text,
   StyleSheet,
   Image,
   TouchableOpacity,
   FlatList,
-  RefreshControl,
-  ScrollView,
-  Platform,
   TextInput,
 } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
-import chat from '../../data/chats.json';
-import HeaderButtom from '../../components/UI/HeaderButton';
-import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { Context } from '../../context/ContextProvider';
-
+import { checkServerError } from '../../utils/errors';
+import { useActionSheet } from '@expo/react-native-action-sheet';
 import ActivityModal from '../../components/UI/ActivityModal';
-import Avatar from '../../components/UI/Avatar';
 import Colors from '../../constants/Colors';
 import sendimg from '../../assets/images/send-button.png';
 import Message from '../../components/Message';
@@ -26,17 +20,45 @@ import ChatHeader from '../../components/ChatHeader';
 import {
   addConversationMessage,
   listMessages,
+  deleteConversation,
 } from '../../store/actions/conversation';
+import { blockProfile } from '../../store/actions/block';
+import { reportProfile } from '../../store/actions/user';
 import { ENV } from '../../environment';
-
+import * as u from '../../constants/user';
+import * as b from '../../constants/block';
+import * as c from '../../constants/conversation';
 const BASE_URL = ENV.API_URL;
 
 API_URL = BASE_URL.replace('http://', '');
 
 const ChatScreen = (props) => {
+  const { showActionSheetWithOptions } = useActionSheet();
   const conversationId = props.navigation.getParam('conversationId');
   const receiverData = props.navigation.getParam('receiverProfile');
   const { profileContext, updateProfileContext } = useContext(Context);
+  const deleteConversationReducer = useSelector(
+    (state) => state.deleteConversation
+  );
+  const {
+    error: errorDeleteConversation,
+    loading: loadingDeleteConversation,
+    data: conversationDeleted,
+  } = deleteConversationReducer;
+
+  const reportProfileReducer = useSelector((state) => state.reportProfile);
+  const {
+    error: errorReportProfile,
+    loading: loadingReportProfile,
+    data: profileReported,
+  } = reportProfileReducer;
+
+  const blockProfileReducer = useSelector((state) => state.blockProfile);
+  const {
+    error: errorBlockProfile,
+    loading: loadingBlockProfile,
+    data: profileBlocked,
+  } = blockProfileReducer;
   const [refreshing, setRefreshing] = useState(false);
   const [localLoading, setLocalLoading] = useState(false);
   const [chatMessage, setChatMessage] = useState('');
@@ -82,6 +104,73 @@ const ChatScreen = (props) => {
     };
   }, [conversationId, dispatch]);
 
+  useEffect(() => {
+    if (errorMessages) {
+      checkServerError(errorMessages);
+    }
+  }, [errorMessages]);
+
+  useEffect(() => {
+    if (conversationDeleted) {
+      Alert.alert('The conversation has been deleted', 'Press ok to continue', [
+        {
+          text: 'Ok',
+          onPress: () => {
+            return;
+          },
+        },
+      ]);
+      props.navigation.navigate('Matches');
+      dispatch({ type: c.DELETE_CONVERSATION_RESET });
+    }
+  }, [conversationDeleted]);
+
+  useEffect(() => {
+    if (errorDeleteConversation) {
+      checkServerError(errorDeleteConversation);
+    }
+  }, [errorDeleteConversation]);
+
+  useEffect(() => {
+    if (errorReportProfile) {
+      checkServerError(errorReportProfile);
+    }
+
+    if (profileReported) {
+      Alert.alert('The profile has been reported', 'Press ok to continue', [
+        {
+          text: 'Ok',
+          onPress: () => {
+            return;
+          },
+        },
+      ]);
+
+      props.navigation.navigate('Matches');
+      dispatch({ type: u.REPORT_PROFILE_RESET });
+    }
+  }, [errorReportProfile, profileReported]);
+
+  useEffect(() => {
+    if (errorBlockProfile) {
+      checkServerError(errorBlockProfile);
+    }
+
+    if (profileBlocked) {
+      Alert.alert('The profile has been blocked', 'Press ok to continue', [
+        {
+          text: 'Ok',
+          onPress: () => {
+            return;
+          },
+        },
+      ]);
+
+      props.navigation.navigate('Matches');
+      dispatch({ type: b.BLOCK_PROFILE_RESET });
+    }
+  }, [errorBlockProfile, profileBlocked]);
+
   const handleSendMessage = () => {
     if (chatSocket && chatMessage) {
       chatSocket.send(chatMessage);
@@ -96,13 +185,15 @@ const ChatScreen = (props) => {
     }
   };
 
-  useEffect(() => {
-    if (errorMessages) {
-      checkServerError(errorMessages);
-    }
-  }, [errorMessages]);
-  const handleShowProfile = (profile, isInGroup) => {
+  const handleShowProfile = (profile, isInGroup, isMyProfile) => {
     if (profile) {
+      if (isMyProfile) {
+        props.navigation.navigate('Profile', {
+          mainProfileId: profileContext.id,
+          isInGroup: profileContext.is_in_group,
+          isMyProfile: true,
+        });
+      }
       props.navigation.navigate('SwipeProfile', {
         mainProfileId: profile.id,
         isInGroup: isInGroup,
@@ -114,7 +205,124 @@ const ChatScreen = (props) => {
     props.navigation.navigate('Matches');
   };
 
-  if (loadingMessages || localLoading) {
+  const handleBlockProfile = (profileId) => {
+    if (!profileId) {
+      return;
+    }
+    Alert.alert(
+      `Are you sure you want to block this profile?`,
+      'This profile will not be able to see you and neither will you',
+      [
+        {
+          text: 'No',
+          onPress: () => {
+            return;
+          },
+          style: 'cancel',
+        },
+        {
+          text: 'Yes',
+          onPress: () => {
+            dispatch(blockProfile(profileId));
+          },
+        },
+      ]
+    );
+  };
+
+  const handleReportProfile = (profileId) => {
+    if (!profileId) {
+      return;
+    }
+    Alert.alert(
+      `Are you sure you want to report this profile?`,
+      'This profile will not be able to see you and neither will you',
+      [
+        {
+          text: 'No',
+          onPress: () => {
+            return;
+          },
+          style: 'cancel',
+        },
+        {
+          text: 'Yes',
+          onPress: () => {
+            dispatch(reportProfile(profileId));
+          },
+        },
+      ]
+    );
+  };
+
+  const handleDeleteChat = (chatId) => {
+    if (!chatId) {
+      return;
+    }
+    Alert.alert(
+      `Are you sure you want to delete this chat?`,
+      'This profile will not be able to see you and neither will you',
+      [
+        {
+          text: 'No',
+          onPress: () => {
+            props.navigation.navigate('Chat');
+          },
+          style: 'cancel',
+        },
+        {
+          text: 'Yes',
+          onPress: () => {
+            dispatch(deleteConversation(chatId));
+          },
+        },
+      ]
+    );
+  };
+
+  const onOpenActionSheet = (profile, chatId) => {
+    // Same interface as https://facebook.github.io/react-native/docs/actionsheetios.html
+    const options = [
+      'View Profile',
+      'Delete chat',
+      'Block profile',
+      'Report profile',
+      'Cancel',
+    ];
+    const destructiveButtonIndex = [1, 2, 3];
+    const cancelButtonIndex = 4;
+
+    showActionSheetWithOptions(
+      {
+        options,
+        cancelButtonIndex,
+        destructiveButtonIndex,
+      },
+      (buttonIndex) => {
+        if (buttonIndex === 0) {
+          handleShowProfile(profile, profile.is_in_group);
+        }
+        if (buttonIndex === 1) {
+          handleDeleteChat(chatId);
+        }
+        if (buttonIndex === 2) {
+          handleBlockProfile(profile.id);
+        }
+        if (buttonIndex === 3) {
+          handleReportProfile(profile.id);
+        }
+        return null;
+      }
+    );
+  };
+
+  if (
+    loadingMessages ||
+    localLoading ||
+    loadingDeleteConversation ||
+    loadingReportProfile ||
+    loadingBlockProfile
+  ) {
     <ActivityModal
       loading
       title="Please wait"
@@ -126,6 +334,7 @@ const ChatScreen = (props) => {
       }}
     />;
   }
+
   const renderMessages = ({ item }) => {
     return (
       <Message
@@ -133,12 +342,19 @@ const ChatScreen = (props) => {
         isMyMessage={item.sent_by_current ? true : false}
         ownProfile={profileContext}
         matchedProfile={receiverData}
-        onShowProfile={() => {
-          handleShowProfile(receiverData, receiverData.isInGroup);
-        }}
+        onShowProfile={() =>
+          item.sent_by_current
+            ? handleShowProfile(
+                profileContext,
+                profileContext.is_in_group,
+                true
+              )
+            : handleShowProfile(receiverData, receiverData.is_in_group)
+        }
       />
     );
   };
+
   return (
     <View style={styles.screen}>
       {!loadingMessages && (
@@ -148,6 +364,7 @@ const ChatScreen = (props) => {
           onShowProfile={() =>
             handleShowProfile(receiverData, receiverData.is_in_group)
           }
+          onActionSheet={() => onOpenActionSheet(receiverData, conversationId)}
         />
       )}
       <View style={styles.messages_Container}>
@@ -182,17 +399,6 @@ const ChatScreen = (props) => {
       </View>
     </View>
   );
-};
-
-ChatScreen.navigationOptions = (navData) => {
-  const handleShowProfile = (profileid, isInGroup) => {
-    if (profileid) {
-      navData.navigation.navigate('SwipeProfile', {
-        mainProfileId: profileid,
-        isInGroup: isInGroup,
-      });
-    }
-  };
 };
 
 const styles = StyleSheet.create({

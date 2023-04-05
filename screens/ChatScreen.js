@@ -251,9 +251,7 @@ const ChatScreen = (props) => {
             style={{ resizeMode: 'contain', flex: 1, aspectRatio: 1 }}
           />
         </View>
-        <Text style={{ color: Colors.white, fontSize: 15 }}>
-          No chats yet ;(
-        </Text>
+        <Text style={{ color: Colors.white, fontSize: 15 }}>No chats yet</Text>
       </View>
     );
   };

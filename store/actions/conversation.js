@@ -1,7 +1,5 @@
-import { Platform } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
-import Constants from 'expo-constants';
 import * as c from '../../constants/conversation';
 import { ENV } from '../../environment';
 
@@ -86,7 +84,7 @@ export const deleteConversation = (id) => {
 
       const { data } = await axios({
         method: 'delete',
-        url: `${BASE_URL}/api/v1/conversations/${id}`,
+        url: `${BASE_URL}/api/v1/conversations/${id}/`,
         headers: config,
       });
 
@@ -94,6 +92,8 @@ export const deleteConversation = (id) => {
         type: c.DELETE_CONVERSATION_SUCCESS,
         payload: data,
       });
+
+      dispatch({ type: c.DELETE_CONVERSATION_RESET });
     } catch (error) {
       dispatch({
         type: c.DELETE_CONVERSATION_FAIL,

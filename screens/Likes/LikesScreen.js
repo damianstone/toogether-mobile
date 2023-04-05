@@ -238,14 +238,14 @@ LikesScreen.navigationOptions = (navData) => {
     headerRight: () => (
       <HeaderButtons HeaderButtonComponent={HeaderButtom}>
         <Item
-          title="Chat"
+          title="Matches"
           iconName={
             Platform.OS === 'android'
               ? 'chatbubble-outline'
               : 'chatbubble-outline'
           }
           onPress={() => {
-            navData.navigation.navigate('Match', {
+            navData.navigation.navigate('Matches', {
               screen: 'Likes',
             });
           }}
