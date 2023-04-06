@@ -71,6 +71,24 @@ export const authenticate = (userDataObj) => {
   };
 };
 
+export const setIsAuth = (flag) => {
+  return (dispatch) => {
+    dispatch({ 
+      type: c.SET_IS_AUTHENTICATED,
+      payload: { isAuth: flag },
+    })
+  };
+};
+
+export const setDidTryLogin = (flag) => {
+  return (dispatch) => {
+    dispatch({ 
+      type: c.SET_DID_TRY_LOGIN,
+      payload: { didTryLogin: flag },
+    })
+  };
+};
+
 export const authenticateLogin = () => {
   return (dispatch) => {
     dispatch({ type: c.AUTHENTICATELOGIN });
@@ -179,7 +197,14 @@ export const logout = () => {
       dispatch({ type: c.USER_LIST_PHOTOS_RESET });
       dispatch({ type: c.USER_GET_PROFILE_RESET });
       await AsyncStorage.removeItem('@userData');
-      dispatch({ type: c.AUTHENTICATELOGIN });
+      dispatch({ 
+        type: c.SET_DID_TRY_LOGIN, 
+        payload: { didTryLogin: false },
+      });
+      dispatch({ 
+        type: c.SET_IS_AUTHENTICATED, 
+        payload: { isAuth: false },
+      });
     } catch (e) {
       console.log(e);
     }

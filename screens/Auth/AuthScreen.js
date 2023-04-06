@@ -123,6 +123,14 @@ const AuthStartScreen = (props) => {
     if (loginSuccess && loginData.has_account) {
       dispatch({ type: c.USER_LOGIN_RESET });
       dispatch({ type: c.LOGIN });
+      dispatch({
+        type: c.SET_IS_AUTHENTICATED,
+        payload: true,
+      })
+      dispatch({
+        type: c.SET_DID_TRY_LOGIN,
+        payload: true,
+      })
       // props.navigation.navigate('Swipe');
     }
 

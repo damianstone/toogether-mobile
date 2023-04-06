@@ -15,13 +15,13 @@ const StartupScreen = (props) => {
       // get the user data as a promise
       const userData = JSON.parse(await AsyncStorage.getItem('@userData'));
 
-      if (userData && userData.has_account) {
-        props.navigation.navigate('Swipe');
-        dispatch({ type: c.LOGIN });
-      } else {
-        dispatch({ type: c.DID_TRY_LOGIN });
-        props.navigation.navigate('AuthStart');
-      }
+      // if (userData && userData.has_account) {
+      //   props.navigation.navigate('Swipe');
+      //   dispatch({ type: c.LOGIN });
+      // } else {
+      //   dispatch({ type: c.DID_TRY_LOGIN });
+      //   props.navigation.navigate('AuthStart');
+      // }
     };
 
     tryLogin();
