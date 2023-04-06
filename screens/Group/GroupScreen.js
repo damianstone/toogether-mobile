@@ -310,6 +310,11 @@ const GroupScreen = (props) => {
                 style={styles.name}
               >{`${groupContext.owner.name}'s group`}</Text>
             )}
+            {
+              groupContext?.total_members < 2 && (
+                <Text style={styles.name}>Don't show group</Text>
+              )
+            }
           </View>
         </View>
         <View style={styles.buttons_container}>
@@ -407,6 +412,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
     alignItems: 'center',
     justifyContent: 'center',
+    width: '100%'
   },
   avatar_view: {
     backgroundColor: Colors.orange,
@@ -425,6 +431,8 @@ const styles = StyleSheet.create({
     marginTop: -5,
     justifyContent: 'center',
     alignItems: 'center',
+    flexDirection: 'row',
+    backgroundColor: 'green',
   },
   name: {
     fontSize: 20,
