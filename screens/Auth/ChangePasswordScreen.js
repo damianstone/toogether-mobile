@@ -86,11 +86,10 @@ const ChangePasswordScreen = (props) => {
       </View>
     )
   }
-  const example = () => { }
 
   return (
     <ScrollView contentContainerStyle={styles.scroll_container}>
-      <KeyboardAvoidingView style={styles.screen}>
+      <KeyboardAvoidingView style={styles.screen} behavior='padding' >
         <View style={styles.auth_text_container}>
           <Text style={styles.auth_text_big}>Change password</Text>
           <Text style={styles.auth_text_small}>
