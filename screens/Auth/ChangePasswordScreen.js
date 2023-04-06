@@ -52,7 +52,7 @@ const ChangePasswordScreen = (props) => {
     }
 
     if (data) {
-      props.navigation.navigate('MyProfile');
+      props.navigation.navigate('Auth');
     }
 
     dispatch({ type: c.CHANGE_PASSWORD_RESET });
