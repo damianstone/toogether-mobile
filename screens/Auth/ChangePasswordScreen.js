@@ -53,6 +53,11 @@ const ChangePasswordScreen = (props) => {
 
     if (data) {
       props.navigation.navigate('Auth');
+      Alert.alert(
+        'Password changed successfully!',
+        'You can Login now! :)',
+        [{ text: 'OK' }]
+      );
     }
 
     dispatch({ type: c.CHANGE_PASSWORD_RESET });
@@ -86,11 +91,10 @@ const ChangePasswordScreen = (props) => {
       </View>
     )
   }
-  const example = () => { }
 
   return (
-    <ScrollView contentContainerStyle={styles.scroll_container}>
-      <KeyboardAvoidingView style={styles.screen}>
+    <View style={styles.screen}>
+      <KeyboardAvoidingView style={styles.scroll_container}>
         <View style={styles.auth_text_container}>
           <Text style={styles.auth_text_big}>Change password</Text>
           <Text style={styles.auth_text_small}>
@@ -132,7 +136,7 @@ const ChangePasswordScreen = (props) => {
             onPress={handlePress}/>
         </View>
       </KeyboardAvoidingView>
-    </ScrollView>
+    </View>
   );
 };
 
@@ -184,12 +188,13 @@ const styles = StyleSheet.create({
     border: 2,
     width: '95%',
     padding: 10,
+    paddingHorizontal: '5%'
     // fixes styling for Android and should be default for iOS
   },
   auth_input_email: {
     width: '100%',
     flexDirection: 'column',
-    paddingHorizontal: 20
+    paddingHorizontal: '5%'
   },
 
   input: {
@@ -215,6 +220,7 @@ const styles = StyleSheet.create({
   scroll_container: {
     flexGrow: 1,
     flexDirection: 'column',
+    width:'100%',
     justifyContent: 'space-between',
     with: '100%',
   },

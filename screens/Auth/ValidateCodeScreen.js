@@ -29,6 +29,7 @@ const ValidateCodeScreen = (props) => {
   const dispatch = useDispatch()
 
   const { data, error, loading } = useSelector(state => state.validateCode)
+  const { data: dataResend} = useSelector(state => state.sendRecoveryCode)
 
 
   const handleResend = () => {
@@ -71,6 +72,20 @@ const ValidateCodeScreen = (props) => {
     dispatch({ type: c.VALIDATE_CODE_RESET });
   }, [dispatch, error, data]);
 
+  useEffect(()=>{
+
+    if(dataResend){
+      Alert.alert(
+        'Code Resent',
+        'Code was resent',
+        [{ text: 'OK' }]
+      );
+    }
+
+  }, [dataResend])
+
+
+
   const handlePress = () => {
     const fixedCode = code.replace(/-/g, "");
     if(code){
@@ -102,8 +117,8 @@ const ValidateCodeScreen = (props) => {
   }
 
   return (
-    <ScrollView contentContainerStyle={styles.scroll_container}>
-      <KeyboardAvoidingView style={styles.screen}>
+    <View style={styles.screen}>
+      <KeyboardAvoidingView style={styles.scroll_container}>
         <View style={styles.auth_text_container} >
           <Text style={styles.auth_text_big}>Validate code</Text>
           <Text style={styles.auth_text_small}>
@@ -132,7 +147,7 @@ const ValidateCodeScreen = (props) => {
             backgroundColor={Colors.bg} />
         </View>
       </KeyboardAvoidingView>
-    </ScrollView>
+    </View>
   );
 };
 
@@ -168,8 +183,10 @@ const styles = StyleSheet.create({
   },
   scroll_container: {
     flexGrow: 1,
+    width:'100%',
     flexDirection: 'column',
     justifyContent: 'space-between',
+    alignItems: "center",
     backgroundColor: Colors.bg,
   },
   auth_text_big: {
@@ -198,7 +215,7 @@ const styles = StyleSheet.create({
     height: '18%',
     flexDirection: 'column',
     alignItems: 'center',
-    justifyContent: 'space-around'
+    justifyContent: 'center',
   },
   button_container: {
     alignSelf: 'center',
@@ -219,7 +236,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     textAlign: 'center',
     fontSize: 20,
-    color: Colors.white
+    color: Colors.white,
   },
 });
 
