@@ -25,7 +25,7 @@ export const userLocation = () => {
       // let location = await Location.getCurrentPositionAsync({
       //   accuracy: Platform.OS === 'ios' ? 3 : Location.Accuracy.High,
       // });
-      // If you are getting stuck and not getting location (on Android uncomment this to get default location so that you can continue working)
+      // // If you are getting stuck and not getting location (on Android uncomment this to get default location so that you can continue working)
       let location;
       if (Platform.OS === 'ios') {
         location = await Location.getCurrentPositionAsync({
@@ -524,7 +524,6 @@ export const listUserPhotos = () => {
   };
 };
 
-
 export const sendRecoveryCode = (email) => {
   return async (dispatch) => {
     try {
@@ -547,7 +546,6 @@ export const sendRecoveryCode = (email) => {
         type: c.RECOVERY_CODE_SUCCESS,
         payload: data,
       });
-
     } catch (error) {
       dispatch({
         type: c.RECOVERY_CODE_FAIL,
@@ -571,7 +569,8 @@ export const validateCode = (email, code) => {
         url: `${BASE_URL}/api/v1/users/validate-code/`,
         headers: config,
         data: {
-          email, code
+          email,
+          code,
         },
       });
 
@@ -579,7 +578,6 @@ export const validateCode = (email, code) => {
         type: c.VALIDATE_CODE_SUCCESS,
         payload: data,
       });
-
     } catch (error) {
       dispatch({
         type: c.VALIDATE_CODE_FAIL,
@@ -589,8 +587,7 @@ export const validateCode = (email, code) => {
   };
 };
 
-export const changePassword = (email,password, repeated_password, token) => {
-
+export const changePassword = (email, password, repeated_password, token) => {
   return async (dispatch) => {
     try {
       dispatch({ type: c.CHANGE_PASSWORD_REQUEST });
@@ -606,17 +603,55 @@ export const changePassword = (email,password, repeated_password, token) => {
         url: `${BASE_URL}/api/v1/profiles/actions/reset-password/`,
         headers: config,
         data: {
-          email, password, repeated_password
+          email,
+          password,
+          repeated_password,
         },
       });
+      
       dispatch({
         type: c.CHANGE_PASSWORD_SUCCESS,
         payload: data,
       });
+
       dispatch({ type: c.CHANGE_PASSWORD_RESET });
     } catch (error) {
       dispatch({
         type: c.CHANGE_PASSWORD_FAIL,
+        payload: error,
+      });
+    }
+  };
+};
+
+// -------------------------------- REPORT ACTION --------------------------------
+
+export const reportProfile = (id) => {
+  return async (dispatch) => {
+    try {
+      dispatch({ type: c.REPORT_PROFILE_REQUEST });
+
+      const userData = JSON.parse(await AsyncStorage.getItem('@userData'));
+
+      const config = {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+        Authorization: `Bearer ${userData.token}`,
+      };
+
+      const { data } = await axios({
+        method: 'POST',
+        url: `${BASE_URL}/api/v1/profiles/${id}/actions/report-profile/`,
+        headers: config,
+      });
+
+      dispatch({
+        type: c.REPORT_PROFILE_SUCCESS,
+        payload: data,
+      });
+    } catch (error) {
+      dispatch({
+        type: c.REPORT_PROFILE_FAIL,
         payload: error,
       });
     }
