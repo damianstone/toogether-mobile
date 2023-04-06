@@ -28,7 +28,7 @@ const PreviewChat = (props) => {
         <View style={styles.chat_preview}>
           <Text style={styles.matched_name}>{receiverProfile.name}</Text>
           <View style={styles.lastMessagesContainer}>
-            <Text style={styles.last_message}>
+            <Text numberOfLines={1} style={styles.last_message}>
               {data?.last_message?.message}
             </Text>
             <Text style={styles.messageCount}>1</Text>

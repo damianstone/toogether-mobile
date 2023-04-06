@@ -16,10 +16,15 @@ import { StatusBar } from 'expo-status-bar';
 
 import HeaderButtom from '../../components/UI/HeaderButton';
 import Colors from '../../constants/Colors';
-import { listMatches, deleteMatch } from '../../store/actions/swipe';
+import {
+  listMatches,
+  deleteMatch,
+  loadMoreMatches,
+} from '../../store/actions/swipe';
 import {
   startConversation,
   listMyConversations,
+  loadMoreConversations,
 } from '../../store/actions/conversation';
 import { checkServerError, check400Error } from '../../utils/errors';
 import no_chats from '../../assets/images/no-chats.png';
@@ -190,6 +195,17 @@ const MatchesScreen = (props) => {
       </SafeAreaView>
     );
   }
+  const handleLoadMoreMatches = () => {
+    if (matches.next) {
+      dispatch(loadMoreMatches(matches.next));
+    }
+  };
+
+  const handleLoadMoreConversations = () => {
+    if (conversations.next) {
+      dispatch(loadMoreConversations(conversations.next));
+    }
+  };
 
   const renderBubblesMatches = ({ item }) => {
     const matchedProfile = item.matched_data.matched_profile;
@@ -251,12 +267,14 @@ const MatchesScreen = (props) => {
                   horizontal
                 />
               }
-              initialNumToRender={4}
               horizontal
               contentContainerStyle={styles.new_matches}
               data={matches?.results}
               keyExtractor={(item) => item.id.toString()}
               renderItem={renderBubblesMatches}
+              extraData={matches}
+              onEndReached={handleLoadMoreMatches}
+              onEndReachedThreshold={0.3}
             />
           )}
         </View>
@@ -276,6 +294,9 @@ const MatchesScreen = (props) => {
               data={conversations?.results}
               renderItem={renderPreviewChats}
               ListEmptyComponent={renderNoChats}
+              extraData={conversations}
+              onEndReached={handleLoadMoreConversations}
+              onEndReachedThreshold={0.3}
             />
           )}
         </View>

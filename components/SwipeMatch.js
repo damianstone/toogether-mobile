@@ -94,11 +94,9 @@ const SwipeMatch = (props) => {
         <View style={styles.footerContainer}>
           <TouchableOpacity
             style={styles.chatButtonContainer}
-            onPress={handleSendMessage}
-          >
+            onPress={handleSendMessage}>
             <Text
-              style={{ color: Colors.white, fontSize: 15, fontWeight: '500' }}
-            >
+              style={{ color: Colors.white, fontSize: 15, fontWeight: '500' }}>
               {chatButtonText}
             </Text>
             <Ionicons name="chatbubble-outline" size={20} color="white" />
