@@ -8,6 +8,7 @@ import {
   ActivityIndicator,
   RefreshControl,
   Alert,
+  Platform,
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { useActionSheet } from '@expo/react-native-action-sheet';
@@ -445,6 +446,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.bgCard,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
+    marginTop: Platform.OS === 'ios' ? '0%' : '15%',
     padding: 10,
     zIndex: -1,
   },
