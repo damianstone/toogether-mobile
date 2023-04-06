@@ -129,8 +129,7 @@ const ChangePasswordScreen = (props) => {
         </View>
         <View style={styles.button_container}>
           <AuthButton text="Confirm"
-            onPress={handlePress}
-            style={{ backgroundColor: '#244344', width: "100%" }} />
+            onPress={handlePress}/>
         </View>
       </KeyboardAvoidingView>
     </ScrollView>
@@ -207,7 +206,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     justifyContent: 'center',
     alignItems: 'center',
-    width: '100%',
+    width: '90%',
     padding: Platform.OS === 'ios' ? 20 : 0,
     paddingHorizontal: Platform.OS === 'ios' ? 0 : 20,
     paddingVertical: Platform.OS === 'ios' ? '7%' : 0,

@@ -204,7 +204,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     justifyContent: 'center',
     alignItems: 'center',
-    width: '100%',
+    width: '90%',
     backgroundColor: Colors.bg,
     padding: Platform.OS === 'ios' ? 20 : 0,
     paddingHorizontal: Platform.OS === 'ios' ? 0 : 20,
