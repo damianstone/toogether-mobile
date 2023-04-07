@@ -170,15 +170,21 @@ export const userLogin = (email, password) => {
           token: data.token,
           has_account: data.has_account,
           refresh_token: data.refresh,
-          loginAuth: true,
-          didTryLogin: false,
         })
       );
-      dispatch({ type: c.DID_TRY_LOGIN });
 
       dispatch({
         type: c.USER_LOGIN_SUCCESS,
         payload: data,
+      });
+
+      dispatch({ 
+        type: c.SET_DID_TRY_LOGIN,
+        payload: true,
+      });
+      dispatch({ 
+        type: c.SET_IS_AUTHENTICATED,
+        payload: true,
       });
     } catch (error) {
       dispatch({
@@ -197,10 +203,10 @@ export const logout = () => {
       dispatch({ type: c.USER_LIST_PHOTOS_RESET });
       dispatch({ type: c.USER_GET_PROFILE_RESET });
       await AsyncStorage.removeItem('@userData');
-      dispatch({ 
-        type: c.SET_DID_TRY_LOGIN, 
-        payload: { didTryLogin: false },
-      });
+      // dispatch({ 
+      //   type: c.SET_DID_TRY_LOGIN, 
+      //   payload: { didTryLogin: true },
+      // });
       dispatch({ 
         type: c.SET_IS_AUTHENTICATED, 
         payload: { isAuth: false },

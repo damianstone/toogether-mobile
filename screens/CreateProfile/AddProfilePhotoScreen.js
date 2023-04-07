@@ -64,7 +64,6 @@ const AddProfilePhotoScreen = (props) => {
               type: c.SET_IS_AUTHENTICATED, 
               payload: { isAuth: true },
             });
-            // props.navigation.navigate('Swipe');
           },
           style: 'cancel',
         },
@@ -78,7 +77,6 @@ const AddProfilePhotoScreen = (props) => {
   const handleAddPhoto = () => {
     if (image && image.uri) {
       dispatch(addPhoto(image));
-      // dispatch({ type: c.LOGIN });
     }
     if (!image || !image.uri) {
       Alert.alert(

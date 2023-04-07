@@ -1,8 +1,4 @@
 export const AUTHENTICATE = 'AUTHENTICATE';
-export const AUTHENTICATELOGIN = 'AUTHENTICATELOGIN';
-export const DID_TRY_LOGIN = 'DID_TRY_LOGIN';
-export const LOGOUT = 'LOGOUT';
-export const LOGIN = 'LOGIN';
 export const SET_IS_AUTHENTICATED = 'SET_IS_AUTHENTICATED';
 export const SET_DID_TRY_LOGIN = 'SET_DID_TRY_LOGIN';
 

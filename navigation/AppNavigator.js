@@ -23,18 +23,10 @@ const AppNavigator = (props) => {
   const Stack = createStackNavigator();
   const dispatch = useDispatch();
 
-  // Is auth
-  // didTryLogin
-  const [localIsAuth, setLocalIsAuth] = useState(false);
-  const [localDidTryLogin, setLocalDidTryLogin] = useState(false);
-
   const isAuth = useSelector((state) => state.auth.isAuth);
   const didTryLogin = useSelector((state) => state.auth.didTryLogin);
 
-  const state = useSelector((state) => state.auth);
-
   const token = useSelector(state => state);
-  // console.log('APP NAVIGATOR');
 
   const checkToken = async () => {
     const userData = JSON.parse(await AsyncStorage.getItem('@userData'));
@@ -52,14 +44,6 @@ const AppNavigator = (props) => {
 
       if (isTokenExpired && isRefreshTokenExpired) {
         await dispatch(logout());
-        // setLocalIsAuth(false);
-        // dispatch(setIsAuth(false))
-        // dispatch(setDidTryLogin(true))
-
-        // dispatch(authenticateLogin());
-        // dispatch(authDidTryLogin());
-        console.log('1. isAuth: ', isAuth);
-        console.log('1. didTryLogin: ', didTryLogin);
         return;
       }
 
@@ -70,31 +54,17 @@ const AppNavigator = (props) => {
       dispatch(authenticate(userData));
       dispatch(setDidTryLogin(true));
       await dispatch(setIsAuth(true));
-      // dispatch(setIsAuth(true));
       // if there is userData and the token is not expired, then the user is clearly authenticated
-      console.log('2. isAuth: ', isAuth);
-      console.log('2. didTryLogin: ', didTryLogin);
       return;
     }
 
     // if there is no user data in the local storage, then the user is clearly not authenticated
-    // dispatch(authenticateLogin());
-    // dispatch(authDidTryLogin());
-    // dispatch(setIsAuth(false))
     dispatch(setDidTryLogin(true));
     await dispatch(setIsAuth(false))
-    console.log('3. isAuth: ', isAuth);
-    console.log('3.didTryLogin: ', didTryLogin);
   };
 
   useEffect(() => {
     checkToken();
-    // setLocalDidTryLogin(true);
-    // dispatch(setIsAuth(localIsAuth));
-    // dispatch(setDidTryLogin(true));
-    console.log("4. isAuth: ", isAuth);
-    console.log("4. didTryLogin: ", didTryLogin);
-    console.log('REFRESH');
   }, [isAuth]);
 
   // console.log('IS AUTH ---> ', isAuth);
