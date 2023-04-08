@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useContext } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import {
   Alert,
   View,
@@ -21,13 +21,14 @@ import {
   addConversationMessage,
   listMessages,
   deleteConversation,
+  loadMoreMessages,
 } from '../../store/actions/conversation';
 import { blockProfile } from '../../store/actions/block';
 import { reportProfile } from '../../store/actions/user';
-import { ENV } from '../../environment';
 import * as u from '../../constants/user';
 import * as b from '../../constants/block';
 import * as c from '../../constants/conversation';
+import { ENV } from '../../environment';
 const BASE_URL = ENV.API_URL;
 
 API_URL = BASE_URL.replace('http://', '');
@@ -59,11 +60,6 @@ const ChatScreen = (props) => {
     loading: loadingBlockProfile,
     data: profileBlocked,
   } = blockProfileReducer;
-  const [refreshing, setRefreshing] = useState(false);
-  const [localLoading, setLocalLoading] = useState(false);
-  const [chatMessage, setChatMessage] = useState('');
-  const [chatSocket, setChatSocket] = useState(null);
-  const dispatch = useDispatch();
 
   const conversationReducer = useSelector(
     (state) => state.listConversationMessages
@@ -71,11 +67,20 @@ const ChatScreen = (props) => {
   const {
     error: errorMessages,
     loading: loadingMessages,
-    data: messages,
+    data: messagesData,
   } = conversationReducer;
+
+  const [refreshing, setRefreshing] = useState(false);
+  const [localLoading, setLocalLoading] = useState(false);
+  const [chatMessage, setChatMessage] = useState('');
+  const [chatSocket, setChatSocket] = useState(null);
+  const [messages, setMessages] = useState([]);
+  const dispatch = useDispatch();
+
   useEffect(() => {
     if (conversationId) {
       dispatch(listMessages(conversationId));
+      setMessages(messagesData);
     }
   }, [conversationId]);
 
@@ -107,6 +112,7 @@ const ChatScreen = (props) => {
   useEffect(() => {
     if (errorMessages) {
       checkServerError(errorMessages);
+      props.navigation.navigate('Matches');
     }
   }, [errorMessages]);
 
@@ -317,7 +323,6 @@ const ChatScreen = (props) => {
   };
 
   if (
-    loadingMessages ||
     localLoading ||
     loadingDeleteConversation ||
     loadingReportProfile ||
@@ -335,6 +340,11 @@ const ChatScreen = (props) => {
     />;
   }
 
+  const handleLoadMoreMessages = () => {
+    if (messagesData?.next) {
+      dispatch(loadMoreMessages(messagesData.next));
+    }
+  };
   const renderMessages = ({ item }) => {
     return (
       <Message
@@ -357,7 +367,7 @@ const ChatScreen = (props) => {
 
   return (
     <View style={styles.screen}>
-      {!loadingMessages && (
+      {messagesData && (
         <ChatHeader
           onGoBack={() => handleGoBack()}
           receiverData={receiverData}
@@ -370,12 +380,22 @@ const ChatScreen = (props) => {
       <View style={styles.messages_Container}>
         <FlatList
           inverted={true}
-          data={messages?.results}
-          keyExtractor={(item) => item.id.toString()}
+          data={messagesData?.results}
           renderItem={renderMessages}
           contentContainerStyle={{ flexDirection: 'column' }}
           extraData={conversationReducer}
+          onEndReachedThreshold={0.2}
+          onEndReached={handleLoadMoreMessages}
         />
+        {loadingMessages && (
+          <ActivityModal
+            loading
+            title="Loading messages"
+            size="large"
+            activityColor="white"
+            titleColor="white"
+          />
+        )}
       </View>
       <View style={styles.sendMessage}>
         <View style={{ flex: 2, flexDirection: 'row', padding: 10 }}>

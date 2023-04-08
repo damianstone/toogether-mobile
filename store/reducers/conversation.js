@@ -13,6 +13,24 @@ export const listMyConversationsReducer = (state = {}, action) => {
 
     case c.LIST_CONVERSATIONS_FAIL:
       return { loading: false, error: action.payload };
+    case c.LOAD_MORE_CONVERSATIONS_REQUESTS:
+      return { ...state, loading: true };
+    case c.LOAD_MORE_CONVERSATIONS_SUCCESS:
+      const newNext = action.payload.next;
+      const oldData = { ...state.data };
+      const newConversations = [...action.payload.results];
+      const newData = {
+        ...state.data,
+        results: [...newConversations, ...oldData.results],
+        next: newNext,
+      };
+      return {
+        ...state,
+        data: newData,
+        loading: false,
+      };
+    case c.LOAD_MORE_CONVERSATIONS_FAIL:
+      return { data: state.data, loading: false, error: action.payload };
 
     default:
       return state;
@@ -32,12 +50,33 @@ export const listConversationMessagesReducer = (state = {}, action) => {
     case c.LIST_CONVERSATION_MESSAGES_FAIL:
       return { loading: false, error: action.payload };
 
+    case c.LOAD_MORE_MESSAGES_REQUESTS:
+      return { ...state, loading: true };
+
+    case c.LOAD_MORE_MESSAGES_SUCCESS:
+      const newNext = action.payload.next;
+      const oldData = { ...state.data };
+      const newMessages = [...action.payload.results];
+      const newData2 = {
+        ...state.data,
+        results: [...newMessages, ...oldData.results],
+        next: newNext,
+      };
+      return {
+        ...state,
+        data: newData2,
+        loading: false,
+      };
+
+    case c.LOAD_MORE_MESSAGES_FAIL:
+      return { data: state.data, loading: false, error: action.payload };
+
     case c.ADD_CONVERSATION_MESSAGE:
       const newData = { ...state.data };
       newData.results.unshift(action.payload);
       return {
         ...state,
-        data: newData, // Append the new message to the existing list
+        data: newData,
       };
     default:
       return state;

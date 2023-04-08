@@ -202,6 +202,38 @@ export const listMatches = () => {
   };
 };
 
+export const loadMoreMatches = (url) => {
+  return async (dispatch) => {
+    try {
+      dispatch({ type: w.LOAD_MORE_MATCH_REQUEST });
+
+      const userData = JSON.parse(await AsyncStorage.getItem('@userData'));
+
+      const config = {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+        Authorization: 'Bearer ' + userData.token,
+      };
+
+      const { data } = await axios({
+        method: 'get',
+        url: url,
+        headers: config,
+      });
+
+      dispatch({
+        type: w.LOAD_MORE_MATCH_SUCCESS,
+        payload: data,
+      });
+    } catch (error) {
+      dispatch({
+        type: w.LOAD_MORE_MATCH_FAIL,
+        payload: error,
+      });
+    }
+  };
+};
+
 export const deleteMatch = (id) => {
   return async (dispatch) => {
     try {

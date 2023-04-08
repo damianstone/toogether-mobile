@@ -18,13 +18,11 @@ export const listMyConversations = () => {
         Accept: 'application/json',
         Authorization: 'Bearer ' + userData.token,
       };
-
       const { data } = await axios({
         method: 'get',
         url: `${BASE_URL}/api/v1/conversations/`,
         headers: config,
       });
-
       dispatch({
         type: c.LIST_CONVERSATIONS_SUCCESS,
         payload: data,
@@ -38,13 +36,43 @@ export const listMyConversations = () => {
   };
 };
 
+export const loadMoreConversations = (url) => {
+  return async (dispatch) => {
+    try {
+      dispatch({ type: c.LOAD_MORE_CONVERSATIONS_REQUESTS });
+
+      const userData = JSON.parse(await AsyncStorage.getItem('@userData'));
+
+      const config = {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+        Authorization: 'Bearer ' + userData.token,
+      };
+
+      const { data } = await axios({
+        method: 'get',
+        url: url,
+        headers: config,
+      });
+
+      dispatch({
+        type: c.LOAD_MORE_CONVERSATIONS_SUCCESS,
+        payload: data,
+      });
+    } catch (error) {
+      dispatch({
+        type: c.LOAD_MORE_CONVERSATIONS_FAIL,
+        payload: error,
+      });
+    }
+  };
+};
 export const listMessages = (id) => {
   return async (dispatch) => {
     try {
       dispatch({ type: c.LIST_CONVERSATION_MESSAGES_REQUEST });
 
       const userData = JSON.parse(await AsyncStorage.getItem('@userData'));
-
       const config = {
         'Content-Type': 'application/json',
         Accept: 'application/json',
@@ -69,6 +97,41 @@ export const listMessages = (id) => {
     }
   };
 };
+export const loadMoreMessages = (url) => {
+  return async (dispatch) => {
+    try {
+      dispatch({ type: c.LOAD_MORE_MESSAGES_REQUESTS });
+
+      const userData = JSON.parse(await AsyncStorage.getItem('@userData'));
+
+      const config = {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+        Authorization: 'Bearer ' + userData.token,
+      };
+
+      const { data } = await axios({
+        method: 'get',
+        url: url,
+        headers: config,
+      });
+
+      dispatch({
+        type: c.LOAD_MORE_MESSAGES_SUCCESS,
+        payload: data,
+      });
+    } catch (error) {
+      dispatch({
+        type: c.LOAD_MORE_MESSAGES_FAIL,
+        payload: error,
+      });
+    }
+  };
+};
+export const addConversationMessage = (messages) => (dispatch) => {
+  dispatch({ type: c.ADD_CONVERSATION_MESSAGE, payload: messages });
+};
+
 export const deleteConversation = (id) => {
   return async (dispatch) => {
     try {
@@ -132,8 +195,4 @@ export const startConversation = (matchId) => {
       });
     }
   };
-};
-
-export const addConversationMessage = (message) => (dispatch) => {
-  dispatch({ type: c.ADD_CONVERSATION_MESSAGE, payload: message });
 };
