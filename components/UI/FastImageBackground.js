@@ -4,37 +4,25 @@ import FastImage from 'react-native-fast-image';
 
 const FastImageBackground = ({
   containerStyle,
-  key,
   imageStyle,
   source,
   resizeMode,
   children,
 }) => {
-  const getResizeMode = () => {
-    if ('contain') {
-      return FastImage.resizeMode.contain;
-    }
-    if ('cover') {
-      return FastImage.resizeMode.cover;
-    }
-    if ('center') {
-      return FastImage.resizeMode.center;
-    }
-    if ('stretch') {
-      return FastImage.resizeMode.stretch;
-    }
-  };
-
   return (
     <View
-      style={{ flex: 1, padding: 0, margin: 0, ...containerStyle }}
-      key={key}>
+      style={{ flex: 1, padding: 0, margin: 0, ...containerStyle }}>
       <FastImage
         style={{
+          position: 'absolute',
+          left: 0,
+          right: 0,
+          top: 0,
+          bottom: 0,
           ...imageStyle,
         }}
         source={source}
-        resizeMode={getResizeMode(resizeMode)}
+        resizeMode={resizeMode}
       />
       {children}
     </View>
