@@ -642,7 +642,7 @@ export const changePassword = (email, password, repeated_password, token) => {
           repeated_password,
         },
       });
-      
+
       dispatch({
         type: c.CHANGE_PASSWORD_SUCCESS,
         payload: data,
