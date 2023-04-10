@@ -54,17 +54,8 @@ const SettingScreen = (props) => {
   }, [errorDelete, dataDeleted]);
 
   const handleLogout = async () => {
-    try {
-      await dispatch(logout());
-      return props.navigation.navigate('AuthStart');
-    } catch (error) {
-      if (error) {
-        if (error?.response?.status === 400) {
-          check400Error(error);
-        }
-        checkServerError(error);
-      }
-    }
+    await dispatch(logout());
+    props.navigation.navigate("AuthStart")
   };
 
   const handleDeleteUser = () => {
