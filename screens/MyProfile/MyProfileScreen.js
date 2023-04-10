@@ -14,18 +14,14 @@ import {
 } from 'react-native';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { useDispatch, useSelector } from 'react-redux';
-import { withNavigationFocus } from 'react-navigation';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import * as ImagePicker from 'expo-image-picker';
+import FastImage from 'react-native-fast-image';
 import { MaterialIcons } from '@expo/vector-icons';
 import { Context } from '../../context/ContextProvider';
 import { getNameInitials, getImage } from '../../utils/getMethods';
-
-import ProfileGallery from '../../components/MyProfile/ProfileGallery';
-import HeaderButtom from '../../components/UI/HeaderButton';
-import Loader from '../../components/UI/Loader';
-import Colors from '../../constants/Colors';
-import * as c from '../../constants/user';
+import { checkServerError, check400Error } from '../../utils/errors';
+import { verifyPermissions } from '../../utils/permissions';
 import {
   listUserPhotos,
   getUserProfile,
@@ -33,11 +29,12 @@ import {
   addPhoto,
   updatePhoto,
 } from '../../store/actions/user';
-import { checkServerError, check400Error } from '../../utils/errors';
-import { verifyPermissions } from '../../utils/permissions';
 
-import styles from './styles';
+import ProfileGallery from '../../components/MyProfile/ProfileGallery';
 import FooterProfile from '../../components/MyProfile/FooterProfile';
+import HeaderButtom from '../../components/UI/HeaderButton';
+import * as c from '../../constants/user';
+import styles from './styles';
 
 const MyProfileScreen = (props) => {
   const { profileContext, updateProfileContext } = useContext(Context);
@@ -219,9 +216,10 @@ const MyProfileScreen = (props) => {
         onPress={handleOpenPreview}
       >
         {photos && Object.values(photos).length > 0 && (
-          <Image
+          <FastImage
             source={{
               uri: `${getImage(Object.values(photos)[0].image)}`,
+              priority: FastImage.priority.high,
             }}
             style={styles.image}
           />

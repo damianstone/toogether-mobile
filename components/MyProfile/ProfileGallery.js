@@ -5,13 +5,15 @@ import {
   View,
   StyleSheet,
   Dimensions,
-  FlatList,
-  Image,
 } from 'react-native';
+import FastImage from 'react-native-fast-image';
+
 import Colors from '../../constants/Colors';
 import { BASE_PHOTOS } from '../../data/base_fotos';
 import { getImage } from '../../utils/getMethods';
+
 const { width } = Dimensions.get('window');
+
 const ProfileGallery = (props) => {
   const {
     photos,
@@ -27,20 +29,16 @@ const ProfileGallery = (props) => {
       <TouchableOpacity
         key={photo.id}
         onPress={() => handleActionSheet(photo.id)}
-        style={[styles.myphotosItemView]}
-      >
+        style={[styles.myphotosItemView]}>
         {loadingAddPhoto && photo.id === photoId ? (
           <Loader size="small" />
         ) : (
-          <Image
+          <FastImage
             source={{
               uri: `${getImage(photo.image)}`,
+              priority: FastImage.priority.high,
             }}
-            style={{
-              width: '100%',
-              height: '100%',
-              backgroundColor: Colors.bgCard,
-            }}
+            style={styles.image}
           />
         )}
       </TouchableOpacity>
@@ -63,16 +61,8 @@ const ProfileGallery = (props) => {
                 onAddPhoto();
                 setPhotoId(item.id);
               }}
-              style={styles.myphotosItemView}
-            >
-              <View
-                style={{
-                  width: '100%',
-                  height: '100%',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}
-              >
+              style={styles.myphotosItemView}>
+              <View style={styles.imagePlaceholder}>
                 {loadingAddPhoto && item.id === photoId ? (
                   <Loader size="small" />
                 ) : (
@@ -104,6 +94,17 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     alignItems: 'flex-end',
     marginBottom: 11,
+  },
+  image: {
+    width: '100%',
+    height: '100%',
+    backgroundColor: Colors.bgCard,
+  },
+  imagePlaceholder: {
+    width: '100%',
+    height: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   photoTitleLabel: {
     fontWeight: '500',

@@ -9,6 +9,9 @@ import {
   View,
 } from 'react-native';
 import Swiper from 'react-native-swiper';
+import FastImage from 'react-native-fast-image';
+
+import FastImageBackground from './UI/FastImageBackground';
 import { getImage } from '../utils/getMethods';
 import Colors from '../constants/Colors';
 import InfoCard from './InfoCard';
@@ -62,7 +65,10 @@ const SwipeCard = (props) => {
 
   const checkPhoto = (profile) => {
     if (profile.photos.length > 0) {
-      return { uri: `${getImage(profile.photos[0]?.image)}` };
+      return {
+        uri: `${getImage(profile.photos[0]?.image)}`,
+        priority: FastImage.priority.normal,
+      };
     }
     return require('../assets/images/placeholder-profile.png');
   };
@@ -103,18 +109,16 @@ const SwipeCard = (props) => {
           removeClippedSubviews={false}
           showsButtons
           buttonWrapperStyle={{ color: Colors.placeholder }}
-          style={styles.wrapper}
-        >
+          style={styles.wrapper}>
           {isGroup ? (
             members.map((profile) => {
               return (
-                <ImageBackground
+                <FastImageBackground
                   key={profile.id}
                   imageStyle={{ ...imageStyle }}
                   resizeMode="cover"
                   source={checkPhoto(profile)}
-                  style={styles.image}
-                >
+                  style={styles.image}>
                   <InfoCard
                     name={profile.name}
                     city={profile.city}
@@ -126,8 +130,7 @@ const SwipeCard = (props) => {
                   {!showProfileRestricted && (
                     <TouchableOpacity
                       onPress={() => showProfileHandler(profile, true)}
-                      style={styles.arrowContainer}
-                    >
+                      style={styles.arrowContainer}>
                       <Image
                         source={require('../assets/images/white-arrow-up.png')}
                         style={{ width: '100%', height: '100%' }}
@@ -137,15 +140,14 @@ const SwipeCard = (props) => {
                   {showProfileRestricted && allowedProfileId === profile.id && (
                     <TouchableOpacity
                       onPress={() => showProfileHandler(profile, true)}
-                      style={styles.arrowContainer}
-                    >
+                      style={styles.arrowContainer}>
                       <Image
                         source={require('../assets/images/white-arrow-up.png')}
                         style={{ width: '100%', height: '100%' }}
                       />
                     </TouchableOpacity>
                   )}
-                </ImageBackground>
+                </FastImageBackground>
               );
             })
           ) : (
@@ -154,8 +156,7 @@ const SwipeCard = (props) => {
               key={profile.id}
               resizeMode="cover"
               source={checkPhoto(profile)}
-              style={styles.image}
-            >
+              style={styles.image}>
               <InfoCard
                 name={profile.name}
                 city={profile.city}
@@ -166,8 +167,7 @@ const SwipeCard = (props) => {
               />
               <TouchableOpacity
                 onPress={() => showProfileHandler(profile, false)}
-                style={styles.arrowContainer}
-              >
+                style={styles.arrowContainer}>
                 <Image
                   source={require('../assets/images/white-arrow-up.png')}
                   style={{ width: '100%', height: '100%' }}
