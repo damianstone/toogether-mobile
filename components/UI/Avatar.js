@@ -7,6 +7,7 @@ import { getUserProfile } from '../../store/actions/user';
 import { getNameInitials, getImage } from '../../utils/getMethods';
 
 import Loader from './Loader';
+import FastImage from 'react-native-fast-image';
 
 const Avatar = (props) => {
   const { onPress } = props;
@@ -40,8 +41,11 @@ const Avatar = (props) => {
         ))}
       {dataProfile && dataProfile.photos.length > 0 && (
         <View style={styles.avatar_view}>
-          <Image
-            source={{ uri: `${getImage(dataProfile.photos[0].image)}` }}
+          <FastImage
+            source={{
+              uri: `${getImage(dataProfile.photos[0].image)}`,
+              priority: FastImage.priority.high,
+            }}
             style={styles.img}
           />
         </View>

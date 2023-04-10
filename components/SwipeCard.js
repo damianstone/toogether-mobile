@@ -1,13 +1,6 @@
 /* eslint-disable no-unused-vars */
-import React, { useState } from 'react';
-import {
-  ImageBackground,
-  StyleSheet,
-  Text,
-  Image,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import React from 'react';
+import { StyleSheet, Text, Image, TouchableOpacity, View } from 'react-native';
 import Swiper from 'react-native-swiper';
 import FastImage from 'react-native-fast-image';
 
@@ -28,7 +21,7 @@ const SwipeCard = ({
     if (profile.photos.length > 0) {
       return {
         uri: `${getImage(profile.photos[0]?.image)}`,
-        priority: FastImage.priority.normal,
+        priority: FastImage.priority.high,
       };
     }
     return require('../assets/images/placeholder-profile.png');
@@ -36,12 +29,12 @@ const SwipeCard = ({
 
   const renderSingleCard = () => {
     return (
-      <ImageBackground
-        imageStyle={styles.singleImageStyle}
+      <FastImageBackground
         key={profile.id}
-        resizeMode="cover"
-        source={checkPhoto(profile)}
-        style={styles.image}>
+        containerStyle={styles.imageBackgroundContainer}
+        imageStyle={styles.singleImageStyle}
+        resizeMode={FastImage.resizeMode.cover}
+        source={checkPhoto(profile)}>
         <InfoCard
           name={profile.name}
           city={profile.city}
@@ -58,7 +51,7 @@ const SwipeCard = ({
             style={{ width: '100%', height: '100%' }}
           />
         </TouchableOpacity>
-      </ImageBackground>
+      </FastImageBackground>
     );
   };
 
