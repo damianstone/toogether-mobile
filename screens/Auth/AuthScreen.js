@@ -190,15 +190,13 @@ const AuthStartScreen = (props) => {
         behavior={Platform.OS === 'ios' ? 'position' : 'height'}
         keyboardVerticalOffset={
           Platform.OS === 'ios' ? undefined : -0.3 * Device.height
-        }
-      >
+        }>
         <ScrollView
           style={styles.scrollview_style}
           contentContainerStyle={styles.scrollview_content_container}
           automaticallyAdjustKeyboardInsets={
             Platform.OS == 'ios' ? false : true
-          }
-        >
+          }>
           <View style={styles.auth_input_container}>
             <AuthInput
               id="email"
@@ -244,6 +242,12 @@ const AuthStartScreen = (props) => {
                 onInputChange={inputChangeHandler}
               />
             )}
+            <ButtonAndroid
+              style={styles.auth_text_button}
+              color={Colors.bgCard}
+              title={'Did you forget your password?'}
+              onPress={() => props.navigation.navigate('Recovery')}
+            />
             {registerLoading || loginLoading ? (
               <View style={styles.auth_loader_container}>
                 <ActivityIndicator size="large" />

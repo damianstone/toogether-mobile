@@ -55,8 +55,8 @@ const SettingScreen = (props) => {
 
   const handleLogout = async () => {
     try {
-      dispatch(logout());
-      props.navigation.navigate('AuthStart');
+      await dispatch(logout());
+      return props.navigation.navigate('AuthStart');
     } catch (error) {
       if (error) {
         if (error?.response?.status === 400) {
@@ -174,8 +174,7 @@ const SettingScreen = (props) => {
             <TouchableOpacity
               onPress={() => checkAction(setting.action)}
               style={styles.settingView}
-              key={setting.id}
-            >
+              key={setting.id}>
               <View style={styles.settingIcon}>
                 {setting.ionicons && (
                   <Ionicons name={setting.icon} size={25} color="white" />
@@ -209,8 +208,7 @@ const SettingScreen = (props) => {
             <TouchableOpacity
               onPress={() => checkAction(setting.action)}
               style={styles.settingView}
-              key={setting.id}
-            >
+              key={setting.id}>
               <View style={styles.settingIcon}>
                 {setting.ionicons && (
                   <Ionicons name={setting.icon} size={25} color="white" />
