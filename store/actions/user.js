@@ -89,17 +89,17 @@ export const setDidTryLogin = (flag) => {
   };
 };
 
-export const authenticateLogin = () => {
-  return (dispatch) => {
-    dispatch({ type: c.AUTHENTICATELOGIN });
-  };
-};
+// export const authenticateLogin = () => {
+//   return (dispatch) => {
+//     dispatch({ type: c.AUTHENTICATELOGIN });
+//   };
+// };
 
-export const authDidTryLogin = () => {
-  return (dispatch) => {
-    dispatch({ type: c.DID_TRY_LOGIN });
-  };
-};
+// export const authDidTryLogin = () => {
+//   return (dispatch) => {
+//     dispatch({ type: c.DID_TRY_LOGIN });
+//   };
+// };
 
 export const userRegister = (email, password, repeated_password) => {
   return async (dispatch) => {
@@ -163,6 +163,11 @@ export const userLogin = (email, password) => {
         },
       });
 
+      dispatch({ 
+        type: c.SET_DID_TRY_LOGIN,
+        payload: { didTryLogin: true },
+      });
+
       await AsyncStorage.setItem(
         '@userData',
         JSON.stringify({
@@ -177,15 +182,12 @@ export const userLogin = (email, password) => {
         type: c.USER_LOGIN_SUCCESS,
         payload: data,
       });
-
-      dispatch({ 
-        type: c.SET_DID_TRY_LOGIN,
-        payload: true,
-      });
-      dispatch({ 
-        type: c.SET_IS_AUTHENTICATED,
-        payload: true,
-      });
+      if (data.has_account) {
+        dispatch({ 
+          type: c.SET_IS_AUTHENTICATED,
+          payload: { isAuth: true },
+        });
+      }
     } catch (error) {
       dispatch({
         type: c.USER_LOGIN_FAIL,

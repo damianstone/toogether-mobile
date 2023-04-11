@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, StackActions, useNavigation, useNavigationState } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useDispatch, useSelector } from 'react-redux';
@@ -20,18 +20,15 @@ const jwt_decode = require('jwt-decode');
 
 // This replaces the switch navigator
 const AppNavigator = (props) => {
-  const Stack = createStackNavigator();
   const dispatch = useDispatch();
 
   const isAuth = useSelector((state) => state.auth.isAuth);
   const didTryLogin = useSelector((state) => state.auth.didTryLogin);
 
   const token = useSelector(state => state);
-
+  
   const checkToken = async () => {
     const userData = JSON.parse(await AsyncStorage.getItem('@userData'));
-
-    // console.log('USER DATA ----> ', userData);
 
     if (userData && userData.has_account) {
       // Avoids possible ambiguity
@@ -53,37 +50,28 @@ const AppNavigator = (props) => {
 
       dispatch(authenticate(userData));
       dispatch(setDidTryLogin(true));
-      await dispatch(setIsAuth(true));
+      dispatch(setIsAuth(true));
       // if there is userData and the token is not expired, then the user is clearly authenticated
       return;
     }
 
-    // if there is no user data in the local storage, then the user is clearly not authenticated
     dispatch(setDidTryLogin(true));
-    await dispatch(setIsAuth(false))
+    dispatch(setIsAuth(false))
+    return;
+    // if there is no user data in the local storage, then the user is clearly not authenticated
   };
 
   useEffect(() => {
-    checkToken();
+    if (!didTryLogin) {
+      checkToken();
+    }
   }, [isAuth]);
-
-  // console.log('IS AUTH ---> ', isAuth);
 
   return (
     <NavigationContainer onStateChange={checkToken}>
-      <Stack.Navigator
-        screenOptions={{
-          headerShown: false,
-        }}
-      >
-        {isAuth && <Stack.Screen name="Home" component={TooNavigator} />}
-        {!isAuth && didTryLogin && (
-          <Stack.Screen name="Auth" component={AuthNavigator} />
-        )}
-        {!isAuth && !didTryLogin && (
-          <Stack.Screen name="StartupScreen" component={StartupScreen} />
-        )}
-      </Stack.Navigator>
+      {isAuth && <TooNavigator/>}
+      {!isAuth && didTryLogin && <AuthNavigator/>}
+      {!isAuth && !didTryLogin && <StartupScreen/>}
     </NavigationContainer>
   );
 };

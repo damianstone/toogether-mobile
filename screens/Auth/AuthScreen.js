@@ -19,9 +19,10 @@ import AuthInput from '../../components/UI/AuthInput';
 import Colors from '../../constants/Colors';
 import Device from '../../theme/Device';
 import * as c from '../../constants/user';
-import { userRegister, userLogin } from '../../store/actions/user';
+import { userRegister, userLogin, setIsAuth } from '../../store/actions/user';
 import { check400Error, checkServerError } from '../../utils/errors';
 import styles from './styles';
+import { StackActions, useNavigationState } from '@react-navigation/native';
 
 const FORM_UPDATE = 'FORM_UPDATE';
 
@@ -133,20 +134,11 @@ const AuthStartScreen = (props) => {
     }
 
     if (loginSuccess && !loginData.has_account) {
-      dispatch({ type: c.USER_LOGIN_RESET });
-      dispatch({
-        type: c.SET_DID_TRY_LOGIN,
-        payload: true,
-      });
-      dispatch({
-        type: c.SET_IS_AUTHENTICATED,
-        payload: true,
-      });
-      props.navigation.navigate('Success', { register: register });
+      props.navigation.navigate('Success', { register: true });
     }
 
     dispatch({ type: c.USER_LOGIN_RESET });
-  }, [loginError, loginSuccess]);
+  }, [loginError, loginSuccess, formIsValid]);
 
   const inputChangeHandler = useCallback(
     (inputIdentifier, inputValue, inputValidity) => {
@@ -183,7 +175,6 @@ const AuthStartScreen = (props) => {
   const handleLogin = () => {
     if (formIsValid) {
       dispatch(userLogin(inputValues.email, inputValues.password));
-      // props.navigation.navigate('Swipe');
     }
   };
 
