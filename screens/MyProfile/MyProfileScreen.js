@@ -35,6 +35,7 @@ import FooterProfile from '../../components/MyProfile/FooterProfile';
 import HeaderButtom from '../../components/UI/HeaderButton';
 import * as c from '../../constants/user';
 import styles from './styles';
+import Loader from '../../components/UI/Loader';
 
 const MyProfileScreen = (props) => {
   const { profileContext, updateProfileContext } = useContext(Context);
@@ -209,12 +210,10 @@ const MyProfileScreen = (props) => {
         <RefreshControl refreshing={refreshing} onRefresh={loadProfile} />
       }
       contentContainerStyle={styles.scroll_container_style}
-      style={styles.scrollview_style}
-    >
+      style={styles.scrollview_style}>
       <TouchableOpacity
         style={styles.profilePictureContainer}
-        onPress={handleOpenPreview}
-      >
+        onPress={handleOpenPreview}>
         {photos && Object.values(photos).length > 0 && (
           <FastImage
             source={{
@@ -232,32 +231,30 @@ const MyProfileScreen = (props) => {
           </View>
         )}
       </TouchableOpacity>
-      <View style={styles.nameView}>
-        {userProfile && userProfile.name && (
-          <>
+      {userProfile ? (
+        <>
+          <View style={styles.nameView}>
             <Text style={styles.name}>{userProfile.name}</Text>
             <TouchableOpacity onPress={() => handleNavigate('EditProfile')}>
               <MaterialIcons name="edit" size={20} color="white" />
             </TouchableOpacity>
-          </>
-        )}
-      </View>
-      <View style={styles.counterContainer}>
-        <View style={styles.counterView}>
-          <Text style={styles.likesNumber}>
-            {typeof userProfile !== 'undefined' ? userProfile?.total_likes : ''}
-          </Text>
-          <Text style={styles.counterText}>Likes</Text>
-        </View>
-        <View style={styles.counterView}>
-          <Text style={styles.matchesNumber}>
-            {typeof userProfile !== 'undefined'
-              ? userProfile.total_matches
-              : ''}
-          </Text>
-          <Text style={styles.counterText}>matches</Text>
-        </View>
-      </View>
+          </View>
+          <View style={styles.counterContainer}>
+            <View style={styles.counterView}>
+              <Text style={styles.likesNumber}>{userProfile.total_likes}</Text>
+              <Text style={styles.counterText}>Likes</Text>
+            </View>
+            <View style={styles.counterView}>
+              <Text style={styles.matchesNumber}>
+                {userProfile.total_matches}
+              </Text>
+              <Text style={styles.counterText}>matches</Text>
+            </View>
+          </View>
+        </>
+      ) : (
+        <Loader />
+      )}
       <View>
         <ProfileGallery
           photos={photos}
