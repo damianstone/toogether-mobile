@@ -1,4 +1,3 @@
-/* eslint-disable react/jsx-curly-brace-presence */
 import React, { useEffect, useState, useCallback, useContext } from 'react';
 import {
   FlatList,
@@ -17,7 +16,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import * as ImagePicker from 'expo-image-picker';
 import FastImage from 'react-native-fast-image';
-import { MaterialIcons } from '@expo/vector-icons';
 import { Context } from '../../context/ContextProvider';
 import { getNameInitials, getImage } from '../../utils/getMethods';
 import { checkServerError, check400Error } from '../../utils/errors';
@@ -30,12 +28,13 @@ import {
   updatePhoto,
 } from '../../store/actions/user';
 
+import NameCounter from '../../components/MyProfile/NameCounter';
 import ProfileGallery from '../../components/MyProfile/ProfileGallery';
 import FooterProfile from '../../components/MyProfile/FooterProfile';
 import HeaderButtom from '../../components/UI/HeaderButton';
+import Loader from '../../components/UI/Loader';
 import * as c from '../../constants/user';
 import styles from './styles';
-import Loader from '../../components/UI/Loader';
 
 const MyProfileScreen = (props) => {
   const { profileContext, updateProfileContext } = useContext(Context);
@@ -200,10 +199,6 @@ const MyProfileScreen = (props) => {
     });
   };
 
-  const handleNavigate = (screen) => {
-    props.navigation.navigate(screen);
-  };
-
   return (
     <ScrollView
       refreshControl={
@@ -214,7 +209,7 @@ const MyProfileScreen = (props) => {
       <TouchableOpacity
         style={styles.profilePictureContainer}
         onPress={handleOpenPreview}>
-        {photos && Object.values(photos).length > 0 && (
+        {photos?.length > 0 ? (
           <FastImage
             source={{
               uri: `${getImage(Object.values(photos)[0].image)}`,
@@ -222,8 +217,10 @@ const MyProfileScreen = (props) => {
             }}
             style={styles.image}
           />
+        ) : (
+          <Loader />
         )}
-        {(!photos || Object.values(photos).length === 0) && userProfile && (
+        {userProfile && photos?.length <= 0 && (
           <View style={styles.avatar_view}>
             <Text style={styles.avatar_initials}>
               {getNameInitials(userProfile.name)}
@@ -232,26 +229,12 @@ const MyProfileScreen = (props) => {
         )}
       </TouchableOpacity>
       {userProfile ? (
-        <>
-          <View style={styles.nameView}>
-            <Text style={styles.name}>{userProfile.name}</Text>
-            <TouchableOpacity onPress={() => handleNavigate('EditProfile')}>
-              <MaterialIcons name="edit" size={20} color="white" />
-            </TouchableOpacity>
-          </View>
-          <View style={styles.counterContainer}>
-            <View style={styles.counterView}>
-              <Text style={styles.likesNumber}>{userProfile.total_likes}</Text>
-              <Text style={styles.counterText}>Likes</Text>
-            </View>
-            <View style={styles.counterView}>
-              <Text style={styles.matchesNumber}>
-                {userProfile.total_matches}
-              </Text>
-              <Text style={styles.counterText}>matches</Text>
-            </View>
-          </View>
-        </>
+        <NameCounter
+          name={userProfile.name}
+          total_likes={userProfile.total_likes}
+          total_matches={userProfile.total_matches}
+          navigation={props.navigation}
+        />
       ) : (
         <Loader />
       )}

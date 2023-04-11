@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
+import Colors from '../../constants/Colors';
 
 const NameCounter = ({ name, total_likes, total_matches, navigation }) => {
   return (
