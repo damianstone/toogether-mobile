@@ -32,6 +32,7 @@
     "expo-app-loading": "~2.1.1",
     "expo-clipboard": "~4.0.1",
     "expo-constants": "~14.0.2",
+    "expo-env-info": "^1.0.5",
     "expo-file-system": "~15.1.1",
     "expo-font": "~11.0.1",
     "expo-google-app-auth": "~8.3.0",

@@ -26,7 +26,7 @@ export default () => ({
     },
     ios: {
       supportsTablet: false,
-      bundleIdentifier: 'toogether.app',
+      bundleIdentifier: 'app.toogether.Toogether',
       buildNumber: '1.0.5',
     },
     android: {
