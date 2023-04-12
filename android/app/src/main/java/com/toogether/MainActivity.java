@@ -1,4 +1,4 @@
-package toogether.app;
+package com.toogether;
 
 import android.os.Build;
 import android.os.Bundle;

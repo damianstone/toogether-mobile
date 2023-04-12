@@ -25,9 +25,10 @@ export default () => ({
       assetExts: ['png', 'js', 'jpg', 'tts'],
     },
     ios: {
+      bitcode: false,
       supportsTablet: false,
-      bundleIdentifier: 'app.toogether.Toogether',
-      buildNumber: '1.0.5',
+      bundleIdentifier: 'toogether.app', // just a placeholder, this can be changed in Xcode
+      buildNumber: '1.0.5', // just a placeholder, this value needs to be changed in the ios native code (info.plist)
     },
     android: {
       adaptiveIcon: {

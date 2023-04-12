@@ -1,4 +1,4 @@
-package toogether.app.newarchitecture.modules;
+package com.toogether.newarchitecture.modules;
 
 import com.facebook.jni.HybridData;
 import com.facebook.react.ReactPackage;
