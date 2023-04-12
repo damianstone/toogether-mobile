@@ -30,7 +30,7 @@ PODS:
     - ExpoModulesCore
   - EXManifests (0.4.0):
     - EXJSONUtils
-  - Expo (47.0.13):
+  - Expo (47.0.14):
     - ExpoModulesCore
   - ExpoClipboard (4.0.2):
     - ExpoModulesCore
@@ -634,7 +634,7 @@ SPEC CHECKSUMS:
   EXJSONUtils: 09aef2c1fba1a116ca8c73a2c8299aac00d96b43
   EXLocation: 7d08926d931f4fb619bfa25e73669f1e19b102c6
   EXManifests: 347f49430b63444579aa013f0ad057d16b8d1cc8
-  Expo: b9fa98bf260992312ee3c424400819fb9beadafe
+  Expo: 5f4240506a147162542178989696e56e3dd72924
   ExpoClipboard: dc3c9469926884bfe1af886c9243de69bebf6363
   ExpoImagePicker: ce37302446e70145bb413f0f74886441abdae022
   ExpoKeepAwake: 69b59d0a8d2b24de9f82759c39b3821fec030318
