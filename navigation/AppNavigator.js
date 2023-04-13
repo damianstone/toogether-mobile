@@ -29,7 +29,6 @@ const AppNavigator = (props) => {
   
   const checkToken = async () => {
     const userData = JSON.parse(await AsyncStorage.getItem('@userData'));
-
     if (userData && userData.has_account) {
       // Avoids possible ambiguity
       const currentTime = Date.now();
@@ -38,19 +37,18 @@ const AppNavigator = (props) => {
       const isTokenExpired = tokenDecoded.exp < currentTime / 1000;
       const isRefreshTokenExpired =
         refreshTokenDecoded.exp < currentTime / 1000;
-
-      if (isTokenExpired && isRefreshTokenExpired) {
-        await dispatch(logout());
-        return;
-      }
-
       if (isTokenExpired && !isRefreshTokenExpired) {
         await dispatch(updateToken());
       }
-
       dispatch(authenticate(userData));
       dispatch(setDidTryLogin(true));
-      dispatch(setIsAuth(true));
+      if (userData.has_account) {
+        dispatch(setIsAuth(true));  
+      }
+      else {
+        // This is an edge case (if user's close the app after registering, i.e. generating token but then close the app we want them to finish their profile first)
+        dispatch(setIsAuth(false));  
+      }
       // if there is userData and the token is not expired, then the user is clearly authenticated
       return;
     }

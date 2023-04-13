@@ -16,11 +16,11 @@ import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { useDispatch, useSelector } from 'react-redux';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import * as ImagePicker from 'expo-image-picker';
-import { LinearGradient } from 'expo-linear-gradient';
-import { MaterialIcons, Feather } from '@expo/vector-icons';
+import { MaterialIcons } from '@expo/vector-icons';
 import { Context } from '../../context/ContextProvider';
 import { getNameInitials, getImage } from '../../utils/getMethods';
 
+import ProfileGallery from '../../components/MyProfile/ProfileGallery';
 import HeaderButtom from '../../components/UI/HeaderButton';
 import Loader from '../../components/UI/Loader';
 import Colors from '../../constants/Colors';
@@ -34,8 +34,9 @@ import {
 } from '../../store/actions/user';
 import { checkServerError, check400Error } from '../../utils/errors';
 import { verifyPermissions } from '../../utils/permissions';
-import { BASE_PHOTOS } from '../../data/base_fotos';
+
 import styles from './styles';
+import FooterProfile from '../../components/MyProfile/FooterProfile';
 
 const MyProfileScreen = (props) => {
   const { profileContext, updateProfileContext } = useContext(Context);
@@ -204,234 +205,72 @@ const MyProfileScreen = (props) => {
     props.navigation.navigate(screen);
   };
 
-  const renderPhoto = (photo) => {
-    let stylesObj = {
-      ...styles.myphotosItemView,
-      backgroundColor: 'transparent',
-    };
-    if (loadingRemovePhoto || loadingAddPhoto || loadingPhotos) {
-      stylesObj = {
-        ...styles.myphotosItemView,
-        backgroundColor: 'transparent',
-      };
-    }
-    return (
+  return (
+    <ScrollView
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={loadProfile} />
+      }
+      contentContainerStyle={styles.scroll_container_style}
+      style={styles.scrollview_style}
+    >
       <TouchableOpacity
-        key={photo.id}
-        onPress={() => onOpenActionSheet(photo.id)}
-        style={{ ...stylesObj }}
+        style={styles.profilePictureContainer}
+        onPress={handleOpenPreview}
       >
-        {loadingPhotos ||
-        loadingRemovePhoto ||
-        (loadingAddPhoto && photo.id === photoId) ? (
-          <Loader size="small" />
-        ) : (
+        {photos && Object.values(photos).length > 0 && (
           <Image
             source={{
-              uri: `${getImage(photo.image)}`,
+              uri: `${getImage(Object.values(photos)[0].image)}`,
             }}
-            style={{
-              width: '100%',
-              height: '100%',
-              backgroundColor: 'transparent',
-            }}
+            style={styles.image}
           />
         )}
+        {(!photos || Object.values(photos).length === 0) && userProfile && (
+          <View style={styles.avatar_view}>
+            <Text style={styles.avatar_initials}>
+              {getNameInitials(userProfile.name)}
+            </Text>
+          </View>
+        )}
       </TouchableOpacity>
-    );
-  };
-
-  return (
-    <View style={styles.MainContainer}>
-      <SafeAreaView style={styles.safeAreaContainer}>
-        <View style={styles.MainContainer}>
-          <ScrollView
-            style={styles.body}
-            nestedScrollEnabled
-            contentContainerStyle={styles.scroll_container_style}
-            refreshControl={
-              <RefreshControl
-                refreshing={refreshing}
-                onRefresh={loadProfile}
-                tintColor={Colors.white}
-              />
-            }
-          >
-            <TouchableOpacity
-              style={styles.profilePictureContainer}
-              onPress={handleOpenPreview}
-            >
-              {typeof userProfile === 'undefined' && (
-                <View
-                  style={{
-                    backgroundColor: Colors.bgCard,
-                    opacity: 0.5,
-                    width: 150,
-                    height: 150,
-                    borderRadius: 100,
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                  }}
-                >
-                  <Loader />
-                </View>
-              )}
-              {photos && Object.values(photos).length > 0 && (
-                <Image
-                  source={{
-                    uri: `${getImage(Object.values(photos)[0].image)}`,
-                  }}
-                  style={styles.image}
-                />
-              )}
-              {(!photos || Object.values(photos).length === 0) &&
-                userProfile && (
-                  <View style={styles.avatar_view}>
-                    <Text style={styles.avatar_initials}>
-                      {getNameInitials(userProfile.name)}
-                    </Text>
-                  </View>
-                )}
+      <View style={styles.nameView}>
+        {userProfile && userProfile.name && (
+          <>
+            <Text style={styles.name}>{userProfile.name}</Text>
+            <TouchableOpacity onPress={() => handleNavigate('EditProfile')}>
+              <MaterialIcons name="edit" size={20} color="white" />
             </TouchableOpacity>
-            <View style={styles.nameView}>
-              {userProfile && userProfile.name && (
-                <>
-                  <Text style={styles.name}>{userProfile.name}</Text>
-                  <TouchableOpacity
-                    onPress={() => handleNavigate('EditProfile')}
-                  >
-                    <MaterialIcons name="edit" size={20} color="white" />
-                  </TouchableOpacity>
-                </>
-              )}
-            </View>
-            <View style={styles.counterContainer}>
-              <View style={styles.counterView}>
-                <Text style={styles.likesNumber}>
-                  {typeof userProfile !== 'undefined'
-                    ? userProfile?.total_likes
-                    : ''}
-                </Text>
-                <Text style={styles.counterText}>Likes</Text>
-              </View>
-              <View style={styles.counterView}>
-                <Text style={styles.matchesNumber}>
-                  {typeof userProfile !== 'undefined'
-                    ? userProfile.total_matches
-                    : ''}
-                </Text>
-                <Text style={styles.counterText}>matches</Text>
-              </View>
-            </View>
-            <View style={styles.myphotosView}>
-              <View style={styles.itemView}>
-                <Text style={styles.photoTitleLabel}>My Photos</Text>
-              </View>
-              <FlatList
-                style={styles.flatlist_photos_style}
-                contentContainerStyle={styles.flatlist_photos_container_style}
-                data={BASE_PHOTOS}
-                horizontal={false}
-                keyExtractor={(photo) => photo.id}
-                nestedScrollEnabled
-                numColumns={3}
-                renderItem={({ item, index }) =>
-                  photos && photos[index] ? (
-                    renderPhoto(photos[index], item.id)
-                  ) : (
-                    <TouchableOpacity
-                      key={item.id}
-                      onPress={() => {
-                        handleAddPhoto();
-                        setPhotoId(item.id);
-                      }}
-                      style={{
-                        ...styles.myphotosItemView,
-                        backgroundColor: Colors.bgCard,
-                      }}
-                    >
-                      <View
-                        style={{
-                          width: '100%',
-                          height: '100%',
-                          justifyContent: 'center',
-                          alignItems: 'center',
-                        }}
-                      >
-                        {loadingAddPhoto && item.id === photoId ? (
-                          <Loader size="small" />
-                        ) : (
-                          <Text style={{ color: Colors.white }}>
-                            Add Photo 📸
-                          </Text>
-                        )}
-                      </View>
-                    </TouchableOpacity>
-                  )
-                }
-                scrollEnabled={false}
-              />
-            </View>
-
-            <View style={styles.circle}>
-              <TouchableOpacity
-                onPress={handleOpenPreview}
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  width: '70%',
-                  alignItems: 'center',
-                  borderRadius: 10,
-                  padding: 7,
-                }}
-              >
-                <LinearGradient
-                  colors={['#ED665A', '#CF2A6E', '#BA007C']}
-                  style={styles.linearCircle}
-                />
-                <View style={{ padding: 10 }}>
-                  <Text
-                    style={{
-                      color: Colors.white,
-                      fontSize: 20,
-                      fontWeight: '500',
-                    }}
-                  >
-                    Profile Preview
-                  </Text>
-                </View>
-                <View
-                  style={{
-                    borderRadius: 100,
-                    padding: 3,
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    marginHorizontal: 10,
-                  }}
-                >
-                  <Feather name="arrow-right" size={35} color={Colors.white} />
-                </View>
-              </TouchableOpacity>
-
-              <View
-                style={{
-                  marginTop: 2,
-                  marginBottom: 35,
-                  padding: 10,
-                }}
-              >
-                <View style={styles.logoContainer}>
-                  <Image
-                    source={require('../../assets/images/logo-2.png')}
-                    style={styles.logo}
-                  />
-                </View>
-              </View>
-            </View>
-          </ScrollView>
+          </>
+        )}
+      </View>
+      <View style={styles.counterContainer}>
+        <View style={styles.counterView}>
+          <Text style={styles.likesNumber}>
+            {typeof userProfile !== 'undefined' ? userProfile?.total_likes : ''}
+          </Text>
+          <Text style={styles.counterText}>Likes</Text>
         </View>
-      </SafeAreaView>
-    </View>
+        <View style={styles.counterView}>
+          <Text style={styles.matchesNumber}>
+            {typeof userProfile !== 'undefined'
+              ? userProfile.total_matches
+              : ''}
+          </Text>
+          <Text style={styles.counterText}>matches</Text>
+        </View>
+      </View>
+      <View>
+        <ProfileGallery
+          photos={photos}
+          onAddPhoto={handleAddPhoto}
+          setPhotoId={setPhotoId}
+          photoId={photoId}
+          loadingPhotos={loadingPhotos}
+          handleActionSheet={onOpenActionSheet}
+        />
+      </View>
+      <FooterProfile handleOpenPreview={handleOpenPreview} />
+    </ScrollView>
   );
 };
 

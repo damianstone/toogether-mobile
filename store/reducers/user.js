@@ -281,3 +281,70 @@ export const reportProfileReducer = (state = {}, action) => {
       return state;
   }
 };
+
+export const sendRecoveryCodeReducer = (state = {}, action) => {
+  switch (action.type) {
+    case c.RECOVER_CODE_REQUEST:
+      return {
+        loading: true,
+      };
+    case c.RECOVERY_CODE_SUCCESS:
+      return {
+        data: { ...action.payload },
+      };
+    case c.RECOVERY_CODE_FAIL:
+      return {
+        loading: false,
+        error: action.payload,
+      };
+    case c.RECOVERY_CODE_RESET:
+      return {};
+
+    default:
+      return state;
+  }
+};
+
+export const validateCodeReducer = (state = {}, action) => {
+  switch (action.type) {
+    case c.VALIDATE_CODE_REQUEST:
+      return {
+        loading: true,
+      };
+    case c.VALIDATE_CODE_SUCCESS:
+      return {
+        data: { ...action.payload },
+      };
+    case c.VALIDATE_CODE_FAIL:
+      return {
+        loading: false,
+        error: action.payload,
+      };
+    case c.VALIDATE_CODE_RESET:
+      return {};
+    default:
+      return state;
+  }
+};
+
+export const changePasswordReducer = (state = {}, action) => {
+  switch (action.type) {
+    case c.CHANGE_PASSWORD_REQUEST:
+      return {
+        loading: true,
+      };
+    case c.CHANGE_PASSWORD_SUCCESS:
+      return {
+        data: { ...action.payload },
+      };
+    case c.CHANGE_PASSWORD_FAIL:
+      return {
+        loading: false,
+        error: action.payload,
+      };
+    case c.CHANGE_PASSWORD_RESET:
+      return {};
+    default:
+      return state;
+  }
+};

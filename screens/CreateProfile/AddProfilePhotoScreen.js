@@ -28,6 +28,7 @@ const AddProfilePhotoScreen = (props) => {
 
   const userAddPhotoReducer = useSelector((state) => state.userAddPhoto);
   const { error, loading, data } = userAddPhotoReducer;
+
   useEffect(() => {
     if (error) {
       if (error.response.status === 400) {

@@ -43,6 +43,9 @@ import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import Header from '../components/UI/Header';
 import { getNavHeader } from './getNavHeader';
 import StartupScreen from '../screens/StartupScreen';
+import RecoveryScreen from '../screens/Recovery/RecoveryScreen';
+import ValidateCodeScreen from '../screens/Recovery/ValidateCodeScreen';
+import ChangePasswordScreen from '../screens/Recovery/ChangePasswordScreen';
 
 console.log('GET NAV -> ', getNavHeader(1, 'X')); // TODO: for some reason this is undefined
 
@@ -581,6 +584,9 @@ export const AuthNavigator = () => {
       <Stack.Screen name="Create" component={CreateProfileScreen} />
       <Stack.Screen name="AddPhoto" component={AddProfilePhotoScreen} />
       <Stack.Screen name="Success" component={AuthSucess} />
+      <Stack.Screen name="Recovery" component={RecoveryScreen} />
+      <Stack.Screen name="ValidateCode" component={ValidateCodeScreen} />
+      <Stack.Screen name="ChangePassword" component={ChangePasswordScreen} />
     </Stack.Navigator>
   );
 };
