@@ -1,7 +1,8 @@
 name: IOS deployment
 
 on:
-  push: ["cache-images"]
+  push: 
+    branches: ["cache-images"]
 
 jobs:
   deploy:
