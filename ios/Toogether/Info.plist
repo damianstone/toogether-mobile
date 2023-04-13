@@ -17,7 +17,7 @@
 	<key>CFBundleShortVersionString</key>
 	<string>1.0.0</string>
 	<key>CFBundleVersion</key>
-	<string>1.0.7</string>
+	<string>1.0.8</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>LSRequiresIPhoneOS</key>
@@ -57,5 +57,12 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+<string>Allow $(PRODUCT_NAME) to use your location</string>
+<key>NSLocationAlwaysUsageDescription</key>
+<string>Allow $(PRODUCT_NAME) to use your location</string>
+<key>NSLocationWhenInUseUsageDescription</key>
+<string>Allow $(PRODUCT_NAME) to use your location</string>
 </dict>
 </plist>

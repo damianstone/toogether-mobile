@@ -27,7 +27,7 @@ export default () => ({
     ios: {
       supportsTablet: false,
       bundleIdentifier: 'toogether.app', // just a placeholder, this can be changed in Xcode
-      buildNumber: '1.0.7', // just a placeholder, this value needs to be changed in the ios native code (info.plist)
+      buildNumber: '1.0.8', // just a placeholder, this value needs to be changed in the ios native code (info.plist)
     },
     android: {
       adaptiveIcon: {
