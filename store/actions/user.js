@@ -73,19 +73,19 @@ export const authenticate = (userDataObj) => {
 
 export const setIsAuth = (flag) => {
   return (dispatch) => {
-    dispatch({ 
+    dispatch({
       type: c.SET_IS_AUTHENTICATED,
       payload: { isAuth: flag },
-    })
+    });
   };
 };
 
 export const setDidTryLogin = (flag) => {
   return (dispatch) => {
-    dispatch({ 
+    dispatch({
       type: c.SET_DID_TRY_LOGIN,
       payload: { didTryLogin: flag },
-    })
+    });
   };
 };
 
@@ -150,7 +150,7 @@ export const userLogin = (email, password) => {
         },
       });
 
-      dispatch({ 
+      dispatch({
         type: c.SET_DID_TRY_LOGIN,
         payload: { didTryLogin: true },
       });
@@ -170,7 +170,7 @@ export const userLogin = (email, password) => {
         payload: data,
       });
       if (data.has_account) {
-        dispatch({ 
+        dispatch({
           type: c.SET_IS_AUTHENTICATED,
           payload: { isAuth: true },
         });
@@ -192,12 +192,12 @@ export const logout = () => {
       dispatch({ type: c.USER_LIST_PHOTOS_RESET });
       dispatch({ type: c.USER_GET_PROFILE_RESET });
       await AsyncStorage.removeItem('@userData');
-      // dispatch({ 
-      //   type: c.SET_DID_TRY_LOGIN, 
+      // dispatch({
+      //   type: c.SET_DID_TRY_LOGIN,
       //   payload: { didTryLogin: true },
       // });
-      dispatch({ 
-        type: c.SET_IS_AUTHENTICATED, 
+      dispatch({
+        type: c.SET_IS_AUTHENTICATED,
         payload: { isAuth: false },
       });
     } catch (e) {

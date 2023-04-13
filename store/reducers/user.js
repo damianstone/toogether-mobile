@@ -32,12 +32,12 @@ export const authenticateReducer = (state = {}, action) => {
       return {
         ...state,
         isAuth: action.payload.isAuth,
-      }
+      };
     case c.SET_DID_TRY_LOGIN:
       return {
         ...state,
         didTryLogin: action.payload.didTryLogin,
-      }
+      };
     default:
       return state;
   }

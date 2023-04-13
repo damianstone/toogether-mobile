@@ -57,12 +57,12 @@ const AddProfilePhotoScreen = (props) => {
         {
           text: 'Later',
           onPress: async () => {
-            await dispatch({ 
-              type: c.SET_DID_TRY_LOGIN, 
+            await dispatch({
+              type: c.SET_DID_TRY_LOGIN,
               payload: { didTryLogin: true },
             });
-            await dispatch({ 
-              type: c.SET_IS_AUTHENTICATED, 
+            await dispatch({
+              type: c.SET_IS_AUTHENTICATED,
               payload: { isAuth: true },
             });
           },

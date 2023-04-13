@@ -1,5 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { NavigationContainer, StackActions, useNavigation, useNavigationState } from '@react-navigation/native';
+import {
+  NavigationContainer,
+  StackActions,
+  useNavigation,
+  useNavigationState,
+} from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useDispatch, useSelector } from 'react-redux';
@@ -25,8 +30,8 @@ const AppNavigator = (props) => {
   const isAuth = useSelector((state) => state.auth.isAuth);
   const didTryLogin = useSelector((state) => state.auth.didTryLogin);
 
-  const token = useSelector(state => state);
-  
+  const token = useSelector((state) => state);
+
   const checkToken = async () => {
     const userData = JSON.parse(await AsyncStorage.getItem('@userData'));
     if (userData && userData.has_account) {
@@ -43,18 +48,17 @@ const AppNavigator = (props) => {
       dispatch(authenticate(userData));
       dispatch(setDidTryLogin(true));
       if (userData.has_account) {
-        dispatch(setIsAuth(true));  
-      }
-      else {
+        dispatch(setIsAuth(true));
+      } else {
         // This is an edge case (if user's close the app after registering, i.e. generating token but then close the app we want them to finish their profile first)
-        dispatch(setIsAuth(false));  
+        dispatch(setIsAuth(false));
       }
       // if there is userData and the token is not expired, then the user is clearly authenticated
       return;
     }
 
     dispatch(setDidTryLogin(true));
-    dispatch(setIsAuth(false))
+    dispatch(setIsAuth(false));
     return;
     // if there is no user data in the local storage, then the user is clearly not authenticated
   };
@@ -67,9 +71,9 @@ const AppNavigator = (props) => {
 
   return (
     <NavigationContainer onStateChange={checkToken}>
-      {isAuth && <TooNavigator/>}
-      {!isAuth && didTryLogin && <AuthNavigator/>}
-      {!isAuth && !didTryLogin && <StartupScreen/>}
+      {isAuth && <TooNavigator />}
+      {!isAuth && didTryLogin && <AuthNavigator />}
+      {!isAuth && !didTryLogin && <StartupScreen />}
     </NavigationContainer>
   );
 };
