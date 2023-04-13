@@ -50,6 +50,9 @@ jobs:
           eas-version: latest
           token: ${{ secrets.EXPO_TOKEN }}
 
+      - name: Install CocoaPods
+        run: gem install cocoapods
+
       - name: Install dependencies
         run: npm install --legacy-peer-deps
 
