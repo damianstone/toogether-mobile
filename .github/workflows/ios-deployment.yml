@@ -1,7 +1,7 @@
 name: IOS deployment
 
 on:
-  workflow_dispatch:
+  push: ["cache-images"]
 
 jobs:
   deploy:
@@ -51,6 +51,11 @@ jobs:
 
       - name: Install dependencies
         run: npm install --legacy-peer-deps
+
+      - name: Install pods
+        run: |
+          cd ios
+          pod install
 
       - name: Build for IOS
         run: eas build -p ios --profile rocket --non-interactive
