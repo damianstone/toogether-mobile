@@ -1,8 +1,7 @@
 name: IOS deployment
 
 on:
-  push: 
-    branches: ["cache-images"]
+  workflow_dispatch:
 
 jobs:
   deploy:
@@ -50,16 +49,8 @@ jobs:
           eas-version: latest
           token: ${{ secrets.EXPO_TOKEN }}
 
-      - name: Install CocoaPods
-        run: sudo gem install cocoapods
-
       - name: Install dependencies
         run: npm install --legacy-peer-deps
-
-      - name: Install pods
-        run: |
-          cd ios
-          pod install
 
       - name: Build for IOS
         run: eas build -p ios --profile rocket --non-interactive
