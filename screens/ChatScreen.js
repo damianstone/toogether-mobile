@@ -287,25 +287,6 @@ const ChatScreen = (props) => {
   );
 };
 
-ChatScreen.navigationOptions = (navData) => {
-  return {
-    headerTitle: 'Matches',
-    headerLeft: () => (
-      <HeaderButtons HeaderButtonComponent={HeaderButtom}>
-        <Item
-          iconName={
-            Platform.OS === 'android' ? 'ios-arrow-back' : 'ios-arrow-back'
-          }
-          onPress={() => {
-            navData.navigation.goBack(null);
-          }}
-          title="Back arrow"
-        />
-      </HeaderButtons>
-    ),
-  };
-};
-
 export default ChatScreen;
 
 const styles = StyleSheet.create({

@@ -134,7 +134,7 @@ const LikesScreen = (props) => {
           age={member.age}
           image={member.photos.length > 0 ? member.photos[0].image : null}
           onShowProfile={() =>
-            props.navigation.push('Swipe', { topProfile: item })
+            props.navigation.navigate('Swipe', { topProfile: item })
           }
           dislike={() => handleRemoveLike(member.id)}
           like={() => handleLike(member.id)}
@@ -149,7 +149,7 @@ const LikesScreen = (props) => {
         age={item.age}
         image={item.photos.length > 0 ? item.photos[0].image : null}
         onShowProfile={() =>
-          props.navigation.push('Swipe', { topProfile: item })
+          props.navigation.navigate('Swipe', { topProfile: item })
         }
         dislike={() => handleRemoveLike(item.id)}
         like={() => handleLike(item.id)}
@@ -206,36 +206,6 @@ const LikesScreen = (props) => {
       )}
     </View>
   );
-};
-
-LikesScreen.navigationOptions = (navData) => {
-  return {
-    headerTitle: 'Likes',
-    headerLeft: () => (
-      <Avatar
-        onPress={() => {
-          navData.navigation.navigate('MyProfile');
-        }}
-      />
-    ),
-    headerRight: () => (
-      <HeaderButtons HeaderButtonComponent={HeaderButtom}>
-        <Item
-          title="Chat"
-          iconName={
-            Platform.OS === 'android'
-              ? 'chatbubble-outline'
-              : 'chatbubble-outline'
-          }
-          onPress={() => {
-            navData.navigation.navigate('Match', {
-              screen: 'Likes',
-            });
-          }}
-        />
-      </HeaderButtons>
-    ),
-  };
 };
 
 export default LikesScreen;

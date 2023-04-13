@@ -13,7 +13,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Context } from '../../context/ContextProvider';
 import { createGroup } from '../../store/actions/group';
 import { check400Error, checkServerError } from '../../utils/errors';
-import { StackActions } from 'react-navigation';
+import { useNavigation } from '@react-navigation/native';
+import { StackActions } from '@react-navigation/native';
 
 import AuthButton from '../../components/UI/AuthButton';
 import Avatar from '../../components/UI/Avatar';
@@ -27,6 +28,12 @@ const { width, height } = Dimensions.get('window');
 
 const StartGroupScreen = (props) => {
   const { groupContext, updateGroupContext } = useContext(Context);
+
+  useEffect(() => {
+    if (groupContext) {
+      props.navigation.navigate('Group');
+    }
+  }, []);
 
   /* set to true to have time to check if there is a group in the context and be able to redirect 
   the user to the group screen in a smooth way */
@@ -42,9 +49,7 @@ const StartGroupScreen = (props) => {
   } = createGroupReducer;
 
   // * this function replaces the first screen on the GroupNavigato stack
-  const replaceAction = StackActions.replace({
-    routeName: 'Group',
-  });
+  const replaceAction = StackActions.replace('Group', {});
 
   // * if the user is already in a group
   useEffect(() => {
@@ -114,19 +119,6 @@ const StartGroupScreen = (props) => {
       </View>
     </SafeAreaView>
   );
-};
-
-StartGroupScreen.navigationOptions = (navData) => {
-  return {
-    headerTitle: 'Group',
-    headerLeft: () => (
-      <Avatar
-        onPress={() => {
-          navData.navigation.navigate('MyProfile');
-        }}
-      />
-    ),
-  };
 };
 
 export default StartGroupScreen;

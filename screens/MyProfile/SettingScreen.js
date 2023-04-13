@@ -49,13 +49,23 @@ const SettingScreen = (props) => {
     }
 
     if (dataDeleted) {
-      props.navigation.navigate('AuthStart');
+      dispatch(logout());
+      // props.navigation.navigate('AuthStart');
     }
   }, [errorDelete, dataDeleted]);
 
   const handleLogout = async () => {
-    await dispatch(logout());
-    props.navigation.navigate('AuthStart');
+    try {
+      dispatch(logout());
+      // props.navigation.navigate('AuthStart');
+    } catch (error) {
+      if (error) {
+        if (error?.response?.status === 400) {
+          check400Error(error);
+        }
+        checkServerError(error);
+      }
+    }
   };
 
   const handleDeleteUser = () => {
@@ -252,25 +262,6 @@ const SettingScreen = (props) => {
       </ScrollView>
     </View>
   );
-};
-
-SettingScreen.navigationOptions = (navData) => {
-  return {
-    headerTitle: 'Settings',
-    headerLeft: () => (
-      <HeaderButtons HeaderButtonComponent={HeaderButtom}>
-        <Item
-          iconName={
-            Platform.OS === 'android' ? 'ios-arrow-back' : 'ios-arrow-back'
-          }
-          onPress={() => {
-            navData.navigation.navigate('MyProfile');
-          }}
-          title="Back arrow"
-        />
-      </HeaderButtons>
-    ),
-  };
 };
 
 export default SettingScreen;

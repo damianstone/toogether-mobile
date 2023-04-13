@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { useActionSheet } from '@expo/react-native-action-sheet';
-import { StackActions } from 'react-navigation';
+import { StackActions, useNavigation } from '@react-navigation/native';
 import {
   getGroup,
   leaveGroup,
@@ -34,6 +34,8 @@ import MemberAvatar from '../../components/MemberAvatar';
 import Device from '../../theme/Device';
 
 const GroupScreen = (props) => {
+  // const navigation = useNavigation();
+
   const { groupContext, isOwnerGroup, updateGroupContext } =
     useContext(Context);
 
@@ -76,10 +78,8 @@ const GroupScreen = (props) => {
     data: dataRemoveMember,
   } = removeMemberReducer;
 
-  // * this function replaces the first screen on the GroupNavigato stack
-  const replaceAction = StackActions.replace({
-    routeName: 'StartGroup',
-  });
+  // * this function replaces the first screen on the GroupNavigation stack
+  const replaceAction = StackActions.replace('StartGroup');
 
   // we need to kepp calling the group if there is any change made by an external member
   useEffect(() => {
@@ -366,19 +366,6 @@ const GroupScreen = (props) => {
       </View>
     </View>
   );
-};
-
-GroupScreen.navigationOptions = (navData) => {
-  return {
-    headerTitle: 'Group',
-    headerLeft: () => (
-      <Avatar
-        onPress={() => {
-          navData.navigation.navigate('MyProfile');
-        }}
-      />
-    ),
-  };
 };
 
 export default GroupScreen;

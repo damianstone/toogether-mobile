@@ -28,6 +28,7 @@ const AddProfilePhotoScreen = (props) => {
 
   const userAddPhotoReducer = useSelector((state) => state.userAddPhoto);
   const { error, loading, data } = userAddPhotoReducer;
+
   useEffect(() => {
     if (error) {
       if (error.response.status === 400) {
@@ -55,8 +56,15 @@ const AddProfilePhotoScreen = (props) => {
       [
         {
           text: 'Later',
-          onPress: () => {
-            props.navigation.navigate('Swipe');
+          onPress: async () => {
+            await dispatch({ 
+              type: c.SET_DID_TRY_LOGIN, 
+              payload: { didTryLogin: true },
+            });
+            await dispatch({ 
+              type: c.SET_IS_AUTHENTICATED, 
+              payload: { isAuth: true },
+            });
           },
           style: 'cancel',
         },

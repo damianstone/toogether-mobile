@@ -25,7 +25,7 @@ export const userLocation = () => {
       // let location = await Location.getCurrentPositionAsync({
       //   accuracy: Platform.OS === 'ios' ? 3 : Location.Accuracy.High,
       // });
-      // // If you are getting stuck and not getting location (on Android uncomment this to get default location so that you can continue working)
+      // If you are getting stuck and not getting location (on Android uncomment this to get default location so that you can continue working)
       let location;
       if (Platform.OS === 'ios') {
         location = await Location.getCurrentPositionAsync({
@@ -34,8 +34,8 @@ export const userLocation = () => {
       } else {
         location = {
           coords: {
-            latitude: 37.785834,
-            longitude: -122.406417,
+            latitude: 37.4220936,
+            longitude: -122.083922,
           },
         };
       }
@@ -66,8 +66,26 @@ export const userLocation = () => {
 // -------------------------------- LOGIN / REGISTER ACTIONS --------------------------------
 
 export const authenticate = (userDataObj) => {
-  return (dispatch) => {
+  return (dispatch, getState) => {
     dispatch({ type: c.AUTHENTICATE, payload: userDataObj });
+  };
+};
+
+export const setIsAuth = (flag) => {
+  return (dispatch) => {
+    dispatch({ 
+      type: c.SET_IS_AUTHENTICATED,
+      payload: { isAuth: flag },
+    })
+  };
+};
+
+export const setDidTryLogin = (flag) => {
+  return (dispatch) => {
+    dispatch({ 
+      type: c.SET_DID_TRY_LOGIN,
+      payload: { didTryLogin: flag },
+    })
   };
 };
 
@@ -90,7 +108,6 @@ export const userRegister = (email, password, repeated_password) => {
           repeated_password,
         },
       });
-
       await AsyncStorage.setItem(
         '@userData',
         JSON.stringify({
@@ -133,6 +150,11 @@ export const userLogin = (email, password) => {
         },
       });
 
+      dispatch({ 
+        type: c.SET_DID_TRY_LOGIN,
+        payload: { didTryLogin: true },
+      });
+
       await AsyncStorage.setItem(
         '@userData',
         JSON.stringify({
@@ -147,6 +169,12 @@ export const userLogin = (email, password) => {
         type: c.USER_LOGIN_SUCCESS,
         payload: data,
       });
+      if (data.has_account) {
+        dispatch({ 
+          type: c.SET_IS_AUTHENTICATED,
+          payload: { isAuth: true },
+        });
+      }
     } catch (error) {
       dispatch({
         type: c.USER_LOGIN_FAIL,
@@ -159,10 +187,19 @@ export const userLogin = (email, password) => {
 export const logout = () => {
   return async (dispatch) => {
     try {
-      await AsyncStorage.removeItem('@userData');
+      // await AsyncStorage.removeItem('@userData');
       dispatch({ type: c.USER_LOGIN_RESET });
       dispatch({ type: c.USER_LIST_PHOTOS_RESET });
       dispatch({ type: c.USER_GET_PROFILE_RESET });
+      await AsyncStorage.removeItem('@userData');
+      // dispatch({ 
+      //   type: c.SET_DID_TRY_LOGIN, 
+      //   payload: { didTryLogin: true },
+      // });
+      dispatch({ 
+        type: c.SET_IS_AUTHENTICATED, 
+        payload: { isAuth: false },
+      });
     } catch (e) {
       console.log(e);
     }

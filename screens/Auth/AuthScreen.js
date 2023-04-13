@@ -19,9 +19,10 @@ import AuthInput from '../../components/UI/AuthInput';
 import Colors from '../../constants/Colors';
 import Device from '../../theme/Device';
 import * as c from '../../constants/user';
-import { userRegister, userLogin } from '../../store/actions/user';
+import { userRegister, userLogin, setIsAuth } from '../../store/actions/user';
 import { check400Error, checkServerError } from '../../utils/errors';
 import styles from './styles';
+import { StackActions, useNavigationState } from '@react-navigation/native';
 
 const FORM_UPDATE = 'FORM_UPDATE';
 
@@ -50,7 +51,7 @@ const formReducer = (state, action) => {
 };
 
 const AuthStartScreen = (props) => {
-  const register = props.navigation.getParam('register');
+  const register = props.route.params.register;
   const dispatch = useDispatch();
 
   const [formState, dispatchFormState] = useReducer(formReducer, {
@@ -121,17 +122,23 @@ const AuthStartScreen = (props) => {
     }
 
     if (loginSuccess && loginData.has_account) {
-      props.navigation.navigate('Swipe');
       dispatch({ type: c.USER_LOGIN_RESET });
+      dispatch({
+        type: c.SET_DID_TRY_LOGIN,
+        payload: true,
+      });
+      dispatch({
+        type: c.SET_IS_AUTHENTICATED,
+        payload: true,
+      });
     }
 
     if (loginSuccess && !loginData.has_account) {
-      props.navigation.navigate('Success', { register: register });
-      dispatch({ type: c.USER_LOGIN_RESET });
+      props.navigation.navigate('Success', { register: true });
     }
 
     dispatch({ type: c.USER_LOGIN_RESET });
-  }, [loginError, loginSuccess]);
+  }, [loginError, loginSuccess, formIsValid]);
 
   const inputChangeHandler = useCallback(
     (inputIdentifier, inputValue, inputValidity) => {
@@ -147,9 +154,9 @@ const AuthStartScreen = (props) => {
 
   const handleSwitch = () => {
     if (register) {
-      props.navigation.navigate('Auth', { register: false });
+      props.navigation.navigate('AuthLogin', { register: false });
     } else {
-      props.navigation.navigate('Auth', { register: true });
+      props.navigation.navigate('AuthLogin', { register: true });
     }
   };
 
