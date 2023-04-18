@@ -8,10 +8,11 @@ export default () => ({
     slug: 'toogether-app',
     owner: 'damian_stone',
     privacy: 'public',
-    version: '1.0.0',
+    version: '1.1.0',
     orientation: 'portrait',
     icon: './assets/images/toogether-icon.png',
     platforms: ['ios', 'android'],
+    plugins: ['expo-image-picker'],
     splash: {
       image: './assets/images/logo-2.png',
       resizeMode: 'contain',
@@ -23,11 +24,6 @@ export default () => ({
     assetBundlePatterns: ['**/*'],
     packagerOpts: {
       assetExts: ['png', 'js', 'jpg', 'tts'],
-    },
-    ios: {
-      supportsTablet: false,
-      bundleIdentifier: 'toogether.app',
-      buildNumber: '1.0.4',
     },
     android: {
       adaptiveIcon: {

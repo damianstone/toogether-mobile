@@ -4,12 +4,12 @@ import {
   StyleSheet,
   Text,
   View,
-  Image,
   ActivityIndicator,
   RefreshControl,
   Alert,
   Platform,
 } from 'react-native';
+import FastImage from 'react-native-fast-image';
 import { useDispatch, useSelector } from 'react-redux';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import { StackActions } from 'react-navigation';
@@ -289,9 +289,10 @@ const GroupScreen = (props) => {
           {groupContext &&
             groupContext.owner.photos &&
             groupContext.owner.photos.length > 0 && (
-              <Image
+              <FastImage
                 source={{
                   uri: `${getImage(groupContext.owner.photos[0].image)}`,
+                  priority: FastImage.priority.normal,
                 }}
                 style={{ width: 150, height: 150, borderRadius: 100 }}
               />

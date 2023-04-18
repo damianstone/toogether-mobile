@@ -14,6 +14,7 @@ import ActivityModal from '../../components/UI/ActivityModal';
 import DetailBottomSheet from '../../components/DetailBottomSheet';
 import Colors from '../../constants/Colors';
 import { reportProfile } from '../../store/actions/user';
+import FastImage from 'react-native-fast-image';
 
 const ProfileScreen = (props) => {
   const dispatch = useDispatch();
@@ -207,12 +208,15 @@ const ProfileScreen = (props) => {
         >
           {profile?.photos?.length > 0 ? (
             profile.photos.map((photo) => (
-              <ImageBackground
+              <FastImage
                 key={profile.id}
                 style={styles.image}
                 imageStyle={styles.imageStyle}
-                source={{ uri: `${getImage(photo.image)}` }}
-                resizeMode="cover"
+                source={{
+                  uri: `${getImage(photo.image)}`,
+                  priority: FastImage.priority.high,
+                }}
+                resizeMode={FastImage.resizeMode.cover}
               />
             ))
           ) : (

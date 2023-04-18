@@ -18,6 +18,7 @@ import { getNameInitials, getImage } from '../../utils/getMethods';
 import HeaderButtom from '../../components/UI/HeaderButton';
 import Colors from '../../constants/Colors';
 import * as b from '../../constants/block';
+import FastImage from 'react-native-fast-image';
 
 const BlockProfilesScreen = (props) => {
   const dispatch = useDispatch();
@@ -96,8 +97,11 @@ const BlockProfilesScreen = (props) => {
           <View style={styles.horizontalRowContainer}>
             {item.photos.length > 0 ? (
               <View style={styles.imageContainer}>
-                <Image
-                  source={{ uri: `${getImage(item.photos[0].image)}` }}
+                <FastImage
+                  source={{
+                    uri: `${getImage(item.photos[0].image)}`,
+                    priority: FastImage.priority.normal,
+                  }}
                   style={{ width: '100%', height: '100%', borderRadius: 100 }}
                 />
               </View>

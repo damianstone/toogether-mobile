@@ -18,6 +18,7 @@ import { getImage } from '../utils/getMethods';
 import Colors from '../constants/Colors';
 import GradientText from './UI/GradientText';
 import ButtonAndroid from './UI/ButtonAndroid';
+import FastImage from 'react-native-fast-image';
 
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 const SCREEN_WIDTH = Dimensions.get('window').width;
@@ -62,8 +63,11 @@ const SwipeMatch = (props) => {
         <View style={styles.profilesContainer}>
           <View style={styles.imageContainer}>
             {currentProfileImage ? (
-              <Image
-                source={{ uri: `${getImage(currentProfileImage)}` }}
+              <FastImage
+                source={{
+                  uri: `${getImage(currentProfileImage)}`,
+                  priority: FastImage.priority.normal,
+                }}
                 style={styles.image}
               />
             ) : (
@@ -77,8 +81,11 @@ const SwipeMatch = (props) => {
           </View>
           <View style={styles.imageContainer}>
             {matchedProfileImage ? (
-              <Image
-                source={{ uri: `${getImage(matchedProfileImage)}` }}
+              <FastImage
+                source={{
+                  uri: `${getImage(matchedProfileImage)}`,
+                  priority: FastImage.priority.normal,
+                }}
                 style={styles.image}
               />
             ) : (

@@ -257,6 +257,7 @@ const tabScreenCnfig = {
                 ? Colors.bgCard
                 : Colors.bg,
             borderTopWidth: 0,
+            height: 80,
           },
           tabStyle: {
             backgroundColor:
@@ -288,6 +289,7 @@ const ToogetherTab =
         style: {
           backgroundColor: Colors.bg,
           borderTopWidth: 0,
+          height: 80,
         },
       })
     : createBottomTabNavigator(tabScreenCnfig, {
@@ -298,10 +300,12 @@ const ToogetherTab =
           tabStyle: {
             backgroundColor: Colors.bg,
             statusBarStyle: Colors.bg,
+            height: 80,
           },
           style: {
             backgroundColor: Colors.bg,
             borderTopWidth: 0,
+            height: 90,
           },
         },
       });
