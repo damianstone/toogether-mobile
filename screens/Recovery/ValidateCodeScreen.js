@@ -22,9 +22,10 @@ import { sendRecoveryCode } from '../../store/actions/user';
 import { check400Error, checkServerError } from '../../utils/errors';
 
 const ValidateCodeScreen = (props) => {
-  const [code, setCode] = useState('');
-  const email = props.navigation.getParam('email');
+  const { email } = props.route.params;
+  
   const dispatch = useDispatch();
+  const [code, setCode] = useState('');
 
   const { data, error, loading } = useSelector((state) => state.validateCode);
   const { data: dataResend } = useSelector((state) => state.sendRecoveryCode);

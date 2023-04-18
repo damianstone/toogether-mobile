@@ -17,13 +17,10 @@ import { reportProfile } from '../../store/actions/user';
 import FastImage from 'react-native-fast-image';
 
 const ProfileScreen = (props) => {
+  const { profile, isGroup, preview, isMyProfile, currentRef } =
+    props.route.params;
+    
   const dispatch = useDispatch();
-  const profile = props.navigation.getParam('profile');
-  const isGroup = props.navigation.getParam('isGroup');
-  const preview = props.navigation.getParam('preview');
-  const isMyProfile = props.navigation.getParam('isMyProfile');
-
-  const currentRef = props.navigation.getParam('currentRef');
 
   const blockProfileReducer = useSelector((state) => state.blockProfile);
   const {
@@ -204,8 +201,7 @@ const ProfileScreen = (props) => {
                 margin: 4,
               }}
             />
-          }
-        >
+          }>
           {profile?.photos?.length > 0 ? (
             profile.photos.map((photo) => (
               <FastImage

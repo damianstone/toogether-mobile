@@ -21,10 +21,10 @@ import { changePassword } from '../../store/actions/user';
 import { check400Error, checkServerError } from '../../utils/errors';
 
 const ChangePasswordScreen = (props) => {
-  const { data, error, loading } = useSelector((state) => state.changePassword);
-  const email = props.navigation.getParam('email');
-  const token = props.navigation.getParam('token');
+  const { email, token } = props.route.params;
 
+  const { data, error, loading } = useSelector((state) => state.changePassword);
+  
   const [password, setPassword] = useState('');
   const [repeated_password, setRepeated_password] = useState('');
 

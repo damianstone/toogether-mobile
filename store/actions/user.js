@@ -3,73 +3,14 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import * as Location from 'expo-location';
 import * as c from '../../constants/user';
+import * as a from '../../constants/auth';
 import { ENV } from '../../environment';
 
 const BASE_URL = ENV.API_URL;
 
-// -------------------------------- LOCATION --------------------------------
-
-export const userLocation = () => {
-  return async (dispatch) => {
-    try {
-      dispatch({ type: c.USER_LOCATION_REQUEST });
-
-      const userData = JSON.parse(await AsyncStorage.getItem('@userData'));
-
-      const config = {
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
-        Authorization: `Bearer ${userData.token}`,
-      };
-
-      // let location = await Location.getCurrentPositionAsync({
-      //   accuracy: Platform.OS === 'ios' ? 3 : Location.Accuracy.High,
-      // });
-      // // If you are getting stuck and not getting location (on Android uncomment this to get default location so that you can continue working)
-      let location;
-      if (Platform.OS === 'ios') {
-        location = await Location.getCurrentPositionAsync({
-          accuracy: Platform.OS === 'ios' ? 3 : Location.Accuracy.Highest,
-        });
-      } else {
-        location = {
-          coords: {
-            latitude: 37.785834,
-            longitude: -122.406417,
-          },
-        };
-      }
-
-      const { data } = await axios({
-        method: 'POST',
-        url: `${BASE_URL}/api/v1/profiles/actions/location/`,
-        headers: config,
-        data: {
-          lat: location.coords.latitude,
-          lon: location.coords.longitude,
-        },
-      });
-
-      dispatch({
-        type: c.USER_LOCATION_SUCCESS,
-        payload: data,
-      });
-    } catch (error) {
-      dispatch({
-        type: c.USER_LOCATION_FAIL,
-        payload: error,
-      });
-    }
-  };
-};
 
 // -------------------------------- LOGIN / REGISTER ACTIONS --------------------------------
 
-export const authenticate = (userDataObj) => {
-  return (dispatch) => {
-    dispatch({ type: c.AUTHENTICATE, payload: userDataObj });
-  };
-};
 
 export const userRegister = (email, password, repeated_password) => {
   return async (dispatch) => {
@@ -163,6 +104,10 @@ export const logout = () => {
       dispatch({ type: c.USER_LOGIN_RESET });
       dispatch({ type: c.USER_LIST_PHOTOS_RESET });
       dispatch({ type: c.USER_GET_PROFILE_RESET });
+      dispatch({
+        type: a.SET_IS_AUTHENTICATED,
+        payload: { isAuth: false },
+      });
     } catch (e) {
       console.log(e);
     }
@@ -234,6 +179,63 @@ export const userDelete = () => {
     }
   };
 };
+
+// -------------------------------- LOCATION --------------------------------
+
+export const userLocation = () => {
+  return async (dispatch) => {
+    try {
+      dispatch({ type: c.USER_LOCATION_REQUEST });
+
+      const userData = JSON.parse(await AsyncStorage.getItem('@userData'));
+
+      const config = {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+        Authorization: `Bearer ${userData.token}`,
+      };
+
+      // let location = await Location.getCurrentPositionAsync({
+      //   accuracy: Platform.OS === 'ios' ? 3 : Location.Accuracy.High,
+      // });
+      // // If you are getting stuck and not getting location (on Android uncomment this to get default location so that you can continue working)
+      let location;
+      if (Platform.OS === 'ios') {
+        location = await Location.getCurrentPositionAsync({
+          accuracy: Platform.OS === 'ios' ? 3 : Location.Accuracy.Highest,
+        });
+      } else {
+        location = {
+          coords: {
+            latitude: 37.785834,
+            longitude: -122.406417,
+          },
+        };
+      }
+
+      const { data } = await axios({
+        method: 'POST',
+        url: `${BASE_URL}/api/v1/profiles/actions/location/`,
+        headers: config,
+        data: {
+          lat: location.coords.latitude,
+          lon: location.coords.longitude,
+        },
+      });
+
+      dispatch({
+        type: c.USER_LOCATION_SUCCESS,
+        payload: data,
+      });
+    } catch (error) {
+      dispatch({
+        type: c.USER_LOCATION_FAIL,
+        payload: error,
+      });
+    }
+  };
+};
+
 
 // -------------------------------- PROFILE ACTIONS --------------------------------
 

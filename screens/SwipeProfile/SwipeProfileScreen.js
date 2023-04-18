@@ -15,10 +15,9 @@ import * as w from '../../constants/swipe';
 // TODO: manage errors
 
 const SwipeProfileScreen = (props) => {
+  const { mainProfileId, isInGroup, isMyProfile } = props.route.params;
+
   const dispatch = useDispatch();
-  const mainProfileId = props.navigation.getParam('mainProfileId');
-  const isInGroup = props.navigation.getParam('isInGroup');
-  const isMyProfile = props.navigation.getParam('isMyProfile');
 
   const currentSwipeProfile = useSelector((state) => state.getSwipeProfile);
 
@@ -134,8 +133,7 @@ const SwipeProfileScreen = (props) => {
             alignItems: 'center',
             backgroundColor: Colors.bgCard,
             opacity: 0.5,
-          }}
-        >
+          }}>
           <Loader />
         </View>
       </View>

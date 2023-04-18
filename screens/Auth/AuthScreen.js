@@ -50,7 +50,8 @@ const formReducer = (state, action) => {
 };
 
 const AuthStartScreen = (props) => {
-  const register = props.navigation.getParam('register');
+  const { register } = props.route.params;
+
   const dispatch = useDispatch();
 
   const [formState, dispatchFormState] = useReducer(formReducer, {
