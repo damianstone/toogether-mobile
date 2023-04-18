@@ -8,7 +8,7 @@ export default () => ({
     slug: 'toogether-app',
     owner: 'damian_stone',
     privacy: 'public',
-    version: '1.0.0',
+    version: '1.1.0',
     orientation: 'portrait',
     icon: './assets/images/toogether-icon.png',
     platforms: ['ios', 'android'],
