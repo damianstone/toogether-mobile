@@ -52,7 +52,8 @@ const LikeCard = ({
                     priority: FastImage.priority.high,
                   }
                 : require('../assets/images/placeholder-profile.png')
-            }>
+            }
+          >
             <View style={styles.infoCard}>
               <Text style={{ color: Colors.black, fontSize: 10 }}>
                 {getCardInfo()}

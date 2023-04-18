@@ -10,8 +10,7 @@ const FastImageBackground = ({
   children,
 }) => {
   return (
-    <View
-      style={{ flex: 1, padding: 0, margin: 0, ...containerStyle }}>
+    <View style={{ flex: 1, padding: 0, margin: 0, ...containerStyle }}>
       <FastImage
         style={{
           position: 'absolute',

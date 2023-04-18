@@ -34,7 +34,8 @@ const SwipeCard = ({
         containerStyle={styles.imageBackgroundContainer}
         imageStyle={styles.singleImageStyle}
         resizeMode={FastImage.resizeMode.cover}
-        source={checkPhoto(profile)}>
+        source={checkPhoto(profile)}
+      >
         <InfoCard
           name={profile.name}
           city={profile.city}
@@ -45,7 +46,8 @@ const SwipeCard = ({
         />
         <TouchableOpacity
           onPress={() => showProfileHandler(profile, false)}
-          style={styles.arrowContainer}>
+          style={styles.arrowContainer}
+        >
           <Image
             source={require('../assets/images/white-arrow-up.png')}
             style={{ width: '100%', height: '100%' }}
@@ -62,7 +64,8 @@ const SwipeCard = ({
         containerStyle={styles.imageBackgroundContainer}
         imageStyle={styles.groupImageStyle}
         resizeMode={FastImage.resizeMode.cover}
-        source={checkPhoto(member)}>
+        source={checkPhoto(member)}
+      >
         <InfoCard
           name={member.name}
           city={member.city}
@@ -74,7 +77,8 @@ const SwipeCard = ({
         {!showProfileRestricted && (
           <TouchableOpacity
             onPress={() => showProfileHandler(member, true)}
-            style={styles.arrowContainer}>
+            style={styles.arrowContainer}
+          >
             <Image
               source={require('../assets/images/white-arrow-up.png')}
               style={{ width: '100%', height: '100%' }}
@@ -84,7 +88,8 @@ const SwipeCard = ({
         {showProfileRestricted && allowedProfileId === member.id && (
           <TouchableOpacity
             onPress={() => showProfileHandler(member, true)}
-            style={styles.arrowContainer}>
+            style={styles.arrowContainer}
+          >
             <Image
               source={require('../assets/images/white-arrow-up.png')}
               style={{ width: '100%', height: '100%' }}
@@ -110,7 +115,8 @@ const SwipeCard = ({
           paginationStyle={{ top: 5, bottom: null }}
           removeClippedSubviews={false}
           showsButtons
-          style={styles.wrapper}>
+          style={styles.wrapper}
+        >
           {isGroup ? renderGroupCard() : renderSingleCard()}
         </Swiper>
       </View>
