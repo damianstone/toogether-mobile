@@ -24,6 +24,29 @@ IOS_LOCAL_URL = http://127.0.0.1:8000
 ANDROID_LOCAL_URL = http://10.0.2.2:8000
 ```
 
+### Export your ANDROID_HOME SDK path
+To find the path to your Android SDK installation, you can follow these steps:
+
+1. Open Android Studio.
+2. Click on "Configure" in the welcome screen or the main window.
+3. Click on "SDK Manager" from the dropdown menu.
+4. In the SDK Manager window, you should see the path to your SDK installation at the top of the window.
+
+```bash
+export ANDROID_HOME=/path/to/your/sdk
+```
+
+### Run locally
+For iOS
+```bash
+npm run ios
+```
+
+For Android
+```bash
+npm run android
+```
+
 ### Style standards
 
 To keep the code in a standard style we use `Prettier + Eslint`

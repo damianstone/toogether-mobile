@@ -1,4 +1,3 @@
-/* eslint-disable react/jsx-curly-brace-presence */
 import React, { useEffect, useState, useCallback, useContext } from 'react';
 import {
   FlatList,
@@ -14,18 +13,13 @@ import {
 } from 'react-native';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { useDispatch, useSelector } from 'react-redux';
-import { withNavigationFocus } from 'react-navigation';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import * as ImagePicker from 'expo-image-picker';
-import { MaterialIcons } from '@expo/vector-icons';
+import FastImage from 'react-native-fast-image';
 import { Context } from '../../context/ContextProvider';
 import { getNameInitials, getImage } from '../../utils/getMethods';
-
-import ProfileGallery from '../../components/MyProfile/ProfileGallery';
-import HeaderButtom from '../../components/UI/HeaderButton';
-import Loader from '../../components/UI/Loader';
-import Colors from '../../constants/Colors';
-import * as c from '../../constants/user';
+import { checkServerError, check400Error } from '../../utils/errors';
+import { verifyPermissions } from '../../utils/permissions';
 import {
   listUserPhotos,
   getUserProfile,
@@ -33,11 +27,14 @@ import {
   addPhoto,
   updatePhoto,
 } from '../../store/actions/user';
-import { checkServerError, check400Error } from '../../utils/errors';
-import { verifyPermissions } from '../../utils/permissions';
 
-import styles from './styles';
+import NameCounter from '../../components/MyProfile/NameCounter';
+import ProfileGallery from '../../components/MyProfile/ProfileGallery';
 import FooterProfile from '../../components/MyProfile/FooterProfile';
+import HeaderButtom from '../../components/UI/HeaderButton';
+import Loader from '../../components/UI/Loader';
+import * as c from '../../constants/user';
+import styles from './styles';
 
 const MyProfileScreen = (props) => {
   const { profileContext, updateProfileContext } = useContext(Context);
@@ -202,31 +199,28 @@ const MyProfileScreen = (props) => {
     });
   };
 
-  const handleNavigate = (screen) => {
-    props.navigation.navigate(screen);
-  };
-
   return (
     <ScrollView
       refreshControl={
         <RefreshControl refreshing={refreshing} onRefresh={loadProfile} />
       }
       contentContainerStyle={styles.scroll_container_style}
-      style={styles.scrollview_style}
-    >
+      style={styles.scrollview_style}>
       <TouchableOpacity
         style={styles.profilePictureContainer}
-        onPress={handleOpenPreview}
-      >
-        {photos && Object.values(photos).length > 0 && (
-          <Image
+        onPress={handleOpenPreview}>
+        {photos?.length > 0 ? (
+          <FastImage
             source={{
               uri: `${getImage(Object.values(photos)[0].image)}`,
+              priority: FastImage.priority.high,
             }}
             style={styles.image}
           />
+        ) : (
+          <Loader />
         )}
-        {(!photos || Object.values(photos).length === 0) && userProfile && (
+        {userProfile && photos?.length <= 0 && (
           <View style={styles.avatar_view}>
             <Text style={styles.avatar_initials}>
               {getNameInitials(userProfile.name)}
@@ -234,32 +228,16 @@ const MyProfileScreen = (props) => {
           </View>
         )}
       </TouchableOpacity>
-      <View style={styles.nameView}>
-        {userProfile && userProfile.name && (
-          <>
-            <Text style={styles.name}>{userProfile.name}</Text>
-            <TouchableOpacity onPress={() => handleNavigate('EditProfile')}>
-              <MaterialIcons name="edit" size={20} color="white" />
-            </TouchableOpacity>
-          </>
-        )}
-      </View>
-      <View style={styles.counterContainer}>
-        <View style={styles.counterView}>
-          <Text style={styles.likesNumber}>
-            {typeof userProfile !== 'undefined' ? userProfile?.total_likes : ''}
-          </Text>
-          <Text style={styles.counterText}>Likes</Text>
-        </View>
-        <View style={styles.counterView}>
-          <Text style={styles.matchesNumber}>
-            {typeof userProfile !== 'undefined'
-              ? userProfile.total_matches
-              : ''}
-          </Text>
-          <Text style={styles.counterText}>matches</Text>
-        </View>
-      </View>
+      {userProfile ? (
+        <NameCounter
+          name={userProfile.name}
+          total_likes={userProfile.total_likes}
+          total_matches={userProfile.total_matches}
+          navigation={props.navigation}
+        />
+      ) : (
+        <Loader />
+      )}
       <View>
         <ProfileGallery
           photos={photos}
