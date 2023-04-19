@@ -265,7 +265,7 @@ MyProfileScreen.navigationOptions = (navData) => {
             Platform.OS === 'android' ? 'settings-sharp' : 'settings-sharp'
           }
           onPress={() => {
-            navData.navigation.navigate('Setting');
+            navData.navigation.navigate('Settings');
           }}
           title="Back arrow"
         />

@@ -13,6 +13,7 @@ import { ContextProvider } from './context/ContextProvider';
 import store from './store/store';
 
 SplashScreen.preventAutoHideAsync();
+
 const fetchFonts = async () => {
   const loadedFonts = await Font.loadAsync({
     'poppins-regular': require('./assets/fonts/Poppins-Regular.ttf'),
