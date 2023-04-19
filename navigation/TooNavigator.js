@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import { Platform, Text, View, Image } from 'react-native';
 import { Context } from '../context/ContextProvider';
 
+import { createStackNavigator } from '@react-navigation/stack';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -47,10 +48,9 @@ import ChangePasswordScreen from '../screens/Recovery/ChangePasswordScreen';
 
 // console.log('GET NAV -> ', getNavHeader(1, 'X')); // TODO: for some reason this is undefined
 
-const Stack = createNativeStackNavigator();
+const Stack = createStackNavigator();
 
 const defaultNavOptions = {
-  headerMode: 'none',
   headerStyle: {
     backgroundColor: Colors.bg,
     shadowColor: 'transparent',
@@ -379,13 +379,13 @@ const GroupNavigator = () => {
       initialRouteName={groupContext ? 'Group' : 'StartGroup'}
       screenOptions={{
         ...defaultNavOptions,
-        gestureDirection: 'horizontal', // INVERTED
       }}>
       <Stack.Screen
         name="StartGroup"
         component={StartGroupScreen}
         options={({ navigation }) => ({
           headerTitle: 'Start group',
+          gestureDirection: 'horizontal-inverted',
         })}
       />
       <Stack.Screen
@@ -418,7 +418,7 @@ const GroupNavigator = () => {
         options={({ navigation }) => ({
           ...defaultNavOptions,
           gestureDirection: 'horizontal',
-          headerTitle: 'Likes',
+          headerTitle: 'Group',
           headerLeft: () => (
             <Avatar
               onPress={() => {

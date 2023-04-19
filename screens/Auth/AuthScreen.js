@@ -1,14 +1,12 @@
-import React, { useEffect, useReducer, useCallback } from 'react';
+import React, { useEffect, useReducer, useCallback, useContext } from 'react';
 import {
   View,
-  Button,
   Text,
   ScrollView,
   Alert,
   Platform,
   ActivityIndicator,
   KeyboardAvoidingView,
-  Keyboard,
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { StatusBar } from 'expo-status-bar';
@@ -19,7 +17,9 @@ import AuthInput from '../../components/UI/AuthInput';
 import Colors from '../../constants/Colors';
 import Device from '../../theme/Device';
 import * as c from '../../constants/user';
+import { Context } from '../../context/ContextProvider';
 import { userRegister, userLogin } from '../../store/actions/user';
+import { authenticate, setIsAuth } from '../../store/actions/auth';
 import { check400Error, checkServerError } from '../../utils/errors';
 import styles from './styles';
 
@@ -50,6 +50,7 @@ const formReducer = (state, action) => {
 };
 
 const AuthStartScreen = (props) => {
+  const { updateProfileContext } = useContext(Context);
   const { register } = props.route.params;
 
   const dispatch = useDispatch();
@@ -122,7 +123,8 @@ const AuthStartScreen = (props) => {
     }
 
     if (loginSuccess && loginData.has_account) {
-      props.navigation.navigate('Swipe');
+      updateProfileContext(loginData)
+      dispatch(setIsAuth(true));
       dispatch({ type: c.USER_LOGIN_RESET });
     }
 

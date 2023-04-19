@@ -28,6 +28,7 @@
     "@react-navigation/material-bottom-tabs": "^6.2.15",
     "@react-navigation/native": "^6.1.6",
     "@react-navigation/native-stack": "^6.9.12",
+    "@react-navigation/stack": "^6.3.16",
     "axios": "^0.27.2",
     "eslint-plugin-import-helpers": "^1.2.1",
     "eslint-plugin-react-native": "^4.0.0",

@@ -16,7 +16,6 @@ import { StatusBar } from 'expo-status-bar';
 import { Context } from '../../context/ContextProvider';
 import { joinGroup } from '../../store/actions/group';
 import { check400Error, checkServerError } from '../../utils/errors';
-import { StackActions } from 'react-navigation';
 
 import HeaderButtom from '../../components/UI/HeaderButton';
 import AuthButton from '../../components/UI/AuthButton';
@@ -53,7 +52,7 @@ const formReducer = (state, action) => {
 };
 
 const JoinGroupScreen = (props) => {
-  const { groupContext, updateGroupContext } = useContext(Context);
+  const { updateGroupContext } = useContext(Context);
   const dispatch = useDispatch();
 
   const joinGroupReducer = useSelector((state) => state.joinGroup);
@@ -87,8 +86,8 @@ const JoinGroupScreen = (props) => {
 
     if (dataJoin) {
       updateGroupContext(dataJoin);
-      dispatch({ type: g.JOIN_GROUP_RESET });
       props.navigation.navigate('Group');
+      dispatch({ type: g.JOIN_GROUP_RESET });
     }
   }, [errorJoin, dataJoin]);
 
