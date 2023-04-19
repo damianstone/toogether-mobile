@@ -590,8 +590,50 @@ export const RecoveryNavigator = () => {
           ),
         })}
       />
-      <Stack.Screen name="ValidateCode" component={ValidateCodeScreen} />
-      <Stack.Screen name="ChangePassword" component={ChangePasswordScreen} />
+      <Stack.Screen
+        name="ValidateCode"
+        component={ValidateCodeScreen}
+        options={({ navigation }) => ({
+          headerTitle: '',
+          headerLeft: () => (
+            <HeaderButtons HeaderButtonComponent={HeaderButtom}>
+              <Item
+                iconName={
+                  Platform.OS === 'android'
+                    ? 'ios-arrow-back'
+                    : 'ios-arrow-back'
+                }
+                onPress={() => {
+                  navigation.goBack();
+                }}
+                title="Back arrow"
+              />
+            </HeaderButtons>
+          ),
+        })}
+      />
+      <Stack.Screen
+        name="ChangePassword"
+        component={ChangePasswordScreen}
+        options={({ navigation }) => ({
+          headerTitle: '',
+          headerLeft: () => (
+            <HeaderButtons HeaderButtonComponent={HeaderButtom}>
+              <Item
+                iconName={
+                  Platform.OS === 'android'
+                    ? 'ios-arrow-back'
+                    : 'ios-arrow-back'
+                }
+                onPress={() => {
+                  navigation.goBack();
+                }}
+                title="Back arrow"
+              />
+            </HeaderButtons>
+          ),
+        })}
+      />
     </Stack.Navigator>
   );
 };
