@@ -23,7 +23,7 @@ import { Context } from '../../context/ContextProvider';
 import Avatar from '../../components/UI/Avatar';
 import Loader from '../../components/UI/Loader';
 import ActionButton from '../../components/UI/ActionButton';
-import * as g from '../../constants/group';
+import * as g from '../../constants/requestTypes/group';
 import { checkServerError, check400Error } from '../../utils/errors';
 import { getNameInitials, getCardName, getImage } from '../../utils/getMethods';
 

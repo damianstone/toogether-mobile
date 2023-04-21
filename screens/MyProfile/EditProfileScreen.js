@@ -23,7 +23,7 @@ import AuthButton from '../../components/UI/AuthButton';
 import Input from '../../components/UI/Input';
 import Loader from '../../components/UI/Loader';
 import Colors from '../../constants/Colors';
-import * as c from '../../constants/user';
+import * as c from '../../constants/requestTypes/user';
 import styles from './styles';
 
 const FORM_UPDATE = 'FORM_UPDATE';

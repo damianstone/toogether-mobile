@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import { exist } from '../../utils/checks';
 
 import * as r from '../../constants/responses/match';
-import * as w from '../../constants/swipe';
+import * as w from '../../constants/requestTypes/swipe';
 import SwipeMatch from '../../components/SwipeMatch';
 
 const MatchScreen = (props) => {

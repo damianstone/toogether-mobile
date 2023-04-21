@@ -16,7 +16,7 @@ import HeaderButtom from '../../components/UI/HeaderButton';
 import Device from '../../theme/Device';
 import Colors from '../../constants/Colors';
 import ActivityModal from '../../components/UI/ActivityModal';
-import * as c from '../../constants/user';
+import * as c from '../../constants/requestTypes/user';
 import { validateCode } from '../../store/actions/user';
 import { sendRecoveryCode } from '../../store/actions/user';
 import { check400Error, checkServerError } from '../../utils/errors';

@@ -16,10 +16,10 @@ import AuthButton from '../../components/UI/AuthButton';
 import AuthInput from '../../components/UI/AuthInput';
 import Colors from '../../constants/Colors';
 import Device from '../../theme/Device';
-import * as c from '../../constants/user';
+import * as c from '../../constants/requestTypes/auth';
 import { Context } from '../../context/ContextProvider';
-import { userRegister, userLogin } from '../../store/actions/user';
-import { authenticate, setIsAuth } from '../../store/actions/auth';
+import { login, register } from '../../store/actions/auth';
+import { authenticate } from '../../store/actions/auth';
 import { check400Error, checkServerError } from '../../utils/errors';
 import styles from './styles';
 
@@ -51,7 +51,7 @@ const formReducer = (state, action) => {
 
 const AuthStartScreen = (props) => {
   const { updateProfileContext } = useContext(Context);
-  const { register } = props.route.params;
+  const { registerMode } = props.route.params;
 
   const dispatch = useDispatch();
 
@@ -98,7 +98,7 @@ const AuthStartScreen = (props) => {
     }
 
     if (registerData) {
-      props.navigation.navigate('Success', { register: register });
+      props.navigation.navigate('Success', { registerMode: true });
       dispatch({ type: c.USER_REGISTER_RESET });
     }
 
@@ -123,13 +123,13 @@ const AuthStartScreen = (props) => {
     }
 
     if (loginSuccess && loginData.has_account) {
-      updateProfileContext(loginData)
-      dispatch(setIsAuth(true));
+      updateProfileContext(loginData);
+      dispatch(authenticate(true));
       dispatch({ type: c.USER_LOGIN_RESET });
     }
 
     if (loginSuccess && !loginData.has_account) {
-      props.navigation.navigate('Success', { register: register });
+      props.navigation.navigate('Success', { registerMode: registerMode });
       dispatch({ type: c.USER_LOGIN_RESET });
     }
 
@@ -149,17 +149,17 @@ const AuthStartScreen = (props) => {
   );
 
   const handleSwitch = () => {
-    if (register) {
-      props.navigation.navigate('Auth', { register: false });
+    if (registerMode) {
+      props.navigation.navigate('Auth', { registerMode: false });
     } else {
-      props.navigation.navigate('Auth', { register: true });
+      props.navigation.navigate('Auth', { registerMode: true });
     }
   };
 
   const handleRegister = () => {
     if (formIsValid) {
       dispatch(
-        userRegister(
+        register(
           inputValues.email,
           inputValues.password,
           inputValues.repeated_password
@@ -170,7 +170,7 @@ const AuthStartScreen = (props) => {
 
   const handleLogin = () => {
     if (formIsValid) {
-      dispatch(userLogin(inputValues.email, inputValues.password));
+      dispatch(login(inputValues.email, inputValues.password));
     }
   };
 
@@ -180,12 +180,12 @@ const AuthStartScreen = (props) => {
       <View style={styles.auth_text_view}>
         <View style={styles.auth_text_container}>
           <Text style={styles.auth_text_big}>
-            {register ? 'Lets create your account!' : 'Lets sign you in'}
+            {registerMode ? 'Lets create your account!' : 'Lets sign you in'}
           </Text>
         </View>
         <View style={styles.auth_text_container}>
           <Text style={styles.auth_text_small}>
-            {register ? 'Welcome ;)' : 'Welcome back'}
+            {registerMode ? 'Welcome ;)' : 'Welcome back'}
           </Text>
         </View>
       </View>
@@ -229,7 +229,7 @@ const AuthStartScreen = (props) => {
               autoCorrect={false}
               onInputChange={inputChangeHandler}
             />
-            {register && (
+            {registerMode && (
               <AuthInput
                 secureTextEntry
                 textContentType={
@@ -245,7 +245,7 @@ const AuthStartScreen = (props) => {
                 onInputChange={inputChangeHandler}
               />
             )}
-            {!register && (
+            {!registerMode && (
               <ButtonAndroid
                 style={styles.auth_text_button}
                 color={Colors.bgCard}
@@ -259,15 +259,15 @@ const AuthStartScreen = (props) => {
               </View>
             ) : (
               <AuthButton
-                text={register ? 'Create account' : 'Login'}
-                onPress={register ? handleRegister : handleLogin}
+                text={registerMode ? 'Create account' : 'Login'}
+                onPress={registerMode ? handleRegister : handleLogin}
               />
             )}
             <ButtonAndroid
               style={styles.auth_text_button}
               color={Colors.bgCard}
               title={
-                register
+                registerMode
                   ? 'You already have an account?'
                   : 'You dont have an account?'
               }

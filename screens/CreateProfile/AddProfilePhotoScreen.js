@@ -16,7 +16,7 @@ import ButtonAndroid from '../../components/UI/ButtonAndroid';
 import AuthButton from '../../components/UI/AuthButton';
 import ImageSelector from '../../components/UI/ImageSelector';
 import Colors from '../../constants/Colors';
-import * as c from '../../constants/user';
+import * as c from '../../constants/requestTypes/user';
 import { addPhoto } from '../../store/actions/user';
 import { check400Error, checkServerError } from '../../utils/errors';
 

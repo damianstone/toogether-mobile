@@ -11,7 +11,7 @@ import SwipeCard from '../../components/SwipeCard';
 import SwipeButtons from '../../components/SwipeButtons';
 import Colors from '../../constants/Colors';
 import * as r from '../../constants/responses/match';
-import * as w from '../../constants/swipe';
+import * as w from '../../constants/requestTypes/swipe';
 import styles from './styles';
 
 const SCREEN_HEIGHT = Dimensions.get('window').height;

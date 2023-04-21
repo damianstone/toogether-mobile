@@ -21,7 +21,7 @@ import HeaderButtom from '../../components/UI/HeaderButton';
 import AuthButton from '../../components/UI/AuthButton';
 import AuthInput from '../../components/UI/AuthInput';
 import Colors from '../../constants/Colors';
-import * as g from '../../constants/group';
+import * as g from '../../constants/requestTypes/group';
 
 const { width, height } = Dimensions.get('window');
 

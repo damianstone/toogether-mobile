@@ -1,4 +1,4 @@
-import * as c from '../../constants/user';
+import * as c from '../../constants/requestTypes/user';
 
 export const userLocationReducer = (state = {}, action) => {
   switch (action.type) {
@@ -14,79 +14,6 @@ export const userLocationReducer = (state = {}, action) => {
       return {
         loading: false,
         error: action.payload,
-      };
-    default:
-      return state;
-  }
-};
-
-// -------------------------------- LOGIN / REGISTER REDUCERS --------------------------------
-export const authenticateReducer = (state = {}, action) => {
-  switch (action.type) {
-    case c.AUTHENTICATE:
-      return {
-        userData: { ...action.payload },
-      };
-    default:
-      return state;
-  }
-};
-
-export const userRegisterReducer = (state = {}, action) => {
-  switch (action.type) {
-    case c.USER_REGISTER_REQUEST:
-      return {
-        loading: true,
-      };
-    case c.USER_REGISTER_SUCCESS:
-      return {
-        data: { ...action.payload },
-      };
-    case c.USER_REGISTER_FAIL:
-      return {
-        loading: false,
-        error: action.payload,
-      };
-    case c.USER_REGISTER_RESET:
-      return {};
-    default:
-      return state;
-  }
-};
-
-export const userLoginReducer = (state = {}, action) => {
-  switch (action.type) {
-    case c.USER_LOGIN_REQUEST:
-      return {
-        loading: true,
-        success: false,
-      };
-    case c.USER_LOGIN_SUCCESS:
-      return {
-        data: { ...action.payload },
-        success: true,
-      };
-    case c.USER_LOGIN_FAIL:
-      return {
-        loading: false,
-        error: action.payload,
-      };
-    case c.USER_LOGIN_RESET:
-      return {};
-    default:
-      return state;
-  }
-};
-
-export const tokenRefreshReducer = (state = {}, action) => {
-  switch (action.type) {
-    case c.REFRESH_TOKEN_REQUEST:
-      return {
-        loading: true,
-      };
-    case c.REFRESH_TOKEN_SUCCESS:
-      return {
-        data: { ...action.payload, updated: true },
       };
     default:
       return state;

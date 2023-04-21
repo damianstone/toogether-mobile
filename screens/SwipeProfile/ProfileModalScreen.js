@@ -6,8 +6,8 @@ import { blockProfile } from '../../store/actions/block';
 import { like, listSwipe } from '../../store/actions/swipe';
 import { checkServerError, check400Error } from '../../utils/errors';
 import { getImage } from '../../utils/getMethods';
-import * as b from '../../constants/block';
-import * as r from '../../constants/user';
+import * as b from '../../constants/requestTypes/block';
+import * as r from '../../constants/requestTypes/user';
 import { userLocation } from '../../store/actions/user';
 import ActivityModal from '../../components/UI/ActivityModal';
 

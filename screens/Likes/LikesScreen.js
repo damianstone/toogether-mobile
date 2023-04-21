@@ -13,7 +13,7 @@ import { listLikes, removeLike, like } from '../../store/actions/swipe';
 import { checkServerError } from '../../utils/errors';
 import { exist, isMatch, alreadyMatched } from '../../utils/checks';
 
-import * as w from '../../constants/swipe';
+import * as w from '../../constants/requestTypes/swipe';
 import HeaderButtom from '../../components/UI/HeaderButton';
 import LikeCard from '../../components/LikeCard';
 import Avatar from '../../components/UI/Avatar';

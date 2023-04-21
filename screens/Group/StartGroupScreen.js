@@ -18,7 +18,7 @@ import { check400Error, checkServerError } from '../../utils/errors';
 import AuthButton from '../../components/UI/AuthButton';
 import Avatar from '../../components/UI/Avatar';
 import Colors from '../../constants/Colors';
-import * as g from '../../constants/group';
+import * as g from '../../constants/requestTypes/group';
 import ButtonAndroid from '../../components/UI/ButtonAndroid';
 import Device from '../../theme/Device';
 

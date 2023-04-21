@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useReducer, useCallback } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import {
   ScrollView,
   Text,
@@ -19,7 +19,8 @@ import {
   Feather,
   MaterialCommunityIcons,
 } from '@expo/vector-icons';
-import { logout, userDelete } from '../../store/actions/user';
+import { userDelete } from '../../store/actions/user';
+import { logout } from '../../store/actions/auth';
 import { SETTINGS_ACCOUNT_DATA, SETTINGS_APP_DATA } from '../../data/settings';
 import { check400Error, checkServerError } from '../../utils/errors';
 
@@ -27,7 +28,6 @@ import HeaderButtom from '../../components/UI/HeaderButton';
 import AuthButton from '../../components/UI/AuthButton';
 import ActivityModal from '../../components/UI/ActivityModal';
 import Colors from '../../constants/Colors';
-import * as c from '../../constants/user';
 
 const SettingScreen = (props) => {
   const dispatch = useDispatch();
@@ -49,7 +49,7 @@ const SettingScreen = (props) => {
     }
 
     if (dataDeleted) {
-      props.navigation.navigate('AuthStart');
+      dispatch(logout());
     }
   }, [errorDelete, dataDeleted]);
 
@@ -165,8 +165,7 @@ const SettingScreen = (props) => {
             <TouchableOpacity
               onPress={() => checkAction(setting.action)}
               style={styles.settingView}
-              key={setting.id}
-            >
+              key={setting.id}>
               <View style={styles.settingIcon}>
                 {setting.ionicons && (
                   <Ionicons name={setting.icon} size={25} color="white" />
@@ -200,8 +199,7 @@ const SettingScreen = (props) => {
             <TouchableOpacity
               onPress={() => checkAction(setting.action)}
               style={styles.settingView}
-              key={setting.id}
-            >
+              key={setting.id}>
               <View style={styles.settingIcon}>
                 {setting.ionicons && (
                   <Ionicons name={setting.icon} size={25} color="white" />

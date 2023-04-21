@@ -21,7 +21,7 @@ import {
 
 import Input from '../../components/UI/Input';
 import Loader from '../../components/UI/Loader';
-import * as c from '../../constants/user';
+import * as c from '../../constants/requestTypes/user';
 import Colors from '../../constants/Colors';
 
 const FORM_UPDATE = 'FORM_UPDATE';

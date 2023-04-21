@@ -17,7 +17,7 @@ import { getNameInitials, getImage } from '../../utils/getMethods';
 
 import HeaderButtom from '../../components/UI/HeaderButton';
 import Colors from '../../constants/Colors';
-import * as b from '../../constants/block';
+import * as b from '../../constants/requestTypes/block';
 import FastImage from 'react-native-fast-image';
 
 const BlockProfilesScreen = (props) => {

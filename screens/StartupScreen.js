@@ -8,6 +8,7 @@ import Colors from '../constants/Colors';
 const StartupScreen = (props) => {
   useEffect(() => {
     const tryLogin = async () => {
+      console.log("STARTUP SCREEN", props)
       // get the user data as a promise
       const userData = JSON.parse(await AsyncStorage.getItem('@userData'));
 

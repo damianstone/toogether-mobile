@@ -33,7 +33,7 @@ import ProfileGallery from '../../components/MyProfile/ProfileGallery';
 import FooterProfile from '../../components/MyProfile/FooterProfile';
 import HeaderButtom from '../../components/UI/HeaderButton';
 import Loader from '../../components/UI/Loader';
-import * as c from '../../constants/user';
+import * as c from '../../constants/requestTypes/user';
 import styles from './styles';
 
 const MyProfileScreen = (props) => {

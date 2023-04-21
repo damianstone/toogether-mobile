@@ -10,7 +10,7 @@ import HeaderButtom from '../../components/UI/HeaderButton';
 import Loader from '../../components/UI/Loader';
 import SwipeCard from '../../components/SwipeCard';
 import Colors from '../../constants/Colors';
-import * as w from '../../constants/swipe';
+import * as w from '../../constants/requestTypes/swipe';
 
 // TODO: manage errors
 

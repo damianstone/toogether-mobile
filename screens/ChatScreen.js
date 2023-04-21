@@ -18,8 +18,8 @@ import { listMatches, deleteMatch } from '../store/actions/swipe';
 import { blockProfile } from '../store/actions/block';
 import { checkServerError, check400Error } from '../utils/errors';
 
-import * as w from '../constants/swipe';
-import * as b from '../constants/block';
+import * as w from '../constants/requestTypes/swipe';
+import * as b from '../constants/requestTypes/block';
 import HeaderButtom from '../components/UI/HeaderButton';
 import ChatAvatar from '../components/ChatAvatar';
 import Colors from '../constants/Colors';

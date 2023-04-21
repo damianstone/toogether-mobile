@@ -4,8 +4,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { TooNavigator, AuthNavigator } from './TooNavigator';
-import { updateToken } from '../store/actions/user';
-import { authenticate, setIsAuth, setDidTryLogin } from '../store/actions/auth';
+import { refreshToken } from '../store/actions/auth';
+import { authenticate, setDidTryLogin } from '../store/actions/auth';
+import { logout } from '../store/actions/user';
 import StartupScreen from '../screens/StartupScreen';
 
 const jwt_decode = require('jwt-decode');
@@ -19,8 +20,8 @@ const AppNavigator = (props) => {
 
   const checkToken = async () => {
     const userData = JSON.parse(await AsyncStorage.getItem('@userData'));
+
     if (userData && userData.has_account) {
-      // Avoids possible ambiguity
       const currentTime = Date.now();
       const tokenDecoded = jwt_decode(userData.token);
       const refreshTokenDecoded = jwt_decode(userData.refresh_token);
@@ -28,28 +29,21 @@ const AppNavigator = (props) => {
       const isRefreshTokenExpired =
         refreshTokenDecoded.exp < currentTime / 1000;
 
-      dispatch(authenticate(userData));
-      dispatch(setDidTryLogin(true));
-
-
       if (isTokenExpired && !isRefreshTokenExpired) {
-        await dispatch(updateToken());
+        return await dispatch(refreshToken());
       }
 
-      if (userData.has_account) {
-        dispatch(setIsAuth(true));
-      } else {
-        // This is an edge case (if user's close the app after registering, i.e. generating token but then close the app we want them to finish their profile first)
-        dispatch(setIsAuth(false));
+      if (isTokenExpired && isRefreshTokenExpired) {
+        return await dispatch(logout);
       }
-      // if there is userData and the token is not expired, then the user is clearly authenticated
-      return;
+
+      return dispatch(authenticate(true));
     }
 
-    dispatch(setDidTryLogin(true));
-    dispatch(setIsAuth(false));
-    return;
     // if there is no user data in the local storage, then the user is clearly not authenticated
+    dispatch(setDidTryLogin(true));
+    dispatch(authenticate(false));
+    return;
   };
 
   useEffect(() => {
