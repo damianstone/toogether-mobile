@@ -12,7 +12,6 @@ import {
 import FastImage from 'react-native-fast-image';
 import { useDispatch, useSelector } from 'react-redux';
 import { useActionSheet } from '@expo/react-native-action-sheet';
-import { StackActions } from 'react-navigation';
 import {
   getGroup,
   leaveGroup,
@@ -21,10 +20,9 @@ import {
 } from '../../store/actions/group';
 import { Context } from '../../context/ContextProvider';
 
-import Avatar from '../../components/UI/Avatar';
 import Loader from '../../components/UI/Loader';
 import ActionButton from '../../components/UI/ActionButton';
-import * as g from '../../constants/group';
+import * as g from '../../constants/requestTypes/group';
 import { checkServerError, check400Error } from '../../utils/errors';
 import { getNameInitials, getCardName, getImage } from '../../utils/getMethods';
 
@@ -76,20 +74,9 @@ const GroupScreen = (props) => {
     data: dataRemoveMember,
   } = removeMemberReducer;
 
-  // * this function replaces the first screen on the GroupNavigato stack
-  const replaceAction = StackActions.replace({
-    routeName: 'StartGroup',
-  });
-
   // we need to kepp calling the group if there is any change made by an external member
   useEffect(() => {
     dispatch(getGroup());
-  }, []);
-
-  useEffect(() => {
-    if (!groupContext) {
-      props.navigation.dispatch(replaceAction);
-    }
   }, []);
 
   // handle render after fetching the group
@@ -99,9 +86,6 @@ const GroupScreen = (props) => {
         check400Error(errorGroup);
       }
       checkServerError(errorGroup);
-    }
-    if (dataGroup) {
-      updateGroupContext(dataGroup);
     }
   }, [errorGroup, dataGroup]);
 
@@ -117,7 +101,7 @@ const GroupScreen = (props) => {
     if (dataDelete) {
       updateGroupContext(null);
       dispatch({ type: g.DELETE_GROUP_RESET });
-      props.navigation.dispatch(replaceAction);
+      props.navigation.navigate('StartGroup');
     }
   }, [errorDelete, dataDelete]);
 
@@ -133,7 +117,7 @@ const GroupScreen = (props) => {
     if (dataLeave) {
       updateGroupContext(null);
       dispatch({ type: g.LEAVE_GROUP_RESET });
-      props.navigation.dispatch(replaceAction);
+      props.navigation.navigate('StartGroup');
     }
   }, [errorLeave, dataLeave]);
 
@@ -258,7 +242,7 @@ const GroupScreen = (props) => {
     );
   };
 
-  if (loadingDelete || loadingLeave) {
+  if (loadingDelete || loadingLeave || loadingRemoveMember) {
     return (
       <View style={styles.loadingScreen}>
         <ActivityIndicator color={Colors.white} size="large" />
@@ -308,8 +292,9 @@ const GroupScreen = (props) => {
           <View style={styles.nameView}>
             {groupContext?.owner && (
               <Text
-                style={styles.name}
-              >{`${groupContext.owner.name}'s group`}</Text>
+                style={
+                  styles.name
+                }>{`${groupContext.owner.name}'s group`}</Text>
             )}
           </View>
         </View>
@@ -367,19 +352,6 @@ const GroupScreen = (props) => {
       </View>
     </View>
   );
-};
-
-GroupScreen.navigationOptions = (navData) => {
-  return {
-    headerTitle: 'Group',
-    headerLeft: () => (
-      <Avatar
-        onPress={() => {
-          navData.navigation.navigate('MyProfile');
-        }}
-      />
-    ),
-  };
 };
 
 export default GroupScreen;

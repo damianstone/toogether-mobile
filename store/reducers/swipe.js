@@ -1,4 +1,4 @@
-import * as w from '../../constants/swipe';
+import * as w from '../../constants/requestTypes/swipe';
 
 // -------------------------------- SWIPE CARDS --------------------------------
 export const listSwipeReducer = (state = {}, action) => {

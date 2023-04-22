@@ -1,3 +1,4 @@
+import 'react-native-gesture-handler';
 import React, { useState, useEffect, useCallback } from 'react';
 import { Provider } from 'react-redux';
 import {
@@ -8,11 +9,12 @@ import AppLoading from 'expo-app-loading';
 import * as Font from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 
-import ToogetherNav from './navigation/ToogetherNav';
+import AppNavigator from './navigation/AppNavigator';
 import { ContextProvider } from './context/ContextProvider';
 import store from './store/store';
 
 SplashScreen.preventAutoHideAsync();
+
 const fetchFonts = async () => {
   const loadedFonts = await Font.loadAsync({
     'poppins-regular': require('./assets/fonts/Poppins-Regular.ttf'),
@@ -48,7 +50,7 @@ const App = () => {
     <Provider store={store}>
       <ActionSheetProvider>
         <ContextProvider>
-          <ToogetherNav theme="dark" />
+          <AppNavigator theme="dark" />
         </ContextProvider>
       </ActionSheetProvider>
     </Provider>

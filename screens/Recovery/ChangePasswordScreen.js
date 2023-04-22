@@ -5,26 +5,23 @@ import {
   StyleSheet,
   Alert,
   KeyboardAvoidingView,
-  ScrollView,
   Platform,
 } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
-import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import AuthButton from '../../components/UI/AuthButton';
 import AuthInput from '../../components/UI/AuthInput';
-import HeaderButtom from '../../components/UI/HeaderButton';
 import Device from '../../theme/Device';
 import Colors from '../../constants/Colors';
 import ActivityModal from '../../components/UI/ActivityModal';
-import * as c from '../../constants/user';
+import * as c from '../../constants/requestTypes/user';
 import { changePassword } from '../../store/actions/user';
 import { check400Error, checkServerError } from '../../utils/errors';
 
 const ChangePasswordScreen = (props) => {
-  const { data, error, loading } = useSelector((state) => state.changePassword);
-  const email = props.navigation.getParam('email');
-  const token = props.navigation.getParam('token');
+  const { email, token } = props.route.params;
 
+  const { data, error, loading } = useSelector((state) => state.changePassword);
+  
   const [password, setPassword] = useState('');
   const [repeated_password, setRepeated_password] = useState('');
 
@@ -127,25 +124,6 @@ const ChangePasswordScreen = (props) => {
       </KeyboardAvoidingView>
     </View>
   );
-};
-
-ChangePasswordScreen.navigationOptions = (navData) => {
-  return {
-    headerTitle: '',
-    headerLeft: () => (
-      <HeaderButtons HeaderButtonComponent={HeaderButtom}>
-        <Item
-          iconName={
-            Platform.OS === 'android' ? 'ios-arrow-back' : 'ios-arrow-back'
-          }
-          onPress={() => {
-            navData.navigation.navigate('ValidateCode');
-          }}
-          title="Back arrow"
-        />
-      </HeaderButtons>
-    ),
-  };
 };
 
 export default ChangePasswordScreen;

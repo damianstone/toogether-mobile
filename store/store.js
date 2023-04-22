@@ -1,16 +1,18 @@
 import { applyMiddleware, combineReducers, createStore } from 'redux';
 import thunk from 'redux-thunk';
 import {
-  userLocationReducer,
   authenticateReducer,
   tokenRefreshReducer,
+  userLoginReducer,
+  userRegisterReducer,
+} from './reducers/auth';
+import {
+  userLocationReducer,
   userAddPhotoReducer,
   userRemovePhotoReducer,
   userCreateProfileReducer,
   userUpdateProfileReducer,
   userListPhotosReducer,
-  userLoginReducer,
-  userRegisterReducer,
   userDeleteReducer,
   userGetProfileReducer,
   reportProfileReducer,
@@ -43,12 +45,13 @@ import {
 } from './reducers/swipe';
 
 const reducer = combineReducers({
-  // profile API
-  userLocation: userLocationReducer,
+  // auth
   auth: authenticateReducer,
   tokenRefresh: tokenRefreshReducer,
   userRegister: userRegisterReducer,
   userLogin: userLoginReducer,
+  // profile API
+  userLocation: userLocationReducer,
   userDelete: userDeleteReducer,
   userCreateProfile: userCreateProfileReducer,
   userUpdateProfile: userUpdateProfileReducer,

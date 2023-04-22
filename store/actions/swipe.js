@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import Constants from 'expo-constants';
-import * as w from '../../constants/swipe';
+import * as w from '../../constants/requestTypes/swipe';
 import { ENV } from '../../environment';
 
 const BASE_URL = ENV.API_URL;

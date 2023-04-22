@@ -1,9 +1,5 @@
 import React, { useEffect, useState, useCallback, useContext } from 'react';
 import {
-  FlatList,
-  Image,
-  Platform,
-  SafeAreaView,
   ScrollView,
   Text,
   TouchableOpacity,
@@ -11,7 +7,6 @@ import {
   Alert,
   RefreshControl,
 } from 'react-native';
-import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { useDispatch, useSelector } from 'react-redux';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import * as ImagePicker from 'expo-image-picker';
@@ -21,8 +16,8 @@ import { getNameInitials, getImage } from '../../utils/getMethods';
 import { checkServerError, check400Error } from '../../utils/errors';
 import { verifyPermissions } from '../../utils/permissions';
 import {
-  listUserPhotos,
   getUserProfile,
+  listUserPhotos,
   removeUserPhoto,
   addPhoto,
   updatePhoto,
@@ -31,10 +26,10 @@ import {
 import NameCounter from '../../components/MyProfile/NameCounter';
 import ProfileGallery from '../../components/MyProfile/ProfileGallery';
 import FooterProfile from '../../components/MyProfile/FooterProfile';
-import HeaderButtom from '../../components/UI/HeaderButton';
 import Loader from '../../components/UI/Loader';
-import * as c from '../../constants/user';
+import * as c from '../../constants/requestTypes/user';
 import styles from './styles';
+import Colors from '../../constants/Colors';
 
 const MyProfileScreen = (props) => {
   const { profileContext, updateProfileContext } = useContext(Context);
@@ -43,7 +38,6 @@ const MyProfileScreen = (props) => {
   const { showActionSheetWithOptions } = useActionSheet();
   const [refreshing, setRefreshing] = useState(false);
   const [photoId, setPhotoId] = useState('');
-  const [photos, setPhotos] = useState();
 
   const userGetProfile = useSelector((state) => state.userGetProfile);
   const {
@@ -56,7 +50,7 @@ const MyProfileScreen = (props) => {
   const {
     loading: loadingPhotos,
     error: errorPhotos,
-    data: dataPhotos,
+    data: photos,
   } = userListPhotos;
 
   const userRemovePhoto = useSelector((state) => state.userRemovePhoto);
@@ -74,23 +68,22 @@ const MyProfileScreen = (props) => {
   } = userAddPhoto;
 
   useEffect(() => {
-    if (!userProfile && !errorProfile) {
-      dispatch(getUserProfile());
-    }
+    dispatch(listUserPhotos());
+    dispatch(getUserProfile());
+  }, []);
+
+  useEffect(() => {
     if (errorProfile) {
       checkServerError(errorProfile);
     }
-    if (userProfile) {
-      updateProfileContext(userProfile);
+
+    if (errorPhotos) {
+      checkServerError(errorPhotos);
     }
-  }, [photos, userProfile]);
+  }, [errorPhotos, errorProfile]);
 
   useEffect(() => {
-    if (dataPhotos) {
-      setPhotos([...dataPhotos]);
-    }
-
-    if ((!photos || dataRemovePhoto || dataAddPhoto) && !errorPhotos) {
+    if ((dataRemovePhoto || dataAddPhoto) && !errorPhotos) {
       dispatch(listUserPhotos());
     }
 
@@ -127,20 +120,17 @@ const MyProfileScreen = (props) => {
 
     dispatch({ type: c.USER_ADD_PHOTO_RESET });
     dispatch({ type: c.USER_REMOVE_PHOTO_RESET });
-  }, [
-    dataPhotos,
-    dataRemovePhoto,
-    dataAddPhoto,
-    errorRemovePhoto,
-    errorPhotos,
-    errorAddPhoto,
-  ]);
+  }, [dataRemovePhoto, dataAddPhoto, errorRemovePhoto, errorAddPhoto]);
+
+  useEffect(() => {
+    const unsubscribe = props.navigation.addListener('focus', loadProfile);
+    return () => unsubscribe;
+  }, [loadProfile]);
 
   const loadProfile = useCallback(async () => {
     setRefreshing(true);
     try {
       await dispatch(getUserProfile());
-      await dispatch(listUserPhotos());
     } catch (err) {
       checkServerError(err);
     }
@@ -202,16 +192,19 @@ const MyProfileScreen = (props) => {
   return (
     <ScrollView
       refreshControl={
-        <RefreshControl refreshing={refreshing} onRefresh={loadProfile} />
+        <RefreshControl
+          refreshing={refreshing}
+          onRefresh={loadProfile}
+          tintColor={Colors.white}
+        />
       }
       contentContainerStyle={styles.scroll_container_style}
-      style={styles.scrollview_style}
-    >
+      style={styles.scrollview_style}>
       <TouchableOpacity
         style={styles.profilePictureContainer}
-        onPress={handleOpenPreview}
-      >
-        {photos?.length > 0 ? (
+        onPress={handleOpenPreview}>
+        {loadingPhotos && <Loader size="small" />}
+        {photos?.length > 0 && (
           <FastImage
             source={{
               uri: `${getImage(Object.values(photos)[0].image)}`,
@@ -219,8 +212,6 @@ const MyProfileScreen = (props) => {
             }}
             style={styles.image}
           />
-        ) : (
-          <Loader />
         )}
         {userProfile && photos?.length <= 0 && (
           <View style={styles.avatar_view}>
@@ -253,38 +244,6 @@ const MyProfileScreen = (props) => {
       <FooterProfile handleOpenPreview={handleOpenPreview} />
     </ScrollView>
   );
-};
-
-MyProfileScreen.navigationOptions = (navData) => {
-  return {
-    headerTitle: 'My Profile',
-    headerRight: () => (
-      <HeaderButtons HeaderButtonComponent={HeaderButtom}>
-        <Item
-          iconName={
-            Platform.OS === 'android' ? 'settings-sharp' : 'settings-sharp'
-          }
-          onPress={() => {
-            navData.navigation.navigate('Setting');
-          }}
-          title="Back arrow"
-        />
-      </HeaderButtons>
-    ),
-    headerLeft: () => (
-      <HeaderButtons HeaderButtonComponent={HeaderButtom}>
-        <Item
-          iconName={
-            Platform.OS === 'android' ? 'ios-arrow-back' : 'ios-arrow-back'
-          }
-          onPress={() => {
-            navData.navigation.navigate('Swipe');
-          }}
-          title="Back arrow"
-        />
-      </HeaderButtons>
-    ),
-  };
 };
 
 export default MyProfileScreen;

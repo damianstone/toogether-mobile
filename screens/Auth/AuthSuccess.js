@@ -13,14 +13,14 @@ import { StatusBar } from 'expo-status-bar';
 import Colors from '../../constants/Colors';
 
 const AuthSucess = (props) => {
-  const register = props.navigation.getParam('register');
+  const { registerMode } = props.route.params;
 
   return (
     <View style={[styles.screen, Platform.OS === 'ios' ? {} : { flex: 1 }]}>
       <StatusBar style="light" />
       <View style={styles.container}>
         <Text style={styles.mainText}>
-          {register ? 'Register Success' : 'Login Success'}
+          {registerMode ? 'Register Success' : 'Login Success'}
         </Text>
         <View style={styles.container}>
           <Text style={styles.text}>Lets start with your profile</Text>

@@ -10,21 +10,20 @@ import {
   Alert,
 } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
-import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import AuthButton from '../../components/UI/AuthButton';
-import HeaderButtom from '../../components/UI/HeaderButton';
 import Device from '../../theme/Device';
 import Colors from '../../constants/Colors';
 import ActivityModal from '../../components/UI/ActivityModal';
-import * as c from '../../constants/user';
+import * as c from '../../constants/requestTypes/user';
 import { validateCode } from '../../store/actions/user';
 import { sendRecoveryCode } from '../../store/actions/user';
 import { check400Error, checkServerError } from '../../utils/errors';
 
 const ValidateCodeScreen = (props) => {
-  const [code, setCode] = useState('');
-  const email = props.navigation.getParam('email');
+  const { email } = props.route.params;
+  
   const dispatch = useDispatch();
+  const [code, setCode] = useState('');
 
   const { data, error, loading } = useSelector((state) => state.validateCode);
   const { data: dataResend } = useSelector((state) => state.sendRecoveryCode);
@@ -139,25 +138,6 @@ const ValidateCodeScreen = (props) => {
       </KeyboardAvoidingView>
     </View>
   );
-};
-
-ValidateCodeScreen.navigationOptions = (navData) => {
-  return {
-    headerTitle: '',
-    headerLeft: () => (
-      <HeaderButtons HeaderButtonComponent={HeaderButtom}>
-        <Item
-          iconName={
-            Platform.OS === 'android' ? 'ios-arrow-back' : 'ios-arrow-back'
-          }
-          onPress={() => {
-            navData.navigation.navigate('Recovery');
-          }}
-          title="Back arrow"
-        />
-      </HeaderButtons>
-    ),
-  };
 };
 
 export default ValidateCodeScreen;
