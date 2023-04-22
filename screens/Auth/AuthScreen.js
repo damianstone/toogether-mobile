@@ -122,7 +122,7 @@ const AuthStartScreen = (props) => {
     }
 
     if (loginSuccess && loginData.has_account) {
-      dispatch(authenticate(true))
+      dispatch(authenticate(true));
       dispatch({ type: c.USER_LOGIN_RESET });
     }
 
@@ -191,13 +191,15 @@ const AuthStartScreen = (props) => {
         behavior={Platform.OS === 'ios' ? 'position' : 'height'}
         keyboardVerticalOffset={
           Platform.OS === 'ios' ? undefined : -0.3 * Device.height
-        }>
+        }
+      >
         <ScrollView
           style={styles.scrollview_style}
           contentContainerStyle={styles.scrollview_content_container}
           automaticallyAdjustKeyboardInsets={
             Platform.OS == 'ios' ? false : true
-          }>
+          }
+        >
           <View style={styles.auth_input_container}>
             <AuthInput
               id="email"

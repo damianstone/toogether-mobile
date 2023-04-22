@@ -19,7 +19,6 @@ export const authenticateReducer = (state = {}, action) => {
   }
 };
 
-
 export const userRegisterReducer = (state = {}, action) => {
   switch (action.type) {
     case a.USER_REGISTER_REQUEST:

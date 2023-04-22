@@ -90,7 +90,8 @@ const AddProfilePhotoScreen = (props) => {
       style={styles.scroll}
       contentContainerStyle={styles.screen}
       showsVerticalScrollIndicator={false}
-      showsHorizontalScrollIndicator={false}>
+      showsHorizontalScrollIndicator={false}
+    >
       <StatusBar style="light" />
       <View style={styles.auth_text_view}>
         <View style={authStyles.default.auth_text_container}>

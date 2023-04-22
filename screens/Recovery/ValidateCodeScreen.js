@@ -21,7 +21,7 @@ import { check400Error, checkServerError } from '../../utils/errors';
 
 const ValidateCodeScreen = (props) => {
   const { email } = props.route.params;
-  
+
   const dispatch = useDispatch();
   const [code, setCode] = useState('');
 

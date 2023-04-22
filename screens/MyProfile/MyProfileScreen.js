@@ -199,10 +199,12 @@ const MyProfileScreen = (props) => {
         />
       }
       contentContainerStyle={styles.scroll_container_style}
-      style={styles.scrollview_style}>
+      style={styles.scrollview_style}
+    >
       <TouchableOpacity
         style={styles.profilePictureContainer}
-        onPress={handleOpenPreview}>
+        onPress={handleOpenPreview}
+      >
         {loadingPhotos && <Loader size="small" />}
         {photos?.length > 0 && (
           <FastImage

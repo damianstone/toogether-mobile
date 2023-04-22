@@ -129,7 +129,8 @@ const SwipeProfileScreen = (props) => {
             alignItems: 'center',
             backgroundColor: Colors.bgCard,
             opacity: 0.5,
-          }}>
+          }}
+        >
           <Loader />
         </View>
       </View>

@@ -66,7 +66,8 @@ const MyProfileNavigator = () => {
     <Stack.Navigator
       screenOptions={{
         ...defaultNavOptions,
-      }}>
+      }}
+    >
       <Stack.Screen
         name="MyProfile"
         component={MyProfileScreen}
@@ -201,7 +202,8 @@ const MyProfileNavigator = () => {
 const MyProfileNavigatorWithModal = () => {
   return (
     <Stack.Navigator
-      screenOptions={{ headerShown: false, presentation: 'modal' }}>
+      screenOptions={{ headerShown: false, presentation: 'modal' }}
+    >
       <Stack.Screen
         name="MyProfileNavigator"
         component={MyProfileNavigator}
@@ -218,7 +220,8 @@ const ChatNavigator = () => {
       screenOptions={{
         ...defaultNavOptions,
         gestureDirection: 'horizontal',
-      }}>
+      }}
+    >
       <Stack.Screen
         name="Chat"
         component={ChatScreen}
@@ -272,7 +275,8 @@ const ChatNavigator = () => {
 const MatchNavigator = () => {
   return (
     <Stack.Navigator
-      screenOptions={{ ...defaultNavOptions, presentation: 'modal' }}>
+      screenOptions={{ ...defaultNavOptions, presentation: 'modal' }}
+    >
       <Stack.Screen
         name="Matches"
         component={ChatNavigator}
@@ -292,7 +296,8 @@ const LikeNavigator = () => {
     <Stack.Navigator
       screenOptions={{
         ...defaultNavOptions,
-      }}>
+      }}
+    >
       <Stack.Screen
         name="Likes"
         component={LikesScreen}
@@ -331,7 +336,8 @@ const SwipeNavigator = () => {
     <Stack.Navigator
       screenOptions={{
         ...defaultNavOptions,
-      }}>
+      }}
+    >
       <Stack.Screen
         name="Swipe"
         component={SwipeScreen}
@@ -379,7 +385,8 @@ const GroupNavigator = () => {
       initialRouteName={groupContext ? 'Group' : 'StartGroup'}
       screenOptions={{
         ...defaultNavOptions,
-      }}>
+      }}
+    >
       <Stack.Screen
         name="StartGroup"
         component={StartGroupScreen}
@@ -477,7 +484,8 @@ const ToogetherTab = (props) => {
             borderTopColor: bgCard ? Colors.bgCard : Colors.bg,
           },
         };
-      }}>
+      }}
+    >
       <Tab.Screen
         name="SwipeNavigator"
         component={SwipeNavigator}
@@ -530,7 +538,8 @@ const HomeNavigator = () => {
       initialRouteName="Main"
       screenOptions={{
         headerShown: false,
-      }}>
+      }}
+    >
       <Stack.Screen name="Main" component={ToogetherTab} />
       <Stack.Screen
         name="ProfileModal"
@@ -552,7 +561,8 @@ export const TooNavigator = () => {
       initialRouteName="Swipe"
       screenOptions={{
         headerShown: false,
-      }}>
+      }}
+    >
       <Stack.Screen name="Swipe" component={HomeNavigator} />
       <Stack.Screen name="Match" component={MatchNavigator} />
       <Stack.Screen name="GroupNavigator" component={GroupNavigator} />

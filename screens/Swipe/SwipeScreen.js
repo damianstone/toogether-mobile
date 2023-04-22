@@ -1,10 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import {
-  View,
-  Share,
-  SafeAreaView,
-  Alert,
-} from 'react-native';
+import { View, Share, SafeAreaView, Alert } from 'react-native';
 import { useNetInfo } from '@react-native-community/netinfo';
 import { StatusBar } from 'expo-status-bar';
 import { useSelector, useDispatch } from 'react-redux';

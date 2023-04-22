@@ -31,20 +31,20 @@ const StartupScreen = ({ navigation }) => {
       const isRefreshExpired = refresh.exp < currentTime / 1000;
 
       if (isTokenExpired && !isRefreshExpired) {
-        console.log("refresh")
+        console.log('refresh');
         return dispatch(refreshToken());
       }
 
       if (isTokenExpired && isRefreshExpired) {
-        console.log("SECOND")
+        console.log('SECOND');
         return dispatch(logout());
       }
 
-      console.log("THIRD")
+      console.log('THIRD');
       return dispatch(authenticate(true));
     }
 
-    console.log("HERE")
+    console.log('HERE');
     // if there is no user data in the local storage, then the user is clearly not authenticated
     dispatch(setDidTryLogin(true));
     dispatch(authenticate(false));

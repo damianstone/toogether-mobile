@@ -162,7 +162,8 @@ const SettingScreen = (props) => {
             <TouchableOpacity
               onPress={() => checkAction(setting.action)}
               style={styles.settingView}
-              key={setting.id}>
+              key={setting.id}
+            >
               <View style={styles.settingIcon}>
                 {setting.ionicons && (
                   <Ionicons name={setting.icon} size={25} color="white" />
@@ -196,7 +197,8 @@ const SettingScreen = (props) => {
             <TouchableOpacity
               onPress={() => checkAction(setting.action)}
               style={styles.settingView}
-              key={setting.id}>
+              key={setting.id}
+            >
               <View style={styles.settingIcon}>
                 {setting.ionicons && (
                   <Ionicons name={setting.icon} size={25} color="white" />

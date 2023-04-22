@@ -45,7 +45,7 @@ const StartGroupScreen = (props) => {
 
     if (dataCreate) {
       updateGroupContext(dataCreate);
-      props.navigation.navigate("Group");
+      props.navigation.navigate('Group');
       dispatch({ type: g.CREATE_GROUP_RESET });
     }
   }, [dispatch, errorCreate, dataCreate]);

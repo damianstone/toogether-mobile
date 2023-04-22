@@ -18,7 +18,7 @@ import FastImage from 'react-native-fast-image';
 const ProfileScreen = (props) => {
   const { profile, isGroup, preview, isMyProfile, currentRef } =
     props.route.params;
-    
+
   const dispatch = useDispatch();
 
   const blockProfileReducer = useSelector((state) => state.blockProfile);
@@ -200,7 +200,8 @@ const ProfileScreen = (props) => {
                 margin: 4,
               }}
             />
-          }>
+          }
+        >
           {profile?.photos?.length > 0 ? (
             profile.photos.map((photo) => (
               <FastImage

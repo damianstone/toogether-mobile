@@ -21,7 +21,7 @@ const ChangePasswordScreen = (props) => {
   const { email, token } = props.route.params;
 
   const { data, error, loading } = useSelector((state) => state.changePassword);
-  
+
   const [password, setPassword] = useState('');
   const [repeated_password, setRepeated_password] = useState('');
 

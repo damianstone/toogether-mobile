@@ -322,5 +322,4 @@ const EditProfileScreen = (props) => {
   );
 };
 
-
 export default EditProfileScreen;

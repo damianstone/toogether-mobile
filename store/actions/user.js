@@ -157,7 +157,6 @@ export const createUserProfile = (
         type: c.USER_CREATE_SUCCESS,
         payload: data,
       });
-
     } catch (error) {
       dispatch({
         type: c.USER_CREATE_FAIL,
@@ -219,7 +218,7 @@ export const userDelete = () => {
         headers: config,
       });
 
-      dispatch(logout())
+      dispatch(logout());
     } catch (error) {
       dispatch({ type: c.USER_DELETE_FAIL, payload: error });
     }
