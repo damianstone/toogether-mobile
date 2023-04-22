@@ -158,12 +158,6 @@ export const createUserProfile = (
         payload: data,
       });
 
-      dispatch({
-        type: a.AUTHENTICATE,
-        payload: {
-          isAuth: true,
-        },
-      });
     } catch (error) {
       dispatch({
         type: c.USER_CREATE_FAIL,

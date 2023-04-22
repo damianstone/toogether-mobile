@@ -139,6 +139,8 @@ export const login = (email, password) => {
         type: a.USER_LOGIN_SUCCESS,
         payload: data,
       });
+
+      dispatch(authenticate(true));
     } catch (error) {
       dispatch({
         type: a.USER_LOGIN_FAIL,
@@ -157,7 +159,6 @@ export const logout = () => {
         type: a.AUTHENTICATE,
         payload: { isAuth: false },
       });
-
 
       dispatch({ type: c.USER_LIST_PHOTOS_RESET });
       dispatch({ type: c.USER_GET_PROFILE_RESET });

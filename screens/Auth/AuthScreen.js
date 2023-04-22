@@ -19,7 +19,6 @@ import Device from '../../theme/Device';
 import * as c from '../../constants/requestTypes/auth';
 import { Context } from '../../context/ContextProvider';
 import { login, register } from '../../store/actions/auth';
-import { authenticate } from '../../store/actions/auth';
 import { check400Error, checkServerError } from '../../utils/errors';
 import styles from './styles';
 
@@ -124,7 +123,6 @@ const AuthStartScreen = (props) => {
 
     if (loginSuccess && loginData.has_account) {
       updateProfileContext(loginData);
-      dispatch(authenticate(true));
       dispatch({ type: c.USER_LOGIN_RESET });
     }
 

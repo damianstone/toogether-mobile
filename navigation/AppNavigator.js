@@ -30,11 +30,11 @@ const AppNavigator = (props) => {
         refreshTokenDecoded.exp < currentTime / 1000;
 
       if (isTokenExpired && !isRefreshTokenExpired) {
-        return await dispatch(refreshToken());
+        return dispatch(refreshToken());
       }
 
       if (isTokenExpired && isRefreshTokenExpired) {
-        return await dispatch(logout);
+        return dispatch(logout);
       }
 
       return dispatch(authenticate(true));

@@ -1,11 +1,14 @@
 /* eslint-disable consistent-return */
 import React, { useEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import ActivityModal from '../components/UI/ActivityModal';
 import Colors from '../constants/Colors';
 
-const StartupScreen = (props) => {
+const StartupScreen = ({navigation}) => {
+  // const navigation = useNavigation()
+
   useEffect(() => {
     const tryLogin = async () => {
       console.log("STARTUP SCREEN", props)
@@ -13,9 +16,9 @@ const StartupScreen = (props) => {
       const userData = JSON.parse(await AsyncStorage.getItem('@userData'));
 
       if (userData && userData.has_account) {
-        props.navigation.navigate('Swipe');
+        navigation.navigate('Swipe');
       } else {
-        props.navigation.navigate('AuthStart');
+        navigation.navigate('AuthStart');
       }
     };
 

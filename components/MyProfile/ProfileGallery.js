@@ -11,26 +11,24 @@ import FastImage from 'react-native-fast-image';
 import Colors from '../../constants/Colors';
 import { BASE_PHOTOS } from '../../data/base_fotos';
 import { getImage } from '../../utils/getMethods';
+import Loader from '../UI/Loader';
 
 const { width } = Dimensions.get('window');
 
-const ProfileGallery = (props) => {
-  const {
-    photos,
-    loadingAddPhoto,
-    onAddPhoto,
-    setPhotoId,
-    photoId,
-    handleActionSheet,
-  } = props;
-
+const ProfileGallery = ({
+  photos,
+  loadingAddPhoto,
+  onAddPhoto,
+  setPhotoId,
+  photoId,
+  handleActionSheet,
+}) => {
   const renderPhoto = (photo) => {
     return (
       <TouchableOpacity
         key={photo.id}
         onPress={() => handleActionSheet(photo.id)}
-        style={[styles.myphotosItemView]}
-      >
+        style={[styles.myphotosItemView]}>
         {loadingAddPhoto && photo.id === photoId ? (
           <Loader size="small" />
         ) : (
@@ -62,8 +60,7 @@ const ProfileGallery = (props) => {
                 onAddPhoto();
                 setPhotoId(item.id);
               }}
-              style={styles.myphotosItemView}
-            >
+              style={styles.myphotosItemView}>
               <View style={styles.imagePlaceholder}>
                 {loadingAddPhoto && item.id === photoId ? (
                   <Loader size="small" />
