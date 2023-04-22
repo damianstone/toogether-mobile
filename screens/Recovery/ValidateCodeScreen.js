@@ -10,9 +10,7 @@ import {
   Alert,
 } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
-import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import AuthButton from '../../components/UI/AuthButton';
-import HeaderButtom from '../../components/UI/HeaderButton';
 import Device from '../../theme/Device';
 import Colors from '../../constants/Colors';
 import ActivityModal from '../../components/UI/ActivityModal';
@@ -140,25 +138,6 @@ const ValidateCodeScreen = (props) => {
       </KeyboardAvoidingView>
     </View>
   );
-};
-
-ValidateCodeScreen.navigationOptions = (navData) => {
-  return {
-    headerTitle: '',
-    headerLeft: () => (
-      <HeaderButtons HeaderButtonComponent={HeaderButtom}>
-        <Item
-          iconName={
-            Platform.OS === 'android' ? 'ios-arrow-back' : 'ios-arrow-back'
-          }
-          onPress={() => {
-            navData.navigation.navigate('Recovery');
-          }}
-          title="Back arrow"
-        />
-      </HeaderButtons>
-    ),
-  };
 };
 
 export default ValidateCodeScreen;

@@ -10,14 +10,12 @@ import {
   Alert,
   Dimensions,
 } from 'react-native';
-import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { useDispatch, useSelector } from 'react-redux';
 import { StatusBar } from 'expo-status-bar';
 import { Context } from '../../context/ContextProvider';
 import { joinGroup } from '../../store/actions/group';
 import { check400Error, checkServerError } from '../../utils/errors';
 
-import HeaderButtom from '../../components/UI/HeaderButton';
 import AuthButton from '../../components/UI/AuthButton';
 import AuthInput from '../../components/UI/AuthInput';
 import Colors from '../../constants/Colors';
@@ -164,25 +162,6 @@ const JoinGroupScreen = (props) => {
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
-};
-
-JoinGroupScreen.navigationOptions = (navData) => {
-  return {
-    headerTitle: 'Join a group',
-    headerLeft: () => (
-      <HeaderButtons HeaderButtonComponent={HeaderButtom}>
-        <Item
-          iconName={
-            Platform.OS === 'android' ? 'ios-arrow-back' : 'ios-arrow-back'
-          }
-          onPress={() => {
-            navData.navigation.goBack();
-          }}
-          title="Back arrow"
-        />
-      </HeaderButtons>
-    ),
-  };
 };
 
 export default JoinGroupScreen;

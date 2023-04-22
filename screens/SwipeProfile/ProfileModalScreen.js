@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import { StyleSheet, View, ImageBackground, Alert } from 'react-native';
 import Swiper from 'react-native-swiper';
 import { useDispatch, useSelector } from 'react-redux';
@@ -8,7 +8,6 @@ import { checkServerError, check400Error } from '../../utils/errors';
 import { getImage } from '../../utils/getMethods';
 import * as b from '../../constants/requestTypes/block';
 import * as r from '../../constants/requestTypes/user';
-import { userLocation } from '../../store/actions/user';
 import ActivityModal from '../../components/UI/ActivityModal';
 
 import DetailBottomSheet from '../../components/DetailBottomSheet';

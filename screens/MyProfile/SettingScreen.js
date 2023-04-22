@@ -2,7 +2,6 @@ import React, { useEffect, useCallback } from 'react';
 import {
   ScrollView,
   Text,
-  Platform,
   TouchableOpacity,
   View,
   Alert,
@@ -10,7 +9,6 @@ import {
   Share,
   StyleSheet,
 } from 'react-native';
-import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   FontAwesome5,
@@ -24,7 +22,6 @@ import { logout } from '../../store/actions/auth';
 import { SETTINGS_ACCOUNT_DATA, SETTINGS_APP_DATA } from '../../data/settings';
 import { check400Error, checkServerError } from '../../utils/errors';
 
-import HeaderButtom from '../../components/UI/HeaderButton';
 import AuthButton from '../../components/UI/AuthButton';
 import ActivityModal from '../../components/UI/ActivityModal';
 import Colors from '../../constants/Colors';
@@ -250,25 +247,6 @@ const SettingScreen = (props) => {
       </ScrollView>
     </View>
   );
-};
-
-SettingScreen.navigationOptions = (navData) => {
-  return {
-    headerTitle: 'Settings',
-    headerLeft: () => (
-      <HeaderButtons HeaderButtonComponent={HeaderButtom}>
-        <Item
-          iconName={
-            Platform.OS === 'android' ? 'ios-arrow-back' : 'ios-arrow-back'
-          }
-          onPress={() => {
-            navData.navigation.navigate('MyProfile');
-          }}
-          title="Back arrow"
-        />
-      </HeaderButtons>
-    ),
-  };
 };
 
 export default SettingScreen;

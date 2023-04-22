@@ -40,7 +40,7 @@ const StartupScreen = ({ navigation }) => {
         return dispatch(logout());
       }
 
-      cpnsole.log("THIRD")
+      console.log("THIRD")
       return dispatch(authenticate(true));
     }
 

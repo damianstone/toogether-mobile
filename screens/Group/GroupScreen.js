@@ -20,7 +20,6 @@ import {
 } from '../../store/actions/group';
 import { Context } from '../../context/ContextProvider';
 
-import Avatar from '../../components/UI/Avatar';
 import Loader from '../../components/UI/Loader';
 import ActionButton from '../../components/UI/ActionButton';
 import * as g from '../../constants/requestTypes/group';
@@ -353,19 +352,6 @@ const GroupScreen = (props) => {
       </View>
     </View>
   );
-};
-
-GroupScreen.navigationOptions = (navData) => {
-  return {
-    headerTitle: 'Group',
-    headerLeft: () => (
-      <Avatar
-        onPress={() => {
-          navData.navigation.navigate('MyProfile');
-        }}
-      />
-    ),
-  };
 };
 
 export default GroupScreen;

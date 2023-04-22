@@ -1,25 +1,20 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import {
   View,
-  Image,
   Share,
-  Platform,
   SafeAreaView,
   Alert,
 } from 'react-native';
 import { useNetInfo } from '@react-native-community/netinfo';
-import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { StatusBar } from 'expo-status-bar';
 import { useSelector, useDispatch } from 'react-redux';
 import { verifyLocationPermissions } from '../../utils/permissions';
-import { exist, getShowMode } from '../../utils/checks';
+import { getShowMode } from '../../utils/checks';
 import { userLocation } from '../../store/actions/user';
 import { listSwipe } from '../../store/actions/swipe';
 
 import Deck from './Deck';
-import HeaderButtom from '../../components/UI/HeaderButton';
 import ActivityModal from '../../components/UI/ActivityModal';
-import Avatar from '../../components/UI/Avatar';
 import SwipeError from '../../components/SwipeError';
 import styles from './styles';
 
@@ -213,41 +208,6 @@ const SwipeScreen = (props) => {
       </View>
     </SafeAreaView>
   );
-};
-
-SwipeScreen.navigationOptions = (navData) => {
-  return {
-    headerTitle: () => (
-      <View style={styles.logoContainer}>
-        <Image
-          source={require('../../assets/images/logo-1.png')}
-          style={styles.logo}
-        />
-      </View>
-    ),
-    headerLeft: () => (
-      <Avatar
-        onPress={() => {
-          navData.navigation.navigate('MyProfile');
-        }}
-      />
-    ),
-    headerRight: () => (
-      <HeaderButtons HeaderButtonComponent={HeaderButtom}>
-        <Item
-          title="Chat"
-          iconName={
-            Platform.OS === 'android'
-              ? 'chatbubble-outline'
-              : 'chatbubble-outline'
-          }
-          onPress={() => {
-            navData.navigation.navigate('Match');
-          }}
-        />
-      </HeaderButtons>
-    ),
-  };
 };
 
 export default SwipeScreen;

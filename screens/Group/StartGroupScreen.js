@@ -16,11 +16,9 @@ import { createGroup } from '../../store/actions/group';
 import { check400Error, checkServerError } from '../../utils/errors';
 
 import AuthButton from '../../components/UI/AuthButton';
-import Avatar from '../../components/UI/Avatar';
 import Colors from '../../constants/Colors';
 import * as g from '../../constants/requestTypes/group';
 import ButtonAndroid from '../../components/UI/ButtonAndroid';
-import Device from '../../theme/Device';
 
 const { width, height } = Dimensions.get('window');
 
@@ -93,19 +91,6 @@ const StartGroupScreen = (props) => {
       </View>
     </SafeAreaView>
   );
-};
-
-StartGroupScreen.navigationOptions = (navData) => {
-  return {
-    headerTitle: 'Group',
-    headerLeft: () => (
-      <Avatar
-        onPress={() => {
-          navData.navigation.navigate('MyProfile');
-        }}
-      />
-    ),
-  };
 };
 
 export default StartGroupScreen;
