@@ -139,8 +139,6 @@ export const login = (email, password) => {
         type: a.USER_LOGIN_SUCCESS,
         payload: data,
       });
-
-      dispatch(authenticate(true));
     } catch (error) {
       dispatch({
         type: a.USER_LOGIN_FAIL,

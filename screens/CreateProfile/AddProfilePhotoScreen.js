@@ -18,6 +18,7 @@ import ImageSelector from '../../components/UI/ImageSelector';
 import Colors from '../../constants/Colors';
 import * as c from '../../constants/requestTypes/user';
 import { addPhoto } from '../../store/actions/user';
+import { authenticate } from '../../store/actions/auth';
 import { check400Error, checkServerError } from '../../utils/errors';
 
 import * as authStyles from '../Auth/styles';
@@ -56,7 +57,7 @@ const AddProfilePhotoScreen = (props) => {
         {
           text: 'Later',
           onPress: () => {
-            props.navigation.navigate('Swipe');
+            dispatch(authenticate(true));
           },
           style: 'cancel',
         },
@@ -89,8 +90,7 @@ const AddProfilePhotoScreen = (props) => {
       style={styles.scroll}
       contentContainerStyle={styles.screen}
       showsVerticalScrollIndicator={false}
-      showsHorizontalScrollIndicator={false}
-    >
+      showsHorizontalScrollIndicator={false}>
       <StatusBar style="light" />
       <View style={styles.auth_text_view}>
         <View style={authStyles.default.auth_text_container}>
