@@ -1,8 +1,6 @@
-import { Platform } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
-import Constants from 'expo-constants';
-import * as b from '../../constants/block';
+import * as b from '../../constants/requestTypes/block';
 import { ENV } from '../../environment';
 
 const BASE_URL = ENV.API_URL;

@@ -12,7 +12,6 @@ export default () => ({
     orientation: 'portrait',
     icon: './assets/images/toogether-icon.png',
     platforms: ['ios', 'android'],
-    plugins: ['expo-image-picker'],
     splash: {
       image: './assets/images/logo-2.png',
       resizeMode: 'contain',

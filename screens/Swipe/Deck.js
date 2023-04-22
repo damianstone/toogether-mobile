@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { View, Dimensions, Alert, Text } from 'react-native';
+import React, { useState, useEffect, useRef } from 'react';
+import { View, Dimensions, Alert } from 'react-native';
 import Swiper from 'react-native-deck-swiper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useDispatch, useSelector } from 'react-redux';
@@ -11,13 +11,11 @@ import SwipeCard from '../../components/SwipeCard';
 import SwipeButtons from '../../components/SwipeButtons';
 import Colors from '../../constants/Colors';
 import * as r from '../../constants/responses/match';
-import * as w from '../../constants/swipe';
+import * as w from '../../constants/requestTypes/swipe';
 import styles from './styles';
 
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 const SCREEN_WIDTH = Dimensions.get('window').width;
-
-// TODO: use context
 
 const Deck = (props) => {
   const { navigation, swipeProfiles, setShowMode, topProfile } = props;

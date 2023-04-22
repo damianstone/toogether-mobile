@@ -8,7 +8,6 @@ import {
   ActivityIndicator,
   KeyboardAvoidingView,
 } from 'react-native';
-import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { useDispatch, useSelector } from 'react-redux';
 import { getUserProfile, updateUserProfile } from '../../store/actions/user';
 import { UPDATE_PROFILE_INPUTS } from '../../data/profile';
@@ -18,12 +17,11 @@ import {
   checkServerError,
 } from '../../utils/errors';
 
-import HeaderButtom from '../../components/UI/HeaderButton';
 import AuthButton from '../../components/UI/AuthButton';
 import Input from '../../components/UI/Input';
 import Loader from '../../components/UI/Loader';
 import Colors from '../../constants/Colors';
-import * as c from '../../constants/user';
+import * as c from '../../constants/requestTypes/user';
 import styles from './styles';
 
 const FORM_UPDATE = 'FORM_UPDATE';
@@ -322,25 +320,6 @@ const EditProfileScreen = (props) => {
       </KeyboardAvoidingView>
     </View>
   );
-};
-
-EditProfileScreen.navigationOptions = (navData) => {
-  return {
-    headerTitle: 'Edit Profile',
-    headerLeft: () => (
-      <HeaderButtons HeaderButtonComponent={HeaderButtom}>
-        <Item
-          iconName={
-            Platform.OS === 'android' ? 'ios-arrow-back' : 'ios-arrow-back'
-          }
-          onPress={() => {
-            navData.navigation.navigate('MyProfile');
-          }}
-          title="Back arrow"
-        />
-      </HeaderButtons>
-    ),
-  };
 };
 
 export default EditProfileScreen;

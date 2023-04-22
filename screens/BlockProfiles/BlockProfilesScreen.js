@@ -9,15 +9,13 @@ import {
   FlatList,
   Alert,
 } from 'react-native';
-import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { useDispatch, useSelector } from 'react-redux';
 import { listBlockedProfiles, unBlockProfile } from '../../store/actions/block';
 import { checkServerError } from '../../utils/errors';
 import { getNameInitials, getImage } from '../../utils/getMethods';
 
-import HeaderButtom from '../../components/UI/HeaderButton';
 import Colors from '../../constants/Colors';
-import * as b from '../../constants/block';
+import * as b from '../../constants/requestTypes/block';
 import FastImage from 'react-native-fast-image';
 
 const BlockProfilesScreen = (props) => {
@@ -170,25 +168,6 @@ const BlockProfilesScreen = (props) => {
       />
     </View>
   );
-};
-
-BlockProfilesScreen.navigationOptions = (navData) => {
-  return {
-    headerTitle: 'Blocked Users',
-    headerLeft: () => (
-      <HeaderButtons HeaderButtonComponent={HeaderButtom}>
-        <Item
-          iconName={
-            Platform.OS === 'android' ? 'ios-arrow-back' : 'ios-arrow-back'
-          }
-          onPress={() => {
-            navData.navigation.goBack();
-          }}
-          title="Back arrow"
-        />
-      </HeaderButtons>
-    ),
-  };
 };
 
 export default BlockProfilesScreen;

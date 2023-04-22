@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Platform, Alert } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
-import { HeaderButtons, Item } from 'react-navigation-header-buttons';
+
 import AuthButton from '../../components/UI/AuthButton';
 import AuthInput from '../../components/UI/AuthInput';
-import HeaderButtom from '../../components/UI/HeaderButton';
 import Device from '../../theme/Device';
 import Colors from '../../constants/Colors';
 import ActivityModal from '../../components/UI/ActivityModal';
-import * as c from '../../constants/user';
+import * as c from '../../constants/requestTypes/user';
 import { sendRecoveryCode } from '../../store/actions/user';
 import { check400Error, checkServerError } from '../../utils/errors';
 
@@ -103,25 +102,6 @@ const RecoveryScreen = (props) => {
       </View>
     </View>
   );
-};
-
-RecoveryScreen.navigationOptions = (navData) => {
-  return {
-    headerTitle: '',
-    headerLeft: () => (
-      <HeaderButtons HeaderButtonComponent={HeaderButtom}>
-        <Item
-          iconName={
-            Platform.OS === 'android' ? 'ios-arrow-back' : 'ios-arrow-back'
-          }
-          onPress={() => {
-            navData.navigation.navigate('Auth');
-          }}
-          title="Back arrow"
-        />
-      </HeaderButtons>
-    ),
-  };
 };
 
 export default RecoveryScreen;

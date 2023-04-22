@@ -1,5 +1,4 @@
 import React from 'react';
-
 import {
   View,
   Text,
@@ -9,11 +8,11 @@ import {
   Dimensions,
 } from 'react-native';
 
-const { width } = Dimensions.get('window');
 import { LinearGradient } from 'expo-linear-gradient';
 import { Feather } from '@expo/vector-icons';
-
 import Colors from '../../constants/Colors';
+
+const { width } = Dimensions.get('window');
 
 const FooterProfile = (props) => {
   const { handleOpenPreview } = props;

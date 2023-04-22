@@ -1,9 +1,10 @@
-import React, { useEffect, useContext, useState } from 'react';
+import React, { useEffect, useContext } from 'react';
 import {
   Image,
   View,
   Button,
   StyleSheet,
+  SafeAreaView,
   ActivityIndicator,
   Platform,
   Dimensions,
@@ -13,26 +14,17 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Context } from '../../context/ContextProvider';
 import { createGroup } from '../../store/actions/group';
 import { check400Error, checkServerError } from '../../utils/errors';
-import { StackActions } from 'react-navigation';
 
 import AuthButton from '../../components/UI/AuthButton';
-import Avatar from '../../components/UI/Avatar';
 import Colors from '../../constants/Colors';
-import * as g from '../../constants/group';
+import * as g from '../../constants/requestTypes/group';
 import ButtonAndroid from '../../components/UI/ButtonAndroid';
-import Device from '../../theme/Device';
-import { SafeAreaView } from 'react-native-safe-area-context';
 
 const { width, height } = Dimensions.get('window');
 
 const StartGroupScreen = (props) => {
-  const { groupContext, updateGroupContext } = useContext(Context);
-
-  /* set to true to have time to check if there is a group in the context and be able to redirect 
-  the user to the group screen in a smooth way */
-  const [transitionLoading, setTransitionLoading] = useState(true);
-
   const dispatch = useDispatch();
+  const { groupContext, updateGroupContext } = useContext(Context);
 
   const createGroupReducer = useSelector((state) => state.createGroup);
   const {
@@ -40,21 +32,6 @@ const StartGroupScreen = (props) => {
     error: errorCreate,
     data: dataCreate,
   } = createGroupReducer;
-
-  // * this function replaces the first screen on the GroupNavigato stack
-  const replaceAction = StackActions.replace({
-    routeName: 'Group',
-  });
-
-  // * if the user is already in a group
-  useEffect(() => {
-    if (groupContext) {
-      props.navigation.dispatch(replaceAction);
-      setTransitionLoading(false);
-    } else {
-      setTransitionLoading(false);
-    }
-  }, []);
 
   // handle render after create group action
   useEffect(() => {
@@ -68,7 +45,7 @@ const StartGroupScreen = (props) => {
 
     if (dataCreate) {
       updateGroupContext(dataCreate);
-      props.navigation.dispatch(replaceAction);
+      props.navigation.navigate('Group');
       dispatch({ type: g.CREATE_GROUP_RESET });
     }
   }, [dispatch, errorCreate, dataCreate]);
@@ -81,7 +58,7 @@ const StartGroupScreen = (props) => {
     props.navigation.navigate('JoinGroup');
   };
 
-  if (loadingCreate || transitionLoading) {
+  if (loadingCreate) {
     return (
       <View style={styles.loadingScreen}>
         <ActivityIndicator color={Colors.white} size="large" />
@@ -116,19 +93,6 @@ const StartGroupScreen = (props) => {
   );
 };
 
-StartGroupScreen.navigationOptions = (navData) => {
-  return {
-    headerTitle: 'Group',
-    headerLeft: () => (
-      <Avatar
-        onPress={() => {
-          navData.navigation.navigate('MyProfile');
-        }}
-      />
-    ),
-  };
-};
-
 export default StartGroupScreen;
 
 const styles = StyleSheet.create({
@@ -147,6 +111,7 @@ const styles = StyleSheet.create({
 
   container: {
     flexGrow: 1,
+    backgroundColor: Colors.bg,
     flexDirection: 'column',
     justifyContent: 'space-between',
   },

@@ -14,7 +14,7 @@ import { StatusBar } from 'expo-status-bar';
 import AuthButton from '../../components/UI/AuthButton';
 import Input from '../../components/UI/Input';
 import Colors from '../../constants/Colors';
-import * as c from '../../constants/user';
+import * as c from '../../constants/requestTypes/user';
 import { createUserProfile } from '../../store/actions/user';
 import {
   checkServerError,
