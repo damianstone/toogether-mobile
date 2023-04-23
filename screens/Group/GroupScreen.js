@@ -12,6 +12,7 @@ import {
 import FastImage from 'react-native-fast-image';
 import { useDispatch, useSelector } from 'react-redux';
 import { useActionSheet } from '@expo/react-native-action-sheet';
+
 import {
   getGroup,
   leaveGroup,
@@ -19,16 +20,14 @@ import {
   deleteGroup,
 } from '../../store/actions/group';
 import { Context } from '../../context/ContextProvider';
-
-import Loader from '../../components/UI/Loader';
-import ActionButton from '../../components/UI/ActionButton';
-import * as g from '../../constants/requestTypes/group';
 import { checkServerError, check400Error } from '../../utils/errors';
 import { getNameInitials, getCardName, getImage } from '../../utils/getMethods';
-
+import Loader from '../../components/UI/Loader';
+import ActionButton from '../../components/UI/ActionButton';
+import ClipBoard from '../../components/Group/ClipBoard';
+import MemberAvatar from '../../components/Group/MemberAvatar';
+import * as g from '../../constants/requestTypes/group';
 import Colors from '../../constants/Colors';
-import ClipBoard from '../../components/UI/ClipBoard';
-import MemberAvatar from '../../components/MemberAvatar';
 import Device from '../../theme/Device';
 
 const GroupScreen = (props) => {
@@ -300,7 +299,7 @@ const GroupScreen = (props) => {
         <View style={styles.buttons_container}>
           {isOwnerGroup && groupContext?.share_link && (
             <ClipBoard
-              text={groupContext.share_link}
+              groupCode={groupContext.share_link}
               backgroundColor={Colors.white}
             />
           )}
