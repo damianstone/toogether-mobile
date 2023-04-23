@@ -1,10 +1,9 @@
-import React, { useState, useEffect, useReducer, useCallback } from 'react';
+import React, { useEffect, useReducer, useCallback } from 'react';
 import {
   StyleSheet,
   Text,
   View,
   Image,
-  Button,
   Alert,
   ScrollView,
   TouchableOpacity,
@@ -13,11 +12,7 @@ import {
 import { StatusBar } from 'expo-status-bar';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateUserProfile } from '../../store/actions/user';
-import {
-  getFieldErrorFromServer,
-  check400Error,
-  checkServerError,
-} from '../../utils/errors';
+import { check400Error, checkServerError } from '../../utils/errors';
 
 import Input from '../../components/UI/Input';
 import Loader from '../../components/UI/Loader';
@@ -142,9 +137,7 @@ const InstagramScreen = (props) => {
               underlineColorAndroid="transparent"
               placeholder="your_account"
               placeholderTextColor={Colors.placeholder}
-              multiline
-              numberOfLines={5}
-              maxLength={500}
+              maxLength={30}
               inputType="textInput"
               id="instagram"
               label="Instagram account"

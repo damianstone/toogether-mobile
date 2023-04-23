@@ -218,7 +218,7 @@ const AuthStartScreen = (props) => {
             <AuthInput
               secureTextEntry
               textContentType={
-                Platform.OS === 'ios' ? 'password' : 'newPassword'
+                Platform.OS === 'ios' ? 'oneTimeCode' : 'newPassword'
               }
               id="password"
               label="Password"
@@ -228,12 +228,13 @@ const AuthStartScreen = (props) => {
               errorText="Enter your password"
               autoCorrect={false}
               onInputChange={inputChangeHandler}
+              autoComplete={'off'}
             />
             {registerMode && (
               <AuthInput
                 secureTextEntry
                 textContentType={
-                  Platform.OS === 'ios' ? 'password' : 'newPassword'
+                  Platform.OS === 'ios' ? 'oneTimeCode' : 'newPassword'
                 }
                 required
                 autoCapitalize="none"
