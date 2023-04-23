@@ -228,7 +228,7 @@ const AuthStartScreen = (props) => {
               errorText="Enter your password"
               autoCorrect={false}
               onInputChange={inputChangeHandler}
-              autoComplete={"off"}
+              autoComplete={'off'}
             />
             {registerMode && (
               <AuthInput

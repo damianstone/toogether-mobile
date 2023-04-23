@@ -113,7 +113,8 @@ const InstagramScreen = (props) => {
   return (
     <ScrollView
       contentContainerStyle={styles.screen}
-      style={{ backgroundColor: Colors.bg }}>
+      style={{ backgroundColor: Colors.bg }}
+    >
       <StatusBar style="light" />
       <KeyboardAvoidingView behavior="position">
         <View style={styles.container}>
