@@ -4,7 +4,6 @@ import { Ionicons } from '@expo/vector-icons';
 import Colors from '../../constants/Colors';
 
 const ClipBoard = ({ groupCode, backgroundColor }) => {
-
   const handleShareInvitation = async (groupCode) => {
     try {
       const result = await Share.share({
@@ -33,17 +32,18 @@ const ClipBoard = ({ groupCode, backgroundColor }) => {
     }
   };
 
-
   return (
     <View
       style={{
         ...styles.clipboard_button_container,
         backgroundColor: backgroundColor,
-      }}>
+      }}
+    >
       <Text style={styles.clipboard_button_text}>{groupCode}</Text>
       <TouchableOpacity
         style={styles.clipboard_icon}
-        onPress={() => handleShareInvitation(groupCode)}>
+        onPress={() => handleShareInvitation(groupCode)}
+      >
         <Ionicons name="ios-share-outline" size={24} color="white" />
       </TouchableOpacity>
     </View>
