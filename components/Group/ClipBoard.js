@@ -1,21 +1,21 @@
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View, Share } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import * as Clipboard from 'expo-clipboard';
 import Colors from '../../constants/Colors';
 
-const ClipBoard = (props) => {
-  const { text, backgroundColor } = props;
+const ClipBoard = ({ groupCode, backgroundColor }) => {
 
-  const handleShareUrl = async (groupUrl) => {
+  const handleShareInvitation = async (groupCode) => {
     try {
       const result = await Share.share({
-        message: `Join to my group on Toogether app using the following link: 
-          \n ${groupUrl}
-          \n How to join a group using the link? 🤔
-          \n Open the app -> Group -> Join a group -> paste the link 
-          \n Don't have Toogether yet? 👀
-          \n Download it here ;) https://toogether.app/
+        message: `
+                  Join to my group on Toogether app 
+                  \n COPY the following link: 
+                  \n ${groupCode}
+                  \n How to join a group using the link? 🤔
+                  \n Open the app -> Group -> Join a group -> paste the link 
+                  \n Don't have Toogether yet? 👀
+                  \n Download it here ;) https://toogether.app/beta
           `,
       });
       if (result.action === Share.sharedAction) {
@@ -33,22 +33,17 @@ const ClipBoard = (props) => {
     }
   };
 
-  const removeHttp = (url) => {
-    return url.replace(/^https?:\/\//, '');
-  };
 
   return (
     <View
       style={{
         ...styles.clipboard_button_container,
         backgroundColor: backgroundColor,
-      }}
-    >
-      <Text style={styles.clipboard_button_text}>{removeHttp(text)}</Text>
+      }}>
+      <Text style={styles.clipboard_button_text}>{groupCode}</Text>
       <TouchableOpacity
         style={styles.clipboard_icon}
-        onPress={() => handleShareUrl(text)}
-      >
+        onPress={() => handleShareInvitation(groupCode)}>
         <Ionicons name="ios-share-outline" size={24} color="white" />
       </TouchableOpacity>
     </View>
@@ -68,10 +63,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   clipboard_button_text: {
-    paddingHorizontal: 7,
+    paddingHorizontal: 20,
     color: Colors.placeholder,
-    fontSize: 13,
-    width: '85%',
+    fontSize: 15,
+    width: '80%',
   },
   clipboard_icon: {
     padding: 3,
