@@ -19,10 +19,12 @@ const NameCounter = ({ name, total_likes, total_matches, navigation }) => {
             <Text style={styles.counterText}>Likes</Text>
           </View>
         </TouchableOpacity>
-        <View style={styles.counterView}>
-          <Text style={styles.matchesNumber}>{total_matches}</Text>
-          <Text style={styles.counterText}>matches</Text>
-        </View>
+        <TouchableOpacity onPress={() => navigation.navigate("Match")}>
+          <View style={styles.counterView}>
+            <Text style={styles.matchesNumber}>{total_matches}</Text>
+            <Text style={styles.counterText}>matches</Text>
+          </View>
+        </TouchableOpacity>
       </View>
     </>
   );
