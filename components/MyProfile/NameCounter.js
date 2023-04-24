@@ -12,14 +12,14 @@ const NameCounter = ({ name, total_likes, total_matches, navigation }) => {
           <MaterialIcons name="edit" size={20} color="white" />
         </TouchableOpacity>
       </View>
-      <View style={styles.counterContainer}> 
-        <TouchableOpacity onPress={() => navigation.navigate("Likes")}>
+      <View style={styles.counterContainer}>
+        <TouchableOpacity onPress={() => navigation.navigate('Likes')}>
           <View style={styles.counterView}>
             <Text style={styles.likesNumber}>{total_likes}</Text>
             <Text style={styles.counterText}>Likes</Text>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate("Match")}>
+        <TouchableOpacity onPress={() => navigation.navigate('Match')}>
           <View style={styles.counterView}>
             <Text style={styles.matchesNumber}>{total_matches}</Text>
             <Text style={styles.counterText}>matches</Text>
