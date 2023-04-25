@@ -200,10 +200,7 @@ const MyProfileNavigatorWithModal = () => {
     <Stack.Navigator
       screenOptions={{ headerShown: false, presentation: 'modal' }}
     >
-      <Stack.Screen
-        name="MyProfileNavigator"
-        component={MyProfileNavigator}
-      />
+      <Stack.Screen name="MyProfileNavigator" component={MyProfileNavigator} />
       <Stack.Screen name="ProfileModal" component={ProfileModalScreen} />
     </Stack.Navigator>
   );
@@ -298,7 +295,7 @@ const LikeNavigator = () => {
         component={LikesScreen}
         options={({ navigation }) => ({
           headerTitle: 'Likes',
-          gestureDirection: "horizontal",
+          gestureDirection: 'horizontal',
           headerLeft: () => (
             <Avatar
               onPress={() => {
