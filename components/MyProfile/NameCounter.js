@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import Colors from '../../constants/Colors';
-
+ 
 const NameCounter = ({ name, total_likes, total_matches, navigation }) => {
   return (
     <>
@@ -13,7 +13,7 @@ const NameCounter = ({ name, total_likes, total_matches, navigation }) => {
         </TouchableOpacity>
       </View>
       <View style={styles.counterContainer}>
-        <TouchableOpacity onPress={() => navigation.navigate('Likes')}>
+        <TouchableOpacity onPress={() => navigation.navigate('LikeNavigator')}>
           <View style={styles.counterView}>
             <Text style={styles.likesNumber}>{total_likes}</Text>
             <Text style={styles.counterText}>Likes</Text>
