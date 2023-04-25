@@ -129,10 +129,8 @@ const JoinGroupScreen = (props) => {
   return (
     <SafeAreaView style={styles.screen}>
       <StatusBar style="light" />
-      <KeyboardAvoidingView 
-        behavior={Platform.OS === 'ios' ? 'position' : ''}
-      >
-        <ScrollView 
+      <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'position' : ''}>
+        <ScrollView
           style={styles.container}
           contentContainerStyle={styles.scroll}
         >
@@ -191,7 +189,7 @@ const styles = StyleSheet.create({
   },
 
   scroll: {
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
   },
 
   imageContainer: {
