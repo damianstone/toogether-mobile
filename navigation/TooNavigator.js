@@ -3,7 +3,6 @@ import { Platform, Text, View, Image } from 'react-native';
 import { Context } from '../context/ContextProvider';
 
 import { createStackNavigator } from '@react-navigation/stack';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
@@ -41,12 +40,9 @@ import InstagramScreen from '../screens/CreateProfile/InstagramScreen';
 import Avatar from '../components/UI/Avatar';
 import HeaderButtom from '../components/UI/HeaderButton';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
-// import { getNavHeader } from './getNavHeader';
 import RecoveryScreen from '../screens/Recovery/RecoveryScreen';
 import ValidateCodeScreen from '../screens/Recovery/ValidateCodeScreen';
 import ChangePasswordScreen from '../screens/Recovery/ChangePasswordScreen';
-
-// console.log('GET NAV -> ', getNavHeader(1, 'X')); // TODO: for some reason this is undefined
 
 const Stack = createStackNavigator();
 
@@ -204,11 +200,7 @@ const MyProfileNavigatorWithModal = () => {
     <Stack.Navigator
       screenOptions={{ headerShown: false, presentation: 'modal' }}
     >
-      <Stack.Screen
-        name="MyProfileNavigator"
-        component={MyProfileNavigator}
-        options={{ gestureDirection: 'horizontal' }} // INVERTED
-      />
+      <Stack.Screen name="MyProfileNavigator" component={MyProfileNavigator} />
       <Stack.Screen name="ProfileModal" component={ProfileModalScreen} />
     </Stack.Navigator>
   );
@@ -303,6 +295,7 @@ const LikeNavigator = () => {
         component={LikesScreen}
         options={({ navigation }) => ({
           headerTitle: 'Likes',
+          gestureDirection: 'horizontal',
           headerLeft: () => (
             <Avatar
               onPress={() => {
@@ -569,7 +562,7 @@ export const TooNavigator = () => {
       <Stack.Screen
         name="MyProfile"
         component={MyProfileNavigatorWithModal}
-        options={{ gestureDirection: 'horizontal' }} // INVERTED
+        options={{ gestureDirection: 'horizontal-inverted' }} // INVERTED
       />
     </Stack.Navigator>
   );
