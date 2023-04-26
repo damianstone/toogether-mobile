@@ -1,14 +1,10 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import {
-  Text,
-  View,
-  ImageBackground,
-  StyleSheet,
-  TouchableOpacity,
-} from 'react-native';
+import React from 'react';
+import { Text, View, StyleSheet, TouchableOpacity } from 'react-native';
+import FastImage from 'react-native-fast-image';
 
 import { getNameInitials, getImage } from '../utils/getMethods';
 import Colors from '../constants/Colors';
+import FastImageBackground from './UI/FastImageBackground';
 
 const ChatAvatar = (props) => {
   const {
@@ -25,10 +21,13 @@ const ChatAvatar = (props) => {
   if (matchedProfileHasPhoto) {
     return (
       <TouchableOpacity onPress={onShowProfile}>
-        <ImageBackground
-          source={{ uri: `${getImage(matchedProfilePhoto)}` }}
+        <FastImageBackground
+          source={{
+            uri: `${getImage(matchedProfilePhoto)}`,
+            priority: FastImage.priority.high,
+          }}
           imageStyle={styles.img}
-          style={
+          containerStyle={
             isInGroup ? styles.groupImageContainer : styles.singleImageContainer
           }
           onPress={onShowProfile}>
@@ -39,7 +38,7 @@ const ChatAvatar = (props) => {
               </Text>
             </View>
           ) : null}
-        </ImageBackground>
+        </FastImageBackground>
       </TouchableOpacity>
     );
   }

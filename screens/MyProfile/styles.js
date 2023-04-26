@@ -60,42 +60,6 @@ export default StyleSheet.create({
     color: Colors.white,
     fontSize: 25,
   },
-  nameView: {
-    flexDirection: 'row',
-    width: '100%',
-    marginTop: -5,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  name: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    // marginRight: 10,
-    color: Colors.white,
-    padding: 10,
-  },
-  counterContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    paddingVertical: 12,
-  },
-  counterView: {
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  likesNumber: {
-    color: Colors.orange,
-    fontSize: 24,
-  },
-  counterText: {
-    color: Colors.white,
-    fontSize: 14,
-    marginTop: 5,
-  },
-  matchesNumber: {
-    color: Colors.calypso,
-    fontSize: 24,
-  },
 
   /* ----------------------- PHOTOS-----------------------  */
   myphotosView: {

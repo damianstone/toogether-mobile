@@ -1,16 +1,20 @@
-import React, { useEffect, useContext } from 'react';
+import React, { useEffect } from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import { Context } from '../../context/ContextProvider';
 import Colors from '../../constants/Colors';
 import { getUserProfile } from '../../store/actions/user';
 import { getNameInitials, getImage } from '../../utils/getMethods';
 import Loader from './Loader';
+import FastImage from 'react-native-fast-image';
 
+<<<<<<< HEAD
 const Avatar = (props) => {
   const { onPress, id } = props;
   const { profileContext, updateProfileContext } = useContext(Context);
 
+=======
+const Avatar = ({ onPress }) => {
+>>>>>>> develop
   const dispatch = useDispatch();
 
   const userProfile = useSelector((state) => state.userGetProfile);
@@ -21,6 +25,7 @@ const Avatar = (props) => {
   } = userProfile;
 
   useEffect(() => {
+<<<<<<< HEAD
     if (!dataProfile && !profileContext /* chat test */ && !id) {
       dispatch(getUserProfile());
     }
@@ -28,6 +33,9 @@ const Avatar = (props) => {
     if (dataProfile) {
       updateProfileContext(dataProfile);
     }
+=======
+    dispatch(getUserProfile());
+>>>>>>> develop
   }, []);
 
   return (
@@ -38,15 +46,18 @@ const Avatar = (props) => {
             <Loader />
           </View>
         ))}
-      {dataProfile && dataProfile.photos.length > 0 && (
+      {dataProfile?.photos.length > 0 && (
         <View style={styles.avatar_view}>
-          <Image
-            source={{ uri: `${getImage(dataProfile.photos[0].image)}` }}
+          <FastImage
+            source={{
+              uri: `${getImage(dataProfile.photos[0].image)}`,
+              priority: FastImage.priority.high,
+            }}
             style={styles.img}
           />
         </View>
       )}
-      {dataProfile?.photos?.length === 0 && (
+      {dataProfile?.photos.length === 0 && (
         <View style={styles.avatar_view}>
           <Text style={styles.avatar_initials}>
             {getNameInitials(dataProfile.name)}

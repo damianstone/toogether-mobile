@@ -1,19 +1,24 @@
 import { applyMiddleware, combineReducers, createStore } from 'redux';
 import thunk from 'redux-thunk';
 import {
-  userLocationReducer,
   authenticateReducer,
   tokenRefreshReducer,
+  userLoginReducer,
+  userRegisterReducer,
+} from './reducers/auth';
+import {
+  userLocationReducer,
   userAddPhotoReducer,
   userRemovePhotoReducer,
   userCreateProfileReducer,
   userUpdateProfileReducer,
   userListPhotosReducer,
-  userLoginReducer,
-  userRegisterReducer,
   userDeleteReducer,
   userGetProfileReducer,
   reportProfileReducer,
+  sendRecoveryCodeReducer,
+  validateCodeReducer,
+  changePasswordReducer,
 } from './reducers/user';
 import {
   listBlockedProfilesReducer,
@@ -46,21 +51,26 @@ import {
 } from './reducers/conversation';
 
 const reducer = combineReducers({
-  // profile API
-  userLocation: userLocationReducer,
+  // auth
   auth: authenticateReducer,
   tokenRefresh: tokenRefreshReducer,
   userRegister: userRegisterReducer,
   userLogin: userLoginReducer,
+  // profile API
+  userLocation: userLocationReducer,
   userDelete: userDeleteReducer,
   userCreateProfile: userCreateProfileReducer,
   userUpdateProfile: userUpdateProfileReducer,
   userGetProfile: userGetProfileReducer,
   reportProfile: reportProfileReducer,
-  // photos API
+  // Photos API
   userAddPhoto: userAddPhotoReducer,
   userRemovePhoto: userRemovePhotoReducer,
   userListPhotos: userListPhotosReducer,
+  // Rcovery API
+  sendRecoveryCode: sendRecoveryCodeReducer,
+  validateCode: validateCodeReducer,
+  changePassword: changePasswordReducer,
   // Block API
   listBlockedProfiles: listBlockedProfilesReducer,
   blockProfile: blockProfileReducer,

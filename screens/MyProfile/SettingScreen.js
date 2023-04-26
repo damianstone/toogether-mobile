@@ -1,8 +1,7 @@
-import React, { useState, useEffect, useReducer, useCallback } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import {
   ScrollView,
   Text,
-  Platform,
   TouchableOpacity,
   View,
   Alert,
@@ -10,7 +9,6 @@ import {
   Share,
   StyleSheet,
 } from 'react-native';
-import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   FontAwesome5,
@@ -19,15 +17,14 @@ import {
   Feather,
   MaterialCommunityIcons,
 } from '@expo/vector-icons';
-import { logout, userDelete } from '../../store/actions/user';
+import { userDelete } from '../../store/actions/user';
+import { logout } from '../../store/actions/auth';
 import { SETTINGS_ACCOUNT_DATA, SETTINGS_APP_DATA } from '../../data/settings';
 import { check400Error, checkServerError } from '../../utils/errors';
 
-import HeaderButtom from '../../components/UI/HeaderButton';
 import AuthButton from '../../components/UI/AuthButton';
 import ActivityModal from '../../components/UI/ActivityModal';
 import Colors from '../../constants/Colors';
-import * as c from '../../constants/user';
 
 const SettingScreen = (props) => {
   const dispatch = useDispatch();
@@ -49,22 +46,13 @@ const SettingScreen = (props) => {
     }
 
     if (dataDeleted) {
-      props.navigation.navigate('AuthStart');
+      dispatch(logout());
     }
   }, [errorDelete, dataDeleted]);
 
   const handleLogout = async () => {
-    try {
-      dispatch(logout());
-      props.navigation.navigate('AuthStart');
-    } catch (error) {
-      if (error) {
-        if (error?.response?.status === 400) {
-          check400Error(error);
-        }
-        checkServerError(error);
-      }
-    }
+    await dispatch(logout());
+    props.navigation.navigate('AuthStart');
   };
 
   const handleDeleteUser = () => {
@@ -261,25 +249,6 @@ const SettingScreen = (props) => {
       </ScrollView>
     </View>
   );
-};
-
-SettingScreen.navigationOptions = (navData) => {
-  return {
-    headerTitle: 'Settings',
-    headerLeft: () => (
-      <HeaderButtons HeaderButtonComponent={HeaderButtom}>
-        <Item
-          iconName={
-            Platform.OS === 'android' ? 'ios-arrow-back' : 'ios-arrow-back'
-          }
-          onPress={() => {
-            navData.navigation.navigate('MyProfile');
-          }}
-          title="Back arrow"
-        />
-      </HeaderButtons>
-    ),
-  };
 };
 
 export default SettingScreen;

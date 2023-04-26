@@ -1,10 +1,5 @@
-/* eslint-disable react/jsx-curly-brace-presence */
 import React, { useEffect, useState, useCallback, useContext } from 'react';
 import {
-  FlatList,
-  Image,
-  Platform,
-  SafeAreaView,
   ScrollView,
   Text,
   TouchableOpacity,
@@ -12,32 +7,29 @@ import {
   Alert,
   RefreshControl,
 } from 'react-native';
-import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { useDispatch, useSelector } from 'react-redux';
-import { withNavigationFocus } from 'react-navigation';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import * as ImagePicker from 'expo-image-picker';
-import { MaterialIcons } from '@expo/vector-icons';
+import FastImage from 'react-native-fast-image';
 import { Context } from '../../context/ContextProvider';
 import { getNameInitials, getImage } from '../../utils/getMethods';
-
-import ProfileGallery from '../../components/MyProfile/ProfileGallery';
-import HeaderButtom from '../../components/UI/HeaderButton';
-import Loader from '../../components/UI/Loader';
-import Colors from '../../constants/Colors';
-import * as c from '../../constants/user';
+import { checkServerError, check400Error } from '../../utils/errors';
+import { verifyPermissions } from '../../utils/permissions';
 import {
-  listUserPhotos,
   getUserProfile,
+  listUserPhotos,
   removeUserPhoto,
   addPhoto,
   updatePhoto,
 } from '../../store/actions/user';
-import { checkServerError, check400Error } from '../../utils/errors';
-import { verifyPermissions } from '../../utils/permissions';
 
-import styles from './styles';
+import NameCounter from '../../components/MyProfile/NameCounter';
+import ProfileGallery from '../../components/MyProfile/ProfileGallery';
 import FooterProfile from '../../components/MyProfile/FooterProfile';
+import Loader from '../../components/UI/Loader';
+import * as c from '../../constants/requestTypes/user';
+import styles from './styles';
+import Colors from '../../constants/Colors';
 
 const MyProfileScreen = (props) => {
   const { profileContext, updateProfileContext } = useContext(Context);
@@ -46,7 +38,6 @@ const MyProfileScreen = (props) => {
   const { showActionSheetWithOptions } = useActionSheet();
   const [refreshing, setRefreshing] = useState(false);
   const [photoId, setPhotoId] = useState('');
-  const [photos, setPhotos] = useState();
 
   const userGetProfile = useSelector((state) => state.userGetProfile);
   const {
@@ -59,7 +50,7 @@ const MyProfileScreen = (props) => {
   const {
     loading: loadingPhotos,
     error: errorPhotos,
-    data: dataPhotos,
+    data: photos,
   } = userListPhotos;
 
   const userRemovePhoto = useSelector((state) => state.userRemovePhoto);
@@ -77,23 +68,22 @@ const MyProfileScreen = (props) => {
   } = userAddPhoto;
 
   useEffect(() => {
-    if (!userProfile && !errorProfile) {
-      dispatch(getUserProfile());
-    }
+    dispatch(listUserPhotos());
+    dispatch(getUserProfile());
+  }, []);
+
+  useEffect(() => {
     if (errorProfile) {
       checkServerError(errorProfile);
     }
-    if (userProfile) {
-      updateProfileContext(userProfile);
+
+    if (errorPhotos) {
+      checkServerError(errorPhotos);
     }
-  }, [photos, userProfile]);
+  }, [errorPhotos, errorProfile]);
 
   useEffect(() => {
-    if (dataPhotos) {
-      setPhotos([...dataPhotos]);
-    }
-
-    if ((!photos || dataRemovePhoto || dataAddPhoto) && !errorPhotos) {
+    if ((dataRemovePhoto || dataAddPhoto) && !errorPhotos) {
       dispatch(listUserPhotos());
     }
 
@@ -130,20 +120,17 @@ const MyProfileScreen = (props) => {
 
     dispatch({ type: c.USER_ADD_PHOTO_RESET });
     dispatch({ type: c.USER_REMOVE_PHOTO_RESET });
-  }, [
-    dataPhotos,
-    dataRemovePhoto,
-    dataAddPhoto,
-    errorRemovePhoto,
-    errorPhotos,
-    errorAddPhoto,
-  ]);
+  }, [dataRemovePhoto, dataAddPhoto, errorRemovePhoto, errorAddPhoto]);
+
+  useEffect(() => {
+    const unsubscribe = props.navigation.addListener('focus', loadProfile);
+    return () => unsubscribe;
+  }, [loadProfile]);
 
   const loadProfile = useCallback(async () => {
     setRefreshing(true);
     try {
       await dispatch(getUserProfile());
-      await dispatch(listUserPhotos());
     } catch (err) {
       checkServerError(err);
     }
@@ -202,14 +189,14 @@ const MyProfileScreen = (props) => {
     });
   };
 
-  const handleNavigate = (screen) => {
-    props.navigation.navigate(screen);
-  };
-
   return (
     <ScrollView
       refreshControl={
-        <RefreshControl refreshing={refreshing} onRefresh={loadProfile} />
+        <RefreshControl
+          refreshing={refreshing}
+          onRefresh={loadProfile}
+          tintColor={Colors.white}
+        />
       }
       contentContainerStyle={styles.scroll_container_style}
       style={styles.scrollview_style}
@@ -218,15 +205,17 @@ const MyProfileScreen = (props) => {
         style={styles.profilePictureContainer}
         onPress={handleOpenPreview}
       >
-        {photos && Object.values(photos).length > 0 && (
-          <Image
+        {loadingPhotos && <Loader size="small" />}
+        {photos?.length > 0 && (
+          <FastImage
             source={{
               uri: `${getImage(Object.values(photos)[0].image)}`,
+              priority: FastImage.priority.high,
             }}
             style={styles.image}
           />
         )}
-        {(!photos || Object.values(photos).length === 0) && userProfile && (
+        {userProfile && photos?.length <= 0 && (
           <View style={styles.avatar_view}>
             <Text style={styles.avatar_initials}>
               {getNameInitials(userProfile.name)}
@@ -234,32 +223,16 @@ const MyProfileScreen = (props) => {
           </View>
         )}
       </TouchableOpacity>
-      <View style={styles.nameView}>
-        {userProfile && userProfile.name && (
-          <>
-            <Text style={styles.name}>{userProfile.name}</Text>
-            <TouchableOpacity onPress={() => handleNavigate('EditProfile')}>
-              <MaterialIcons name="edit" size={20} color="white" />
-            </TouchableOpacity>
-          </>
-        )}
-      </View>
-      <View style={styles.counterContainer}>
-        <View style={styles.counterView}>
-          <Text style={styles.likesNumber}>
-            {typeof userProfile !== 'undefined' ? userProfile?.total_likes : ''}
-          </Text>
-          <Text style={styles.counterText}>Likes</Text>
-        </View>
-        <View style={styles.counterView}>
-          <Text style={styles.matchesNumber}>
-            {typeof userProfile !== 'undefined'
-              ? userProfile.total_matches
-              : ''}
-          </Text>
-          <Text style={styles.counterText}>matches</Text>
-        </View>
-      </View>
+      {userProfile ? (
+        <NameCounter
+          name={userProfile.name}
+          total_likes={userProfile.total_likes}
+          total_matches={userProfile.total_matches}
+          navigation={props.navigation}
+        />
+      ) : (
+        <Loader />
+      )}
       <View>
         <ProfileGallery
           photos={photos}
@@ -273,38 +246,6 @@ const MyProfileScreen = (props) => {
       <FooterProfile handleOpenPreview={handleOpenPreview} />
     </ScrollView>
   );
-};
-
-MyProfileScreen.navigationOptions = (navData) => {
-  return {
-    headerTitle: 'My Profile',
-    headerRight: () => (
-      <HeaderButtons HeaderButtonComponent={HeaderButtom}>
-        <Item
-          iconName={
-            Platform.OS === 'android' ? 'settings-sharp' : 'settings-sharp'
-          }
-          onPress={() => {
-            navData.navigation.navigate('Setting');
-          }}
-          title="Back arrow"
-        />
-      </HeaderButtons>
-    ),
-    headerLeft: () => (
-      <HeaderButtons HeaderButtonComponent={HeaderButtom}>
-        <Item
-          iconName={
-            Platform.OS === 'android' ? 'ios-arrow-back' : 'ios-arrow-back'
-          }
-          onPress={() => {
-            navData.navigation.navigate('Swipe');
-          }}
-          title="Back arrow"
-        />
-      </HeaderButtons>
-    ),
-  };
 };
 
 export default MyProfileScreen;

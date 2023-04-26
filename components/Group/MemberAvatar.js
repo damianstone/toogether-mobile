@@ -1,16 +1,19 @@
-import React, { useEffect } from 'react';
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { getNameInitials, getImage } from '../utils/getMethods';
-import Colors from '../constants/Colors';
+import React from 'react';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import FastImage from 'react-native-fast-image';
 
-const MemberAvatar = (props) => {
-  const { onPress, photos, name } = props;
+import { getNameInitials, getImage } from '../../utils/getMethods';
+import Colors from '../../constants/Colors';
 
+const MemberAvatar = ({ onPress, photos, name }) => {
   return (
     <TouchableOpacity onPress={onPress} style={styles.imgContainer}>
       {photos && photos.length >= 1 && (
-        <Image
-          source={{ uri: `${getImage(photos[0].image)}` }}
+        <FastImage
+          source={{
+            uri: `${getImage(photos[0].image)}`,
+            priority: FastImage.priority.high,
+          }}
           style={styles.img}
         />
       )}

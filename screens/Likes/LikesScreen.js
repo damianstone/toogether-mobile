@@ -9,16 +9,13 @@ import {
   StatusBar,
   Text,
 } from 'react-native';
-import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { useDispatch, useSelector } from 'react-redux';
 import { listLikes, removeLike, like } from '../../store/actions/swipe';
 import { checkServerError } from '../../utils/errors';
-import { exist, isMatch, alreadyMatched } from '../../utils/checks';
+import { isMatch, alreadyMatched } from '../../utils/checks';
 
-import * as w from '../../constants/swipe';
-import HeaderButtom from '../../components/UI/HeaderButton';
+import * as w from '../../constants/requestTypes/swipe';
 import LikeCard from '../../components/LikeCard';
-import Avatar from '../../components/UI/Avatar';
 import Loader from '../../components/UI/Loader';
 import ActivityModal from '../../components/UI/ActivityModal';
 import Colors from '../../constants/Colors';
@@ -90,7 +87,12 @@ const LikesScreen = (props) => {
     const unsubscribe = props.navigation.addListener('didFocus', () => {
       reload();
     });
-    return () => unsubscribe;
+
+    return () => {
+      if (unsubscribe.remove) {
+        unsubscribe.remove();
+      }
+    };
   }, [reload]);
 
   const reload = useCallback(async () => {
@@ -225,6 +227,7 @@ const LikesScreen = (props) => {
   );
 };
 
+<<<<<<< HEAD
 LikesScreen.navigationOptions = (navData) => {
   return {
     headerTitle: 'Likes',
@@ -255,6 +258,8 @@ LikesScreen.navigationOptions = (navData) => {
   };
 };
 
+=======
+>>>>>>> develop
 export default LikesScreen;
 
 const styles = StyleSheet.create({
