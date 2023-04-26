@@ -115,79 +115,9 @@ const SwipeCard = ({
           paginationStyle={{ top: 5, bottom: null }}
           removeClippedSubviews={false}
           showsButtons
-<<<<<<< HEAD
-          buttonWrapperStyle={{ color: Colors.placeholder }}
-          style={styles.wrapper}>
-          {isGroup ? (
-            members?.map((profile) => {
-              return (
-                <ImageBackground
-                  key={profile.id}
-                  imageStyle={{ ...imageStyle }}
-                  resizeMode="cover"
-                  source={checkPhoto(profile)}
-                  style={styles.image}>
-                  <InfoCard
-                    name={profile.name}
-                    city={profile.city}
-                    live_in={profile.live_in}
-                    from={profile.nationality}
-                    age={profile.age}
-                    university={profile.university}
-                  />
-                  {!showProfileRestricted && (
-                    <TouchableOpacity
-                      onPress={() => showProfileHandler(profile, true)}
-                      style={styles.arrowContainer}>
-                      <Image
-                        source={require('../assets/images/white-arrow-up.png')}
-                        style={{ width: '100%', height: '100%' }}
-                      />
-                    </TouchableOpacity>
-                  )}
-                  {showProfileRestricted && allowedProfileId === profile.id && (
-                    <TouchableOpacity
-                      onPress={() => showProfileHandler(profile, true)}
-                      style={styles.arrowContainer}>
-                      <Image
-                        source={require('../assets/images/white-arrow-up.png')}
-                        style={{ width: '100%', height: '100%' }}
-                      />
-                    </TouchableOpacity>
-                  )}
-                </ImageBackground>
-              );
-            })
-          ) : (
-            <ImageBackground
-              imageStyle={{ ...imageStyle }}
-              key={profile.id}
-              resizeMode="cover"
-              source={checkPhoto(profile)}
-              style={styles.image}>
-              <InfoCard
-                name={profile.name}
-                city={profile.city}
-                live_in={profile.live_in}
-                from={profile.nationality}
-                age={profile.age}
-                university={profile.university}
-              />
-              <TouchableOpacity
-                onPress={() => showProfileHandler(profile, false)}
-                style={styles.arrowContainer}>
-                <Image
-                  source={require('../assets/images/white-arrow-up.png')}
-                  style={{ width: '100%', height: '100%' }}
-                />
-              </TouchableOpacity>
-            </ImageBackground>
-          )}
-=======
           style={styles.wrapper}
         >
           {isGroup ? renderGroupCard() : renderSingleCard()}
->>>>>>> develop
         </Swiper>
       </View>
     </View>

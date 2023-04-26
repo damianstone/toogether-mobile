@@ -10,11 +10,6 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from 'react-native';
-<<<<<<< HEAD
-
-import { HeaderButtons, Item } from 'react-navigation-header-buttons';
-=======
->>>>>>> develop
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import { useDispatch, useSelector } from 'react-redux';
 import { listMatches, deleteMatch } from '../store/actions/swipe';

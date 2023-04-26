@@ -7,14 +7,7 @@ import { getNameInitials, getImage } from '../../utils/getMethods';
 import Loader from './Loader';
 import FastImage from 'react-native-fast-image';
 
-<<<<<<< HEAD
-const Avatar = (props) => {
-  const { onPress, id } = props;
-  const { profileContext, updateProfileContext } = useContext(Context);
-
-=======
 const Avatar = ({ onPress }) => {
->>>>>>> develop
   const dispatch = useDispatch();
 
   const userProfile = useSelector((state) => state.userGetProfile);
@@ -25,17 +18,7 @@ const Avatar = ({ onPress }) => {
   } = userProfile;
 
   useEffect(() => {
-<<<<<<< HEAD
-    if (!dataProfile && !profileContext /* chat test */ && !id) {
-      dispatch(getUserProfile());
-    }
-
-    if (dataProfile) {
-      updateProfileContext(dataProfile);
-    }
-=======
     dispatch(getUserProfile());
->>>>>>> develop
   }, []);
 
   return (

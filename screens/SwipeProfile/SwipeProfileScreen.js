@@ -14,13 +14,6 @@ const SwipeProfileScreen = (props) => {
   const { mainProfileId, isInGroup, isMyProfile } = props.route.params;
 
   const dispatch = useDispatch();
-<<<<<<< HEAD
-  const mainProfileId = props.navigation.getParam('mainProfileId');
-  const isInGroup = props.navigation.getParam('isInGroup');
-  const isMyProfile = props.navigation.getParam('isMyProfile');
-=======
-
->>>>>>> develop
   const currentSwipeProfile = useSelector((state) => state.getSwipeProfile);
 
   const {
