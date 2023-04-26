@@ -15,6 +15,7 @@ import Colors from '../constants/Colors';
 
 import SwipeProfileScreen from '../screens/SwipeProfile/SwipeProfileScreen';
 import ProfileModalScreen from '../screens/SwipeProfile/ProfileModalScreen';
+
 import MatchScreen from '../screens/Match/MatchScreen';
 
 import AuthScreen from '../screens/Auth/AuthScreen';
@@ -32,17 +33,20 @@ import SettingScreen from '../screens/MyProfile/SettingScreen';
 import EditProfileScreen from '../screens/MyProfile/EditProfileScreen';
 
 import SwipeScreen from '../screens/Swipe/SwipeScreen';
-import ChatScreen from '../screens/ChatScreen';
 import LikesScreen from '../screens/Likes/LikesScreen';
 import BlockProfilesScreen from '../screens/BlockProfiles/BlockProfilesScreen';
 import InstagramScreen from '../screens/CreateProfile/InstagramScreen';
 
-import Avatar from '../components/UI/Avatar';
-import HeaderButtom from '../components/UI/HeaderButton';
-import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import RecoveryScreen from '../screens/Recovery/RecoveryScreen';
 import ValidateCodeScreen from '../screens/Recovery/ValidateCodeScreen';
 import ChangePasswordScreen from '../screens/Recovery/ChangePasswordScreen';
+
+import ChatScreen from '../screens/Chat/ChatScreen';
+import MatchesScreen from '../screens/Chat/MatchesScreen';
+
+import Avatar from '../components/UI/Avatar';
+import HeaderButtom from '../components/UI/HeaderButton';
+import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 
 const Stack = createStackNavigator();
 
@@ -62,8 +66,7 @@ const MyProfileNavigator = () => {
     <Stack.Navigator
       screenOptions={{
         ...defaultNavOptions,
-      }}
-    >
+      }}>
       <Stack.Screen
         name="MyProfile"
         component={MyProfileScreen}
@@ -198,8 +201,7 @@ const MyProfileNavigator = () => {
 const MyProfileNavigatorWithModal = () => {
   return (
     <Stack.Navigator
-      screenOptions={{ headerShown: false, presentation: 'modal' }}
-    >
+      screenOptions={{ headerShown: false, presentation: 'modal' }}>
       <Stack.Screen name="MyProfileNavigator" component={MyProfileNavigator} />
       <Stack.Screen name="ProfileModal" component={ProfileModalScreen} />
     </Stack.Navigator>
@@ -212,13 +214,34 @@ const ChatNavigator = () => {
       screenOptions={{
         ...defaultNavOptions,
         gestureDirection: 'horizontal',
-      }}
-    >
+      }}>
+      <Stack.Screen
+        name="Matches"
+        component={MatchesScreen}
+        options={({ navigation }) => ({
+          title: 'Matches',
+          headerLeft: () => (
+            <HeaderButtons HeaderButtonComponent={HeaderButtom}>
+              <Item
+                iconName={
+                  Platform.OS === 'android'
+                    ? 'ios-arrow-back'
+                    : 'ios-arrow-back'
+                }
+                onPress={() => {
+                  navigation.goBack();
+                }}
+                title="Back arrow"
+              />
+            </HeaderButtons>
+          ),
+        })}
+      />
       <Stack.Screen
         name="Chat"
         component={ChatScreen}
         options={({ navigation }) => ({
-          title: 'Matches',
+          headerMode: "none",
           headerLeft: () => (
             <HeaderButtons HeaderButtonComponent={HeaderButtom}>
               <Item
@@ -267,10 +290,9 @@ const ChatNavigator = () => {
 const MatchNavigator = () => {
   return (
     <Stack.Navigator
-      screenOptions={{ ...defaultNavOptions, presentation: 'modal' }}
-    >
+      screenOptions={{ ...defaultNavOptions, presentation: 'modal' }}>
       <Stack.Screen
-        name="Matches"
+        name="ChatNavigator"
         component={ChatNavigator}
         options={{ headerShown: false }}
       />
@@ -288,8 +310,7 @@ const LikeNavigator = () => {
     <Stack.Navigator
       screenOptions={{
         ...defaultNavOptions,
-      }}
-    >
+      }}>
       <Stack.Screen
         name="Likes"
         component={LikesScreen}
@@ -329,8 +350,7 @@ const SwipeNavigator = () => {
     <Stack.Navigator
       screenOptions={{
         ...defaultNavOptions,
-      }}
-    >
+      }}>
       <Stack.Screen
         name="Swipe"
         component={SwipeScreen}
@@ -378,8 +398,7 @@ const GroupNavigator = () => {
       initialRouteName={groupContext ? 'Group' : 'StartGroup'}
       screenOptions={{
         ...defaultNavOptions,
-      }}
-    >
+      }}>
       <Stack.Screen
         name="StartGroup"
         component={StartGroupScreen}
@@ -477,8 +496,7 @@ const ToogetherTab = (props) => {
             borderTopColor: bgCard ? Colors.bgCard : Colors.bg,
           },
         };
-      }}
-    >
+      }}>
       <Tab.Screen
         name="SwipeNavigator"
         component={SwipeNavigator}
@@ -531,8 +549,7 @@ const HomeNavigator = () => {
       initialRouteName="Main"
       screenOptions={{
         headerShown: false,
-      }}
-    >
+      }}>
       <Stack.Screen name="Main" component={ToogetherTab} />
       <Stack.Screen
         name="ProfileModal"
@@ -554,8 +571,7 @@ export const TooNavigator = () => {
       initialRouteName="Swipe"
       screenOptions={{
         headerShown: false,
-      }}
-    >
+      }}>
       <Stack.Screen name="Swipe" component={HomeNavigator} />
       <Stack.Screen name="Match" component={MatchNavigator} />
       <Stack.Screen name="GroupNavigator" component={GroupNavigator} />

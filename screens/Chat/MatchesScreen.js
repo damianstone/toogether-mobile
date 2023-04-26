@@ -32,7 +32,7 @@ import ActivityModal from '../../components/UI/ActivityModal';
 import MatchCounter from '../../components/MatchCounter';
 import MatchAvatar from '../../components/MatchAvatar';
 import PreviewChat from '../../components/PreviewChat';
-import * as conv from '../../constants/conversation';
+import * as conv from '../../constants/requestTypes/conversation';
 
 const MatchesScreen = (props) => {
   const { showActionSheetWithOptions } = useActionSheet();
@@ -97,12 +97,9 @@ const MatchesScreen = (props) => {
   useEffect(() => {
     if (dataStartedConversation) {
       dispatch({ type: conv.START_CONVERSATION_RESET });
-      props.navigation.navigate({
-        routeName: 'Chat',
-        params: {
-          receiverProfile: dataStartedConversation.receiver,
-          conversationId: dataStartedConversation.id,
-        },
+      props.navigation.navigate('Chat', {
+        receiverProfile: dataStartedConversation.receiver,
+        conversationId: dataStartedConversation.id,
       });
     }
     if (errorStartedConversations) {
@@ -150,12 +147,9 @@ const MatchesScreen = (props) => {
 
   const handleShowChatbyId = (conversationId, receiverProfile) => {
     if (conversationId) {
-      props.navigation.navigate({
-        routeName: 'Chat',
-        params: {
-          conversationId,
-          receiverProfile,
-        },
+      props.navigation.navigate('Chat', {
+        conversationId: conversationId,
+        receiverProfile: receiverProfile,
       });
     }
   };

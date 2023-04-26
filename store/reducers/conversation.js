@@ -1,4 +1,4 @@
-import * as c from '../../constants/conversation';
+import * as c from '../../constants/requestTypes/conversation';
 
 // -------------------------------- CHATS --------------------------------
 export const listMyConversationsReducer = (state = {}, action) => {

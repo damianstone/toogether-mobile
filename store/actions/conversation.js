@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
-import * as c from '../../constants/conversation';
+import * as c from '../../constants/requestTypes/conversation';
 import { ENV } from '../../environment';
 
 const BASE_URL = ENV.API_URL;

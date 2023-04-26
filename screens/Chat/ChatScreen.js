@@ -25,9 +25,9 @@ import {
 } from '../../store/actions/conversation';
 import { blockProfile } from '../../store/actions/block';
 import { reportProfile } from '../../store/actions/user';
-import * as u from '../../constants/user';
-import * as b from '../../constants/block';
-import * as c from '../../constants/conversation';
+import * as u from '../../constants/requestTypes/user';
+import * as b from '../../constants/requestTypes/block';
+import * as c from '../../constants/requestTypes/conversation';
 import { ENV } from '../../environment';
 const BASE_URL = ENV.API_URL;
 
@@ -35,9 +35,9 @@ API_URL = BASE_URL.replace('http://', '');
 
 const ChatScreen = (props) => {
   const { showActionSheetWithOptions } = useActionSheet();
-  const conversationId = props.navigation.getParam('conversationId');
-  const receiverData = props.navigation.getParam('receiverProfile');
+  const {conversationId, receiverProfile } = props.route.params;
   const { profileContext, updateProfileContext } = useContext(Context);
+
   const deleteConversationReducer = useSelector(
     (state) => state.deleteConversation
   );
@@ -194,7 +194,7 @@ const ChatScreen = (props) => {
   const handleShowProfile = (profile, isInGroup, isMyProfile) => {
     if (profile) {
       if (isMyProfile) {
-        props.navigation.navigate('Profile', {
+        props.navigation.navigate('SwipeProfile', {
           mainProfileId: profileContext.id,
           isInGroup: profileContext.is_in_group,
           isMyProfile: true,
@@ -351,7 +351,7 @@ const ChatScreen = (props) => {
         message={item}
         isMyMessage={item.sent_by_current ? true : false}
         ownProfile={profileContext}
-        matchedProfile={receiverData}
+        matchedProfile={receiverProfile}
         onShowProfile={() =>
           item.sent_by_current
             ? handleShowProfile(
@@ -359,7 +359,7 @@ const ChatScreen = (props) => {
                 profileContext.is_in_group,
                 true
               )
-            : handleShowProfile(receiverData, receiverData.is_in_group)
+            : handleShowProfile(receiverProfile, receiverProfile.is_in_group)
         }
       />
     );
@@ -370,11 +370,11 @@ const ChatScreen = (props) => {
       {messagesData && (
         <ChatHeader
           onGoBack={() => handleGoBack()}
-          receiverData={receiverData}
+          receiverData={receiverProfile}
           onShowProfile={() =>
-            handleShowProfile(receiverData, receiverData.is_in_group)
+            handleShowProfile(receiverProfile, receiverProfile.is_in_group)
           }
-          onActionSheet={() => onOpenActionSheet(receiverData, conversationId)}
+          onActionSheet={() => onOpenActionSheet(receiverProfile, conversationId)}
         />
       )}
       <View style={styles.messages_Container}>
