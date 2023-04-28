@@ -28,7 +28,6 @@ export const userLocation = () => {
         accuracy: Platform.OS === 'ios' ? 3 : Location.Accuracy.High,
       });
 
-
       // let location;
       // if (Platform.OS === 'ios') {
       //   location = await Location.getCurrentPositionAsync({
