@@ -12,6 +12,7 @@ import {
 import FastImage from 'react-native-fast-image';
 import { useDispatch, useSelector } from 'react-redux';
 import { useActionSheet } from '@expo/react-native-action-sheet';
+import { StackActions } from '@react-navigation/native';
 
 import {
   getGroup,
@@ -100,7 +101,7 @@ const GroupScreen = (props) => {
     if (dataDelete) {
       updateGroupContext(null);
       dispatch({ type: g.DELETE_GROUP_RESET });
-      props.navigation.navigate('StartGroup');
+      props.navigation.dispatch(StackActions.replace('StartGroup'));
     }
   }, [errorDelete, dataDelete]);
 
@@ -116,7 +117,7 @@ const GroupScreen = (props) => {
     if (dataLeave) {
       updateGroupContext(null);
       dispatch({ type: g.LEAVE_GROUP_RESET });
-      props.navigation.navigate('StartGroup');
+      props.navigation.dispatch(StackActions.replace('StartGroup'));
     }
   }, [errorLeave, dataLeave]);
 
@@ -291,8 +292,9 @@ const GroupScreen = (props) => {
           <View style={styles.nameView}>
             {groupContext?.owner && (
               <Text
-                style={styles.name}
-              >{`${groupContext.owner.name}'s group`}</Text>
+                style={
+                  styles.name
+                }>{`${groupContext.owner.name}'s group`}</Text>
             )}
           </View>
         </View>

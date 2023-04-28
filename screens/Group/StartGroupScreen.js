@@ -10,6 +10,7 @@ import {
   Dimensions,
 } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
+import { StackActions } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import { Context } from '../../context/ContextProvider';
 import { createGroup } from '../../store/actions/group';
@@ -45,8 +46,8 @@ const StartGroupScreen = (props) => {
 
     if (dataCreate) {
       updateGroupContext(dataCreate);
-      props.navigation.navigate('Group');
       dispatch({ type: g.CREATE_GROUP_RESET });
+      props.navigation.dispatch(StackActions.replace("Group"))
     }
   }, [dispatch, errorCreate, dataCreate]);
 
