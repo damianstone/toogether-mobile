@@ -324,6 +324,11 @@ const GroupScreen = (props) => {
               backgroundColor={Colors.orange}
             />
           )}
+          {groupContext.members.length <= 1 && (
+            <Text style={{ fontSize: 10, color: Colors.placeholder }}>
+              Group incognito until 2 members join
+            </Text>
+          )}
         </View>
       </View>
       <View style={{ ...styles.members_view, ...HEIGHT_MEMBER_CARD_CONTAINER }}>
