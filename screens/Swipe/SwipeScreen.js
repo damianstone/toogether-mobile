@@ -23,10 +23,11 @@ import styles from './styles';
 */
 
 const SwipeScreen = (props) => {
-  const topProfile = props.route.params?.topProfile;
+  const topProfile = props.route.params?.topProfile
+  console.log(props.route)
+  // console.log('TOP PROFILE -> ', topProfile);
 
   const dispatch = useDispatch();
-  const netInfo = useNetInfo();
   const [showMode, setShowMode] = useState(2);
   const [localLoading, setLocalLoading] = useState(false);
   const permissionGranted = verifyLocationPermissions();
