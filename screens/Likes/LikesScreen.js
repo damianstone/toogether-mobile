@@ -7,11 +7,12 @@ import {
   RefreshControl,
   Text,
 } from 'react-native';
+import { StackActions, CommonActions } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
+
 import { listLikes, removeLike, like } from '../../store/actions/swipe';
 import { checkServerError } from '../../utils/errors';
 import { isMatch, alreadyMatched } from '../../utils/checks';
-
 import * as w from '../../constants/requestTypes/swipe';
 import LikeCard from '../../components/LikeCard';
 import Loader from '../../components/UI/Loader';
@@ -131,7 +132,10 @@ const LikesScreen = (props) => {
           age={member.age}
           image={member.photos.length > 0 ? member.photos[0].image : null}
           onShowProfile={() =>
-            props.navigation.push('Swipe', { topProfile: item })
+            props.navigation.navigate('SwipeNavigator', {
+              screen: 'Swipe',
+              params: { topProfile: item },
+            })
           }
           dislike={() => handleRemoveLike(member.id)}
           like={() => handleLike(member.id)}
@@ -146,7 +150,10 @@ const LikesScreen = (props) => {
         age={item.age}
         image={item.photos.length > 0 ? item.photos[0].image : null}
         onShowProfile={() =>
-          props.navigation.push('Swipe', { topProfile: item })
+          props.navigation.navigate('SwipeNavigator', {
+            screen: 'Swipe',
+            params: { topProfile: item },
+          })
         }
         dislike={() => handleRemoveLike(item.id)}
         like={() => handleLike(item.id)}
@@ -164,8 +171,7 @@ const LikesScreen = (props) => {
           width: '100%',
           height: '100%',
           textAlign: 'center',
-        }}
-      >
+        }}>
         <View style={{ width: 200, height: 200 }}>
           <Image
             source={require('../../assets/images/no-likes.png')}
