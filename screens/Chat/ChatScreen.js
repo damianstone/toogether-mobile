@@ -272,7 +272,8 @@ const ChatScreen = (props) => {
         {
           text: 'No',
           onPress: () => {
-            props.navigation.navigate('Chat');
+            // props.navigation.navigate('Chat');
+            return ;
           },
           style: 'cancel',
         },
