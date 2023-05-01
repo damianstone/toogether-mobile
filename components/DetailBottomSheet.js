@@ -67,7 +67,8 @@ const DetailBottomSheet = (props) => {
       style={styles.screen}
       contentContainerStyle={styles.scrollview}
       showsVerticalScrollIndicator={false}
-      showsHorizontalScrollIndicator={false}>
+      showsHorizontalScrollIndicator={false}
+    >
       <View style={styles.container1}>
         <View style={styles.nameTextContainer}>
           <Text style={styles.nameText}>{`${name}, ${age}`}</Text>
@@ -119,13 +120,15 @@ const DetailBottomSheet = (props) => {
           <View style={styles.reportContainer}>
             <TouchableOpacity
               style={styles.blockButton}
-              onPress={blockProfileAlert}>
+              onPress={blockProfileAlert}
+            >
               <Text style={styles.blockButtonText}>Block Profile</Text>
             </TouchableOpacity>
 
             <TouchableOpacity
               style={styles.blockButton}
-              onPress={reportProfileAlert}>
+              onPress={reportProfileAlert}
+            >
               <Text style={styles.blockButtonText}>Report Profile</Text>
             </TouchableOpacity>
           </View>
