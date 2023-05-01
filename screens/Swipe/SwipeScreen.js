@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { View, Share, SafeAreaView, Alert } from 'react-native';
+import { View, Share, SafeAreaView, Alert, Linking } from 'react-native';
 import { useNetInfo } from '@react-native-community/netinfo';
 import { StatusBar } from 'expo-status-bar';
 import { useSelector, useDispatch } from 'react-redux';
@@ -114,14 +114,25 @@ const SwipeScreen = (props) => {
     }
   };
 
+  const handleFeedbackForm = useCallback(async () => {
+    const url = `https://forms.gle/fSgpVLbNAMXtQFyB7`;
+    const supported = await Linking.canOpenURL(url);
+
+    if (supported) {
+      await Linking.openURL(url);
+    } else {
+      Alert.alert(`Don't know how to open this URL: ${url}`);
+    }
+  }, []);
+
   const renderAllCardSwiped = () => {
     return (
       <SwipeError
         imageUrl={require('../../assets/images/radar.png')}
         title="All cards swiped"
-        text="There seems to be no one around you using Toogether. Why not tell them to download it? ;)"
-        onPress={onShareApp}
-        buttonText="Share this amazing app"
+        text="Complete the following 3 minute form and help us build Toogether ;)"
+        onPress={handleFeedbackForm}
+        buttonText="Feedback form"
         reload
         onReload={reload}
       />
