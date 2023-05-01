@@ -285,7 +285,7 @@ const EditProfileScreen = (props) => {
                 maxLength={500}
                 inputType="textInput"
                 id="description"
-                label="About"
+                label="Bio"
                 autoCapitalize="none"
                 required={false}
                 initialIsValid
