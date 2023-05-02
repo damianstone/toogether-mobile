@@ -35,6 +35,8 @@ export const userDeleteReducer = (state = {}, action) => {
         loading: false,
         error: action.payload,
       };
+    case c.USER_DELETE_RESET:
+      return {};
     default:
       return state;
   }
