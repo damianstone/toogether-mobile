@@ -39,9 +39,7 @@ const SwipeMatch = (props) => {
 
   const { chatOnPress, laterOnPress } = props;
 
-  const handleSendMessage = useCallback(async () => {
-    return chatOnPress();
-  }, []);
+  const handleSendMessage = chatOnPress;
 
   return (
     <Modal transparent={false} visible={visible} animationType="fade">
