@@ -41,18 +41,6 @@ const SwipeMatch = (props) => {
 
   const handleSendMessage = useCallback(async () => {
     return chatOnPress();
-    // if (!exist(matchedInstagram)) {
-    //   return chatOnPress();
-    // }
-
-    // const url = `https://www.instagram.com/${matchedInstagram}/`;
-    // const supported = await Linking.canOpenURL(url);
-
-    // if (supported) {
-    //   await Linking.openURL(url);
-    // } else {
-    //   Alert.alert(`Don't know how to open this URL: ${url}`);
-    // }
   }, []);
 
   return (
