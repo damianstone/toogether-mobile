@@ -243,24 +243,6 @@ const ChatNavigator = () => {
         options={{
           headerShown: false
         }}
-        // options={({ navigation }) => ({
-        //   headerMode: "none",
-        //   headerLeft: () => (
-        //     <HeaderButtons HeaderButtonComponent={HeaderButtom}>
-        //       <Item
-        //         iconName={
-        //           Platform.OS === 'android'
-        //             ? 'ios-arrow-back'
-        //             : 'ios-arrow-back'
-        //         }
-        //         onPress={() => {
-        //           navigation.goBack();
-        //         }}
-        //         title="Back arrow"
-        //       />
-        //     </HeaderButtons>
-        //   ),
-        // })}
       />
       <Stack.Screen
         name="SwipeProfile"
