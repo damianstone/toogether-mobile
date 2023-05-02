@@ -12,7 +12,7 @@ const MatchScreen = (props) => {
 
   const handleGoToMatches = () => {
     props.navigation.goBack(null);
-    props.navigation.navigate('Chat');
+    props.navigation.navigate('Match');
   };
 
   const handleCloseMatch = () => {
