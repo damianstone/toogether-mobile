@@ -218,7 +218,10 @@ export const userDelete = () => {
         headers: config,
       });
 
-      dispatch(logout());
+      dispatch({
+        type: c.USER_DELETE_SUCCESS,
+        payload: data,
+      });
     } catch (error) {
       dispatch({ type: c.USER_DELETE_FAIL, payload: error });
     }
