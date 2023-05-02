@@ -240,24 +240,9 @@ const ChatNavigator = () => {
       <Stack.Screen
         name="Chat"
         component={ChatScreen}
-        options={({ navigation }) => ({
-          headerMode: "none",
-          headerLeft: () => (
-            <HeaderButtons HeaderButtonComponent={HeaderButtom}>
-              <Item
-                iconName={
-                  Platform.OS === 'android'
-                    ? 'ios-arrow-back'
-                    : 'ios-arrow-back'
-                }
-                onPress={() => {
-                  navigation.goBack();
-                }}
-                title="Back arrow"
-              />
-            </HeaderButtons>
-          ),
-        })}
+        options={{
+          headerShown: false
+        }}
       />
       <Stack.Screen
         name="SwipeProfile"

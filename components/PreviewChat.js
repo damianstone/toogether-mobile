@@ -31,7 +31,6 @@ const PreviewChat = (props) => {
             <Text numberOfLines={1} style={styles.last_message}>
               {data?.last_message?.message}
             </Text>
-            <Text style={styles.messageCount}>1</Text>
           </View>
         </View>
         <View style={styles.divider} />
