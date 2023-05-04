@@ -410,26 +410,6 @@ const ChatScreen = (props) => {
         )}
       </View>
       )}
-      {/* <View style={styles.messages_Container}>
-        <FlatList
-          inverted={true}
-          data={messagesData?.results}
-          renderItem={renderMessages}
-          contentContainerStyle={{ flexDirection: 'column' }}
-          extraData={conversationReducer}
-          onEndReachedThreshold={0.2}
-          onEndReached={handleLoadMoreMessages}
-        />
-        {loadingMessages && (
-          <ActivityModal
-            loading
-            title="Loading messages"
-            size="large"
-            activityColor="white"
-            titleColor="white"
-          />
-        )}
-      </View> */}
       <View style={styles.sendMessage}>
         <View style={{ flex: 2, flexDirection: 'row', padding: 10 }}>
           <TextInput
