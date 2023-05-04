@@ -441,6 +441,7 @@ const ChatScreen = (props) => {
               setChatMessage(text);
             }}
             value={chatMessage}
+            autoCorrect={false}
           />
           <TouchableOpacity
             onPress={() => handleSendMessage()}
