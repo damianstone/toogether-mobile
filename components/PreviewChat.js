@@ -36,11 +36,6 @@ const PreviewChat = (props) => {
             </Text>
           </View>
         )}
-        {/* <View style={styles.chat_group_size_container}>
-          <Text style={styles.chat_group_size_number}>
-            4
-          </Text>
-        </View> */}
       </View>
       <TouchableOpacity onPress={onShowChat} style={styles.cardContainer}>
         <View style={styles.chat_preview}>
