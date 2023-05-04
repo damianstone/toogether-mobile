@@ -9,7 +9,7 @@ import {
   StatusBar,
   Text,
 } from 'react-native';
-import { StackActions, CommonActions } from '@react-navigation/native';
+import { StackActions, CommonActions, useIsFocused } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { listLikes, removeLike, like } from '../../store/actions/swipe';
@@ -22,6 +22,7 @@ import ActivityModal from '../../components/UI/ActivityModal';
 import Colors from '../../constants/Colors';
 
 const LikesScreen = (props) => {
+  const isVisible = useIsFocused();
   const dispatch = useDispatch();
   const [refreshing, setRefreshing] = useState(
     !!(removeLikeLoading || likeLoading)
@@ -47,6 +48,10 @@ const LikesScreen = (props) => {
     loading: likeLoading,
     data: likeData,
   } = likeReducer;
+
+  useEffect(() => {
+    reload();
+  }, [isVisible]);
 
   useEffect(() => {
     dispatch(listLikes());

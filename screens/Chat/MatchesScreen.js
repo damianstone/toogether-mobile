@@ -75,7 +75,6 @@ const MatchesScreen = (props) => {
   useEffect(() => {
     reload();
     reloadChats();
-    console.log("Reloading");
   }, [isVisible]);
 
   useEffect(() => {
