@@ -18,6 +18,7 @@ import Colors from '../../constants/Colors';
 import sendimg from '../../assets/images/send-button.png';
 import Message from '../../components/Message';
 import ChatHeader from '../../components/ChatHeader';
+import ChatTextInput from '../../components/Chat/ChatTextInput';
 import {
   addConversationMessage,
   listMessages,
@@ -378,7 +379,7 @@ const ChatScreen = (props) => {
           onActionSheet={() => onOpenActionSheet(receiverProfile, conversationId)}
         />
       )}
-      {messagesData?.results.lenght == 0 ? (
+      {messagesData?.results.length == 0 ? (
         <View style={styles.noMsgContainer}>
           <Image
             style={styles.noMsgImage} 
@@ -410,7 +411,8 @@ const ChatScreen = (props) => {
         )}
       </View>
       )}
-      <View style={styles.sendMessage}>
+      <ChatTextInput chatMessage={chatMessage} setChatMessage={setChatMessage} handleSendMessage={handleSendMessage} />
+      {/* <View style={styles.sendMessage}>
         <View style={{ flex: 2, flexDirection: 'row', padding: 10 }}>
           <TextInput
             inputMode="text,url"
@@ -422,6 +424,8 @@ const ChatScreen = (props) => {
             }}
             value={chatMessage}
             autoCorrect={false}
+            maxLength={1000}
+            multiline={true}
           />
           <TouchableOpacity
             onPress={() => handleSendMessage()}
@@ -430,7 +434,7 @@ const ChatScreen = (props) => {
           </TouchableOpacity>
           <View />
         </View>
-      </View>
+      </View> */}
     </View>
   );
 };
@@ -486,13 +490,17 @@ const styles = StyleSheet.create({
   },
 
   inputMessage: {
+    // flex: 2,
+    lineHeight: 23,
     backgroundColor: Colors.white,
     borderRadius: 50,
     marginTop: 2.5,
     paddingLeft: 10,
     width: '85%',
     height: 40,
+    textAlignVertical: 'top',
   },
+
   imgContainer: {
     backgroundColor: Colors.orange,
     borderRadius: 50,
@@ -501,6 +509,7 @@ const styles = StyleSheet.create({
     marginLeft: 15,
     justifyContent: 'center',
   },
+
   image: {
     width: '100%',
     height: '100%',

@@ -39,7 +39,7 @@ const ChatHeader = (props) => {
           {receiverData?.name}
         </Text>
         {receiverData.is_in_group && (
-          <Text style={styles.groupSize}>{receiverData.member_count} member group</Text>
+          <Text style={styles.groupMemberCounterText}>{receiverData.member_count} member group</Text>
         )}
       </View>
       <TouchableOpacity style={styles.menuIcon} onPress={onActionSheet}>
@@ -76,13 +76,13 @@ const styles = StyleSheet.create({
   },
 
   textContainer: {
-    width: '60%',
+    width: '58%',
     marginTop: 5,
   },
 
-  groupSize: {
+  groupMemberCounterText: {
     color: Colors.orange,
-    fontSize: 13,
+    fontSize: 12,
     marginLeft: 8,
   },
 
