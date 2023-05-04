@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   FlatList,
   TextInput,
+  Text,
 } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { Context } from '../../context/ContextProvider';
@@ -377,7 +378,18 @@ const ChatScreen = (props) => {
           onActionSheet={() => onOpenActionSheet(receiverProfile, conversationId)}
         />
       )}
-      <View style={styles.messages_Container}>
+      {messagesData?.results ? (
+        <View style={styles.noMsgContainer}>
+          <Image
+            style={styles.noMsgImage} 
+            source={require('../../assets/images/no-messages.png')} 
+          />
+          <Text style={styles.noMsgText}>
+            Start the conversation!
+          </Text>
+        </View>
+      ) : (
+        <View style={styles.messages_Container}>
         <FlatList
           inverted={true}
           data={messagesData?.results}
@@ -397,6 +409,7 @@ const ChatScreen = (props) => {
           />
         )}
       </View>
+      )}
       <View style={styles.sendMessage}>
         <View style={{ flex: 2, flexDirection: 'row', padding: 10 }}>
           <TextInput
@@ -408,6 +421,7 @@ const ChatScreen = (props) => {
               setChatMessage(text);
             }}
             value={chatMessage}
+            autoCorrect={false}
           />
           <TouchableOpacity
             onPress={() => handleSendMessage()}
@@ -433,6 +447,25 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     width: '100%',
     height: 50,
+  },
+
+  noMsgContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: '90%',
+    width: '100%',
+  },
+
+  noMsgImage: {
+    width: '30%',
+    height: '12%',
+    resizeMode: 'contain',
+  },
+  
+  noMsgText: {
+    color: 'white',
+    fontSize: 24,
   },
 
   messages_Container: {
