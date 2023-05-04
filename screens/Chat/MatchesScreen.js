@@ -12,6 +12,7 @@ import {
   StyleSheet,
 } from 'react-native';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
+import { useIsFocused } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
 
 import HeaderButtom from '../../components/UI/HeaderButton';
@@ -39,6 +40,7 @@ const MatchesScreen = (props) => {
   const dispatch = useDispatch();
   const [localLoading, setLocalLoading] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
+  const isVisible = useIsFocused();
 
   const listMatchesReducer = useSelector((state) => state.listMatches);
   const {
@@ -69,6 +71,12 @@ const MatchesScreen = (props) => {
     loading: loadingStartedConservation,
     data: dataStartedConversation,
   } = startedConversation;
+
+  useEffect(() => {
+    reload();
+    reloadChats();
+    console.log("Reloading");
+  }, [isVisible]);
 
   useEffect(() => {
     dispatch(listMatches());

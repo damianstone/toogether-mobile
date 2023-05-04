@@ -24,23 +24,23 @@ export const userLocation = () => {
         Authorization: `Bearer ${userData.token}`,
       };
 
-      let location = await Location.getCurrentPositionAsync({
-        accuracy: Platform.OS === 'ios' ? 3 : Location.Accuracy.High,
-      });
+      // let location = await Location.getCurrentPositionAsync({
+      //   accuracy: Platform.OS === 'ios' ? 3 : Location.Accuracy.High,
+      // });
 
-      // let location;
-      // if (Platform.OS === 'ios') {
-      //   location = await Location.getCurrentPositionAsync({
-      //     accuracy: Platform.OS === 'ios' ? 3 : Location.Accuracy.Highest,
-      //   });
-      // } else {
-      //   location = {
-      //     coords: {
-      //       latitude: 37.4220936,
-      //       longitude: -122.083922,
-      //     },
-      //   };
-      // }
+      let location;
+      if (Platform.OS === 'ios') {
+        location = await Location.getCurrentPositionAsync({
+          accuracy: Platform.OS === 'ios' ? 3 : Location.Accuracy.Highest,
+        });
+      } else {
+        location = {
+          coords: {
+            latitude: 37.4220936,
+            longitude: -122.083922,
+          },
+        };
+      }
 
       const { data } = await axios({
         method: 'POST',
