@@ -378,7 +378,7 @@ const ChatScreen = (props) => {
           onActionSheet={() => onOpenActionSheet(receiverProfile, conversationId)}
         />
       )}
-      {messagesData?.results ? (
+      {messagesData?.results.lenght == 0 ? (
         <View style={styles.noMsgContainer}>
           <Image
             style={styles.noMsgImage} 

@@ -34,7 +34,14 @@ const ChatHeader = (props) => {
           imageStyle={styles.img}
           style={styles.singleImageContainer}></ImageBackground>
       </TouchableOpacity>
-      <Text style={styles.matched_Name}>{receiverData?.name}</Text>
+      <View style={styles.textContainer}>
+        <Text style={styles.matched_Name}>
+          {receiverData?.name}
+        </Text>
+        {receiverData.is_in_group && (
+          <Text style={styles.groupSize}>{receiverData.member_count} member group</Text>
+        )}
+      </View>
       <TouchableOpacity style={styles.menuIcon} onPress={onActionSheet}>
         <Entypo name="dots-three-vertical" size={24} color="grey" />
       </TouchableOpacity>
@@ -54,8 +61,8 @@ const styles = StyleSheet.create({
   },
 
   singleImageContainer: {
-    width: 40,
-    height: 40,
+    width: 50,
+    height: 50,
     borderRadius: 100,
     justifyContent: 'center',
     alignItems: 'center',
@@ -67,6 +74,18 @@ const styles = StyleSheet.create({
     height: '100%',
     borderRadius: 100,
   },
+
+  textContainer: {
+    width: '60%',
+    marginTop: 5,
+  },
+
+  groupSize: {
+    color: Colors.orange,
+    fontSize: 13,
+    marginLeft: 8,
+  },
+
   noPhotoContainer: {
     width: 50,
     height: 50,
@@ -76,15 +95,14 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.bgCard,
     marginRight: 20,
   },
+
   menuIcon: {
     alignSelf: 'center',
   },
+
   matched_Name: {
-    width: '50%',
     fontSize: 18,
     color: 'white',
-    marginTop: 5,
-    paddingBottom: 5,
     fontWeight: 'bold',
   },
 });
