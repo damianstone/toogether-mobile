@@ -13,16 +13,29 @@ import Colors from '../constants/Colors';
 const PreviewChat = (props) => {
   const { receiverProfile, onShowProfile, data, onShowChat } = props;
 
+  const isGroup = receiverProfile.is_in_group;
+  let groupSize = 0;
+  if (isGroup) {
+    groupSize = receiverProfile.member_count;
+  }
+
   return (
     <View style={styles.container}>
       <View>
-        <TouchableOpacity onPress={onShowProfile}>
+        <TouchableOpacity onPress={onShowProfile} style={styles.chat_profile_head}>
           <ImageBackground
             source={require('../assets/images/placeholder-profile.png')}
             imageStyle={styles.img}
             style={styles.singleImageContainer}
             onPress={onShowProfile}></ImageBackground>
         </TouchableOpacity>
+        {isGroup && (
+          <View style={styles.chat_group_size_container}>
+            <Text style={styles.chat_group_size_number}>
+              {groupSize}
+            </Text>
+          </View>
+        )}
       </View>
       <TouchableOpacity onPress={onShowChat} style={styles.cardContainer}>
         <View style={styles.chat_preview}>
@@ -57,6 +70,7 @@ const styles = StyleSheet.create({
     height: '100%',
     borderRadius: 100,
   },
+
   noPhotoContainer: {
     width: 60,
     height: 60,
@@ -66,6 +80,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.bgCard,
     marginRight: 10,
   },
+
   container: {
     flexDirection: 'row',
     flex: 2,
@@ -80,7 +95,36 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 
+  chat_profile_head: {
+    position: 'absolute',
+  },
+
+  chat_head_container: {
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    alignSelf: 'center',
+    position: 'absolute',
+  },
+
+  chat_group_size_container: {
+    position: 'absolute',
+    marginLeft: 37,
+    marginBottom: 10,
+    width: 20,
+    height: 20,
+    borderRadius: 100,
+    backgroundColor: Colors.orange,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
+  chat_group_size_number: {
+    fontSize: 12,
+    color: 'white',
+  },
+
   chat_preview: {
+    marginLeft: 10,
     flex: 2,
     flexDirection: 'column',
     marginBottom: 10,
@@ -113,6 +157,7 @@ const styles = StyleSheet.create({
   },
 
   cardContainer: {
+    marginLeft: 65,
     backgroundColor: Colors.bg,
     borderRadius: 10,
     width: '100%',

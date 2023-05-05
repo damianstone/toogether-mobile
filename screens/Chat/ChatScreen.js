@@ -18,6 +18,7 @@ import Colors from '../../constants/Colors';
 import sendimg from '../../assets/images/send-button.png';
 import Message from '../../components/Message';
 import ChatHeader from '../../components/ChatHeader';
+import ChatTextInput from '../../components/Chat/ChatTextInput';
 import {
   addConversationMessage,
   listMessages,
@@ -378,7 +379,7 @@ const ChatScreen = (props) => {
           onActionSheet={() => onOpenActionSheet(receiverProfile, conversationId)}
         />
       )}
-      {messagesData?.results ? (
+      {messagesData?.results.length == 0 ? (
         <View style={styles.noMsgContainer}>
           <Image
             style={styles.noMsgImage} 
@@ -410,27 +411,11 @@ const ChatScreen = (props) => {
         )}
       </View>
       )}
-      <View style={styles.sendMessage}>
-        <View style={{ flex: 2, flexDirection: 'row', padding: 10 }}>
-          <TextInput
-            inputMode="text,url"
-            style={styles.inputMessage}
-            placeholder="Type a message"
-            placeholderTextColor={Colors.placeholder}
-            onChangeText={(text) => {
-              setChatMessage(text);
-            }}
-            value={chatMessage}
-            autoCorrect={false}
-          />
-          <TouchableOpacity
-            onPress={() => handleSendMessage()}
-            style={styles.imgContainer}>
-            <Image source={sendimg} style={styles.image} />
-          </TouchableOpacity>
-          <View />
-        </View>
-      </View>
+      <ChatTextInput 
+        chatMessage={chatMessage} 
+        setChatMessage={setChatMessage} 
+        handleSendMessage={handleSendMessage} 
+      />
     </View>
   );
 };
@@ -486,13 +471,17 @@ const styles = StyleSheet.create({
   },
 
   inputMessage: {
+    // flex: 2,
+    lineHeight: 23,
     backgroundColor: Colors.white,
     borderRadius: 50,
     marginTop: 2.5,
     paddingLeft: 10,
     width: '85%',
     height: 40,
+    textAlignVertical: 'top',
   },
+
   imgContainer: {
     backgroundColor: Colors.orange,
     borderRadius: 50,
@@ -501,6 +490,7 @@ const styles = StyleSheet.create({
     marginLeft: 15,
     justifyContent: 'center',
   },
+
   image: {
     width: '100%',
     height: '100%',
