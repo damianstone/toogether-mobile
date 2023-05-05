@@ -51,13 +51,17 @@ export default ChatTextInput;
 
 const styles = StyleSheet.create({
   container: {
+    borderColor: "black",
+    borderWidth: 1,
     flexDirection: 'row', 
-    padding: 10,
+    paddingBottom: 10,
+    paddingHorizontal: 6,
   },
 
   inputContainer: {
     maxHeight: 150,
     paddingTop: 10,
+    marginBottom: 2,
   },
 
   inputMessage: {
@@ -67,20 +71,21 @@ const styles = StyleSheet.create({
     paddingRight: 30,
     width: '100%',
     borderRadius: 20,
-    paddingBottom: 6,
-    maxHeight: 130,
+    paddingTop: 8,
+    paddingBottom: 8,
+    maxHeight: 136,
     textAlignVertical: 'bottom',
     alignSelf: 'center',
-    fontSize: 16,
+    fontSize: 18,
   },
 
   imgContainer: {
     backgroundColor: Colors.orange,
     borderRadius: 50,
-    width: 40,
-    height: 40,
+    width: 44,
+    height: 44,
     marginLeft: 15,
-    marginBottom: 5,
+    marginBottom: 2,
     justifyContent: 'center',
     alignSelf: 'flex-end',
   },
