@@ -1,45 +1,43 @@
-import { StyleSheet, TextInput, TouchableOpacity, View, Image } from "react-native";
-import { useState } from "react";
+import { StyleSheet, TextInput, TouchableOpacity, View, Image, ScrollView } from "react-native";
+import { useEffect, useState, useRef } from "react";
 
 import Colors from "../../constants/Colors";
 import sendimg from '../../assets/images/send-button.png';
 
 const ChatTextInput = (props) => {
   const { chatMessage, setChatMessage, handleSendMessage } = props;
-
-  const [inputHeight, setInputHeight] = useState(40);
-  const [inputRadius, setInputRadius] = useState(0);
-  const [transformStyle, setTransformStyle] = useState(1);
-  const [bottomMargin, setBottomMargin] = useState(0);
+  const scrollViewRef = useRef(null);
 
   const handleTextChange = (newText) => {
-    const lines = newText.split('\n').length;
-    const newInputHeight = 40 + (lines-1) * 20;
-    const newTransformStyle = 1 + (lines-1) * 0.1;
-    // const newBottomMargin = (lines-1) * 7;
-    if (newInputHeight <= 120) {
-      setTransformStyle(newTransformStyle);
-      setInputHeight(newInputHeight);
-      // setBottomMargin(newBottomMargin);
+    setChatMessage(newText)
+  };
+
+  const scrollToBottom = () => {
+    if (scrollViewRef.current) {
+      scrollViewRef.current.scrollToEnd({ animated: true });
     }
   };
 
   return (
     <View style={styles.container}>
-      <TextInput
-          inputMode="text,url"
-          style={[styles.inputMessage, {height: inputHeight, marginBottom: bottomMargin, transform: [{scaleY: transformStyle}]}]}
-          placeholder="Type a message"
-          placeholderTextColor={Colors.placeholder}
-          onChangeText={(text) => {
-            setChatMessage(text);
-            handleTextChange(text);
-          }}
-          value={chatMessage}
-          autoCorrect={false}
-          maxLength={1000}
-          multiline
-      />
+      <ScrollView
+        ref={scrollViewRef}
+        style={styles.inputContainer}
+        // contentContainerStyle={{ flexGrow: 1 }}
+        onContentSizeChange={scrollToBottom}
+      >
+        <TextInput
+            inputMode="text,url"
+            style={[styles.inputMessage]}
+            placeholder="Type a message"
+            placeholderTextColor={Colors.placeholder}
+            onChangeText={(text) => handleTextChange(text)}
+            value={chatMessage}
+            autoCorrect={false}
+            maxLength={1000}
+            multiline
+        />
+      </ScrollView>
       <TouchableOpacity
         onPress={() => handleSendMessage()}
         style={styles.imgContainer}>
@@ -53,20 +51,27 @@ export default ChatTextInput;
 
 const styles = StyleSheet.create({
   container: {
-    borderColor: 'white',
-    borderWidth: 1,
     flexDirection: 'row', 
     padding: 10,
+  },
+
+  inputContainer: {
+    maxHeight: 150,
+    paddingTop: 10,
   },
 
   inputMessage: {
     lineHeight: 20,
     backgroundColor: Colors.white,
-    marginTop: 2.5,
-    paddingLeft: 22,
-    width: '85%',
-    borderRadius: 30,
-    // textAlignVertical: 'top',
+    paddingLeft: 30,
+    paddingRight: 30,
+    width: '100%',
+    borderRadius: 20,
+    paddingBottom: 6,
+    maxHeight: 130,
+    textAlignVertical: 'bottom',
+    alignSelf: 'center',
+    fontSize: 16,
   },
 
   imgContainer: {
@@ -84,4 +89,4 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
   },
-})
+});

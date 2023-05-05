@@ -411,7 +411,11 @@ const ChatScreen = (props) => {
         )}
       </View>
       )}
-      <ChatTextInput chatMessage={chatMessage} setChatMessage={setChatMessage} handleSendMessage={handleSendMessage} />
+      <ChatTextInput 
+        chatMessage={chatMessage} 
+        setChatMessage={setChatMessage} 
+        handleSendMessage={handleSendMessage} 
+      />
       {/* <View style={styles.sendMessage}>
         <View style={{ flex: 2, flexDirection: 'row', padding: 10 }}>
           <TextInput
