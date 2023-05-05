@@ -416,29 +416,6 @@ const ChatScreen = (props) => {
         setChatMessage={setChatMessage} 
         handleSendMessage={handleSendMessage} 
       />
-      {/* <View style={styles.sendMessage}>
-        <View style={{ flex: 2, flexDirection: 'row', padding: 10 }}>
-          <TextInput
-            inputMode="text,url"
-            style={styles.inputMessage}
-            placeholder="Type a message"
-            placeholderTextColor={Colors.placeholder}
-            onChangeText={(text) => {
-              setChatMessage(text);
-            }}
-            value={chatMessage}
-            autoCorrect={false}
-            maxLength={1000}
-            multiline={true}
-          />
-          <TouchableOpacity
-            onPress={() => handleSendMessage()}
-            style={styles.imgContainer}>
-            <Image source={sendimg} style={styles.image} />
-          </TouchableOpacity>
-          <View />
-        </View>
-      </View> */}
     </View>
   );
 };
