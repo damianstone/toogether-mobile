@@ -24,6 +24,11 @@ const StartupScreen = ({ navigation }) => {
 
     if (userData && userData.has_account) {
       const currentTime = Date.now();
+
+      if (!userData.token || !userData.refresh_token) {
+        return dispatch(logout());
+      }
+
       const token = jwt_decode(userData.token);
       const refresh = jwt_decode(userData.refresh_token);
       const isTokenExpired = token.exp < currentTime / 1000;

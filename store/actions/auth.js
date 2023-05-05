@@ -89,6 +89,7 @@ export const register = (email, password, repeated_password) => {
           id: data.id,
           token: data.token,
           has_account: data.has_account,
+          refresh_token: data.refresh_token,
         })
       );
 
@@ -131,7 +132,7 @@ export const login = (email, password) => {
           id: data.id,
           token: data.token,
           has_account: data.has_account,
-          refresh_token: data.refresh,
+          refresh_token: data.refresh_token,
         })
       );
 
