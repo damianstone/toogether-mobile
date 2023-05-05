@@ -51,8 +51,6 @@ export default ChatTextInput;
 
 const styles = StyleSheet.create({
   container: {
-    borderColor: "black",
-    borderWidth: 1,
     flexDirection: 'row', 
     paddingBottom: 10,
     paddingHorizontal: 6,
@@ -80,8 +78,6 @@ const styles = StyleSheet.create({
   },
 
   imgContainer: {
-    backgroundColor: Colors.orange,
-    borderRadius: 50,
     width: 44,
     height: 44,
     marginLeft: 15,
