@@ -281,25 +281,44 @@ const MatchesScreen = (props) => {
         </View>
         <View style={styles.chat_preview}>
           <Text style={styles.title}> Chats</Text>
-          {!loadingListConversations && conversations && (
-            <FlatList
-              refreshControl={
-                <RefreshControl
-                  refreshing={refreshing}
-                  onRefresh={reloadChats}
-                  tintColor={Colors.white}
+          {conversations?.results.length == 0 
+            ? 
+            (
+              <View style={styles.noChatsContainer}>
+                <Image
+                  style={styles.noChatsImage}
+                  source={require('../../assets/images/no-chats.png')}
                 />
-              }
-              keyExtractor={(item) => item?.id.toString()}
-              contentContainerStyle={styles.chats}
-              data={conversations?.results}
-              renderItem={renderPreviewChats}
-              ListEmptyComponent={renderNoChats}
-              extraData={conversations}
-              onEndReached={handleLoadMoreConversations}
-              onEndReachedThreshold={0.3}
-            />
-          )}
+                <Text
+                  style={styles.noChatText}
+                >
+                  No chats yet
+                </Text>
+              </View>
+            )
+            : 
+            (
+              !loadingListConversations && conversations && (
+                <FlatList
+                  refreshControl={
+                    <RefreshControl
+                      refreshing={refreshing}
+                      onRefresh={reloadChats}
+                      tintColor={Colors.white}
+                    />
+                  }
+                  keyExtractor={(item) => item?.id.toString()}
+                  contentContainerStyle={styles.chats}
+                  data={conversations?.results}
+                  renderItem={renderPreviewChats}
+                  ListEmptyComponent={renderNoChats}
+                  extraData={conversations}
+                  onEndReached={handleLoadMoreConversations}
+                  onEndReachedThreshold={0.3}
+                />
+              )
+            )
+          }
         </View>
       </View>
     </SafeAreaView>
@@ -366,6 +385,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginRight: 20,
   },
+
   noMatches: {
     overflow: 'hidden',
     flexDirection: 'row',
@@ -392,21 +412,22 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.bg,
     flex: 1,
   },
+
   noChatsContainer: {
-    paddingTop: 20,
+    paddingTop: 120,
     backgroundColor: Colors.bg,
-    justifyContent: 'center',
     alignItems: 'center',
     width: '100%',
-    height: '100%',
   },
+
   noChatsImage: {
     resizeMode: 'contain',
-    flex: 1,
-    aspectRatio: 1,
+    height: 100,
   },
+
   noChatText: {
+    paddingTop: 16,
     color: Colors.white,
-    fontSize: 16,
+    fontSize: 18,
   },
 });

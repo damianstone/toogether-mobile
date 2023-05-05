@@ -28,19 +28,30 @@ const ChatHeader = (props) => {
           onPress={onGoBack}
         />
       </HeaderButtons>
-      <TouchableOpacity onPress={onShowProfile}>
+      <TouchableOpacity 
+        style={styles.profilePictureButton}
+        onPress={onShowProfile}
+      >
         <ImageBackground
           source={require('../assets/images/placeholder-profile.png')}
           imageStyle={styles.img}
-          style={styles.singleImageContainer}></ImageBackground>
+          style={styles.singleImageContainer}/>
       </TouchableOpacity>
       <View style={styles.textContainer}>
-        <Text style={styles.matched_Name}>
-          {receiverData?.name}
-        </Text>
-        {receiverData.is_in_group && (
-          <Text style={styles.groupMemberCounterText}>{receiverData.member_count} member group</Text>
-        )}
+        <TouchableOpacity 
+          style={styles.profileInfoContainer}
+          onPress={onShowProfile}
+        >
+          <Text
+            numberOfLines={1} 
+            style={styles.matched_Name}
+          >
+            {receiverData?.name}
+          </Text>
+          {receiverData.is_in_group && (
+            <Text style={styles.groupMemberCounterText}>{receiverData.member_count} member group</Text>
+          )}
+        </TouchableOpacity>
       </View>
       <TouchableOpacity style={styles.menuIcon} onPress={onActionSheet}>
         <Entypo name="dots-three-vertical" size={24} color="grey" />
@@ -53,11 +64,12 @@ export default ChatHeader;
 
 const styles = StyleSheet.create({
   headerContainer: {
+    // borderColor: 'white',
+    // borderWidth: 1,
     flexDirection: 'row',
     paddingTop: Constants.statusBarHeight + 15,
     paddingBottom: 5,
     width: '100%',
-    // alignItems: 'flex-end',
   },
 
   singleImageContainer: {
@@ -66,7 +78,18 @@ const styles = StyleSheet.create({
     borderRadius: 100,
     justifyContent: 'center',
     alignItems: 'center',
-    marginHorizontal: 20,
+    marginRight: 8,
+  },
+
+  headerProfileContainer: {
+    width: '75%',
+    height: '100%',
+    flexDirection: 'row',
+  },
+
+  profilePictureButton: {
+    alignSelf: 'flex-start',
+    width: '12%',
   },
 
   img: {
@@ -76,11 +99,21 @@ const styles = StyleSheet.create({
   },
 
   textContainer: {
-    width: '58%',
+    alignSelf: 'center',
+    width: '60%',
     marginTop: 5,
+    paddingLeft: 8,
+    // paddingRight: '12%',
+  },
+
+  profileInfoContainer: {
+    // borderColor: 'white',
+    // borderWidth: 1,
+    maxWidth: '100%',
   },
 
   groupMemberCounterText: {
+    // alignSelf: 'center',
     color: Colors.orange,
     fontSize: 12,
     marginLeft: 8,
@@ -97,10 +130,13 @@ const styles = StyleSheet.create({
   },
 
   menuIcon: {
+    paddingLeft: 24,
     alignSelf: 'center',
   },
 
   matched_Name: {
+    maxWidth: '100%',
+    // alignSelf: 'center',
     fontSize: 18,
     color: 'white',
     fontWeight: 'bold',
