@@ -7,16 +7,14 @@ import {
   RefreshControl,
   Text,
 } from 'react-native';
-import { HeaderButtons, Item } from 'react-navigation-header-buttons';
+import { StackActions, CommonActions } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
+
 import { listLikes, removeLike, like } from '../../store/actions/swipe';
 import { checkServerError } from '../../utils/errors';
-import { exist, isMatch, alreadyMatched } from '../../utils/checks';
-
-import * as w from '../../constants/swipe';
-import HeaderButtom from '../../components/UI/HeaderButton';
+import { isMatch, alreadyMatched } from '../../utils/checks';
+import * as w from '../../constants/requestTypes/swipe';
 import LikeCard from '../../components/LikeCard';
-import Avatar from '../../components/UI/Avatar';
 import Loader from '../../components/UI/Loader';
 import Colors from '../../constants/Colors';
 
@@ -87,7 +85,12 @@ const LikesScreen = (props) => {
     const unsubscribe = props.navigation.addListener('didFocus', () => {
       reload();
     });
-    return () => unsubscribe;
+
+    return () => {
+      if (unsubscribe.remove) {
+        unsubscribe.remove();
+      }
+    };
   }, [reload]);
 
   const reload = useCallback(async () => {
@@ -129,7 +132,10 @@ const LikesScreen = (props) => {
           age={member.age}
           image={member.photos.length > 0 ? member.photos[0].image : null}
           onShowProfile={() =>
-            props.navigation.push('Swipe', { topProfile: item })
+            props.navigation.navigate('SwipeNavigator', {
+              screen: 'Swipe',
+              params: { topProfile: item },
+            })
           }
           dislike={() => handleRemoveLike(member.id)}
           like={() => handleLike(member.id)}
@@ -144,7 +150,10 @@ const LikesScreen = (props) => {
         age={item.age}
         image={item.photos.length > 0 ? item.photos[0].image : null}
         onShowProfile={() =>
-          props.navigation.push('Swipe', { topProfile: item })
+          props.navigation.navigate('SwipeNavigator', {
+            screen: 'Swipe',
+            params: { topProfile: item },
+          })
         }
         dislike={() => handleRemoveLike(item.id)}
         like={() => handleLike(item.id)}
@@ -201,36 +210,6 @@ const LikesScreen = (props) => {
       )}
     </View>
   );
-};
-
-LikesScreen.navigationOptions = (navData) => {
-  return {
-    headerTitle: 'Likes',
-    headerLeft: () => (
-      <Avatar
-        onPress={() => {
-          navData.navigation.navigate('MyProfile');
-        }}
-      />
-    ),
-    headerRight: () => (
-      <HeaderButtons HeaderButtonComponent={HeaderButtom}>
-        <Item
-          title="Chat"
-          iconName={
-            Platform.OS === 'android'
-              ? 'chatbubble-outline'
-              : 'chatbubble-outline'
-          }
-          onPress={() => {
-            navData.navigation.navigate('Match', {
-              screen: 'Likes',
-            });
-          }}
-        />
-      </HeaderButtons>
-    ),
-  };
 };
 
 export default LikesScreen;

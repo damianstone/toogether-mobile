@@ -1,26 +1,15 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import {
-  View,
-  Image,
-  Share,
-  Platform,
-  SafeAreaView,
-  Alert,
-} from 'react-native';
+import { View, Share, SafeAreaView, Alert, Linking } from 'react-native';
 import { useNetInfo } from '@react-native-community/netinfo';
-import { HeaderButtons, Item } from 'react-navigation-header-buttons';
-import { withNavigation, withNavigationFocus } from 'react-navigation';
 import { StatusBar } from 'expo-status-bar';
 import { useSelector, useDispatch } from 'react-redux';
 import { verifyLocationPermissions } from '../../utils/permissions';
-import { exist, getShowMode } from '../../utils/checks';
+import { getShowMode } from '../../utils/checks';
 import { userLocation } from '../../store/actions/user';
 import { listSwipe } from '../../store/actions/swipe';
 
 import Deck from './Deck';
-import HeaderButtom from '../../components/UI/HeaderButton';
 import ActivityModal from '../../components/UI/ActivityModal';
-import Avatar from '../../components/UI/Avatar';
 import SwipeError from '../../components/SwipeError';
 import styles from './styles';
 
@@ -34,10 +23,9 @@ import styles from './styles';
 */
 
 const SwipeScreen = (props) => {
-  const topProfile = props.navigation.getParam('topProfile');
+  const topProfile = props.route.params?.topProfile;
 
   const dispatch = useDispatch();
-  const netInfo = useNetInfo();
   const [showMode, setShowMode] = useState(2);
   const [localLoading, setLocalLoading] = useState(false);
   const permissionGranted = verifyLocationPermissions();
@@ -126,14 +114,25 @@ const SwipeScreen = (props) => {
     }
   };
 
+  const handleFeedbackForm = useCallback(async () => {
+    const url = `https://forms.gle/fSgpVLbNAMXtQFyB7`;
+    const supported = await Linking.canOpenURL(url);
+
+    if (supported) {
+      await Linking.openURL(url);
+    } else {
+      Alert.alert(`Don't know how to open this URL: ${url}`);
+    }
+  }, []);
+
   const renderAllCardSwiped = () => {
     return (
       <SwipeError
         imageUrl={require('../../assets/images/radar.png')}
         title="All cards swiped"
-        text="There seems to be no one around you using Toogether. Why not tell them to download it? ;)"
-        onPress={onShareApp}
-        buttonText="Share this amazing app"
+        text="Complete the following 3 minute form and help us build Toogether ;)"
+        onPress={handleFeedbackForm}
+        buttonText="Feedback form"
         reload
         onReload={reload}
       />
@@ -214,41 +213,6 @@ const SwipeScreen = (props) => {
       </View>
     </SafeAreaView>
   );
-};
-
-SwipeScreen.navigationOptions = (navData) => {
-  return {
-    headerTitle: () => (
-      <View style={styles.logoContainer}>
-        <Image
-          source={require('../../assets/images/logo-1.png')}
-          style={styles.logo}
-        />
-      </View>
-    ),
-    headerLeft: () => (
-      <Avatar
-        onPress={() => {
-          navData.navigation.navigate('MyProfile');
-        }}
-      />
-    ),
-    headerRight: () => (
-      <HeaderButtons HeaderButtonComponent={HeaderButtom}>
-        <Item
-          title="Chat"
-          iconName={
-            Platform.OS === 'android'
-              ? 'chatbubble-outline'
-              : 'chatbubble-outline'
-          }
-          onPress={() => {
-            navData.navigation.navigate('Match');
-          }}
-        />
-      </HeaderButtons>
-    ),
-  };
 };
 
 export default SwipeScreen;

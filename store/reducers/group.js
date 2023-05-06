@@ -1,4 +1,4 @@
-import * as g from '../../constants/group';
+import * as g from '../../constants/requestTypes/group';
 
 export const listGroupReducer = (state = {}, action) => {
   switch (action.type) {

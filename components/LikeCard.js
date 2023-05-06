@@ -1,58 +1,20 @@
 import React from 'react';
-import {
-  ImageBackground,
-  StyleSheet,
-  Text,
-  Dimensions,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import FastImage from 'react-native-fast-image';
 import { Entypo } from '@expo/vector-icons';
-
 import { getImage } from '../utils/getMethods';
+import FastImageBackground from './UI/FastImageBackground';
 import Colors from '../constants/Colors';
 
-const SCREEN_HEIGHT = Dimensions.get('window').height;
-const SCREEN_WIDTH = Dimensions.get('window').width;
-
-const LikeCard = (props) => {
-  const { isGroup, name, age, image, onShowProfile, dislike, like } = props;
-
-  let cardType;
-  let imageContainer;
-  if (isGroup) {
-    cardType = {
-      // position: 'absolute',
-      width: '100%',
-      height: '100%',
-      borderRadius: 15,
-      backgroundColor: Colors.orange,
-    };
-
-    imageContainer = {
-      width: '100%',
-      height: '92%',
-      justifyContent: 'space-between',
-      alignItems: 'flex-end',
-      flexDirection: 'row',
-    };
-  } else {
-    cardType = {
-      position: 'absolute',
-      width: '100%',
-      height: '100%',
-      borderRadius: 15,
-      backgroundColor: Colors.placeholder,
-    };
-    imageContainer = {
-      width: '100%',
-      height: '100%',
-      justifyContent: 'space-between',
-      alignItems: 'flex-end',
-      flexDirection: 'row',
-    };
-  }
-
+const LikeCard = ({
+  isGroup,
+  name,
+  age,
+  image,
+  onShowProfile,
+  dislike,
+  like,
+}) => {
   const getCardInfo = () => {
     let n = name;
     let a = age;
@@ -70,56 +32,42 @@ const LikeCard = (props) => {
 
   return (
     <View style={styles.screen}>
-      <View style={{ ...cardType }}>
+      <View style={isGroup ? styles.groupCard : styles.singleCard}>
         <TouchableOpacity onPress={onShowProfile} style={styles.touch}>
           {isGroup && (
             <View style={styles.groupName}>
               <Text style={styles.text}>Toogether Group</Text>
             </View>
           )}
-          {image ? (
-            <ImageBackground
-              imageStyle={styles.imageStyle}
-              resizeMode="cover"
-              source={{ uri: `${getImage(image)}` }}
-              style={{ ...imageContainer }}
-            >
-              <View style={styles.infoCard}>
-                <Text style={{ color: Colors.black, fontSize: 10 }}>
-                  {getCardInfo()}
-                </Text>
-              </View>
-              <View style={styles.buttonsContainer}>
-                <TouchableOpacity onPress={dislike} style={styles.dislike}>
-                  <Entypo color="white" name="cross" size={15} />
-                </TouchableOpacity>
-                <TouchableOpacity onPress={like} style={styles.like}>
-                  <Entypo color="white" name="heart" size={15} />
-                </TouchableOpacity>
-              </View>
-            </ImageBackground>
-          ) : (
-            <ImageBackground
-              imageStyle={styles.imageStyle}
-              resizeMode="cover"
-              source={require('../assets/images/placeholder-profile.png')}
-              style={{ ...imageContainer }}
-            >
-              <View style={styles.infoCard}>
-                <Text style={{ color: Colors.black, fontSize: 10 }}>
-                  {getCardInfo()}
-                </Text>
-              </View>
-              <View style={styles.buttonsContainer}>
-                <TouchableOpacity onPress={dislike} style={styles.dislike}>
-                  <Entypo color="white" name="cross" size={15} />
-                </TouchableOpacity>
-                <TouchableOpacity onPress={like} style={styles.like}>
-                  <Entypo color="white" name="heart" size={15} />
-                </TouchableOpacity>
-              </View>
-            </ImageBackground>
-          )}
+          <FastImageBackground
+            containerStyle={
+              isGroup ? styles.groupImageContainer : styles.singleImageContainer
+            }
+            imageStyle={styles.imageStyle}
+            resizeMode={FastImage.resizeMode.cover}
+            source={
+              image
+                ? {
+                    uri: `${getImage(image)}`,
+                    priority: FastImage.priority.high,
+                  }
+                : require('../assets/images/placeholder-profile.png')
+            }
+          >
+            <View style={styles.infoCard}>
+              <Text style={{ color: Colors.black, fontSize: 10 }}>
+                {getCardInfo()}
+              </Text>
+            </View>
+            <View style={styles.buttonsContainer}>
+              <TouchableOpacity onPress={dislike} style={styles.dislike}>
+                <Entypo color="white" name="cross" size={15} />
+              </TouchableOpacity>
+              <TouchableOpacity onPress={like} style={styles.like}>
+                <Entypo color="white" name="heart" size={15} />
+              </TouchableOpacity>
+            </View>
+          </FastImageBackground>
         </TouchableOpacity>
       </View>
     </View>
@@ -143,6 +91,33 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginVertical: 2,
     width: '100%',
+  },
+  groupCard: {
+    width: '100%',
+    height: '100%',
+    borderRadius: 15,
+    backgroundColor: Colors.orange,
+  },
+  singleCard: {
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
+    borderRadius: 15,
+    backgroundColor: Colors.placeholder,
+  },
+  groupImageContainer: {
+    width: '100%',
+    height: '92%',
+    justifyContent: 'space-between',
+    alignItems: 'flex-end',
+    flexDirection: 'row',
+  },
+  singleImageContainer: {
+    width: '100%',
+    height: '100%',
+    justifyContent: 'space-between',
+    alignItems: 'flex-end',
+    flexDirection: 'row',
   },
   image: {
     width: '100%',

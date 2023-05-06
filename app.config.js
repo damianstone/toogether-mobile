@@ -8,7 +8,7 @@ export default () => ({
     slug: 'toogether-app',
     owner: 'damian_stone',
     privacy: 'public',
-    version: '1.0.0',
+    version: '1.1.0',
     orientation: 'portrait',
     icon: './assets/images/toogether-icon.png',
     platforms: ['ios', 'android'],
@@ -24,11 +24,6 @@ export default () => ({
     packagerOpts: {
       assetExts: ['png', 'js', 'jpg', 'tts'],
     },
-    ios: {
-      supportsTablet: false,
-      bundleIdentifier: 'toogether.app',
-      buildNumber: '1.0.4',
-    },
     android: {
       adaptiveIcon: {
         foregroundImage: './assets/images/toogether-icon.png',
@@ -36,7 +31,7 @@ export default () => ({
       },
       permissions: ['ACCESS_FINE_LOCATION', 'CAMERA', 'WRITE_EXTERNAL_STORAGE'],
       package: 'toogether.app',
-      versionCode: 202303270, // Using the date + T (try number) format YYYYMMDDT as version code.
+      versionCode: 202304260, // Using the date + T (try number) format YYYYMMDDT as version code.
     },
     web: {
       favicon: './assets/images/toogether-icon.png',

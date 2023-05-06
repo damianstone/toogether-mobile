@@ -4,15 +4,16 @@ import {
   StyleSheet,
   Text,
   View,
-  Image,
-  ScrollView,
   ActivityIndicator,
   RefreshControl,
   Alert,
+  Platform,
 } from 'react-native';
+import FastImage from 'react-native-fast-image';
 import { useDispatch, useSelector } from 'react-redux';
 import { useActionSheet } from '@expo/react-native-action-sheet';
-import { StackActions } from 'react-navigation';
+import { StackActions } from '@react-navigation/native';
+
 import {
   getGroup,
   leaveGroup,
@@ -20,17 +21,14 @@ import {
   deleteGroup,
 } from '../../store/actions/group';
 import { Context } from '../../context/ContextProvider';
-
-import Avatar from '../../components/UI/Avatar';
-import Loader from '../../components/UI/Loader';
-import ActionButton from '../../components/UI/ActionButton';
-import * as g from '../../constants/group';
 import { checkServerError, check400Error } from '../../utils/errors';
 import { getNameInitials, getCardName, getImage } from '../../utils/getMethods';
-
+import Loader from '../../components/UI/Loader';
+import ActionButton from '../../components/UI/ActionButton';
+import ClipBoard from '../../components/Group/ClipBoard';
+import MemberAvatar from '../../components/Group/MemberAvatar';
+import * as g from '../../constants/requestTypes/group';
 import Colors from '../../constants/Colors';
-import ClipBoard from '../../components/UI/ClipBoard';
-import MemberAvatar from '../../components/MemberAvatar';
 import Device from '../../theme/Device';
 
 const GroupScreen = (props) => {
@@ -76,20 +74,9 @@ const GroupScreen = (props) => {
     data: dataRemoveMember,
   } = removeMemberReducer;
 
-  // * this function replaces the first screen on the GroupNavigato stack
-  const replaceAction = StackActions.replace({
-    routeName: 'StartGroup',
-  });
-
   // we need to kepp calling the group if there is any change made by an external member
   useEffect(() => {
     dispatch(getGroup());
-  }, []);
-
-  useEffect(() => {
-    if (!groupContext) {
-      props.navigation.dispatch(replaceAction);
-    }
   }, []);
 
   // handle render after fetching the group
@@ -99,9 +86,6 @@ const GroupScreen = (props) => {
         check400Error(errorGroup);
       }
       checkServerError(errorGroup);
-    }
-    if (dataGroup) {
-      updateGroupContext(dataGroup);
     }
   }, [errorGroup, dataGroup]);
 
@@ -117,7 +101,7 @@ const GroupScreen = (props) => {
     if (dataDelete) {
       updateGroupContext(null);
       dispatch({ type: g.DELETE_GROUP_RESET });
-      props.navigation.dispatch(replaceAction);
+      props.navigation.dispatch(StackActions.replace('StartGroup'));
     }
   }, [errorDelete, dataDelete]);
 
@@ -133,7 +117,7 @@ const GroupScreen = (props) => {
     if (dataLeave) {
       updateGroupContext(null);
       dispatch({ type: g.LEAVE_GROUP_RESET });
-      props.navigation.dispatch(replaceAction);
+      props.navigation.dispatch(StackActions.replace('StartGroup'));
     }
   }, [errorLeave, dataLeave]);
 
@@ -258,7 +242,7 @@ const GroupScreen = (props) => {
     );
   };
 
-  if (loadingDelete || loadingLeave) {
+  if (loadingDelete || loadingLeave || loadingRemoveMember) {
     return (
       <View style={styles.loadingScreen}>
         <ActivityIndicator color={Colors.white} size="large" />
@@ -282,27 +266,17 @@ const GroupScreen = (props) => {
   };
 
   return (
-    <ScrollView
-      style={{ flex: 1, backgroundColor: Colors.bg }}
-      contentContainerStyle={styles.screen}
-      nestedScrollEnabled
-      refreshControl={
-        <RefreshControl
-          refreshing={refreshing}
-          onRefresh={loadGroup}
-          tintColor={Colors.white}
-        />
-      }
-    >
+    <View style={{ flex: 1, backgroundColor: Colors.bg }}>
       <View style={{ ...styles.action_view, ...HEIGHT_ACTION_CONTAINER }}>
         <View style={styles.profile_photo_container}>
           {!groupContext && <Loader />}
           {groupContext &&
             groupContext.owner.photos &&
             groupContext.owner.photos.length > 0 && (
-              <Image
+              <FastImage
                 source={{
                   uri: `${getImage(groupContext.owner.photos[0].image)}`,
+                  priority: FastImage.priority.normal,
                 }}
                 style={{ width: 150, height: 150, borderRadius: 100 }}
               />
@@ -326,7 +300,7 @@ const GroupScreen = (props) => {
         <View style={styles.buttons_container}>
           {isOwnerGroup && groupContext?.share_link && (
             <ClipBoard
-              text={groupContext.share_link}
+              groupCode={groupContext.share_link}
               backgroundColor={Colors.white}
             />
           )}
@@ -349,6 +323,11 @@ const GroupScreen = (props) => {
               backgroundColor={Colors.orange}
             />
           )}
+          {groupContext?.members.length < 1 && (
+            <Text style={{ fontSize: 10, color: Colors.placeholder }}>
+              Group incognito until 1 more member joins
+            </Text>
+          )}
         </View>
       </View>
       <View style={{ ...styles.members_view, ...HEIGHT_MEMBER_CARD_CONTAINER }}>
@@ -365,24 +344,18 @@ const GroupScreen = (props) => {
             data={groupContext.members}
             renderItem={renderMemberItem}
             keyExtractor={(item) => item.id}
+            refreshControl={
+              <RefreshControl
+                refreshing={refreshing}
+                onRefresh={loadGroup}
+                tintColor={Colors.white}
+              />
+            }
           />
         )}
       </View>
-    </ScrollView>
+    </View>
   );
-};
-
-GroupScreen.navigationOptions = (navData) => {
-  return {
-    headerTitle: 'Group',
-    headerLeft: () => (
-      <Avatar
-        onPress={() => {
-          navData.navigation.navigate('MyProfile');
-        }}
-      />
-    ),
-  };
 };
 
 export default GroupScreen;
@@ -450,6 +423,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.bgCard,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
+    marginTop: Platform.OS === 'ios' ? '0%' : '15%',
     padding: 10,
     zIndex: -1,
   },

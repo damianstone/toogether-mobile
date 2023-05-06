@@ -1,24 +1,19 @@
 import React, { useEffect } from 'react';
-import { StyleSheet, Alert, Platform, View } from 'react-native';
-import { HeaderButtons, Item } from 'react-navigation-header-buttons';
+import { StyleSheet, Alert, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { exist, checkMemberInGroup } from '../../utils/checks';
 import { getSwipeProfile } from '../../store/actions/swipe';
 
 import ActivityModal from '../../components/UI/ActivityModal';
-import HeaderButtom from '../../components/UI/HeaderButton';
 import Loader from '../../components/UI/Loader';
 import SwipeCard from '../../components/SwipeCard';
 import Colors from '../../constants/Colors';
-import * as w from '../../constants/swipe';
-
-// TODO: manage errors
+import * as w from '../../constants/requestTypes/swipe';
 
 const SwipeProfileScreen = (props) => {
+  const { mainProfileId, isInGroup, isMyProfile } = props.route.params;
+
   const dispatch = useDispatch();
-  const mainProfileId = props.navigation.getParam('mainProfileId');
-  const isInGroup = props.navigation.getParam('isInGroup');
-  const isMyProfile = props.navigation.getParam('isMyProfile');
 
   const currentSwipeProfile = useSelector((state) => state.getSwipeProfile);
 
@@ -161,24 +156,6 @@ const SwipeProfileScreen = (props) => {
       </View>
     </View>
   );
-};
-
-SwipeProfileScreen.navigationOptions = (navData) => {
-  return {
-    headerLeft: () => (
-      <HeaderButtons HeaderButtonComponent={HeaderButtom}>
-        <Item
-          iconName={
-            Platform.OS === 'android' ? 'ios-arrow-back' : 'ios-arrow-back'
-          }
-          onPress={() => {
-            navData.navigation.pop();
-          }}
-          title="Back arrow"
-        />
-      </HeaderButtons>
-    ),
-  };
 };
 
 export default SwipeProfileScreen;

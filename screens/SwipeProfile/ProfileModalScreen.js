@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import { StyleSheet, View, ImageBackground, Alert } from 'react-native';
 import Swiper from 'react-native-swiper';
 import { useDispatch, useSelector } from 'react-redux';
@@ -6,23 +6,20 @@ import { blockProfile } from '../../store/actions/block';
 import { like, listSwipe } from '../../store/actions/swipe';
 import { checkServerError, check400Error } from '../../utils/errors';
 import { getImage } from '../../utils/getMethods';
-import * as b from '../../constants/block';
-import * as r from '../../constants/user';
-import { userLocation } from '../../store/actions/user';
+import * as b from '../../constants/requestTypes/block';
+import * as r from '../../constants/requestTypes/user';
 import ActivityModal from '../../components/UI/ActivityModal';
 
 import DetailBottomSheet from '../../components/DetailBottomSheet';
 import Colors from '../../constants/Colors';
 import { reportProfile } from '../../store/actions/user';
+import FastImage from 'react-native-fast-image';
 
 const ProfileScreen = (props) => {
-  const dispatch = useDispatch();
-  const profile = props.navigation.getParam('profile');
-  const isGroup = props.navigation.getParam('isGroup');
-  const preview = props.navigation.getParam('preview');
-  const isMyProfile = props.navigation.getParam('isMyProfile');
+  const { profile, isGroup, preview, isMyProfile, currentRef } =
+    props.route.params;
 
-  const currentRef = props.navigation.getParam('currentRef');
+  const dispatch = useDispatch();
 
   const blockProfileReducer = useSelector((state) => state.blockProfile);
   const {
@@ -207,12 +204,15 @@ const ProfileScreen = (props) => {
         >
           {profile?.photos?.length > 0 ? (
             profile.photos.map((photo) => (
-              <ImageBackground
+              <FastImage
                 key={profile.id}
                 style={styles.image}
                 imageStyle={styles.imageStyle}
-                source={{ uri: `${getImage(photo.image)}` }}
-                resizeMode="cover"
+                source={{
+                  uri: `${getImage(photo.image)}`,
+                  priority: FastImage.priority.high,
+                }}
+                resizeMode={FastImage.resizeMode.cover}
               />
             ))
           ) : (

@@ -8,19 +8,16 @@ import {
   FlatList,
   RefreshControl,
   StyleSheet,
-  Platform,
   TouchableOpacity,
 } from 'react-native';
-import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import { useDispatch, useSelector } from 'react-redux';
 import { listMatches, deleteMatch } from '../store/actions/swipe';
 import { blockProfile } from '../store/actions/block';
 import { checkServerError, check400Error } from '../utils/errors';
 
-import * as w from '../constants/swipe';
-import * as b from '../constants/block';
-import HeaderButtom from '../components/UI/HeaderButton';
+import * as w from '../constants/requestTypes/swipe';
+import * as b from '../constants/requestTypes/block';
 import ChatAvatar from '../components/ChatAvatar';
 import Colors from '../constants/Colors';
 
@@ -93,7 +90,12 @@ const ChatScreen = (props) => {
     const unsubscribe = props.navigation.addListener('didFocus', () => {
       reload();
     });
-    return () => unsubscribe;
+
+    return () => {
+      if (unsubscribe.remove) {
+        unsubscribe.remove();
+      }
+    };
   }, [reload]);
 
   const reload = useCallback(async () => {
@@ -288,25 +290,6 @@ const ChatScreen = (props) => {
       </View>
     </View>
   );
-};
-
-ChatScreen.navigationOptions = (navData) => {
-  return {
-    headerTitle: 'Matches',
-    headerLeft: () => (
-      <HeaderButtons HeaderButtonComponent={HeaderButtom}>
-        <Item
-          iconName={
-            Platform.OS === 'android' ? 'ios-arrow-back' : 'ios-arrow-back'
-          }
-          onPress={() => {
-            navData.navigation.goBack(null);
-          }}
-          title="Back arrow"
-        />
-      </HeaderButtons>
-    ),
-  };
 };
 
 export default ChatScreen;

@@ -1,4 +1,4 @@
-import * as c from '../../constants/user';
+import * as c from '../../constants/requestTypes/user';
 
 export const userLocationReducer = (state = {}, action) => {
   switch (action.type) {
@@ -20,79 +20,6 @@ export const userLocationReducer = (state = {}, action) => {
   }
 };
 
-// -------------------------------- LOGIN / REGISTER REDUCERS --------------------------------
-export const authenticateReducer = (state = {}, action) => {
-  switch (action.type) {
-    case c.AUTHENTICATE:
-      return {
-        userData: { ...action.payload },
-      };
-    default:
-      return state;
-  }
-};
-
-export const userRegisterReducer = (state = {}, action) => {
-  switch (action.type) {
-    case c.USER_REGISTER_REQUEST:
-      return {
-        loading: true,
-      };
-    case c.USER_REGISTER_SUCCESS:
-      return {
-        data: { ...action.payload },
-      };
-    case c.USER_REGISTER_FAIL:
-      return {
-        loading: false,
-        error: action.payload,
-      };
-    case c.USER_REGISTER_RESET:
-      return {};
-    default:
-      return state;
-  }
-};
-
-export const userLoginReducer = (state = {}, action) => {
-  switch (action.type) {
-    case c.USER_LOGIN_REQUEST:
-      return {
-        loading: true,
-        success: false,
-      };
-    case c.USER_LOGIN_SUCCESS:
-      return {
-        data: { ...action.payload },
-        success: true,
-      };
-    case c.USER_LOGIN_FAIL:
-      return {
-        loading: false,
-        error: action.payload,
-      };
-    case c.USER_LOGIN_RESET:
-      return {};
-    default:
-      return state;
-  }
-};
-
-export const tokenRefreshReducer = (state = {}, action) => {
-  switch (action.type) {
-    case c.REFRESH_TOKEN_REQUEST:
-      return {
-        loading: true,
-      };
-    case c.REFRESH_TOKEN_SUCCESS:
-      return {
-        data: { ...action.payload, updated: true },
-      };
-    default:
-      return state;
-  }
-};
-
 export const userDeleteReducer = (state = {}, action) => {
   switch (action.type) {
     case c.USER_DELETE_REQUEST:
@@ -108,6 +35,8 @@ export const userDeleteReducer = (state = {}, action) => {
         loading: false,
         error: action.payload,
       };
+    case c.USER_DELETE_RESET:
+      return {};
     default:
       return state;
   }
@@ -265,6 +194,73 @@ export const reportProfileReducer = (state = {}, action) => {
         error: action.payload,
       };
     case c.REPORT_PROFILE_RESET:
+      return {};
+    default:
+      return state;
+  }
+};
+
+export const sendRecoveryCodeReducer = (state = {}, action) => {
+  switch (action.type) {
+    case c.RECOVER_CODE_REQUEST:
+      return {
+        loading: true,
+      };
+    case c.RECOVERY_CODE_SUCCESS:
+      return {
+        data: { ...action.payload },
+      };
+    case c.RECOVERY_CODE_FAIL:
+      return {
+        loading: false,
+        error: action.payload,
+      };
+    case c.RECOVERY_CODE_RESET:
+      return {};
+
+    default:
+      return state;
+  }
+};
+
+export const validateCodeReducer = (state = {}, action) => {
+  switch (action.type) {
+    case c.VALIDATE_CODE_REQUEST:
+      return {
+        loading: true,
+      };
+    case c.VALIDATE_CODE_SUCCESS:
+      return {
+        data: { ...action.payload },
+      };
+    case c.VALIDATE_CODE_FAIL:
+      return {
+        loading: false,
+        error: action.payload,
+      };
+    case c.VALIDATE_CODE_RESET:
+      return {};
+    default:
+      return state;
+  }
+};
+
+export const changePasswordReducer = (state = {}, action) => {
+  switch (action.type) {
+    case c.CHANGE_PASSWORD_REQUEST:
+      return {
+        loading: true,
+      };
+    case c.CHANGE_PASSWORD_SUCCESS:
+      return {
+        data: { ...action.payload },
+      };
+    case c.CHANGE_PASSWORD_FAIL:
+      return {
+        loading: false,
+        error: action.payload,
+      };
+    case c.CHANGE_PASSWORD_RESET:
       return {};
     default:
       return state;
