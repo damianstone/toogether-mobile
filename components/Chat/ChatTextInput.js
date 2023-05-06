@@ -1,15 +1,21 @@
-import { StyleSheet, TextInput, TouchableOpacity, View, Image, ScrollView } from "react-native";
-import { useEffect, useState, useRef } from "react";
+import { useRef } from 'react';
+import {
+  StyleSheet,
+  TextInput,
+  TouchableOpacity,
+  View,
+  Image,
+  ScrollView,
+} from 'react-native';
 
-import Colors from "../../constants/Colors";
+import Colors from '../../constants/Colors';
 import sendimg from '../../assets/images/send-button.png';
 
-const ChatTextInput = (props) => {
-  const { chatMessage, setChatMessage, handleSendMessage } = props;
+const ChatTextInput = ({ chatMessage, setChatMessage, handleSendMessage }) => {
   const scrollViewRef = useRef(null);
 
   const handleTextChange = (newText) => {
-    setChatMessage(newText)
+    setChatMessage(newText);
   };
 
   const scrollToBottom = () => {
@@ -23,19 +29,16 @@ const ChatTextInput = (props) => {
       <ScrollView
         ref={scrollViewRef}
         style={styles.inputContainer}
-        // contentContainerStyle={{ flexGrow: 1 }}
-        onContentSizeChange={scrollToBottom}
-      >
+        onContentSizeChange={scrollToBottom}>
         <TextInput
-            inputMode="text,url"
-            style={[styles.inputMessage]}
-            placeholder="Type a message"
-            placeholderTextColor={Colors.placeholder}
-            onChangeText={(text) => handleTextChange(text)}
-            value={chatMessage}
-            autoCorrect={false}
-            maxLength={1000}
-            multiline
+          inputMode="text,url"
+          style={[styles.inputMessage]}
+          placeholderTextColor={Colors.placeholder}
+          onChangeText={(text) => handleTextChange(text)}
+          value={chatMessage}
+          autoCorrect={false}
+          maxLength={1000}
+          multiline
         />
       </ScrollView>
       <TouchableOpacity
@@ -45,13 +48,13 @@ const ChatTextInput = (props) => {
       </TouchableOpacity>
     </View>
   );
-} 
+};
 
 export default ChatTextInput;
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: 'row', 
+    flexDirection: 'row',
     paddingBottom: 10,
     paddingHorizontal: 6,
   },

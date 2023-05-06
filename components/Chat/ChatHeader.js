@@ -6,17 +6,20 @@ import {
   ImageBackground,
   StyleSheet,
   TouchableOpacity,
-  Image,
   Platform,
 } from 'react-native';
 import { Entypo } from '@expo/vector-icons';
-import { checkPhoto } from '../utils/checks';
-import Colors from '../constants/Colors';
+import { checkPhoto } from '../../utils/checks';
+import Colors from '../../constants/Colors';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
-import HeaderButtom from './UI/HeaderButton';
-const ChatHeader = (props) => {
-  const { receiverData, onShowProfile, onGoBack, onActionSheet } = props;
+import HeaderButtom from '../UI/HeaderButton';
 
+const ChatHeader = ({
+  receiverData,
+  onShowProfile,
+  onGoBack,
+  onActionSheet,
+}) => {
   return (
     <View style={styles.headerContainer}>
       <HeaderButtons HeaderButtonComponent={HeaderButtom}>
@@ -28,28 +31,26 @@ const ChatHeader = (props) => {
           onPress={onGoBack}
         />
       </HeaderButtons>
-      <TouchableOpacity 
+      <TouchableOpacity
         style={styles.profilePictureButton}
-        onPress={onShowProfile}
-      >
+        onPress={onShowProfile}>
         <ImageBackground
-          source={require('../assets/images/placeholder-profile.png')}
+          source={checkPhoto(receiverData)}
           imageStyle={styles.img}
-          style={styles.singleImageContainer}/>
+          style={styles.singleImageContainer}
+        />
       </TouchableOpacity>
       <View style={styles.textContainer}>
-        <TouchableOpacity 
+        <TouchableOpacity
           style={styles.profileInfoContainer}
-          onPress={onShowProfile}
-        >
-          <Text
-            numberOfLines={1} 
-            style={styles.matched_Name}
-          >
+          onPress={onShowProfile}>
+          <Text numberOfLines={1} style={styles.matched_Name}>
             {receiverData?.name}
           </Text>
           {receiverData.is_in_group && (
-            <Text style={styles.groupMemberCounterText}>{receiverData.member_count} member group</Text>
+            <Text style={styles.groupMemberCounterText}>
+              {receiverData.member_count} member group
+            </Text>
           )}
         </TouchableOpacity>
       </View>
@@ -64,8 +65,6 @@ export default ChatHeader;
 
 const styles = StyleSheet.create({
   headerContainer: {
-    // borderColor: 'white',
-    // borderWidth: 1,
     flexDirection: 'row',
     paddingTop: Constants.statusBarHeight + 15,
     paddingBottom: 5,
@@ -103,20 +102,16 @@ const styles = StyleSheet.create({
     width: '60%',
     marginTop: 5,
     paddingLeft: 8,
-    // paddingRight: '12%',
   },
 
   profileInfoContainer: {
-    // borderColor: 'white',
-    // borderWidth: 1,
     maxWidth: '100%',
+    marginLeft: 10,
   },
 
   groupMemberCounterText: {
-    // alignSelf: 'center',
     color: Colors.orange,
     fontSize: 12,
-    marginLeft: 8,
   },
 
   noPhotoContainer: {

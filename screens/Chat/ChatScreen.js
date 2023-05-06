@@ -4,21 +4,13 @@ import {
   View,
   StyleSheet,
   Image,
-  TouchableOpacity,
   FlatList,
-  TextInput,
   Text,
 } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { Context } from '../../context/ContextProvider';
-import { checkServerError } from '../../utils/errors';
 import { useActionSheet } from '@expo/react-native-action-sheet';
-import ActivityModal from '../../components/UI/ActivityModal';
-import Colors from '../../constants/Colors';
-import sendimg from '../../assets/images/send-button.png';
-import Message from '../../components/Message';
-import ChatHeader from '../../components/ChatHeader';
-import ChatTextInput from '../../components/Chat/ChatTextInput';
+
 import {
   addConversationMessage,
   listMessages,
@@ -27,10 +19,18 @@ import {
 } from '../../store/actions/conversation';
 import { blockProfile } from '../../store/actions/block';
 import { reportProfile } from '../../store/actions/user';
+import { checkServerError } from '../../utils/errors';
+import ActivityModal from '../../components/UI/ActivityModal';
+import Colors from '../../constants/Colors';
+import Message from '../../components/Chat/Message';
+import ChatHeader from '../../components/Chat/ChatHeader';
+import ChatTextInput from '../../components/Chat/ChatTextInput';
 import * as u from '../../constants/requestTypes/user';
 import * as b from '../../constants/requestTypes/block';
 import * as c from '../../constants/requestTypes/conversation';
 import { ENV } from '../../environment';
+
+
 const BASE_URL = ENV.API_URL;
 
 API_URL = BASE_URL.replace('http://', '');
@@ -332,8 +332,8 @@ const ChatScreen = (props) => {
   ) {
     <ActivityModal
       loading
-      title="Please wait"
-      size="large"
+      title="Laoding"
+      size="small"
       activityColor="white"
       titleColor="white"
       activityWrapperStyle={{
@@ -347,6 +347,8 @@ const ChatScreen = (props) => {
       dispatch(loadMoreMessages(messagesData.next));
     }
   };
+
+
   const renderMessages = ({ item }) => {
     return (
       <Message

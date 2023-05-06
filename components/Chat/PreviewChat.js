@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React from 'react';
 import {
   Text,
   View,
@@ -6,9 +6,7 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from 'react-native';
-
-import { getNameInitials, getImage } from '../utils/getMethods';
-import Colors from '../constants/Colors';
+import Colors from '../../constants/Colors';
 
 const PreviewChat = (props) => {
   const { receiverProfile, onShowProfile, data, onShowChat } = props;
@@ -22,18 +20,18 @@ const PreviewChat = (props) => {
   return (
     <View style={styles.container}>
       <View>
-        <TouchableOpacity onPress={onShowProfile} style={styles.chat_profile_head}>
+        <TouchableOpacity
+          onPress={onShowProfile}
+          style={styles.chat_profile_head}>
           <ImageBackground
-            source={require('../assets/images/placeholder-profile.png')}
+            source={require('../../assets/images/placeholder-profile.png')}
             imageStyle={styles.img}
             style={styles.singleImageContainer}
             onPress={onShowProfile}></ImageBackground>
         </TouchableOpacity>
         {isGroup && (
           <View style={styles.chat_group_size_container}>
-            <Text style={styles.chat_group_size_number}>
-              {groupSize}
-            </Text>
+            <Text style={styles.chat_group_size_number}>{groupSize}</Text>
           </View>
         )}
       </View>

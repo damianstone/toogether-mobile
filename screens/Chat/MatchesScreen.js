@@ -30,15 +30,14 @@ import {
 import { checkServerError, check400Error } from '../../utils/errors';
 import no_chats from '../../assets/images/no-chats.png';
 import ActivityModal from '../../components/UI/ActivityModal';
-import MatchCounter from '../../components/MatchCounter';
-import MatchAvatar from '../../components/MatchAvatar';
-import PreviewChat from '../../components/PreviewChat';
+import MatchCounter from '../../components/Chat/MatchCounter';
+import MatchAvatar from '../../components/Chat/MatchAvatar';
+import PreviewChat from '../../components/Chat/PreviewChat';
 import * as conv from '../../constants/requestTypes/conversation';
 
 const MatchesScreen = (props) => {
   const { showActionSheetWithOptions } = useActionSheet();
   const dispatch = useDispatch();
-  const [localLoading, setLocalLoading] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
   const isVisible = useIsFocused();
 
@@ -74,7 +73,6 @@ const MatchesScreen = (props) => {
 
   useEffect(() => {
     reload();
-    reloadChats();
   }, [isVisible]);
 
   useEffect(() => {
@@ -118,23 +116,14 @@ const MatchesScreen = (props) => {
   }, [dataStartedConversation, errorStartedConversations]);
 
   const reload = useCallback(async () => {
-    setLocalLoading(true);
+    setRefreshing(true);
     try {
       dispatch(listMatches());
-    } catch (err) {
-      console.log(err);
-    }
-    setLocalLoading(false);
-  }, [dispatch]);
-
-  const reloadChats = useCallback(async () => {
-    setLocalLoading(true);
-    try {
       dispatch(listMyConversations());
     } catch (err) {
       console.log(err);
     }
-    setLocalLoading(false);
+    setRefreshing(false);
   }, [dispatch]);
 
   const handleShowProfile = (profile, isInGroup) => {
@@ -160,42 +149,7 @@ const MatchesScreen = (props) => {
       });
     }
   };
-  const handleDeleteMatch = async (matchId) => {
-    if (matchId) {
-      await dispatch(deleteMatch(matchId));
-    }
 
-    if (matchDeleted) {
-      dispatch({ type: w.DELETE_MATCH_RESET });
-      return dispatch(listMatches());
-    }
-    return null;
-  };
-
-  if (
-    loadingListMatches ||
-    loadingDeleteMatch ||
-    localLoading ||
-    loadingListConversations
-  ) {
-    return (
-      <SafeAreaView style={styles.safe}>
-        <StatusBar style="light" />
-        <View style={styles.screen}>
-          <ActivityModal
-            loading
-            title="Loading"
-            size="small"
-            activityColor="white"
-            titleColor="white"
-            activityWrapperStyle={{
-              backgroundColor: 'transparent',
-            }}
-          />
-        </View>
-      </SafeAreaView>
-    );
-  }
   const handleLoadMoreMatches = () => {
     if (matches.next) {
       dispatch(loadMoreMatches(matches.next));
@@ -226,17 +180,6 @@ const MatchesScreen = (props) => {
     );
   };
 
-  const renderNoChats = () => {
-    return (
-      <View style={styles.noChatsContainer}>
-        <View style={{ width: 200, height: 200 }}>
-          <Image source={no_chats} style={styles.noChatsImage} />
-        </View>
-        <Text style={styles.noChatText}>No chats yet</Text>
-      </View>
-    );
-  };
-
   const renderPreviewChats = ({ item }) => {
     return (
       <PreviewChat
@@ -250,16 +193,52 @@ const MatchesScreen = (props) => {
     );
   };
 
+  const renderNoChats = () => {
+    return (
+      <View style={styles.noChatsContainer}>
+        <View style={{ width: 200, height: 200 }}>
+          <Image source={no_chats} style={styles.noChatsImage} />
+        </View>
+        <Text style={styles.noChatText}>No chats yet</Text>
+      </View>
+    );
+  };
+
+  if (
+    loadingListMatches ||
+    loadingDeleteMatch ||
+    refreshing ||
+    loadingListConversations
+  ) {
+    return (
+      <SafeAreaView style={styles.safe}>
+        <StatusBar style="light" />
+        <View style={styles.screen}>
+          <ActivityModal
+            loading
+            title="Loading"
+            size="small"
+            activityColor="white"
+            titleColor="white"
+            activityWrapperStyle={{
+              backgroundColor: 'transparent',
+            }}
+          />
+        </View>
+      </SafeAreaView>
+    );
+  }
+
   return (
     <SafeAreaView style={styles.safe}>
       <StatusBar style="light" />
       <View style={styles.screen}>
         <View>
           <Text style={styles.title}> New Matches</Text>
-          {!localLoading && (
+          {!refreshing && (
             <FlatList
               ListHeaderComponentStyle={styles.listHeader}
-              ListHeaderComponent={<MatchCounter data={matches} />}
+              ListHeaderComponent={<MatchCounter matches={matches} />}
               refreshControl={
                 <RefreshControl
                   refreshing={refreshing}
@@ -281,68 +260,42 @@ const MatchesScreen = (props) => {
         </View>
         <View style={styles.chat_preview}>
           <Text style={styles.title}> Chats</Text>
-          {conversations?.results.length == 0 
-            ? 
-            (
-              <View style={styles.noChatsContainer}>
-                <Image
-                  style={styles.noChatsImage}
-                  source={require('../../assets/images/no-chats.png')}
-                />
-                <Text
-                  style={styles.noChatText}
-                >
-                  No chats yet
-                </Text>
-              </View>
+          {conversations?.results.length == 0 ? (
+            <View style={styles.noChatsContainer}>
+              <Image
+                style={styles.noChatsImage}
+                source={require('../../assets/images/no-chats.png')}
+              />
+              <Text style={styles.noChatText}>No chats yet</Text>
+            </View>
+          ) : (
+            !loadingListConversations &&
+            conversations && (
+              <FlatList
+                refreshControl={
+                  <RefreshControl
+                    refreshing={refreshing}
+                    onRefresh={reload}
+                    tintColor={Colors.white}
+                  />
+                }
+                keyExtractor={(item) => item?.id.toString()}
+                contentContainerStyle={styles.chats}
+                data={conversations?.results}
+                renderItem={renderPreviewChats}
+                ListEmptyComponent={renderNoChats}
+                extraData={conversations}
+                onEndReached={handleLoadMoreConversations}
+                onEndReachedThreshold={0.3}
+              />
             )
-            : 
-            (
-              !loadingListConversations && conversations && (
-                <FlatList
-                  refreshControl={
-                    <RefreshControl
-                      refreshing={refreshing}
-                      onRefresh={reloadChats}
-                      tintColor={Colors.white}
-                    />
-                  }
-                  keyExtractor={(item) => item?.id.toString()}
-                  contentContainerStyle={styles.chats}
-                  data={conversations?.results}
-                  renderItem={renderPreviewChats}
-                  ListEmptyComponent={renderNoChats}
-                  extraData={conversations}
-                  onEndReached={handleLoadMoreConversations}
-                  onEndReachedThreshold={0.3}
-                />
-              )
-            )
-          }
+          )}
         </View>
       </View>
     </SafeAreaView>
   );
 };
 
-MatchesScreen.navigationOptions = (navData) => {
-  return {
-    headerTitle: 'Matches',
-    headerLeft: () => (
-      <HeaderButtons HeaderButtonComponent={HeaderButtom}>
-        <Item
-          iconName={
-            Platform.OS === 'android' ? 'ios-arrow-back' : 'ios-arrow-back'
-          }
-          onPress={() => {
-            navData.navigation.navigate('Swipe');
-          }}
-          title="Back arrow"
-        />
-      </HeaderButtons>
-    ),
-  };
-};
 export default MatchesScreen;
 
 const styles = StyleSheet.create({

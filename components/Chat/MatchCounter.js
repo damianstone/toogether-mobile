@@ -1,25 +1,14 @@
-import React, { useState } from 'react';
-import {
-  Text,
-  View,
-  ImageBackground,
-  StyleSheet,
-  TouchableOpacity,
-} from 'react-native';
-import Colors from '../constants/Colors';
+import React from 'react';
+import { Text, StyleSheet, TouchableOpacity } from 'react-native';
+import Colors from '../../constants/Colors';
 
-const MatchCounter = (props) => {
-  const matches = props.data;
-
+const MatchCounter = ({ matches }) => {
   return (
     <TouchableOpacity style={styles.noPhotoContainer}>
       {matches?.count == 0 ? (
         <Text style={styles.textCounter}>0</Text>
       ) : (
-        <Text style={styles.textCounter}>
-          {/* <Text style={styles.plus}>+</Text> */}
-          {matches?.count}
-        </Text>
+        <Text style={styles.textCounter}>{matches?.count}</Text>
       )}
     </TouchableOpacity>
   );

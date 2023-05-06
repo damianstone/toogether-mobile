@@ -2,9 +2,9 @@ import React from 'react';
 import { Text, View, StyleSheet, TouchableOpacity } from 'react-native';
 import FastImage from 'react-native-fast-image';
 
-import { getNameInitials, getImage } from '../utils/getMethods';
-import Colors from '../constants/Colors';
-import FastImageBackground from './UI/FastImageBackground';
+import { getNameInitials, getImage } from '../../utils/getMethods';
+import Colors from '../../constants/Colors';
+import FastImageBackground from '../UI/FastImageBackground';
 
 const ChatAvatar = (props) => {
   const {

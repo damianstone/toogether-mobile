@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React from 'react';
 import {
   Text,
   View,
@@ -7,20 +7,17 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
-import { checkPhoto } from '../utils/checks';
+import { checkPhoto } from '../../utils/checks';
+import Colors from '../../constants/Colors';
 
-import Colors from '../constants/Colors';
-
-const Message = (props) => {
-  const {
-    isMyMessage,
-    message,
-    onShowProfile,
-    receiverData,
-    ownProfile,
-    isPrevMessageFromCurrentUser,
-  } = props;
-
+const Message = ({
+  isMyMessage,
+  message,
+  onShowProfile,
+  receiverData,
+  ownProfile,
+  isPrevMessageFromCurrentUser,
+}) => {
   return (
     <View
       style={[
@@ -61,9 +58,9 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     flex: 1,
     alignContent: 'center',
-    maxWidth: '70%',
+    maxWidth: '75%',
     flexDirection: 'row',
-    alignItems: 'baseline',
+    alignItems: 'flex-end',
   },
 
   sameSender: {

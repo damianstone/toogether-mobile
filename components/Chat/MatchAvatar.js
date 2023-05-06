@@ -7,8 +7,8 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
-import { checkPhoto } from '../utils/checks';
-import Colors from '../constants/Colors';
+import { checkPhoto } from '../../utils/checks';
+import Colors from '../../constants/Colors';
 
 const MatchAvatar = (props) => {
   const { matchedProfile, onShowChat } = props;

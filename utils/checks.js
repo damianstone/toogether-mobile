@@ -116,7 +116,7 @@ export const checkMemberInGroup = (memberId, groupMembers) => {
 };
 
 export const checkPhoto = (profile) => {
-  if (profile && profile.photos.length > 0) {
+  if (profile && profile.photos?.length > 0) {
     return { uri: `${getImage(profile.photos[0]?.image)}` };
   }
   if (profile && profile?.photo) {
