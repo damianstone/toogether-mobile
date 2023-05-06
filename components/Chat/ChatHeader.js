@@ -6,17 +6,20 @@ import {
   ImageBackground,
   StyleSheet,
   TouchableOpacity,
-  Image,
   Platform,
 } from 'react-native';
 import { Entypo } from '@expo/vector-icons';
-import { checkPhoto } from '../utils/checks';
-import Colors from '../constants/Colors';
+import { checkPhoto } from '../../utils/checks';
+import Colors from '../../constants/Colors';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
-import HeaderButtom from './UI/HeaderButton';
-const ChatHeader = (props) => {
-  const { receiverData, onShowProfile, onGoBack, onActionSheet } = props;
+import HeaderButtom from '../UI/HeaderButton';
 
+const ChatHeader = ({
+  receiverData,
+  onShowProfile,
+  onGoBack,
+  onActionSheet,
+}) => {
   return (
     <View style={styles.headerContainer}>
       <HeaderButtons HeaderButtonComponent={HeaderButtom}>
@@ -28,19 +31,28 @@ const ChatHeader = (props) => {
           onPress={onGoBack}
         />
       </HeaderButtons>
-      <TouchableOpacity onPress={onShowProfile}>
+      <TouchableOpacity
+        style={styles.profilePictureButton}
+        onPress={onShowProfile}>
         <ImageBackground
-          source={require('../assets/images/placeholder-profile.png')}
+          source={checkPhoto(receiverData)}
           imageStyle={styles.img}
-          style={styles.singleImageContainer}></ImageBackground>
+          style={styles.singleImageContainer}
+        />
       </TouchableOpacity>
       <View style={styles.textContainer}>
-        <Text style={styles.matched_Name}>
-          {receiverData?.name}
-        </Text>
-        {receiverData.is_in_group && (
-          <Text style={styles.groupMemberCounterText}>{receiverData.member_count} member group</Text>
-        )}
+        <TouchableOpacity
+          style={styles.profileInfoContainer}
+          onPress={onShowProfile}>
+          <Text numberOfLines={1} style={styles.matched_Name}>
+            {receiverData?.name}
+          </Text>
+          {receiverData.is_in_group && (
+            <Text style={styles.groupMemberCounterText}>
+              {receiverData.member_count} member group
+            </Text>
+          )}
+        </TouchableOpacity>
       </View>
       <TouchableOpacity style={styles.menuIcon} onPress={onActionSheet}>
         <Entypo name="dots-three-vertical" size={24} color="grey" />
@@ -57,7 +69,6 @@ const styles = StyleSheet.create({
     paddingTop: Constants.statusBarHeight + 15,
     paddingBottom: 5,
     width: '100%',
-    // alignItems: 'flex-end',
   },
 
   singleImageContainer: {
@@ -66,7 +77,18 @@ const styles = StyleSheet.create({
     borderRadius: 100,
     justifyContent: 'center',
     alignItems: 'center',
-    marginHorizontal: 20,
+    marginRight: 8,
+  },
+
+  headerProfileContainer: {
+    width: '75%',
+    height: '100%',
+    flexDirection: 'row',
+  },
+
+  profilePictureButton: {
+    alignSelf: 'flex-start',
+    width: '12%',
   },
 
   img: {
@@ -76,14 +98,20 @@ const styles = StyleSheet.create({
   },
 
   textContainer: {
-    width: '58%',
+    alignSelf: 'center',
+    width: '60%',
     marginTop: 5,
+    paddingLeft: 8,
+  },
+
+  profileInfoContainer: {
+    maxWidth: '100%',
+    marginLeft: 10,
   },
 
   groupMemberCounterText: {
     color: Colors.orange,
     fontSize: 12,
-    marginLeft: 8,
   },
 
   noPhotoContainer: {
@@ -97,10 +125,13 @@ const styles = StyleSheet.create({
   },
 
   menuIcon: {
+    paddingLeft: 24,
     alignSelf: 'center',
   },
 
   matched_Name: {
+    maxWidth: '100%',
+    // alignSelf: 'center',
     fontSize: 18,
     color: 'white',
     fontWeight: 'bold',
