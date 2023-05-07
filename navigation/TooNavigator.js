@@ -16,8 +16,6 @@ import Colors from '../constants/Colors';
 import SwipeProfileScreen from '../screens/SwipeProfile/SwipeProfileScreen';
 import ProfileModalScreen from '../screens/SwipeProfile/ProfileModalScreen';
 
-import MatchScreen from '../screens/Match/MatchScreen';
-
 import AuthScreen from '../screens/Auth/AuthScreen';
 import AuthStartScreen from '../screens/Auth/AuthStartScreen';
 import AuthSucess from '../screens/Auth/AuthSuccess';
@@ -43,6 +41,7 @@ import ChangePasswordScreen from '../screens/Recovery/ChangePasswordScreen';
 
 import ChatScreen from '../screens/Chat/ChatScreen';
 import MatchesScreen from '../screens/Chat/MatchesScreen';
+import ItsMatchScreenModal from '../screens/ItsMatchModal/ItsMatchScreenModal';
 
 import Avatar from '../components/UI/Avatar';
 import HeaderButtom from '../components/UI/HeaderButton';
@@ -543,7 +542,7 @@ const HomeNavigator = () => {
       />
       <Stack.Screen
         name="SwipeMatch"
-        component={MatchScreen}
+        component={ItsMatchScreenModal}
         options={{ presentation: 'modal' }}
       />
     </Stack.Navigator>
