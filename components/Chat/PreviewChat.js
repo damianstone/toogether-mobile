@@ -6,6 +6,8 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from 'react-native';
+
+import { checkPhoto } from '../../utils/checks';
 import Colors from '../../constants/Colors';
 
 const PreviewChat = (props) => {
@@ -24,10 +26,11 @@ const PreviewChat = (props) => {
           onPress={onShowProfile}
           style={styles.chat_profile_head}>
           <ImageBackground
-            source={require('../../assets/images/placeholder-profile.png')}
+            source={checkPhoto(receiverProfile)}
             imageStyle={styles.img}
             style={styles.singleImageContainer}
-            onPress={onShowProfile}></ImageBackground>
+            onPress={onShowProfile}
+          />
         </TouchableOpacity>
         {isGroup && (
           <View style={styles.chat_group_size_container}>
@@ -163,7 +166,7 @@ const styles = StyleSheet.create({
 
   divider: {
     borderBottomWidth: 0.5,
-    borderBottomColor: Colors.white,
+    borderBottomColor: Colors.lightGray,
     width: '75%',
   },
 });

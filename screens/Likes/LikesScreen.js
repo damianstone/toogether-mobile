@@ -83,7 +83,7 @@ const LikesScreen = (props) => {
     }
 
     if (alreadyMatched(likeData)) {
-      props.navigation.navigate('Chat');
+      return;
     }
 
     dispatch({ type: w.LIKE_PROFILE_RESET });

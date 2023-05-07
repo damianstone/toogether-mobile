@@ -234,7 +234,7 @@ const MatchesScreen = (props) => {
       <StatusBar style="light" />
       <View style={styles.screen}>
         <View>
-          <Text style={styles.title}> New Matches</Text>
+          <Text style={styles.title}>Matches</Text>
           {!refreshing && (
             <FlatList
               ListHeaderComponentStyle={styles.listHeader}
@@ -255,6 +255,7 @@ const MatchesScreen = (props) => {
               extraData={matches}
               onEndReached={handleLoadMoreMatches}
               onEndReachedThreshold={0.3}
+              showsHorizontalScrollIndicator={false}
             />
           )}
         </View>
@@ -287,6 +288,7 @@ const MatchesScreen = (props) => {
                 extraData={conversations}
                 onEndReached={handleLoadMoreConversations}
                 onEndReachedThreshold={0.3}
+                showsVerticalScrollIndicator={false}
               />
             )
           )}
@@ -312,7 +314,7 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     bottom: 10,
-    paddingHorizontal: 10,
+    paddingHorizontal: 20,
   },
 
   text: {

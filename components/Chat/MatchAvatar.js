@@ -1,11 +1,5 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import {
-  Text,
-  View,
-  ImageBackground,
-  StyleSheet,
-  TouchableOpacity,
-} from 'react-native';
+import React from 'react';
+import { ImageBackground, StyleSheet, TouchableOpacity } from 'react-native';
 
 import { checkPhoto } from '../../utils/checks';
 import Colors from '../../constants/Colors';
@@ -17,7 +11,8 @@ const MatchAvatar = (props) => {
       <ImageBackground
         source={checkPhoto(matchedProfile)}
         imageStyle={styles.img}
-        style={styles.singleImageContainer}></ImageBackground>
+        style={styles.singleImageContainer}
+      />
     </TouchableOpacity>
   );
 };

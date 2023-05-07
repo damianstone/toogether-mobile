@@ -5,6 +5,7 @@ import {
   ImageBackground,
   StyleSheet,
   TouchableOpacity,
+  Linking,
 } from 'react-native';
 
 import { checkPhoto } from '../../utils/checks';
@@ -18,6 +19,40 @@ const Message = ({
   ownProfile,
   isPrevMessageFromCurrentUser,
 }) => {
+  const formatWithLink = (text) => {
+    if (!text || typeof text !== 'string') {
+      return text;
+    }
+
+    const urlRegex = /(https?:\/\/[^\s]+)/gi;
+    const words = text?.split(' ');
+
+    // Open clickable links in browser
+    const onLinkPress = (url) => {
+      Linking.canOpenURL(url).then((supported) => {
+        if (supported) {
+          Linking.openURL(url);
+        }
+      });
+    };
+
+    const formattedWords = words.map((word, i) => {
+      if (word.match(urlRegex)) {
+        return (
+          <Text key={i}>
+            <TouchableOpacity onPress={() => onLinkPress(word)}>
+              <Text style={{ color: Colors.bgCard }}>{word} </Text>
+            </TouchableOpacity>
+          </Text>
+        );
+      } else {
+        return <Text key={i}>{word} </Text>;
+      }
+    });
+
+    return formattedWords;
+  };
+
   return (
     <View
       style={[
@@ -31,7 +66,9 @@ const Message = ({
           isMyMessage ? styles.myMessageBG : styles.senderMessageBG,
         ]}>
         <View style={styles.textMessageContainer}>
-          <Text style={styles.textMessage}>{message.message}</Text>
+          <Text style={styles.textMessage}>
+            {formatWithLink(message.message)}
+          </Text>
         </View>
         <Text style={styles.time}>{message.sent_at}</Text>
       </View>
