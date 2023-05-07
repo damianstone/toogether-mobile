@@ -33,8 +33,8 @@ const ChatTextInput = ({ chatMessage, setChatMessage, handleSendMessage }) => {
           inputMode="text,url"
           style={{
             ...styles.inputMessage,
-            height: Math.min(Math.max(40, inputHeight), 200),
-            maxHeight: 200,
+            height: Math.min(Math.max(15, inputHeight), 150),
+            maxHeight: 150,
           }}
           onChangeText={(text) => handleTextChange(text)}
           value={chatMessage}
@@ -70,16 +70,20 @@ const styles = StyleSheet.create({
 
   inputMessageContainer: {
     width: '80%',
+    backgroundColor: Colors.white,
+    borderRadius: 20,
+    minHeight: 40,
+    justifyContent: 'center',
+    paddingHorizontal: 20,
+    paddingVertical: 10,
   },
 
   inputMessage: {
     width: '100%',
-    lineHeight: 20,
-    backgroundColor: Colors.white,
-    paddingHorizontal: 20,
     borderRadius: 20,
     fontSize: 15,
-    textAlignVertical: 'vertical',
+    textAlignVertical: 'center',
+    lineHeight: 20,
   },
 
   imgContainer: {
