@@ -255,6 +255,7 @@ const MatchesScreen = (props) => {
               extraData={matches}
               onEndReached={handleLoadMoreMatches}
               onEndReachedThreshold={0.3}
+              showsHorizontalScrollIndicator={false}
             />
           )}
         </View>
@@ -287,6 +288,7 @@ const MatchesScreen = (props) => {
                 extraData={conversations}
                 onEndReached={handleLoadMoreConversations}
                 onEndReachedThreshold={0.3}
+                showsVerticalScrollIndicator={false}
               />
             )
           )}
@@ -312,7 +314,7 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     bottom: 10,
-    paddingHorizontal: 10,
+    paddingHorizontal: 20,
   },
 
   text: {
