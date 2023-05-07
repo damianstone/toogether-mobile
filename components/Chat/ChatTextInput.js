@@ -1,46 +1,51 @@
-import { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import {
   StyleSheet,
   TextInput,
   TouchableOpacity,
   View,
   Image,
-  ScrollView,
+  Alert,
 } from 'react-native';
 
 import Colors from '../../constants/Colors';
 import sendimg from '../../assets/images/send-button.png';
 
 const ChatTextInput = ({ chatMessage, setChatMessage, handleSendMessage }) => {
-  const scrollViewRef = useRef(null);
+  const [inputHeight, setInputHeight] = useState(0);
 
   const handleTextChange = (newText) => {
     setChatMessage(newText);
   };
 
-  const scrollToBottom = () => {
-    if (scrollViewRef.current) {
-      scrollViewRef.current.scrollToEnd({ animated: true });
+  const handleContentSizeChange = (event) => {
+    setInputHeight(event.nativeEvent.contentSize.height);
+    const { height } = event.nativeEvent.contentSize;
+    if (height > styles.inputMessage.height * 6) {
+      setInputHeight(height);
     }
   };
 
   return (
     <View style={styles.container}>
-      <ScrollView
-        ref={scrollViewRef}
-        style={styles.inputContainer}
-        onContentSizeChange={scrollToBottom}>
+      <View style={styles.inputMessageContainer}>
         <TextInput
           inputMode="text,url"
-          style={[styles.inputMessage]}
-          placeholderTextColor={Colors.placeholder}
+          style={{
+            ...styles.inputMessage,
+            height: Math.min(Math.max(40, inputHeight), 200),
+            maxHeight: 200,
+          }}
           onChangeText={(text) => handleTextChange(text)}
           value={chatMessage}
           autoCorrect={false}
           maxLength={1000}
+          onContentSizeChange={handleContentSizeChange}
           multiline
+          keyboardType="default"
         />
-      </ScrollView>
+      </View>
+
       <TouchableOpacity
         onPress={() => handleSendMessage()}
         style={styles.imgContainer}>
@@ -55,36 +60,31 @@ export default ChatTextInput;
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    paddingBottom: 10,
-    paddingHorizontal: 6,
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    alignContent: 'center',
+    width: '100%',
+    paddingHorizontal: 10,
+    paddingVertical: 10,
   },
 
-  inputContainer: {
-    maxHeight: 150,
-    paddingTop: 10,
-    marginBottom: 2,
+  inputMessageContainer: {
+    width: '80%',
   },
 
   inputMessage: {
+    width: '100%',
     lineHeight: 20,
     backgroundColor: Colors.white,
-    paddingLeft: 30,
-    paddingRight: 30,
-    width: '100%',
+    paddingHorizontal: 20,
     borderRadius: 20,
-    paddingTop: 8,
-    paddingBottom: 8,
-    maxHeight: 136,
-    textAlignVertical: 'bottom',
-    alignSelf: 'center',
-    fontSize: 18,
+    fontSize: 15,
+    textAlignVertical: 'vertical',
   },
 
   imgContainer: {
-    width: 44,
-    height: 44,
-    marginLeft: 15,
-    marginBottom: 2,
+    width: 40,
+    height: 40,
     justifyContent: 'center',
     alignSelf: 'flex-end',
   },

@@ -6,6 +6,7 @@ import {
   Image,
   FlatList,
   Text,
+  SafeAreaView,
 } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { Context } from '../../context/ContextProvider';
@@ -30,14 +31,13 @@ import * as b from '../../constants/requestTypes/block';
 import * as c from '../../constants/requestTypes/conversation';
 import { ENV } from '../../environment';
 
-
 const BASE_URL = ENV.API_URL;
 
 API_URL = BASE_URL.replace('http://', '');
 
 const ChatScreen = (props) => {
   const { showActionSheetWithOptions } = useActionSheet();
-  const {conversationId, receiverProfile } = props.route.params;
+  const { conversationId, receiverProfile } = props.route.params;
   const { profileContext, updateProfileContext } = useContext(Context);
 
   const deleteConversationReducer = useSelector(
@@ -180,6 +180,13 @@ const ChatScreen = (props) => {
   }, [errorBlockProfile, profileBlocked]);
 
   const handleSendMessage = () => {
+    if (chatMessage.length >= 1000) {
+      return Alert.alert(
+        'Message too long',
+        'You can only send messages up to 1000 characters'
+      );
+    }
+
     if (chatSocket && chatMessage) {
       chatSocket.send(chatMessage);
       dispatch(
@@ -274,7 +281,7 @@ const ChatScreen = (props) => {
         {
           text: 'No',
           onPress: () => {
-            return ;
+            return;
           },
           style: 'cancel',
         },
@@ -348,7 +355,6 @@ const ChatScreen = (props) => {
     }
   };
 
-
   const renderMessages = ({ item }) => {
     return (
       <Message
@@ -378,45 +384,45 @@ const ChatScreen = (props) => {
           onShowProfile={() =>
             handleShowProfile(receiverProfile, receiverProfile.is_in_group)
           }
-          onActionSheet={() => onOpenActionSheet(receiverProfile, conversationId)}
+          onActionSheet={() =>
+            onOpenActionSheet(receiverProfile, conversationId)
+          }
         />
       )}
       {messagesData?.results.length == 0 ? (
         <View style={styles.noMsgContainer}>
           <Image
-            style={styles.noMsgImage} 
-            source={require('../../assets/images/no-messages.png')} 
+            style={styles.noMsgImage}
+            source={require('../../assets/images/no-messages.png')}
           />
-          <Text style={styles.noMsgText}>
-            Start the conversation!
-          </Text>
+          <Text style={styles.noMsgText}>Start the conversation!</Text>
         </View>
       ) : (
         <View style={styles.messages_Container}>
-        <FlatList
-          inverted={true}
-          data={messagesData?.results}
-          renderItem={renderMessages}
-          contentContainerStyle={{ flexDirection: 'column' }}
-          extraData={conversationReducer}
-          onEndReachedThreshold={0.2}
-          onEndReached={handleLoadMoreMessages}
-        />
-        {loadingMessages && (
-          <ActivityModal
-            loading
-            title="Loading messages"
-            size="large"
-            activityColor="white"
-            titleColor="white"
+          <FlatList
+            inverted={true}
+            data={messagesData?.results}
+            renderItem={renderMessages}
+            contentContainerStyle={{ flexDirection: 'column' }}
+            extraData={conversationReducer}
+            onEndReachedThreshold={0.2}
+            onEndReached={handleLoadMoreMessages}
           />
-        )}
-      </View>
+          {loadingMessages && (
+            <ActivityModal
+              loading
+              title="Loading messages"
+              size="small"
+              activityColor="white"
+              titleColor="white"
+            />
+          )}
+        </View>
       )}
-      <ChatTextInput 
-        chatMessage={chatMessage} 
-        setChatMessage={setChatMessage} 
-        handleSendMessage={handleSendMessage} 
+      <ChatTextInput
+        chatMessage={chatMessage}
+        setChatMessage={setChatMessage}
+        handleSendMessage={handleSendMessage}
       />
     </View>
   );
@@ -428,6 +434,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.bg,
     height: '100%',
     width: '100%',
+    paddingBottom: 20,
   },
 
   titleContainer: {
@@ -449,7 +456,7 @@ const styles = StyleSheet.create({
     height: '12%',
     resizeMode: 'contain',
   },
-  
+
   noMsgText: {
     color: 'white',
     fontSize: 24,
