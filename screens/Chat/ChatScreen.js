@@ -6,7 +6,7 @@ import {
   Image,
   FlatList,
   Text,
-  SafeAreaView,
+  Linking,
 } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { Context } from '../../context/ContextProvider';
@@ -187,13 +187,46 @@ const ChatScreen = (props) => {
       );
     }
 
+    // Regular expression to detect URLs in chat message
+    const urlRegex = /(https?:\/\/[^\s]+)/gi;
+
+    // Replace URLs with clickable links
+    const messageWithLinks = chatMessage.replace(urlRegex, (url) => {
+      return url;
+    });
+
+    // Open clickable links in browser
+    const onLinkPress = (url) => {
+      Linking.canOpenURL(url).then((supported) => {
+        if (supported) {
+          Linking.openURL(url);
+        }
+      });
+    };
+
     if (chatSocket && chatMessage) {
       chatSocket.send(chatMessage);
       dispatch(
         addConversationMessage({
           id: Math.random() * 10,
           sent_by_current: true,
-          message: chatMessage,
+          message: (
+            <Text>
+              {messageWithLinks.split(' ').map((word, i) => {
+                if (urlRegex.test(word)) {
+                  return (
+                    <Text
+                      key={i}
+                      style={{ color: Colors.bgCard }}
+                      onPress={() => onLinkPress(word)}>
+                      {word}{' '}
+                    </Text>
+                  );
+                }
+                return `${word} `;
+              })}
+            </Text>
+          ),
         })
       );
       setChatMessage('');
@@ -380,7 +413,7 @@ const ChatScreen = (props) => {
       {messagesData && (
         <ChatHeader
           onGoBack={() => handleGoBack()}
-          receiverData={receiverProfile}
+          receiverProfile={receiverProfile}
           onShowProfile={() =>
             handleShowProfile(receiverProfile, receiverProfile.is_in_group)
           }

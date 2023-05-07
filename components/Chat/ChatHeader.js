@@ -15,7 +15,7 @@ import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import HeaderButtom from '../UI/HeaderButton';
 
 const ChatHeader = ({
-  receiverData,
+  receiverProfile,
   onShowProfile,
   onGoBack,
   onActionSheet,
@@ -35,7 +35,7 @@ const ChatHeader = ({
         style={styles.profilePictureButton}
         onPress={onShowProfile}>
         <ImageBackground
-          source={checkPhoto(receiverData)}
+          source={checkPhoto(receiverProfile)}
           imageStyle={styles.img}
           style={styles.singleImageContainer}
         />
@@ -45,11 +45,11 @@ const ChatHeader = ({
           style={styles.profileInfoContainer}
           onPress={onShowProfile}>
           <Text numberOfLines={1} style={styles.matched_Name}>
-            {receiverData?.name}
+            {receiverProfile?.name}
           </Text>
-          {receiverData.is_in_group && (
+          {receiverProfile.is_in_group && (
             <Text style={styles.groupMemberCounterText}>
-              {receiverData.member_count} member group
+              {receiverProfile.member_count} member group
             </Text>
           )}
         </TouchableOpacity>

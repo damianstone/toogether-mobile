@@ -234,7 +234,7 @@ const MatchesScreen = (props) => {
       <StatusBar style="light" />
       <View style={styles.screen}>
         <View>
-          <Text style={styles.title}> New Matches</Text>
+          <Text style={styles.title}>Matches</Text>
           {!refreshing && (
             <FlatList
               ListHeaderComponentStyle={styles.listHeader}
