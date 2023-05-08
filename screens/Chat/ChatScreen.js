@@ -7,6 +7,7 @@ import {
   FlatList,
   Text,
   Linking,
+  KeyboardAvoidingView,
 } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { Context } from '../../context/ContextProvider';
@@ -249,10 +250,6 @@ const ChatScreen = (props) => {
     }
   };
 
-  const handleGoBack = () => {
-    props.navigation.navigate('Matches');
-  };
-
   const handleBlockProfile = (profileId) => {
     if (!profileId) {
       return;
@@ -409,10 +406,10 @@ const ChatScreen = (props) => {
   };
 
   return (
-    <View style={styles.screen}>
+    <KeyboardAvoidingView style={styles.screen} behavior="height">
       {messagesData && (
         <ChatHeader
-          onGoBack={() => handleGoBack()}
+          navigation={props.navigation}
           receiverProfile={receiverProfile}
           onShowProfile={() =>
             handleShowProfile(receiverProfile, receiverProfile.is_in_group)
@@ -457,7 +454,7 @@ const ChatScreen = (props) => {
         setChatMessage={setChatMessage}
         handleSendMessage={handleSendMessage}
       />
-    </View>
+    </KeyboardAvoidingView>
   );
 };
 

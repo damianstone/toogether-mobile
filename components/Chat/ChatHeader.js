@@ -17,8 +17,8 @@ import HeaderButtom from '../UI/HeaderButton';
 const ChatHeader = ({
   receiverProfile,
   onShowProfile,
-  onGoBack,
   onActionSheet,
+  navigation,
 }) => {
   return (
     <View style={styles.headerContainer}>
@@ -28,7 +28,7 @@ const ChatHeader = ({
             Platform.OS === 'android' ? 'ios-arrow-back' : 'ios-arrow-back'
           }
           title="Back"
-          onPress={onGoBack}
+          onPress={() => navigation.navigate('Matches')}
         />
       </HeaderButtons>
       <TouchableOpacity
