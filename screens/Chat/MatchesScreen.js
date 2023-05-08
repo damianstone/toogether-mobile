@@ -163,16 +163,18 @@ const MatchesScreen = (props) => {
   };
 
   const renderBubblesMatches = ({ item }) => {
-    const matchedProfile = item.matched_data.matched_profile;
+    // const matchedProfile = item.matched_data.matched_profile;
+
+    const matchedProfile = item.matched_data;
     return (
       <View style={styles.new_matches}>
         <MatchAvatar
           onShowChat={() => handleShowChatbyMatch(item.id)}
           matchedProfile={matchedProfile}
-          matchedProfileHasPhoto={matchedProfile.photos.length > 0}
+          matchedProfileHasPhoto={matchedProfile.matched_profile.photos.length > 0}
           matchedProfilePhoto={
-            matchedProfile.photos.length > 0
-              ? matchedProfile.photos[0].image
+            matchedProfile.matched_profile.photos.length > 0
+              ? matchedProfile.matched_profile.photos[0].image
               : null
           }
         />
