@@ -11,14 +11,7 @@ import {
 import { checkPhoto } from '../../utils/checks';
 import Colors from '../../constants/Colors';
 
-const GroupMessage = ({
-  isMyMessage,
-  message,
-  onShowProfile,
-  receiverData,
-  ownProfile,
-  isPrevMessageFromCurrentUser,
-}) => {
+const GroupMessage = ({ isMyMessage, isPrevMessageFromCurrentUser }) => {
   const formatWithLink = (text) => {
     if (!text || typeof text !== 'string') {
       return text;
@@ -65,10 +58,15 @@ const GroupMessage = ({
           styles.messageContainer,
           isMyMessage ? styles.myMessageBG : styles.senderMessageBG,
         ]}>
-        <View style={styles.textMessageContainer}>
-          <Text style={styles.textMessage}>Message</Text>
+        <View style={{ alignSelf: 'flex-start' }}>
+          <Text style={{ fontSize: 9, color: Colors.placeholder }}>Martin</Text>
         </View>
-        <Text style={styles.time}>11/23</Text>
+        <View style={{ flexDirection: 'row' }}>
+          <View style={styles.textMessageContainer}>
+            <Text style={styles.textMessage}>Message</Text>
+          </View>
+          <Text style={styles.time}>11/23</Text>
+        </View>
       </View>
       <TouchableOpacity onPress={() => {}}>
         <ImageBackground
@@ -114,9 +112,9 @@ const styles = StyleSheet.create({
 
   messageContainer: {
     flexShrink: 1,
-    flexDirection: 'row',
-    borderRadius: 15,
-    paddingTop: 3,
+    flexDirection: 'column',
+    borderRadius: 10,
+    paddingTop: 6,
     paddingBottom: 6,
     paddingHorizontal: 10,
   },
@@ -136,7 +134,7 @@ const styles = StyleSheet.create({
   },
 
   textMessage: {
-    fontSize: 16,
+    fontSize: 18,
     color: Colors.white,
     margin: 0,
   },

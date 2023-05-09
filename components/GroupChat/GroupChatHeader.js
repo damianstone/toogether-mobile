@@ -15,6 +15,10 @@ import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import HeaderButtom from '../UI/HeaderButton';
 
 const GroupChatHeader = ({ navigation }) => {
+  /*
+  props I need
+  member count 
+  */
   return (
     <View style={styles.headerContainer}>
       <HeaderButtons HeaderButtonComponent={HeaderButtom}>
@@ -99,7 +103,7 @@ const styles = StyleSheet.create({
   },
 
   groupMemberCounterText: {
-    color: Colors.orange,
+    color: Colors.calypso,
     fontSize: 12,
   },
 
