@@ -13,8 +13,10 @@ export const listMyConversationsReducer = (state = {}, action) => {
 
     case c.LIST_CONVERSATIONS_FAIL:
       return { loading: false, error: action.payload };
+
     case c.LOAD_MORE_CONVERSATIONS_REQUESTS:
       return { ...state, loading: true };
+
     case c.LOAD_MORE_CONVERSATIONS_SUCCESS:
       const newNext = action.payload.next;
       const oldData = { ...state.data };
@@ -29,6 +31,7 @@ export const listMyConversationsReducer = (state = {}, action) => {
         data: newData,
         loading: false,
       };
+
     case c.LOAD_MORE_CONVERSATIONS_FAIL:
       return { data: state.data, loading: false, error: action.payload };
 
@@ -118,6 +121,27 @@ export const deleteConversationReducer = (state = {}, action) => {
       return { loading: false, error: action.payload };
 
     case c.DELETE_CONVERSATION_RESET:
+      return {};
+
+    default:
+      return state;
+  }
+};
+
+export const getMyGroupChatReducer = (state = {}, action) => {
+  switch (action.type) {
+    case c.GET_GROUP_CHAT_REQUEST:
+      return { loading: true };
+
+    case c.GET_GROUP_CHAT_SUCCESS:
+      return {
+        data: { ...action.payload },
+      };
+
+    case c.GET_GROUP_CHAT_FAIL:
+      return { loading: false, error: action.payload };
+
+    case c.GET_GROUP_CHAT_RESET:
       return {};
 
     default:
