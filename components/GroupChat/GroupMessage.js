@@ -11,7 +11,7 @@ import {
 import { checkPhoto } from '../../utils/checks';
 import Colors from '../../constants/Colors';
 
-const GroupMessage = ({ isMyMessage, isPrevMessageFromCurrentUser }) => {
+const GroupMessage = ({ isMyMessage, message }) => {
   const formatWithLink = (text) => {
     if (!text || typeof text !== 'string') {
       return text;
@@ -51,26 +51,29 @@ const GroupMessage = ({ isMyMessage, isPrevMessageFromCurrentUser }) => {
       style={[
         styles.container,
         isMyMessage ? styles.myMessage : styles.senderMessage,
-        isPrevMessageFromCurrentUser ? styles.sameSender : null,
       ]}>
       <View
         style={[
           styles.messageContainer,
           isMyMessage ? styles.myMessageBG : styles.senderMessageBG,
         ]}>
-        <View style={{ alignSelf: 'flex-start' }}>
-          <Text style={{ fontSize: 9, color: Colors.placeholder }}>Martin</Text>
-        </View>
+        {!isMyMessage ? (
+          <View style={{ alignSelf: 'flex-start' }}>
+            <Text style={{ fontSize: 9, color: Colors.placeholder }}>
+              {message.sender_name}
+            </Text>
+          </View>
+        ) : null}
         <View style={{ flexDirection: 'row' }}>
           <View style={styles.textMessageContainer}>
-            <Text style={styles.textMessage}>Message</Text>
+            <Text style={styles.textMessage}>{message.message}</Text>
           </View>
-          <Text style={styles.time}>11/23</Text>
+          <Text style={styles.time}>{message.sent_at}</Text>
         </View>
       </View>
       <TouchableOpacity onPress={() => {}}>
         <ImageBackground
-          source={require('../../assets/images/group-chat-placeholder.png')}
+          source={checkPhoto(message.sender_photo)}
           imageStyle={styles.img}
           style={styles.singleImageContainer}
         />
@@ -121,7 +124,7 @@ const styles = StyleSheet.create({
 
   myMessageBG: {
     marginEnd: 5,
-    backgroundColor: Colors.orange,
+    backgroundColor: Colors.calypso,
   },
 
   senderMessageBG: {
@@ -135,13 +138,13 @@ const styles = StyleSheet.create({
 
   textMessage: {
     fontSize: 18,
-    color: Colors.white,
+    color: Colors.black,
     margin: 0,
   },
 
   time: {
     fontSize: 8.5,
-    color: Colors.grey,
+    color: Colors.bgCard,
     marginStart: 4,
     alignSelf: 'flex-end',
   },

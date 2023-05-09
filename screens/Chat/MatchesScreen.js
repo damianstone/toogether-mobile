@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useContext } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   FlatList,
@@ -12,12 +12,14 @@ import {
 import { useIsFocused } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
 
+import { Context } from '../../context/ContextProvider';
 import Colors from '../../constants/Colors';
 import { listMatches, loadMoreMatches } from '../../store/actions/swipe';
 import {
   startConversation,
   listMyConversations,
   loadMoreConversations,
+  getMyGroupChat,
 } from '../../store/actions/conversation';
 import { checkServerError, check400Error } from '../../utils/errors';
 import no_chats from '../../assets/images/no-chats.png';
@@ -29,9 +31,17 @@ import PreviewGroupChat from '../../components/GroupChat/PreviewGroupChat';
 import * as conv from '../../constants/requestTypes/conversation';
 
 const MatchesScreen = (props) => {
+  const { groupContext, isOwnerGroup } = useContext(Context);
   const dispatch = useDispatch();
   const [refreshing, setRefreshing] = useState(false);
   const isVisible = useIsFocused();
+
+  const getMyGroupChatReducer = useSelector((state) => state.getMyGroupChat);
+  const {
+    error: errorGetGroupChat,
+    loading: loadingGroupChat,
+    data: groupChat,
+  } = getMyGroupChatReducer;
 
   const listMatchesReducer = useSelector((state) => state.listMatches);
   const {
@@ -112,6 +122,9 @@ const MatchesScreen = (props) => {
     try {
       dispatch(listMatches());
       dispatch(listMyConversations());
+      if (groupContext) {
+        dispatch(getMyGroupChat(groupContext.id));
+      }
     } catch (err) {
       console.log(err);
     }
@@ -285,7 +298,19 @@ const MatchesScreen = (props) => {
                 onEndReached={handleLoadMoreConversations}
                 onEndReachedThreshold={0.3}
                 showsVerticalScrollIndicator={false}
-                ListHeaderComponent={<PreviewGroupChat navigation={props.navigation} />}
+                ListHeaderComponent={
+                  groupChat ? (
+                    <PreviewGroupChat
+                      navigation={props.navigation}
+                      goToGroupChat={() =>
+                        props.navigation.navigate('GroupChat', {
+                          groupId: groupContext.id,
+                        })
+                      }
+                      lastMessage={groupChat.last_message}
+                    />
+                  ) : null
+                }
               />
             )
           )}

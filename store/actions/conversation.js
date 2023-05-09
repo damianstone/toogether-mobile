@@ -182,7 +182,7 @@ export const listGroupMessages = (groupId) => {
       };
       const { data } = await axios({
         method: 'get',
-        url: `${BASE_URL}/api/v1/group-chat/${groupId}/messages`,
+        url: `${BASE_URL}/api/v1/group-chat/${groupId}/messages/`,
         headers: config,
       });
       dispatch({

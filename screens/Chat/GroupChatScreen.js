@@ -13,49 +13,82 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Context } from '../../context/ContextProvider';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 
-import { loadMoreMessages } from '../../store/actions/conversation';
+import {
+  listGroupMessages,
+  loadMoreMessages,
+} from '../../store/actions/conversation';
 import { checkServerError } from '../../utils/errors';
 import ActivityModal from '../../components/UI/ActivityModal';
 import Colors from '../../constants/Colors';
-import Message from '../../components/Chat/Message';
-import ChatHeader from '../../components/Chat/ChatHeader';
 import ChatTextInput from '../../components/Chat/ChatTextInput';
-import { ENV } from '../../environment';
 import GroupMessage from '../../components/GroupChat/GroupMessage';
 import GroupChatHeader from '../../components/GroupChat/GroupChatHeader';
+
+import { ENV } from '../../environment';
 
 const BASE_URL = ENV.API_URL;
 
 API_URL = BASE_URL.replace('http://', '');
 
 const GroupChatScreen = (props) => {
-  const { showActionSheetWithOptions } = useActionSheet();
-  // const { conversationId, receiverProfile } = props.route.params;
-  // const { profileContext, updateProfileContext } = useContext(Context);
+  const { groupId } = props.route.params;
 
-  const [localLoading, setLocalLoading] = useState(false);
   const [chatMessage, setChatMessage] = useState('');
   const [chatSocket, setChatSocket] = useState(null);
-  const [messages, setMessages] = useState([]);
   const dispatch = useDispatch();
 
-  const renderMessages = ({ item }) => {
-    return (
-      <GroupMessage isPrevMessageFromCurrentUser={true} isMyMessage={true} />
-    );
+  const messagesReducer = useSelector(
+    (state) => state.listConversationMessages
+  );
+  const {
+    error: errorMessages,
+    loading: loadingMessages,
+    data: messagesData,
+  } = messagesReducer;
+
+  console.log(messagesData);
+
+  useEffect(() => {
+    dispatch(listGroupMessages(groupId));
+  }, [groupId]);
+
+  const handleLoadMoreMessages = () => {
+    if (messagesData?.next) {
+      dispatch(loadMoreMessages(messagesData.next));
+    }
   };
+
+  const renderMessages = ({ item }) => {
+    console.log(item);
+    return <GroupMessage isMyMessage={item.sent_by_current} message={item} />;
+  };
+
+  if (loadingMessages) {
+    <ActivityModal
+      loading
+      title="Laoding"
+      size="small"
+      activityColor="white"
+      titleColor="white"
+      activityWrapperStyle={{
+        backgroundColor: Colors.bg,
+      }}
+    />;
+  }
 
   return (
     <KeyboardAvoidingView style={styles.screen} behavior="height">
       <GroupChatHeader navigation={props.navigation} />
       <View style={styles.messages_Container}>
-        <FlatList
-          inverted={true}
-          data={[1]}
-          renderItem={renderMessages}
-          contentContainerStyle={{ flexDirection: 'column' }}
-          onEndReachedThreshold={0.2}
-        />
+        {messagesData ? (
+          <FlatList
+            inverted={true}
+            data={messagesData?.results}
+            renderItem={renderMessages}
+            contentContainerStyle={{ flexDirection: 'column' }}
+            onEndReachedThreshold={0.2}
+          />
+        ) : null}
       </View>
       <ChatTextInput
         chatMessage={chatMessage}

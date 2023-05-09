@@ -6,14 +6,22 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { CommonActions } from '@react-navigation/native';
 
 import Colors from '../../constants/Colors';
 
-const PreviewGroupChat = ({ navigation }) => {
+const PreviewGroupChat = ({ navigation, lastMessage, goToGroupChat }) => {
+  const useNav = useNavigation();
+
   return (
     <View style={styles.container}>
       <View>
-        <TouchableOpacity onPress={() => {}} style={styles.chat_profile_head}>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate('GroupNavigator');
+          }}
+          style={styles.chat_profile_head}>
           <ImageBackground
             source={require('../../assets/images/group-chat-placeholder.png')}
             imageStyle={styles.img}
@@ -21,14 +29,15 @@ const PreviewGroupChat = ({ navigation }) => {
           />
         </TouchableOpacity>
       </View>
-      <TouchableOpacity
-        onPress={() => navigation.navigate('GroupChat')}
-        style={styles.cardContainer}>
+      <TouchableOpacity onPress={goToGroupChat} style={styles.cardContainer}>
         <View style={styles.chat_preview}>
           <Text style={styles.matched_name}>TOOG Group</Text>
           <View style={styles.lastMessagesContainer}>
             <Text numberOfLines={1} style={styles.last_message}>
-              Damian Admin: Wena cabros
+              {lastMessage.sent_by_current
+                ? 'Me: '
+                : `${lastMessage.sender_name}: `}{' '}
+              {lastMessage.message}
             </Text>
           </View>
         </View>
