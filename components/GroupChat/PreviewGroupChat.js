@@ -6,14 +6,10 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import { CommonActions } from '@react-navigation/native';
 
 import Colors from '../../constants/Colors';
 
 const PreviewGroupChat = ({ navigation, lastMessage, goToGroupChat }) => {
-  const useNav = useNavigation();
-
   return (
     <View style={styles.container}>
       <View>
@@ -33,12 +29,18 @@ const PreviewGroupChat = ({ navigation, lastMessage, goToGroupChat }) => {
         <View style={styles.chat_preview}>
           <Text style={styles.matched_name}>Your Group</Text>
           <View style={styles.lastMessagesContainer}>
-            <Text numberOfLines={1} style={styles.last_message}>
-              {lastMessage.sent_by_current
-                ? 'Me: '
-                : `${lastMessage.sender_name}: `}{' '}
-              {lastMessage.message}
-            </Text>
+            {lastMessage ? (
+              <Text numberOfLines={1} style={styles.last_message}>
+                {lastMessage.sent_by_current
+                  ? 'Me: '
+                  : `${lastMessage.sender_name}: `}{' '}
+                {lastMessage.message}
+              </Text>
+            ) : (
+              <Text numberOfLines={1} style={styles.last_message}>
+                Start planning with your friends
+              </Text>
+            )}
           </View>
         </View>
         <View style={styles.divider} />

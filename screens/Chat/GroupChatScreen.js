@@ -16,7 +16,7 @@ import { useActionSheet } from '@expo/react-native-action-sheet';
 import {
   listGroupMessages,
   loadMoreMessages,
-  addConversationMessage
+  addConversationMessage,
 } from '../../store/actions/conversation';
 import { checkServerError } from '../../utils/errors';
 import ActivityModal from '../../components/UI/ActivityModal';
@@ -166,7 +166,6 @@ const GroupChatScreen = (props) => {
   };
 
   const renderMessages = ({ item }) => {
-    console.log(item);
     return <GroupMessage isMyMessage={item.sent_by_current} message={item} />;
   };
 

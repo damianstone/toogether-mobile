@@ -185,6 +185,25 @@ const MatchesScreen = (props) => {
     );
   };
 
+  const renderGroupChat = () => {
+    if (groupContext && groupChat) {
+      return (
+        <PreviewGroupChat
+          navigation={props.navigation}
+          goToGroupChat={() =>
+            props.navigation.navigate('GroupChat', {
+              groupId: groupContext.id,
+              totalMembers: groupContext.total_members,
+              currentIsOwnerGroup: isOwnerGroup,
+            })
+          }
+          lastMessage={groupChat.last_message}
+        />
+      );
+    }
+    return null;
+  };
+
   const renderPreviewChats = ({ item }) => {
     return (
       <PreviewChat
@@ -294,21 +313,7 @@ const MatchesScreen = (props) => {
                 onEndReached={handleLoadMoreConversations}
                 onEndReachedThreshold={0.3}
                 showsVerticalScrollIndicator={false}
-                ListHeaderComponent={
-                  groupChat ? (
-                    <PreviewGroupChat
-                      navigation={props.navigation}
-                      goToGroupChat={() =>
-                        props.navigation.navigate('GroupChat', {
-                          groupId: groupContext.id,
-                          totalMembers: groupContext.total_members,
-                          currentIsOwnerGroup: isOwnerGroup,
-                        })
-                      }
-                      lastMessage={groupChat.last_message}
-                    />
-                  ) : null
-                }
+                ListHeaderComponent={renderGroupChat}
               />
             )
           )}
