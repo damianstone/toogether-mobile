@@ -7,10 +7,9 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
-import { checkPhoto } from '../../utils/checks';
 import Colors from '../../constants/Colors';
 
-const PreviewGroupChat = (props) => {
+const PreviewGroupChat = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <View>
@@ -22,7 +21,9 @@ const PreviewGroupChat = (props) => {
           />
         </TouchableOpacity>
       </View>
-      <TouchableOpacity onPress={() => {}} style={styles.cardContainer}>
+      <TouchableOpacity
+        onPress={() => navigation.navigate('GroupChat')}
+        style={styles.cardContainer}>
         <View style={styles.chat_preview}>
           <Text style={styles.matched_name}>TOOG Group</Text>
           <View style={styles.lastMessagesContainer}>

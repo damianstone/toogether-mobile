@@ -66,17 +66,16 @@ const GroupMessage = ({
           isMyMessage ? styles.myMessageBG : styles.senderMessageBG,
         ]}>
         <View style={styles.textMessageContainer}>
-          <Text style={styles.textMessage}>
-            {formatWithLink(message.message)}
-          </Text>
+          <Text style={styles.textMessage}>Message</Text>
         </View>
-        <Text style={styles.time}>{message.sent_at}</Text>
+        <Text style={styles.time}>11/23</Text>
       </View>
-      <TouchableOpacity onPress={onShowProfile}>
+      <TouchableOpacity onPress={() => {}}>
         <ImageBackground
-          source={checkPhoto(isMyMessage ? ownProfile : receiverData)}
+          source={require('../../assets/images/group-chat-placeholder.png')}
           imageStyle={styles.img}
-          style={styles.singleImageContainer}></ImageBackground>
+          style={styles.singleImageContainer}
+        />
       </TouchableOpacity>
     </View>
   );

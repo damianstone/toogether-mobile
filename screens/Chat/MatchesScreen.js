@@ -285,7 +285,7 @@ const MatchesScreen = (props) => {
                 onEndReached={handleLoadMoreConversations}
                 onEndReachedThreshold={0.3}
                 showsVerticalScrollIndicator={false}
-                ListHeaderComponent={<PreviewGroupChat />}
+                ListHeaderComponent={<PreviewGroupChat navigation={props.navigation} />}
               />
             )
           )}

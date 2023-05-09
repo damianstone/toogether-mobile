@@ -40,6 +40,7 @@ import ValidateCodeScreen from '../screens/Recovery/ValidateCodeScreen';
 import ChangePasswordScreen from '../screens/Recovery/ChangePasswordScreen';
 
 import ChatScreen from '../screens/Chat/ChatScreen';
+import GroupChatScreen from '../screens/Chat/GroupChatScreen';
 import MatchesScreen from '../screens/Chat/MatchesScreen';
 import ItsMatchScreenModal from '../screens/ItsMatchModal/ItsMatchScreenModal';
 
@@ -240,7 +241,14 @@ const ChatNavigator = () => {
         name="Chat"
         component={ChatScreen}
         options={{
-          headerShown: false
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="GroupChat"
+        component={GroupChatScreen}
+        options={{
+          headerShown: false,
         }}
       />
       <Stack.Screen
