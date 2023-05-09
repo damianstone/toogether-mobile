@@ -40,6 +40,9 @@ const ChatScreen = (props) => {
   const { showActionSheetWithOptions } = useActionSheet();
   const { conversationId, receiverProfile } = props.route.params;
   const { profileContext, updateProfileContext } = useContext(Context);
+  const [chatMessage, setChatMessage] = useState('');
+  const [chatSocket, setChatSocket] = useState(null);
+  const dispatch = useDispatch();
 
   const deleteConversationReducer = useSelector(
     (state) => state.deleteConversation
@@ -73,17 +76,9 @@ const ChatScreen = (props) => {
     data: messagesData,
   } = conversationReducer;
 
-  const [refreshing, setRefreshing] = useState(false);
-  const [localLoading, setLocalLoading] = useState(false);
-  const [chatMessage, setChatMessage] = useState('');
-  const [chatSocket, setChatSocket] = useState(null);
-  const [messages, setMessages] = useState([]);
-  const dispatch = useDispatch();
-
   useEffect(() => {
     if (conversationId) {
       dispatch(listMessages(conversationId));
-      setMessages(messagesData);
     }
   }, [conversationId]);
 
@@ -362,7 +357,6 @@ const ChatScreen = (props) => {
   };
 
   if (
-    localLoading ||
     loadingDeleteConversation ||
     loadingReportProfile ||
     loadingBlockProfile
@@ -389,7 +383,7 @@ const ChatScreen = (props) => {
     return (
       <Message
         message={item}
-        isMyMessage={item.sent_by_current ? true : false}
+        isMyMessage={item.sent_by_current}
         ownProfile={profileContext}
         matchedProfile={receiverProfile}
         onShowProfile={() =>

@@ -5,7 +5,7 @@ import { ENV } from '../../environment';
 
 const BASE_URL = ENV.API_URL;
 
-// -------------------------------- CHAT --------------------------------
+// -------------------------------- CHAT (1-1) --------------------------------
 export const listMyConversations = () => {
   return async (dispatch) => {
     try {
@@ -36,37 +36,6 @@ export const listMyConversations = () => {
   };
 };
 
-export const loadMoreConversations = (url) => {
-  return async (dispatch) => {
-    try {
-      dispatch({ type: c.LOAD_MORE_CONVERSATIONS_REQUESTS });
-
-      const userData = JSON.parse(await AsyncStorage.getItem('@userData'));
-
-      const config = {
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
-        Authorization: 'Bearer ' + userData.token,
-      };
-
-      const { data } = await axios({
-        method: 'get',
-        url: url,
-        headers: config,
-      });
-
-      dispatch({
-        type: c.LOAD_MORE_CONVERSATIONS_SUCCESS,
-        payload: data,
-      });
-    } catch (error) {
-      dispatch({
-        type: c.LOAD_MORE_CONVERSATIONS_FAIL,
-        payload: error,
-      });
-    }
-  };
-};
 export const listMessages = (id) => {
   return async (dispatch) => {
     try {
@@ -97,37 +66,7 @@ export const listMessages = (id) => {
     }
   };
 };
-export const loadMoreMessages = (url) => {
-  return async (dispatch) => {
-    try {
-      dispatch({ type: c.LOAD_MORE_MESSAGES_REQUESTS });
 
-      const userData = JSON.parse(await AsyncStorage.getItem('@userData'));
-
-      const config = {
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
-        Authorization: 'Bearer ' + userData.token,
-      };
-
-      const { data } = await axios({
-        method: 'get',
-        url: url,
-        headers: config,
-      });
-
-      dispatch({
-        type: c.LOAD_MORE_MESSAGES_SUCCESS,
-        payload: data,
-      });
-    } catch (error) {
-      dispatch({
-        type: c.LOAD_MORE_MESSAGES_FAIL,
-        payload: error,
-      });
-    }
-  };
-};
 export const addConversationMessage = (messages) => (dispatch) => {
   dispatch({ type: c.ADD_CONVERSATION_MESSAGE, payload: messages });
 };
@@ -191,6 +130,134 @@ export const startConversation = (matchId) => {
     } catch (error) {
       dispatch({
         type: c.START_CONVERSATION_FAIL,
+        payload: error,
+      });
+    }
+  };
+};
+
+// -------------------------------- GROUP CHAT--------------------------------
+
+export const getMyGroupChat = (groupId) => {
+  return async (dispatch) => {
+    try {
+      dispatch({ type: c.GET_GROUP_CHAT_REQUEST });
+
+      const userData = JSON.parse(await AsyncStorage.getItem('@userData'));
+
+      const config = {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+        Authorization: 'Bearer ' + userData.token,
+      };
+      const { data } = await axios({
+        method: 'get',
+        url: `${BASE_URL}/api/v1/group-chat/${groupId}/`,
+        headers: config,
+      });
+      dispatch({
+        type: c.GET_GROUP_CHAT_SUCCESS,
+        payload: data,
+      });
+    } catch (error) {
+      dispatch({
+        type: c.GET_GROUP_CHAT_FAIL,
+        payload: error,
+      });
+    }
+  };
+};
+
+export const listGroupMessages = (groupId) => {
+  return async (dispatch) => {
+    try {
+      dispatch({ type: c.LIST_CONVERSATION_MESSAGES_REQUEST });
+
+      const userData = JSON.parse(await AsyncStorage.getItem('@userData'));
+
+      const config = {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+        Authorization: 'Bearer ' + userData.token,
+      };
+      const { data } = await axios({
+        method: 'get',
+        url: `${BASE_URL}/api/v1/group-chat/${groupId}/messages/`,
+        headers: config,
+      });
+      dispatch({
+        type: c.LIST_CONVERSATION_MESSAGES_SUCCESS,
+        payload: data,
+      });
+    } catch (error) {
+      dispatch({
+        type: c.LIST_CONVERSATION_MESSAGES_FAIL,
+        payload: error,
+      });
+    }
+  };
+};
+
+// -------------------------------- PAGINATION --------------------------------
+
+export const loadMoreConversations = (url) => {
+  return async (dispatch) => {
+    try {
+      dispatch({ type: c.LOAD_MORE_CONVERSATIONS_REQUESTS });
+
+      const userData = JSON.parse(await AsyncStorage.getItem('@userData'));
+
+      const config = {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+        Authorization: 'Bearer ' + userData.token,
+      };
+
+      const { data } = await axios({
+        method: 'get',
+        url: url,
+        headers: config,
+      });
+
+      dispatch({
+        type: c.LOAD_MORE_CONVERSATIONS_SUCCESS,
+        payload: data,
+      });
+    } catch (error) {
+      dispatch({
+        type: c.LOAD_MORE_CONVERSATIONS_FAIL,
+        payload: error,
+      });
+    }
+  };
+};
+
+export const loadMoreMessages = (url) => {
+  return async (dispatch) => {
+    try {
+      dispatch({ type: c.LOAD_MORE_MESSAGES_REQUESTS });
+
+      const userData = JSON.parse(await AsyncStorage.getItem('@userData'));
+
+      const config = {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+        Authorization: 'Bearer ' + userData.token,
+      };
+
+      const { data } = await axios({
+        method: 'get',
+        url: url,
+        headers: config,
+      });
+
+      dispatch({
+        type: c.LOAD_MORE_MESSAGES_SUCCESS,
+        payload: data,
+      });
+    } catch (error) {
+      dispatch({
+        type: c.LOAD_MORE_MESSAGES_FAIL,
         payload: error,
       });
     }

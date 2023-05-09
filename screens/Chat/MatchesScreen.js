@@ -1,31 +1,25 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useContext } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useActionSheet } from '@expo/react-native-action-sheet';
 import {
   FlatList,
   Image,
-  Platform,
   SafeAreaView,
   Text,
   View,
   RefreshControl,
   StyleSheet,
 } from 'react-native';
-import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { useIsFocused } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
 
-import HeaderButtom from '../../components/UI/HeaderButton';
+import { Context } from '../../context/ContextProvider';
 import Colors from '../../constants/Colors';
-import {
-  listMatches,
-  deleteMatch,
-  loadMoreMatches,
-} from '../../store/actions/swipe';
+import { listMatches, loadMoreMatches } from '../../store/actions/swipe';
 import {
   startConversation,
   listMyConversations,
   loadMoreConversations,
+  getMyGroupChat,
 } from '../../store/actions/conversation';
 import { checkServerError, check400Error } from '../../utils/errors';
 import no_chats from '../../assets/images/no-chats.png';
@@ -33,13 +27,21 @@ import ActivityModal from '../../components/UI/ActivityModal';
 import MatchCounter from '../../components/Chat/MatchCounter';
 import MatchAvatar from '../../components/Chat/MatchAvatar';
 import PreviewChat from '../../components/Chat/PreviewChat';
+import PreviewGroupChat from '../../components/GroupChat/PreviewGroupChat';
 import * as conv from '../../constants/requestTypes/conversation';
 
 const MatchesScreen = (props) => {
-  const { showActionSheetWithOptions } = useActionSheet();
+  const { groupContext, isOwnerGroup } = useContext(Context);
   const dispatch = useDispatch();
   const [refreshing, setRefreshing] = useState(false);
   const isVisible = useIsFocused();
+
+  const getMyGroupChatReducer = useSelector((state) => state.getMyGroupChat);
+  const {
+    error: errorGetGroupChat,
+    loading: loadingGroupChat,
+    data: groupChat,
+  } = getMyGroupChatReducer;
 
   const listMatchesReducer = useSelector((state) => state.listMatches);
   const {
@@ -120,6 +122,9 @@ const MatchesScreen = (props) => {
     try {
       dispatch(listMatches());
       dispatch(listMyConversations());
+      if (groupContext) {
+        dispatch(getMyGroupChat(groupContext.id));
+      }
     } catch (err) {
       console.log(err);
     }
@@ -171,7 +176,9 @@ const MatchesScreen = (props) => {
         <MatchAvatar
           onShowChat={() => handleShowChatbyMatch(item.id)}
           matchedProfile={matchedProfile}
-          matchedProfileHasPhoto={matchedProfile.matched_profile.photos.length > 0}
+          matchedProfileHasPhoto={
+            matchedProfile.matched_profile.photos.length > 0
+          }
           matchedProfilePhoto={
             matchedProfile.matched_profile.photos.length > 0
               ? matchedProfile.matched_profile.photos[0].image
@@ -291,6 +298,19 @@ const MatchesScreen = (props) => {
                 onEndReached={handleLoadMoreConversations}
                 onEndReachedThreshold={0.3}
                 showsVerticalScrollIndicator={false}
+                ListHeaderComponent={
+                  groupChat ? (
+                    <PreviewGroupChat
+                      navigation={props.navigation}
+                      goToGroupChat={() =>
+                        props.navigation.navigate('GroupChat', {
+                          groupId: groupContext.id,
+                        })
+                      }
+                      lastMessage={groupChat.last_message}
+                    />
+                  ) : null
+                }
               />
             )
           )}

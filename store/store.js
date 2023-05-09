@@ -48,6 +48,7 @@ import {
   listConversationMessagesReducer,
   startConversationReducer,
   deleteConversationReducer,
+  getMyGroupChatReducer,
 } from './reducers/conversation';
 
 const reducer = combineReducers({
@@ -96,6 +97,7 @@ const reducer = combineReducers({
   listConversationMessages: listConversationMessagesReducer,
   deleteConversation: deleteConversationReducer,
   startConversation: startConversationReducer,
+  getMyGroupChat: getMyGroupChatReducer,
 });
 
 const initialState = {};
