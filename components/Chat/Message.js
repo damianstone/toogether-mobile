@@ -116,7 +116,7 @@ const styles = StyleSheet.create({
   messageContainer: {
     flexShrink: 1,
     flexDirection: 'row',
-    borderRadius: 15,
+    borderRadius: 10,
     paddingTop: 3,
     paddingBottom: 6,
     paddingHorizontal: 10,

@@ -14,7 +14,7 @@ import Colors from '../../constants/Colors';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import HeaderButtom from '../UI/HeaderButton';
 
-const GroupChatHeader = ({ navigation }) => {
+const GroupChatHeader = ({ navigation, totalMembers }) => {
   /*
   props I need
   member count 
@@ -40,11 +40,14 @@ const GroupChatHeader = ({ navigation }) => {
       <View style={styles.textContainer}>
         <TouchableOpacity
           style={styles.profileInfoContainer}
-          onPress={() => {}}>
+          onPress={() => navigation.navigate('GroupNavigator')}>
           <Text numberOfLines={1} style={styles.matched_Name}>
-            TOOG Group
+            Your Group
           </Text>
-          <Text style={styles.groupMemberCounterText}>5 members</Text>
+          <Text
+            style={
+              styles.groupMemberCounterText
+            }>{`${totalMembers} members`}</Text>
         </TouchableOpacity>
       </View>
       <TouchableOpacity style={styles.menuIcon} onPress={() => {}}>

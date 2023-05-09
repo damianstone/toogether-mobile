@@ -66,9 +66,13 @@ const GroupMessage = ({ isMyMessage, message }) => {
         ) : null}
         <View style={{ flexDirection: 'row' }}>
           <View style={styles.textMessageContainer}>
-            <Text style={styles.textMessage}>{message.message}</Text>
+            <Text style={isMyMessage ? styles.blackText : styles.whiteText}>
+              {formatWithLink(message.message)}
+            </Text>
           </View>
-          <Text style={styles.time}>{message.sent_at}</Text>
+          <Text style={isMyMessage ? styles.blackTime : styles.greyTime}>
+            {message.sent_at}
+          </Text>
         </View>
       </View>
       <TouchableOpacity onPress={() => {}}>
@@ -136,15 +140,28 @@ const styles = StyleSheet.create({
     flexShrink: 3,
   },
 
-  textMessage: {
-    fontSize: 18,
+  blackText: {
+    fontSize: 15,
     color: Colors.black,
     margin: 0,
   },
+  whiteText: {
+    fontSize: 15,
+    color: Colors.white,
+    margin: 0,
+  },
 
-  time: {
+  blackTime: {
     fontSize: 8.5,
-    color: Colors.bgCard,
+    color: Colors.black,
+    marginStart: 4,
+    alignSelf: 'flex-end',
+    opacity: 0.7
+  },
+
+  greyTime: {
+    fontSize: 8.5,
+    color: Colors.lightGray,
     marginStart: 4,
     alignSelf: 'flex-end',
   },
