@@ -66,7 +66,9 @@ const GroupMessage = ({ isMyMessage, message }) => {
         ) : null}
         <View style={{ flexDirection: 'row' }}>
           <View style={styles.textMessageContainer}>
-            <Text style={styles.textMessage}>{message.message}</Text>
+            <Text style={styles.textMessage}>
+              {formatWithLink(message.message)}
+            </Text>
           </View>
           <Text style={styles.time}>{message.sent_at}</Text>
         </View>
@@ -137,7 +139,7 @@ const styles = StyleSheet.create({
   },
 
   textMessage: {
-    fontSize: 18,
+    fontSize: 15,
     color: Colors.black,
     margin: 0,
   },

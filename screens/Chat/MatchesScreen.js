@@ -37,11 +37,7 @@ const MatchesScreen = (props) => {
   const isVisible = useIsFocused();
 
   const getMyGroupChatReducer = useSelector((state) => state.getMyGroupChat);
-  const {
-    error: errorGetGroupChat,
-    loading: loadingGroupChat,
-    data: groupChat,
-  } = getMyGroupChatReducer;
+  const { data: groupChat } = getMyGroupChatReducer;
 
   const listMatchesReducer = useSelector((state) => state.listMatches);
   const {
@@ -305,6 +301,8 @@ const MatchesScreen = (props) => {
                       goToGroupChat={() =>
                         props.navigation.navigate('GroupChat', {
                           groupId: groupContext.id,
+                          totalMembers: groupContext.total_members,
+                          currentIsOwnerGroup: isOwnerGroup,
                         })
                       }
                       lastMessage={groupChat.last_message}
