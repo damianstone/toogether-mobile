@@ -549,7 +549,7 @@ const HomeNavigator = () => {
       screenOptions={{
         headerShown: false,
       }}>
-      <Stack.Screen name="Main" component={ToogetherTab} />
+      <Stack.Screen name="TabNavigator" component={ToogetherTab} />
       <Stack.Screen
         name="ProfileModal"
         component={ProfileModalScreen}
