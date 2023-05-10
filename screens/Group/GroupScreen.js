@@ -242,6 +242,14 @@ const GroupScreen = (props) => {
     );
   };
 
+  const handleNavigateToGroupChat = () => {
+    props.navigation.navigate('GroupChat', {
+      groupId: groupContext.id,
+      totalMembers: groupContext.total_members,
+      currentIsOwnerGroup: isOwnerGroup,
+      fromGroupScreen: true,
+    })  }
+
   if (loadingDelete || loadingLeave || loadingRemoveMember) {
     return (
       <View style={styles.loadingScreen}>
@@ -323,9 +331,15 @@ const GroupScreen = (props) => {
               backgroundColor={Colors.orange}
             />
           )}
+          <ActionButton
+            onPress={handleNavigateToGroupChat}
+            text="Group Chat"
+            backgroundColor={Colors.calypso}
+            text_Style={{color: 'black'}}
+          />
           {groupContext?.members.length < 1 && (
             <Text style={{ fontSize: 10, color: Colors.placeholder }}>
-              Group incognito until 1 more member joins
+              Group is incognito until 1 or more members join
             </Text>
           )}
         </View>

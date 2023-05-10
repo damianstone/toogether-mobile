@@ -32,7 +32,7 @@ const BASE_URL = ENV.API_URL;
 API_URL = BASE_URL.replace('http://', '');
 
 const GroupChatScreen = (props) => {
-  const { groupId, totalMembers, currentIsOwnerGroup } = props.route.params;
+  const { groupId, totalMembers, currentIsOwnerGroup, fromGroupScreen } = props.route.params;
   const { showActionSheetWithOptions } = useActionSheet();
   const { profileContext } = useContext(Context);
 
@@ -187,6 +187,7 @@ const GroupChatScreen = (props) => {
       <GroupChatHeader
         navigation={props.navigation}
         totalMembers={totalMembers}
+        fromGroupScreen={fromGroupScreen}
       />
       {messagesData?.results.length == 0 ? (
         <View style={styles.noMsgContainer}>

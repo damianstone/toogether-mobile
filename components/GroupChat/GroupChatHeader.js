@@ -14,7 +14,7 @@ import Colors from '../../constants/Colors';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import HeaderButtom from '../UI/HeaderButton';
 
-const GroupChatHeader = ({ navigation, totalMembers }) => {
+const GroupChatHeader = ({ navigation, totalMembers, fromGroupScreen }) => {
   /*
   props I need
   member count 
@@ -27,7 +27,7 @@ const GroupChatHeader = ({ navigation, totalMembers }) => {
             Platform.OS === 'android' ? 'ios-arrow-back' : 'ios-arrow-back'
           }
           title="Back"
-          onPress={() => navigation.navigate('Matches')}
+          onPress={!fromGroupScreen ? (() => navigation.navigate('Matches')) : (() => navigation.navigate('Group'))}
         />
       </HeaderButtons>
       <TouchableOpacity style={styles.profilePictureButton} onPress={() => {}}>
