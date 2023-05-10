@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React from 'react';
 import Constants from 'expo-constants';
 import {
   Text,
@@ -10,15 +10,12 @@ import {
 } from 'react-native';
 import { Entypo } from '@expo/vector-icons';
 import { checkPhoto } from '../../utils/checks';
-import Colors from '../../constants/Colors';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import HeaderButtom from '../UI/HeaderButton';
+import Colors from '../../constants/Colors';
 
 const GroupChatHeader = ({ navigation, totalMembers }) => {
-  /*
-  props I need
-  member count 
-  */
+
   return (
     <View style={styles.headerContainer}>
       <HeaderButtons HeaderButtonComponent={HeaderButtom}>
@@ -40,7 +37,9 @@ const GroupChatHeader = ({ navigation, totalMembers }) => {
       <View style={styles.textContainer}>
         <TouchableOpacity
           style={styles.profileInfoContainer}
-          onPress={() => navigation.navigate('GroupNavigator')}>
+          onPress={() =>
+            navigation.navigate('TabNavigator', { screen: 'GroupNavigator' })
+          }>
           <Text numberOfLines={1} style={styles.matched_Name}>
             Your Group
           </Text>

@@ -10,13 +10,15 @@ import {
 import Colors from '../../constants/Colors';
 
 const PreviewGroupChat = ({ navigation, lastMessage, goToGroupChat }) => {
+  const handleAvatarNavigation = () => {
+    return navigation.navigate('TabNavigator', { screen: 'GroupNavigator' });
+  };
+
   return (
     <View style={styles.container}>
       <View>
         <TouchableOpacity
-          onPress={() => {
-            navigation.navigate('GroupNavigator');
-          }}
+          onPress={handleAvatarNavigation}
           style={styles.chat_profile_head}>
           <ImageBackground
             source={require('../../assets/images/group-chat-placeholder.png')}

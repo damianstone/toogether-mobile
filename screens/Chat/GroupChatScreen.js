@@ -192,7 +192,7 @@ const GroupChatScreen = (props) => {
         <View style={styles.noMsgContainer}>
           <Image
             style={styles.noMsgImage}
-            source={require('../../assets/images/no-messages.png')}
+            source={require('../../assets/images/no-group-messages-placeholder.png')}
           />
           <Text style={styles.noMsgText}>
             Start organizing with your friends{' '}
