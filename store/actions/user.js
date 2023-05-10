@@ -24,23 +24,23 @@ export const userLocation = () => {
         Authorization: `Bearer ${userData.token}`,
       };
 
-      // let location = await Location.getCurrentPositionAsync({
-      //   accuracy: Platform.OS === 'ios' ? 3 : Location.Accuracy.High,
-      // });
-      // // If you are getting stuck and not getting location (on Android uncomment this to get default location so that you can continue working)
-      let location;
-      if (Platform.OS === 'ios') {
-        location = await Location.getCurrentPositionAsync({
-          accuracy: Platform.OS === 'ios' ? 3 : Location.Accuracy.Highest,
-        });
-      } else {
-        location = {
-          coords: {
-            latitude: 37.4220936,
-            longitude: -122.083922,
-          },
-        };
-      }
+      let location = await Location.getCurrentPositionAsync({
+        accuracy: Platform.OS === 'ios' ? 3 : Location.Accuracy.High,
+      });
+
+      // let location;
+      // if (Platform.OS === 'ios') {
+      //   location = await Location.getCurrentPositionAsync({
+      //     accuracy: Platform.OS === 'ios' ? 3 : Location.Accuracy.Highest,
+      //   });
+      // } else {
+      //   location = {
+      //     coords: {
+      //       latitude: 37.4220936,
+      //       longitude: -122.083922,
+      //     },
+      //   };
+      // }
 
       const { data } = await axios({
         method: 'POST',
@@ -81,7 +81,6 @@ export const getUserProfile = (profile_id) => {
         Accept: 'application/json',
         Authorization: 'Bearer ' + userData.token,
       };
-
       const { data } = await axios({
         method: 'get',
         url: `${BASE_URL}/api/v1/profiles/${userData.id}/`,
