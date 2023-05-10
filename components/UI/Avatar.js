@@ -19,8 +19,6 @@ const Avatar = ({ onPress }) => {
     data: dataProfile,
   } = userProfile;
   const {
-    loading: loadingPhotos,
-    error: errorPhotos,
     data: photos,
   } = userListPhotos;
   console.log("photos",photos);
