@@ -176,6 +176,10 @@ const ChatScreen = (props) => {
   }, [errorBlockProfile, profileBlocked]);
 
   const handleSendMessage = () => {
+
+    console.log("MESSAGE => ", chatMessage)
+    console.log("FINISH")
+    
     if (chatMessage.length >= 1000) {
       return Alert.alert(
         'Message too long',

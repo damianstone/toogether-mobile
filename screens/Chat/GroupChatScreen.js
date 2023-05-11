@@ -26,6 +26,8 @@ import GroupMessage from '../../components/GroupChat/GroupMessage';
 import GroupChatHeader from '../../components/GroupChat/GroupChatHeader';
 
 import { ENV } from '../../environment';
+import { getMessageWithLinks } from '../../utils/getMethods';
+import Loader from '../../components/UI/Loader';
 
 const BASE_URL = ENV.API_URL;
 
@@ -36,6 +38,7 @@ const GroupChatScreen = (props) => {
   const { showActionSheetWithOptions } = useActionSheet();
   const { profileContext } = useContext(Context);
 
+  const [conversation, setConversation] = useState([]);
   const [chatMessage, setChatMessage] = useState('');
   const [chatSocket, setChatSocket] = useState(null);
   const dispatch = useDispatch();
@@ -49,11 +52,9 @@ const GroupChatScreen = (props) => {
     data: messagesData,
   } = messagesReducer;
 
-  console.log(messagesData);
-
   useEffect(() => {
     dispatch(listGroupMessages(groupId));
-  }, [groupId]);
+  }, []);
 
   useEffect(() => {
     if (groupId) {
@@ -64,6 +65,21 @@ const GroupChatScreen = (props) => {
 
       newChatSocket.onopen = () => {
         console.log('Socket opened');
+      };
+
+      newChatSocket.onmessage = (event) => {
+        console.log(event.data);
+        const jsonMessage = JSON.parse(event.data);
+        const messageWithLinks = getMessageWithLinks(jsonMessage.message);
+
+        dispatch(
+          addConversationMessage({
+            id: jsonMessage.id,
+            sent_by_current: jsonMessage.sender_id === profileContext.id,
+            sent_at: jsonMessage.sent_at,
+            message: messageWithLinks,
+          })
+        );
       };
 
       newChatSocket.onclose = (e) => {
@@ -78,7 +94,7 @@ const GroupChatScreen = (props) => {
       }
       setChatMessage('');
     };
-  }, [groupId, dispatch]);
+  }, [dispatch]);
 
   useEffect(() => {
     if (errorMessages) {
@@ -95,48 +111,8 @@ const GroupChatScreen = (props) => {
       );
     }
 
-    // Regular expression to detect URLs in chat message
-    const urlRegex = /(https?:\/\/[^\s]+)/gi;
-
-    // Replace URLs with clickable links
-    const messageWithLinks = chatMessage.replace(urlRegex, (url) => {
-      return url;
-    });
-
-    // Open clickable links in browser
-    const onLinkPress = (url) => {
-      Linking.canOpenURL(url).then((supported) => {
-        if (supported) {
-          Linking.openURL(url);
-        }
-      });
-    };
-
     if (chatSocket && chatMessage) {
       chatSocket.send(chatMessage);
-      dispatch(
-        addConversationMessage({
-          id: Math.random() * 10,
-          sent_by_current: true,
-          message: (
-            <Text>
-              {messageWithLinks.split(' ').map((word, i) => {
-                if (urlRegex.test(word)) {
-                  return (
-                    <Text
-                      key={i}
-                      style={{ color: Colors.bgCard }}
-                      onPress={() => onLinkPress(word)}>
-                      {word}{' '}
-                    </Text>
-                  );
-                }
-                return `${word} `;
-              })}
-            </Text>
-          ),
-        })
-      );
       setChatMessage('');
     }
   };
@@ -209,15 +185,7 @@ const GroupChatScreen = (props) => {
             extraData={messagesReducer}
             onEndReached={handleLoadMoreMessages}
           />
-          {loadingMessages && (
-            <ActivityModal
-              loading
-              title="Loading messages"
-              size="small"
-              activityColor="white"
-              titleColor="white"
-            />
-          )}
+          {loadingMessages && <Loader />}
         </View>
       )}
       <ChatTextInput
