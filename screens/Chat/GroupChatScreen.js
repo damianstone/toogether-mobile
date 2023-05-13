@@ -50,6 +50,8 @@ const GroupChatScreen = (props) => {
     data: messagesData,
   } = messagesReducer;
 
+
+
   useEffect(() => {
     dispatch(listGroupMessages(groupId));
   }, []);
@@ -76,6 +78,7 @@ const GroupChatScreen = (props) => {
             sent_by_current: jsonMessage.sender_id === profileContext.id,
             sent_at: jsonMessage.sent_at,
             sender_name: jsonMessage.sender_name,
+            sender_photo: { ...jsonMessage.sender_photo },
             message: messageWithLinks,
           })
         );
@@ -123,21 +126,14 @@ const GroupChatScreen = (props) => {
   };
 
   const renderMessages = ({ item }) => {
-    return <GroupMessage isMyMessage={item.sent_by_current} message={item} />;
+    return (
+      <GroupMessage
+        key={item.id}
+        isMyMessage={item.sent_by_current}
+        message={item}
+      />
+    );
   };
-
-  if (loadingMessages) {
-    <ActivityModal
-      loading
-      title="Laoding"
-      size="small"
-      activityColor="white"
-      titleColor="white"
-      activityWrapperStyle={{
-        backgroundColor: Colors.bg,
-      }}
-    />;
-  }
 
   return (
     <KeyboardAvoidingView style={styles.screen} behavior="height">
@@ -160,10 +156,10 @@ const GroupChatScreen = (props) => {
           <FlatList
             inverted={true}
             data={messagesData?.results}
+            keyExtractor={(message) => message.id}
             renderItem={renderMessages}
             contentContainerStyle={{ flexDirection: 'column' }}
             onEndReachedThreshold={0.2}
-            extraData={messagesReducer}
             onEndReached={handleLoadMoreMessages}
           />
           {loadingMessages && <Loader />}
