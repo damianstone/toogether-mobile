@@ -6,7 +6,6 @@ import {
   Image,
   FlatList,
   Text,
-  Linking,
   KeyboardAvoidingView,
 } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
@@ -35,7 +34,6 @@ API_URL = BASE_URL.replace('http://', '');
 
 const GroupChatScreen = (props) => {
   const { groupId, totalMembers, currentIsOwnerGroup } = props.route.params;
-  const { showActionSheetWithOptions } = useActionSheet();
   const { profileContext } = useContext(Context);
 
   const [conversation, setConversation] = useState([]);
@@ -77,6 +75,7 @@ const GroupChatScreen = (props) => {
             id: jsonMessage.id,
             sent_by_current: jsonMessage.sender_id === profileContext.id,
             sent_at: jsonMessage.sent_at,
+            sender_name: jsonMessage.sender_name,
             message: messageWithLinks,
           })
         );
@@ -115,24 +114,6 @@ const GroupChatScreen = (props) => {
       chatSocket.send(chatMessage);
       setChatMessage('');
     }
-  };
-
-  const onOpenActionSheet = (profile, chatId) => {
-    // Same interface as https://facebook.github.io/react-native/docs/actionsheetios.html
-    const options = ['View group', 'Delete group', 'Cancel'];
-    const destructiveButtonIndex = [1, 2, 3];
-    const cancelButtonIndex = 4;
-
-    showActionSheetWithOptions(
-      {
-        options,
-        cancelButtonIndex,
-        destructiveButtonIndex,
-      },
-      (buttonIndex) => {
-        return null;
-      }
-    );
   };
 
   const handleLoadMoreMessages = () => {

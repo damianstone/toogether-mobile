@@ -2,13 +2,13 @@ import React from 'react';
 import {
   Text,
   View,
-  ImageBackground,
   StyleSheet,
   TouchableOpacity,
   Linking,
 } from 'react-native';
+import FastImage from 'react-native-fast-image';
 
-import { checkPhoto } from '../../utils/checks';
+import { getImage } from '../../utils/getMethods';
 import Colors from '../../constants/Colors';
 
 const GroupMessage = ({ isMyMessage, message }) => {
@@ -75,11 +75,18 @@ const GroupMessage = ({ isMyMessage, message }) => {
           </Text>
         </View>
       </View>
-      <TouchableOpacity onPress={() => {}}>
-        <ImageBackground
-          source={checkPhoto(message.sender_photo)}
-          imageStyle={styles.img}
-          style={styles.singleImageContainer}
+      <TouchableOpacity style={styles.singleImageContainer} onPress={() => {}}>
+        <FastImage
+          style={styles.img}
+          resizeMode={FastImage.resizeMode.cover}
+          source={
+            message?.sender_photo
+              ? {
+                  uri: `${getImage(message.sender_photo.image)}`,
+                  priority: FastImage.priority.high,
+                }
+              : require('../../assets/images/placeholder-profile.png')
+          }
         />
       </TouchableOpacity>
     </View>
@@ -156,7 +163,7 @@ const styles = StyleSheet.create({
     color: Colors.black,
     marginStart: 4,
     alignSelf: 'flex-end',
-    opacity: 0.7
+    opacity: 0.7,
   },
 
   greyTime: {

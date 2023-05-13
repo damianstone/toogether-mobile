@@ -124,3 +124,10 @@ export const checkPhoto = (profile) => {
   }
   return require('../assets/images/placeholder-profile.png');
 };
+
+export const checkSenderPhoto = (message) => {
+  if (message && message.sender_photo) {
+    return { uri: `${getImage(message.sender_photo.image)}` };
+  }
+  return require('../assets/images/placeholder-profile.png');
+};
