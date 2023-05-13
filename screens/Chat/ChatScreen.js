@@ -176,10 +176,9 @@ const ChatScreen = (props) => {
   }, [errorBlockProfile, profileBlocked]);
 
   const handleSendMessage = () => {
+    console.log('MESSAGE => ', chatMessage);
+    console.log('FINISH');
 
-    console.log("MESSAGE => ", chatMessage)
-    console.log("FINISH")
-    
     if (chatMessage.length >= 1000) {
       return Alert.alert(
         'Message too long',
@@ -388,8 +387,6 @@ const ChatScreen = (props) => {
       <Message
         message={item}
         isMyMessage={item.sent_by_current}
-        ownProfile={profileContext}
-        matchedProfile={receiverProfile}
         onShowProfile={() =>
           item.sent_by_current
             ? handleShowProfile(
