@@ -6,10 +6,8 @@ import Colors from '../../constants/Colors';
 import { getNameInitials, getImage } from '../../utils/getMethods';
 import Loader from './Loader';
 import FastImage from 'react-native-fast-image';
-import { useIsFocused } from '@react-navigation/native';
 
 const Avatar = ({ onPress }) => {
-  const dispatch = useDispatch();
 
   const userProfile = useSelector((state) => state.userGetProfile);
   const userListPhotos = useSelector((state) => state.userListPhotos);
@@ -21,8 +19,6 @@ const Avatar = ({ onPress }) => {
   const {
     data: photos,
   } = userListPhotos;
-  console.log("photos",photos);
-  console.log("profile",userProfile);
 
   return (
     <TouchableOpacity onPress={onPress} style={styles.imgContainer}>
