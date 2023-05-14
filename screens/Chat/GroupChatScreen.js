@@ -33,10 +33,9 @@ const BASE_URL = ENV.API_URL;
 API_URL = BASE_URL.replace('http://', '');
 
 const GroupChatScreen = (props) => {
-  const { groupId, totalMembers, currentIsOwnerGroup } = props.route.params;
+  const { groupId, totalMembers } = props.route.params;
   const { profileContext } = useContext(Context);
 
-  const [conversation, setConversation] = useState([]);
   const [chatMessage, setChatMessage] = useState('');
   const [chatSocket, setChatSocket] = useState(null);
   const dispatch = useDispatch();
@@ -49,8 +48,6 @@ const GroupChatScreen = (props) => {
     loading: loadingMessages,
     data: messagesData,
   } = messagesReducer;
-
-
 
   useEffect(() => {
     dispatch(listGroupMessages(groupId));
@@ -68,7 +65,6 @@ const GroupChatScreen = (props) => {
       };
 
       newChatSocket.onmessage = (event) => {
-        console.log(event.data);
         const jsonMessage = JSON.parse(event.data);
         const messageWithLinks = getMessageWithLinks(jsonMessage.message);
 

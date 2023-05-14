@@ -74,8 +74,7 @@ const MatchesScreen = (props) => {
   }, [isVisible]);
 
   useEffect(() => {
-    dispatch(listMatches());
-    dispatch(listMyConversations());
+    reload();
   }, [matchDeleted]);
 
   useEffect(() => {
