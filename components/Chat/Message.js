@@ -2,23 +2,16 @@ import React from 'react';
 import {
   Text,
   View,
-  ImageBackground,
   StyleSheet,
   TouchableOpacity,
   Linking,
 } from 'react-native';
+import FastImage from 'react-native-fast-image';
 
-import { checkPhoto } from '../../utils/checks';
+import { getImage } from '../../utils/getMethods';
 import Colors from '../../constants/Colors';
 
-const Message = ({
-  isMyMessage,
-  message,
-  onShowProfile,
-  receiverData,
-  ownProfile,
-  isPrevMessageFromCurrentUser,
-}) => {
+const Message = ({ isMyMessage, message, onShowProfile }) => {
   const formatWithLink = (text) => {
     if (!text || typeof text !== 'string') {
       return text;
@@ -58,7 +51,6 @@ const Message = ({
       style={[
         styles.container,
         isMyMessage ? styles.myMessage : styles.senderMessage,
-        isPrevMessageFromCurrentUser ? styles.sameSender : null,
       ]}>
       <View
         style={[
@@ -72,11 +64,21 @@ const Message = ({
         </View>
         <Text style={styles.time}>{message.sent_at}</Text>
       </View>
-      <TouchableOpacity onPress={onShowProfile}>
-        <ImageBackground
-          source={checkPhoto(isMyMessage ? ownProfile : receiverData)}
+      <TouchableOpacity
+        style={styles.singleImageContainer}
+        onPress={onShowProfile}>
+        <FastImage
+          source={
+            message?.sender_photo
+              ? {
+                  uri: `${getImage(message.sender_photo.image)}`,
+                  priority: FastImage.priority.high,
+                }
+              : require('../../assets/images/placeholder-profile.png')
+          }
           imageStyle={styles.img}
-          style={styles.singleImageContainer}></ImageBackground>
+          style={styles.singleImageContainer}
+        />
       </TouchableOpacity>
     </View>
   );
