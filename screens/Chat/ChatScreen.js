@@ -18,7 +18,7 @@ import {
   deleteConversation,
   loadMoreMessages,
 } from '../../store/actions/conversation';
-import { getMessageWithLinks } from '../../utils/getMethods';
+import { getMessageWithLinks, getWebSocketURL } from '../../utils/getMethods';
 import { blockProfile } from '../../store/actions/block';
 import { reportProfile } from '../../store/actions/user';
 import { checkServerError } from '../../utils/errors';
@@ -33,9 +33,7 @@ import * as c from '../../constants/requestTypes/conversation';
 import { ENV } from '../../environment';
 import Loader from '../../components/UI/Loader';
 
-const BASE_URL = ENV.API_URL;
-
-API_URL = BASE_URL.replace('http://', '');
+const WS_URL = getWebSocketURL()
 
 const ChatScreen = (props) => {
   const { showActionSheetWithOptions } = useActionSheet();
@@ -86,7 +84,7 @@ const ChatScreen = (props) => {
   useEffect(() => {
     if (conversationId) {
       const wsUrl = encodeURI(
-        `ws://${API_URL}/chat/${conversationId}/?sender_id=${profileContext.id}&my_group_chat=false`
+        `ws://${WS_URL}/chat/${conversationId}/?sender_id=${profileContext.id}&my_group_chat=false`
       );
       const newChatSocket = new WebSocket(wsUrl);
 

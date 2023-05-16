@@ -23,17 +23,13 @@ import ChatTextInput from '../../components/Chat/ChatTextInput';
 import GroupMessage from '../../components/GroupChat/GroupMessage';
 import GroupChatHeader from '../../components/GroupChat/GroupChatHeader';
 
-import { ENV } from '../../environment';
-import { getMessageWithLinks } from '../../utils/getMethods';
+import { getMessageWithLinks, getWebSocketURL } from '../../utils/getMethods';
 import Loader from '../../components/UI/Loader';
 
-const BASE_URL = ENV.API_URL;
-
-API_URL = BASE_URL.replace('http://', '');
+const WS_URL = getWebSocketURL();
 
 const GroupChatScreen = (props) => {
-  const { groupId, totalMembers, currentIsOwnerGroup, fromGroupScreen } =
-    props.route.params;
+  const { groupId, totalMembers, fromGroupScreen } = props.route.params;
   const { showActionSheetWithOptions } = useActionSheet();
   const { profileContext } = useContext(Context);
 
@@ -57,7 +53,7 @@ const GroupChatScreen = (props) => {
   useEffect(() => {
     if (groupId) {
       const wsUrl = encodeURI(
-        `ws://${API_URL}/chat/${groupId}/?sender_id=${profileContext.id}&my_group_chat=true`
+        `ws://${WS_URL}/chat/${groupId}/?sender_id=${profileContext.id}&my_group_chat=true`
       );
       const newChatSocket = new WebSocket(wsUrl);
 

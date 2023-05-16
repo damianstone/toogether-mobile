@@ -37,6 +37,14 @@ export const getImage = (backend_image) => {
   return image;
 };
 
+export const getWebSocketURL = () => {
+  const BASE_URL = ENV.API_URL;
+  if (MODE === 'rocket') {
+    return BASE_URL.replace('https://', '');
+  }
+  return BASE_URL.replace('http://', '');
+};
+
 export const getMessageWithLinks = (stringMessage) => {
   // Regular expression to detect URLs in chat message
   const urlRegex = /(https?:\/\/[^\s]+)/gi;
@@ -68,8 +76,7 @@ export const getMessageWithLinks = (stringMessage) => {
             <Text
               key={i}
               style={{ color: Colors.bgCard }}
-              onPress={() => onLinkPress(word)}
-            >
+              onPress={() => onLinkPress(word)}>
               {word}{' '}
             </Text>
           );
