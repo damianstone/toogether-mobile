@@ -1,19 +1,47 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
-import Constants from 'expo-constants';
-import * as w from '../../constants/requestTypes/swipe';
+import * as c from '../../constants/requestTypes/conversation';
 import { ENV } from '../../environment';
 
 const BASE_URL = ENV.API_URL;
 
-// -------------------------------- SWIPE CARDS --------------------------------
-export const listSwipe = () => {
+// -------------------------------- CHAT (1-1) --------------------------------
+export const listMyConversations = () => {
   return async (dispatch) => {
     try {
-      dispatch({ type: w.LIST_SWIPE_REQUEST });
+      dispatch({ type: c.LIST_CONVERSATIONS_REQUEST });
 
       const userData = JSON.parse(await AsyncStorage.getItem('@userData'));
 
+      const config = {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+        Authorization: 'Bearer ' + userData.token,
+      };
+      const { data } = await axios({
+        method: 'get',
+        url: `${BASE_URL}/api/v1/conversations/`,
+        headers: config,
+      });
+      dispatch({
+        type: c.LIST_CONVERSATIONS_SUCCESS,
+        payload: data,
+      });
+    } catch (error) {
+      dispatch({
+        type: c.LIST_CONVERSATIONS_FAIL,
+        payload: error,
+      });
+    }
+  };
+};
+
+export const listMessages = (id) => {
+  return async (dispatch) => {
+    try {
+      dispatch({ type: c.LIST_CONVERSATION_MESSAGES_REQUEST });
+
+      const userData = JSON.parse(await AsyncStorage.getItem('@userData'));
       const config = {
         'Content-Type': 'application/json',
         Accept: 'application/json',
@@ -22,28 +50,31 @@ export const listSwipe = () => {
 
       const { data } = await axios({
         method: 'get',
-        url: `${BASE_URL}/api/v1/swipe/`,
+        url: `${BASE_URL}/api/v1/conversations/${id}/messages/`,
         headers: config,
       });
 
       dispatch({
-        type: w.LIST_SWIPE_SUCCESS,
+        type: c.LIST_CONVERSATION_MESSAGES_SUCCESS,
         payload: data,
       });
     } catch (error) {
       dispatch({
-        type: w.LIST_SWIPE_FAIL,
+        type: c.LIST_CONVERSATION_MESSAGES_FAIL,
         payload: error,
       });
     }
   };
 };
 
-// get the current swipe profile that could be as a single profile or a group (show preview porpuses)
-export const getSwipeProfile = (id) => {
+export const addConversationMessage = (messages) => (dispatch) => {
+  dispatch({ type: c.ADD_CONVERSATION_MESSAGE, payload: messages });
+};
+
+export const deleteConversation = (id) => {
   return async (dispatch) => {
     try {
-      dispatch({ type: w.GET_SWIPE_PROFILE_REQUEST });
+      dispatch({ type: c.DELETE_CONVERSATION_REQUEST });
 
       const userData = JSON.parse(await AsyncStorage.getItem('@userData'));
 
@@ -53,30 +84,94 @@ export const getSwipeProfile = (id) => {
         Authorization: 'Bearer ' + userData.token,
       };
 
+      const { data } = await axios({
+        method: 'delete',
+        url: `${BASE_URL}/api/v1/conversations/${id}/`,
+        headers: config,
+      });
+
+      dispatch({
+        type: c.DELETE_CONVERSATION_SUCCESS,
+        payload: data,
+      });
+
+      dispatch({ type: c.DELETE_CONVERSATION_RESET });
+    } catch (error) {
+      dispatch({
+        type: c.DELETE_CONVERSATION_FAIL,
+        payload: error,
+      });
+    }
+  };
+};
+
+export const startConversation = (matchId) => {
+  return async (dispatch) => {
+    try {
+      dispatch({ type: c.START_CONVERSATION_REQUEST });
+
+      const userData = JSON.parse(await AsyncStorage.getItem('@userData'));
+
+      const config = {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + userData.token,
+      };
+
+      const { data } = await axios({
+        method: 'POST',
+        url: `${BASE_URL}/api/v1/conversations/${matchId}/start/`,
+        headers: config,
+      });
+      dispatch({
+        type: c.START_CONVERSATION_SUCCESS,
+        payload: data,
+      });
+      dispatch({ type: c.START_CONVERSATION_RESET });
+    } catch (error) {
+      dispatch({
+        type: c.START_CONVERSATION_FAIL,
+        payload: error,
+      });
+    }
+  };
+};
+
+// -------------------------------- GROUP CHAT--------------------------------
+
+export const getMyGroupChat = (groupId) => {
+  return async (dispatch) => {
+    try {
+      dispatch({ type: c.GET_GROUP_CHAT_REQUEST });
+
+      const userData = JSON.parse(await AsyncStorage.getItem('@userData'));
+
+      const config = {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+        Authorization: 'Bearer ' + userData.token,
+      };
       const { data } = await axios({
         method: 'get',
-        url: `${BASE_URL}/api/v1/swipe/${id}/actions/get-swipe-profile/`,
+        url: `${BASE_URL}/api/v1/group-chat/${groupId}/`,
         headers: config,
       });
-
       dispatch({
-        type: w.GET_SWIPE_PROFILE_SUCCESS,
+        type: c.GET_GROUP_CHAT_SUCCESS,
         payload: data,
       });
     } catch (error) {
       dispatch({
-        type: w.GET_SWIPE_PROFILE_FAIL,
+        type: c.GET_GROUP_CHAT_FAIL,
         payload: error,
       });
     }
   };
 };
 
-// -------------------------------- LIKES --------------------------------
-export const listLikes = () => {
+export const listGroupMessages = (groupId) => {
   return async (dispatch) => {
     try {
-      dispatch({ type: w.LIST_LIKES_REQUEST });
+      dispatch({ type: c.LIST_CONVERSATION_MESSAGES_REQUEST });
 
       const userData = JSON.parse(await AsyncStorage.getItem('@userData'));
 
@@ -85,127 +180,30 @@ export const listLikes = () => {
         Accept: 'application/json',
         Authorization: 'Bearer ' + userData.token,
       };
-
       const { data } = await axios({
         method: 'get',
-        url: `${BASE_URL}/api/v1/swipe/actions/get-likes/`,
+        url: `${BASE_URL}/api/v1/group-chat/${groupId}/messages/`,
         headers: config,
       });
-
       dispatch({
-        type: w.LIST_LIKES_SUCCESS,
+        type: c.LIST_CONVERSATION_MESSAGES_SUCCESS,
         payload: data,
       });
     } catch (error) {
       dispatch({
-        type: w.LIST_LIKES_FAIL,
+        type: c.LIST_CONVERSATION_MESSAGES_FAIL,
         payload: error,
       });
     }
   };
 };
 
-export const like = (id) => {
+// -------------------------------- PAGINATION --------------------------------
+
+export const loadMoreConversations = (url) => {
   return async (dispatch) => {
     try {
-      dispatch({ type: w.LIKE_PROFILE_REQUEST });
-
-      const userData = JSON.parse(await AsyncStorage.getItem('@userData'));
-
-      const config = {
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
-        Authorization: 'Bearer ' + userData.token,
-      };
-
-      const { data } = await axios({
-        method: 'post',
-        url: `${BASE_URL}/api/v1/swipe/${id}/actions/like/`,
-        headers: config,
-      });
-
-      dispatch({
-        type: w.LIKE_PROFILE_SUCCESS,
-        payload: data,
-      });
-    } catch (error) {
-      dispatch({
-        type: w.LIKE_PROFILE_FAIL,
-        payload: error,
-      });
-    }
-  };
-};
-
-export const removeLike = (id) => {
-  return async (dispatch) => {
-    try {
-      dispatch({ type: w.REMOVE_LIKE_REQUEST });
-
-      const userData = JSON.parse(await AsyncStorage.getItem('@userData'));
-
-      const config = {
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
-        Authorization: 'Bearer ' + userData.token,
-      };
-
-      const { data } = await axios({
-        method: 'post',
-        url: `${BASE_URL}/api/v1/swipe/${id}/actions/remove-like/`,
-        headers: config,
-      });
-
-      dispatch({
-        type: w.REMOVE_LIKE_SUCCESS,
-        payload: data,
-      });
-    } catch (error) {
-      dispatch({
-        type: w.REMOVE_LIKE_FAIL,
-        payload: error,
-      });
-    }
-  };
-};
-
-// -------------------------------- MATCHES --------------------------------
-export const listMatches = () => {
-  return async (dispatch) => {
-    try {
-      dispatch({ type: w.LIST_MATCH_REQUEST });
-
-      const userData = JSON.parse(await AsyncStorage.getItem('@userData'));
-
-      const config = {
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
-        Authorization: 'Bearer ' + userData.token,
-      };
-
-      const { data } = await axios({
-        method: 'get',
-        url: `${BASE_URL}/api/v1/matches/`,
-        headers: config,
-      });
-
-      dispatch({
-        type: w.LIST_MATCH_SUCCESS,
-        payload: data,
-      });
-    } catch (error) {
-      dispatch({
-        type: w.LIST_MATCH_FAIL,
-        payload: error,
-      });
-    }
-  };
-};
-
-export const loadMoreMatches = (url) => {
-  return async (dispatch) => {
-    try {
-      dispatch({ type: w.LOAD_MORE_MATCH_REQUEST });
+      dispatch({ type: c.LOAD_MORE_CONVERSATIONS_REQUESTS });
 
       const userData = JSON.parse(await AsyncStorage.getItem('@userData'));
 
@@ -222,22 +220,22 @@ export const loadMoreMatches = (url) => {
       });
 
       dispatch({
-        type: w.LOAD_MORE_MATCH_SUCCESS,
+        type: c.LOAD_MORE_CONVERSATIONS_SUCCESS,
         payload: data,
       });
     } catch (error) {
       dispatch({
-        type: w.LOAD_MORE_MATCH_FAIL,
+        type: c.LOAD_MORE_CONVERSATIONS_FAIL,
         payload: error,
       });
     }
   };
 };
 
-export const deleteMatch = (id) => {
+export const loadMoreMessages = (url) => {
   return async (dispatch) => {
     try {
-      dispatch({ type: w.DELETE_MATCH_REQUEST });
+      dispatch({ type: c.LOAD_MORE_MESSAGES_REQUESTS });
 
       const userData = JSON.parse(await AsyncStorage.getItem('@userData'));
 
@@ -248,18 +246,18 @@ export const deleteMatch = (id) => {
       };
 
       const { data } = await axios({
-        method: 'delete',
-        url: `${BASE_URL}/api/v1/matches/${id}/`,
+        method: 'get',
+        url: url,
         headers: config,
       });
 
       dispatch({
-        type: w.DELETE_MATCH_SUCCESS,
+        type: c.LOAD_MORE_MESSAGES_SUCCESS,
         payload: data,
       });
     } catch (error) {
       dispatch({
-        type: w.DELETE_MATCH_FAIL,
+        type: c.LOAD_MORE_MESSAGES_FAIL,
         payload: error,
       });
     }

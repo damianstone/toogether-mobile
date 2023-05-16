@@ -15,7 +15,6 @@ import Colors from '../constants/Colors';
 
 import SwipeProfileScreen from '../screens/SwipeProfile/SwipeProfileScreen';
 import ProfileModalScreen from '../screens/SwipeProfile/ProfileModalScreen';
-import MatchScreen from '../screens/Match/MatchScreen';
 
 import AuthScreen from '../screens/Auth/AuthScreen';
 import AuthStartScreen from '../screens/Auth/AuthStartScreen';
@@ -32,17 +31,22 @@ import SettingScreen from '../screens/MyProfile/SettingScreen';
 import EditProfileScreen from '../screens/MyProfile/EditProfileScreen';
 
 import SwipeScreen from '../screens/Swipe/SwipeScreen';
-import ChatScreen from '../screens/ChatScreen';
 import LikesScreen from '../screens/Likes/LikesScreen';
 import BlockProfilesScreen from '../screens/BlockProfiles/BlockProfilesScreen';
 import InstagramScreen from '../screens/CreateProfile/InstagramScreen';
 
-import Avatar from '../components/UI/Avatar';
-import HeaderButtom from '../components/UI/HeaderButton';
-import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import RecoveryScreen from '../screens/Recovery/RecoveryScreen';
 import ValidateCodeScreen from '../screens/Recovery/ValidateCodeScreen';
 import ChangePasswordScreen from '../screens/Recovery/ChangePasswordScreen';
+
+import ChatScreen from '../screens/Chat/ChatScreen';
+import GroupChatScreen from '../screens/Chat/GroupChatScreen';
+import MatchesScreen from '../screens/Chat/MatchesScreen';
+import ItsMatchScreenModal from '../screens/ItsMatchModal/ItsMatchScreenModal';
+
+import Avatar from '../components/UI/Avatar';
+import HeaderButtom from '../components/UI/HeaderButton';
+import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 
 const Stack = createStackNavigator();
 
@@ -215,8 +219,8 @@ const ChatNavigator = () => {
       }}
     >
       <Stack.Screen
-        name="Chat"
-        component={ChatScreen}
+        name="Matches"
+        component={MatchesScreen}
         options={({ navigation }) => ({
           title: 'Matches',
           headerLeft: () => (
@@ -235,6 +239,20 @@ const ChatNavigator = () => {
             </HeaderButtons>
           ),
         })}
+      />
+      <Stack.Screen
+        name="Chat"
+        component={ChatScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="GroupChat"
+        component={GroupChatScreen}
+        options={{
+          headerShown: false,
+        }}
       />
       <Stack.Screen
         name="SwipeProfile"
@@ -270,7 +288,7 @@ const MatchNavigator = () => {
       screenOptions={{ ...defaultNavOptions, presentation: 'modal' }}
     >
       <Stack.Screen
-        name="Matches"
+        name="ChatNavigator"
         component={ChatNavigator}
         options={{ headerShown: false }}
       />
@@ -443,6 +461,13 @@ const GroupNavigator = () => {
           ),
         })}
       />
+      <Stack.Screen
+        name="GroupChat"
+        component={GroupChatScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
     </Stack.Navigator>
   );
 };
@@ -533,7 +558,7 @@ const HomeNavigator = () => {
         headerShown: false,
       }}
     >
-      <Stack.Screen name="Main" component={ToogetherTab} />
+      <Stack.Screen name="TabNavigator" component={ToogetherTab} />
       <Stack.Screen
         name="ProfileModal"
         component={ProfileModalScreen}
@@ -541,7 +566,7 @@ const HomeNavigator = () => {
       />
       <Stack.Screen
         name="SwipeMatch"
-        component={MatchScreen}
+        component={ItsMatchScreenModal}
         options={{ presentation: 'modal' }}
       />
     </Stack.Navigator>

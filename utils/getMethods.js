@@ -1,5 +1,5 @@
-import { Platform } from 'react-native';
-import Device from '../theme/Device';
+import { Platform, View, Text, Linking, Alert } from 'react-native';
+import Colors from '../constants/Colors';
 import { ENV } from '../environment';
 
 const API_URL = ENV.API_URL;
@@ -35,4 +35,47 @@ export const getImage = (backend_image) => {
     image = `${backend_image}`;
   }
   return image;
+};
+
+export const getMessageWithLinks = (stringMessage) => {
+  // Regular expression to detect URLs in chat message
+  const urlRegex = /(https?:\/\/[^\s]+)/gi;
+
+  // Replace URLs with clickable links
+  const messageWithLinks = stringMessage.replace(urlRegex, (url) => {
+    return url;
+  });
+
+  // Open clickable links in browser
+  const onLinkPress = (url) => {
+    Linking.canOpenURL(url).then((supported) => {
+      if (supported) {
+        Linking.openURL(url);
+      } else {
+        Alert.alert(
+          'No sopported type of link',
+          'Sorry but the message you are trying to send contains a unsupported link'
+        );
+      }
+    });
+  };
+
+  return (
+    <Text>
+      {messageWithLinks.split(' ').map((word, i) => {
+        if (urlRegex.test(word)) {
+          return (
+            <Text
+              key={i}
+              style={{ color: Colors.bgCard }}
+              onPress={() => onLinkPress(word)}
+            >
+              {word}{' '}
+            </Text>
+          );
+        }
+        return `${word} `;
+      })}
+    </Text>
+  );
 };
