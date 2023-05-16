@@ -1,8 +1,7 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import Colors from '../../constants/Colors';
-// import { getUserProfile, listUserPhotos, } from '../../store/actions/user';
 import { getNameInitials, getImage } from '../../utils/getMethods';
 import Loader from './Loader';
 import FastImage from 'react-native-fast-image';
