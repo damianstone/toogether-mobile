@@ -1,4 +1,5 @@
 import * as r from '../constants/responses/match';
+import { getImage } from './getMethods';
 
 /*
  * check if the value exists
@@ -112,4 +113,21 @@ export const checkMemberInGroup = (memberId, groupMembers) => {
   }
 
   return false;
+};
+
+export const checkPhoto = (profile) => {
+  if (profile && profile.photos?.length > 0) {
+    return { uri: `${getImage(profile.photos[0]?.image)}` };
+  }
+  if (profile && profile?.photo) {
+    return { uri: `${getImage(profile.photo)}` };
+  }
+  return require('../assets/images/placeholder-profile.png');
+};
+
+export const checkSenderPhoto = (message) => {
+  if (message && message.sender_photo) {
+    return { uri: `${getImage(message.sender_photo.image)}` };
+  }
+  return require('../assets/images/placeholder-profile.png');
 };

@@ -81,7 +81,6 @@ export const getUserProfile = (profile_id) => {
         Accept: 'application/json',
         Authorization: 'Bearer ' + userData.token,
       };
-
       const { data } = await axios({
         method: 'get',
         url: `${BASE_URL}/api/v1/profiles/${userData.id}/`,

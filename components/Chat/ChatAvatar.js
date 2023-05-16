@@ -2,9 +2,9 @@ import React from 'react';
 import { Text, View, StyleSheet, TouchableOpacity } from 'react-native';
 import FastImage from 'react-native-fast-image';
 
-import { getNameInitials, getImage } from '../utils/getMethods';
-import Colors from '../constants/Colors';
-import FastImageBackground from './UI/FastImageBackground';
+import { getNameInitials, getImage } from '../../utils/getMethods';
+import Colors from '../../constants/Colors';
+import FastImageBackground from '../UI/FastImageBackground';
 
 const ChatAvatar = (props) => {
   const {
@@ -14,6 +14,8 @@ const ChatAvatar = (props) => {
     matchedProfileHasPhoto,
     matchedProfilePhoto,
     onShowProfile,
+    hasBorder,
+    isChat,
   } = props;
 
   if (matchedProfileHasPhoto) {
@@ -28,8 +30,7 @@ const ChatAvatar = (props) => {
           containerStyle={
             isInGroup ? styles.groupImageContainer : styles.singleImageContainer
           }
-          onPress={onShowProfile}
-        >
+          onPress={onShowProfile}>
           {isInGroup ? (
             <View style={styles.counterCircle}>
               <Text style={styles.counterCircleText}>
@@ -45,8 +46,7 @@ const ChatAvatar = (props) => {
   return (
     <TouchableOpacity
       style={styles.noPhotoContainer}
-      onPress={props.onShowProfile}
-    >
+      onPress={props.onShowProfile}>
       <Text style={{ color: Colors.white, fontSize: 20 }}>
         {getNameInitials(matchedProfile.name)}
       </Text>
@@ -89,10 +89,10 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     padding: 5,
   },
-
+  //Changed width and height to 50 to match figma
   singleImageContainer: {
-    width: 60,
-    height: 60,
+    width: 50,
+    height: 50,
     borderRadius: 100,
     justifyContent: 'center',
     alignItems: 'center',
@@ -105,14 +105,23 @@ const styles = StyleSheet.create({
     height: '100%',
     borderRadius: 100,
   },
-
+  //Changed width and height to 50 to match figma
   noPhotoContainer: {
-    width: 60,
-    height: 60,
+    width: 50,
+    height: 50,
     borderRadius: 100,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: Colors.orange,
+    backgroundColor: Colors.bgCard,
+
     marginRight: 20,
+  },
+  //If the match has no messages, the avatar will have a border
+  chat: {
+    borderColor: Colors.orange,
+    borderWidth: 2,
+    width: 65,
+    height: 65,
+    borderRadius: 100,
   },
 });

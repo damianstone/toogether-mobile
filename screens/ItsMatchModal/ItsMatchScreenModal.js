@@ -6,13 +6,13 @@ import * as r from '../../constants/responses/match';
 import * as w from '../../constants/requestTypes/swipe';
 import SwipeMatch from '../../components/SwipeMatch';
 
-const MatchScreen = (props) => {
+const ItsMatchScreenModal = (props) => {
   const { likeData } = props.route.params;
   const dispatch = useDispatch();
 
   const handleGoToMatches = () => {
     props.navigation.goBack(null);
-    props.navigation.navigate('Chat');
+    props.navigation.navigate('Match');
   };
 
   const handleCloseMatch = () => {
@@ -103,4 +103,4 @@ const MatchScreen = (props) => {
   );
 };
 
-export default MatchScreen;
+export default ItsMatchScreenModal;

@@ -14,7 +14,6 @@ const SwipeProfileScreen = (props) => {
   const { mainProfileId, isInGroup, isMyProfile } = props.route.params;
 
   const dispatch = useDispatch();
-
   const currentSwipeProfile = useSelector((state) => state.getSwipeProfile);
 
   const {
@@ -129,8 +128,7 @@ const SwipeProfileScreen = (props) => {
             alignItems: 'center',
             backgroundColor: Colors.bgCard,
             opacity: 0.5,
-          }}
-        >
+          }}>
           <Loader />
         </View>
       </View>
