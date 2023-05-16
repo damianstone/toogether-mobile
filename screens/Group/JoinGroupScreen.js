@@ -9,6 +9,7 @@ import {
   KeyboardAvoidingView,
   Alert,
   Dimensions,
+  ScrollView,
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { StatusBar } from 'expo-status-bar';
@@ -128,8 +129,11 @@ const JoinGroupScreen = (props) => {
   return (
     <SafeAreaView style={styles.screen}>
       <StatusBar style="light" />
-      <KeyboardAvoidingView behavior="position">
-        <View style={styles.container}>
+      <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'position' : ''}>
+        <ScrollView
+          style={styles.container}
+          contentContainerStyle={styles.scroll}
+        >
           <View style={styles.imageContainer}>
             <Image
               source={require('../../assets/images/hand_join.png')}
@@ -158,7 +162,7 @@ const JoinGroupScreen = (props) => {
               <AuthButton text="Join" onPress={handleJoinGroup} />
             )}
           </View>
-        </View>
+        </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
@@ -182,6 +186,9 @@ const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
     flexDirection: 'column',
+  },
+
+  scroll: {
     justifyContent: 'space-between',
   },
 

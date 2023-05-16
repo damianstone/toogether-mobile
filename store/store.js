@@ -43,6 +43,13 @@ import {
   listMatchesReducer,
   deleteMatchReducer,
 } from './reducers/swipe';
+import {
+  listMyConversationsReducer,
+  listConversationMessagesReducer,
+  startConversationReducer,
+  deleteConversationReducer,
+  getMyGroupChatReducer,
+} from './reducers/conversation';
 
 const reducer = combineReducers({
   // auth
@@ -85,6 +92,12 @@ const reducer = combineReducers({
   removeLike: removeLikeReducer,
   listMatches: listMatchesReducer,
   deleteMatch: deleteMatchReducer,
+  // Conversations API
+  listConversations: listMyConversationsReducer,
+  listConversationMessages: listConversationMessagesReducer,
+  deleteConversation: deleteConversationReducer,
+  startConversation: startConversationReducer,
+  getMyGroupChat: getMyGroupChatReducer,
 });
 
 const initialState = {};

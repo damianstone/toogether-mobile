@@ -9,4 +9,7 @@ export default {
   calypso: '#70EDCC',
   red: '#D11A2A',
   placeholder: '#B6B6B6',
+  lightGray: '#B0B3B8',
+  blue: '#282755',
+  grey: '#C4C4C4',
 };

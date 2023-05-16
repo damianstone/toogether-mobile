@@ -16,8 +16,7 @@ const ActivityModal = ({
         style={[
           styles.modalBackground,
           { backgroundColor: `rgba(0,0,0,${opacity})` },
-        ]}
-      >
+        ]}>
         <View style={[styles.activityIndicatorWrapper, activityWrapperStyle]}>
           <ActivityIndicator
             animating={loading}

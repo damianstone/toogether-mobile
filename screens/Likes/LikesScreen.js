@@ -5,19 +5,24 @@ import {
   View,
   Image,
   RefreshControl,
+  SafeAreaView,
+  StatusBar,
   Text,
 } from 'react-native';
+import { StackActions, CommonActions, useIsFocused } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
+
 import { listLikes, removeLike, like } from '../../store/actions/swipe';
 import { checkServerError } from '../../utils/errors';
 import { isMatch, alreadyMatched } from '../../utils/checks';
-
 import * as w from '../../constants/requestTypes/swipe';
 import LikeCard from '../../components/LikeCard';
 import Loader from '../../components/UI/Loader';
+import ActivityModal from '../../components/UI/ActivityModal';
 import Colors from '../../constants/Colors';
 
 const LikesScreen = (props) => {
+  const isVisible = useIsFocused();
   const dispatch = useDispatch();
   const [refreshing, setRefreshing] = useState(
     !!(removeLikeLoading || likeLoading)
@@ -43,6 +48,10 @@ const LikesScreen = (props) => {
     loading: likeLoading,
     data: likeData,
   } = likeReducer;
+
+  useEffect(() => {
+    reload();
+  }, [isVisible]);
 
   useEffect(() => {
     dispatch(listLikes());
@@ -74,7 +83,7 @@ const LikesScreen = (props) => {
     }
 
     if (alreadyMatched(likeData)) {
-      props.navigation.navigate('Chat');
+      return;
     }
 
     dispatch({ type: w.LIKE_PROFILE_RESET });
@@ -120,6 +129,26 @@ const LikesScreen = (props) => {
     return members[Math.floor(Math.random() * members.length)];
   };
 
+  if (likesLoading || removeLikeLoading || likeLoading) {
+    return (
+      <SafeAreaView style={styles.safe}>
+        <StatusBar style="light" />
+        <View style={styles.screen}>
+          <ActivityModal
+            loading
+            title="Loading"
+            size="small"
+            activityColor="white"
+            titleColor="white"
+            activityWrapperStyle={{
+              backgroundColor: 'transparent',
+            }}
+          />
+        </View>
+      </SafeAreaView>
+    );
+  }
+
   const renderLikeCard = ({ item }) => {
     if (item.hasOwnProperty('members')) {
       const member = getRandomMember(item.members);
@@ -131,7 +160,10 @@ const LikesScreen = (props) => {
           age={member.age}
           image={member.photos.length > 0 ? member.photos[0].image : null}
           onShowProfile={() =>
-            props.navigation.push('Swipe', { topProfile: item })
+            props.navigation.navigate('SwipeNavigator', {
+              screen: 'Swipe',
+              params: { topProfile: item },
+            })
           }
           dislike={() => handleRemoveLike(member.id)}
           like={() => handleLike(member.id)}
@@ -146,7 +178,10 @@ const LikesScreen = (props) => {
         age={item.age}
         image={item.photos.length > 0 ? item.photos[0].image : null}
         onShowProfile={() =>
-          props.navigation.push('Swipe', { topProfile: item })
+          props.navigation.navigate('SwipeNavigator', {
+            screen: 'Swipe',
+            params: { topProfile: item },
+          })
         }
         dislike={() => handleRemoveLike(item.id)}
         like={() => handleLike(item.id)}
@@ -164,8 +199,7 @@ const LikesScreen = (props) => {
           width: '100%',
           height: '100%',
           textAlign: 'center',
-        }}
-      >
+        }}>
         <View style={{ width: 200, height: 200 }}>
           <Image
             source={require('../../assets/images/no-likes.png')}
@@ -208,6 +242,11 @@ const LikesScreen = (props) => {
 export default LikesScreen;
 
 const styles = StyleSheet.create({
+  safe: {
+    flex: 1,
+    backgroundColor: Colors.bg,
+  },
+
   screen: {
     backgroundColor: Colors.bg,
     flex: 1,
