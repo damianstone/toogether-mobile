@@ -243,10 +243,16 @@ const GroupScreen = (props) => {
   };
 
   const handleNavigateToGroupChat = () => {
-    props.navigation.navigate('GroupChat', {
-      groupId: groupContext.id,
-      totalMembers: groupContext.total_members,
-      currentIsOwnerGroup: isOwnerGroup,
+    props.navigation.navigate('Match', {
+      screen: 'ChatNavigator',
+      params: {
+        screen: 'GroupChat',
+        params: {
+          groupId: groupContext.id,
+          totalMembers: groupContext.total_members,
+          currentIsOwnerGroup: isOwnerGroup,
+        },
+      },
     });
   };
 
@@ -317,7 +323,6 @@ const GroupScreen = (props) => {
             onPress={handleNavigateToGroupChat}
             text="Group Chat"
             backgroundColor={Colors.blue}
-            text_Style={{ color: 'black' }}
           />
           {isOwnerGroup && (
             <ActionButton
