@@ -306,9 +306,8 @@ const GroupScreen = (props) => {
           <View style={styles.nameView}>
             {groupContext?.owner && (
               <Text
-                style={
-                  styles.name
-                }>{`${groupContext.owner.name}'s group`}</Text>
+                style={styles.name}
+              >{`${groupContext.owner.name}'s group`}</Text>
             )}
           </View>
         </View>

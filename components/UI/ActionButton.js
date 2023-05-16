@@ -5,7 +5,7 @@ import Colors from '../../constants/Colors';
 const AuthButton = (props) => {
   const { backgroundColor, text, onPress, text_Style } = props;
 
-  const textStyle = ! text_Style ? {} : text_Style; 
+  const textStyle = !text_Style ? {} : text_Style;
 
   return (
     <TouchableOpacity
