@@ -19,7 +19,8 @@ const PreviewGroupChat = ({ navigation, lastMessage, goToGroupChat }) => {
       <View>
         <TouchableOpacity
           onPress={handleAvatarNavigation}
-          style={styles.chat_profile_head}>
+          style={styles.chat_profile_head}
+        >
           <ImageBackground
             source={require('../../assets/images/group-chat-placeholder.png')}
             imageStyle={styles.img}

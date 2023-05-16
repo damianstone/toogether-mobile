@@ -1,5 +1,11 @@
 import React from 'react';
-import { ImageBackground, StyleSheet, TouchableOpacity, View, Text } from 'react-native';
+import {
+  ImageBackground,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+  Text,
+} from 'react-native';
 
 import { checkPhoto } from '../../utils/checks';
 import Colors from '../../constants/Colors';

@@ -8,7 +8,6 @@ import Loader from './Loader';
 import FastImage from 'react-native-fast-image';
 
 const Avatar = ({ onPress }) => {
-
   const userProfile = useSelector((state) => state.userGetProfile);
   const userListPhotos = useSelector((state) => state.userListPhotos);
   const {
@@ -16,9 +15,7 @@ const Avatar = ({ onPress }) => {
     error: errorProfile,
     data: dataProfile,
   } = userProfile;
-  const {
-    data: photos,
-  } = userListPhotos;
+  const { data: photos } = userListPhotos;
 
   return (
     <TouchableOpacity onPress={onPress} style={styles.imgContainer}>
@@ -39,13 +36,14 @@ const Avatar = ({ onPress }) => {
           />
         </View>
       )}
-      {((photos?.length === 0 || photos == undefined) && dataProfile !== undefined) && (
-        <View style={styles.avatar_view}>
-          <Text style={styles.avatar_initials}>
-            {getNameInitials(dataProfile.name)}
-          </Text>
-        </View>
-      )}
+      {(photos?.length === 0 || photos == undefined) &&
+        dataProfile !== undefined && (
+          <View style={styles.avatar_view}>
+            <Text style={styles.avatar_initials}>
+              {getNameInitials(dataProfile.name)}
+            </Text>
+          </View>
+        )}
     </TouchableOpacity>
   );
 };

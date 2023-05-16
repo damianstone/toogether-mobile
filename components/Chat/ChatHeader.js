@@ -33,7 +33,8 @@ const ChatHeader = ({
       </HeaderButtons>
       <TouchableOpacity
         style={styles.profilePictureButton}
-        onPress={onShowProfile}>
+        onPress={onShowProfile}
+      >
         <ImageBackground
           source={checkPhoto(receiverProfile)}
           imageStyle={styles.img}
@@ -43,7 +44,8 @@ const ChatHeader = ({
       <View style={styles.textContainer}>
         <TouchableOpacity
           style={styles.profileInfoContainer}
-          onPress={onShowProfile}>
+          onPress={onShowProfile}
+        >
           <Text numberOfLines={1} style={styles.matched_Name}>
             {receiverProfile?.name}
           </Text>

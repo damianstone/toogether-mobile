@@ -229,7 +229,7 @@ export const loadMoreConversations = (url) => {
         payload: error,
       });
     }
-  }; 
+  };
 };
 
 export const loadMoreMessages = (url) => {

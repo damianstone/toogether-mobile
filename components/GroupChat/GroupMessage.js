@@ -51,12 +51,14 @@ const GroupMessage = ({ isMyMessage, message }) => {
       style={[
         styles.container,
         isMyMessage ? styles.myMessage : styles.senderMessage,
-      ]}>
+      ]}
+    >
       <View
         style={[
           styles.messageContainer,
           isMyMessage ? styles.myMessageBG : styles.senderMessageBG,
-        ]}>
+        ]}
+      >
         {!isMyMessage ? (
           <View style={{ alignSelf: 'flex-start' }}>
             <Text style={{ fontSize: 9, color: Colors.placeholder }}>

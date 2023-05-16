@@ -15,7 +15,6 @@ import HeaderButtom from '../UI/HeaderButton';
 import Colors from '../../constants/Colors';
 
 const GroupChatHeader = ({ navigation, totalMembers }) => {
-
   return (
     <View style={styles.headerContainer}>
       <HeaderButtons HeaderButtonComponent={HeaderButtom}>
@@ -39,14 +38,14 @@ const GroupChatHeader = ({ navigation, totalMembers }) => {
           style={styles.profileInfoContainer}
           onPress={() =>
             navigation.navigate('TabNavigator', { screen: 'GroupNavigator' })
-          }>
+          }
+        >
           <Text numberOfLines={1} style={styles.matched_Name}>
             Your Group
           </Text>
           <Text
-            style={
-              styles.groupMemberCounterText
-            }>{`${totalMembers} members`}</Text>
+            style={styles.groupMemberCounterText}
+          >{`${totalMembers} members`}</Text>
         </TouchableOpacity>
       </View>
       <TouchableOpacity style={styles.menuIcon} onPress={() => {}}>
