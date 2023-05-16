@@ -19,6 +19,7 @@ import {
   deleteConversation,
   loadMoreMessages,
 } from '../../store/actions/conversation';
+import { getMessageWithLinks } from '../../utils/getMethods';
 import { blockProfile } from '../../store/actions/block';
 import { reportProfile } from '../../store/actions/user';
 import { checkServerError } from '../../utils/errors';
@@ -31,6 +32,7 @@ import * as u from '../../constants/requestTypes/user';
 import * as b from '../../constants/requestTypes/block';
 import * as c from '../../constants/requestTypes/conversation';
 import { ENV } from '../../environment';
+import Loader from '../../components/UI/Loader';
 
 const BASE_URL = ENV.API_URL;
 
@@ -39,7 +41,7 @@ API_URL = BASE_URL.replace('http://', '');
 const ChatScreen = (props) => {
   const { showActionSheetWithOptions } = useActionSheet();
   const { conversationId, receiverProfile } = props.route.params;
-  const { profileContext, updateProfileContext } = useContext(Context);
+  const { profileContext } = useContext(Context);
   const [chatMessage, setChatMessage] = useState('');
   const [chatSocket, setChatSocket] = useState(null);
   const dispatch = useDispatch();
@@ -91,6 +93,22 @@ const ChatScreen = (props) => {
 
       newChatSocket.onopen = () => {
         console.log('Socket opened');
+      };
+
+      newChatSocket.onmessage = (event) => {
+        const jsonMessage = JSON.parse(event.data);
+        const messageWithLinks = getMessageWithLinks(jsonMessage.message);
+
+        dispatch(
+          addConversationMessage({
+            id: jsonMessage.id,
+            sent_by_current: jsonMessage.sender_id === profileContext.id,
+            sent_at: jsonMessage.sent_at,
+            sender_name: jsonMessage.sender_name,
+            sender_photo: { ...jsonMessage.sender_photo },
+            message: messageWithLinks,
+          })
+        );
       };
 
       newChatSocket.onclose = (e) => {
@@ -182,49 +200,8 @@ const ChatScreen = (props) => {
         'You can only send messages up to 1000 characters'
       );
     }
-
-    // Regular expression to detect URLs in chat message
-    const urlRegex = /(https?:\/\/[^\s]+)/gi;
-
-    // Replace URLs with clickable links
-    const messageWithLinks = chatMessage.replace(urlRegex, (url) => {
-      return url;
-    });
-
-    // Open clickable links in browser
-    const onLinkPress = (url) => {
-      Linking.canOpenURL(url).then((supported) => {
-        if (supported) {
-          Linking.openURL(url);
-        }
-      });
-    };
-
     if (chatSocket && chatMessage) {
       chatSocket.send(chatMessage);
-      dispatch(
-        addConversationMessage({
-          id: Math.random() * 10,
-          sent_by_current: true,
-          message: (
-            <Text>
-              {messageWithLinks.split(' ').map((word, i) => {
-                if (urlRegex.test(word)) {
-                  return (
-                    <Text
-                      key={i}
-                      style={{ color: Colors.bgCard }}
-                      onPress={() => onLinkPress(word)}>
-                      {word}{' '}
-                    </Text>
-                  );
-                }
-                return `${word} `;
-              })}
-            </Text>
-          ),
-        })
-      );
       setChatMessage('');
     }
   };
@@ -300,8 +277,8 @@ const ChatScreen = (props) => {
       return;
     }
     Alert.alert(
-      `Are you sure you want to delete this chat?`,
-      'This profile will not be able to see you and neither will you',
+      `Are you sure you want to delete and unmatch this profile?`,
+      'The conversation and the match will be deteled',
       [
         {
           text: 'No',
@@ -361,16 +338,19 @@ const ChatScreen = (props) => {
     loadingReportProfile ||
     loadingBlockProfile
   ) {
-    <ActivityModal
-      loading
-      title="Laoding"
-      size="small"
-      activityColor="white"
-      titleColor="white"
-      activityWrapperStyle={{
-        backgroundColor: Colors.bg,
-      }}
-    />;
+    <View style={styles.screen}>
+      <ActivityModal
+        loading
+        title="Laoding"
+        size="small"
+        activityColor="white"
+        titleColor="white"
+        activityWrapperStyle={{
+          backgroundColor: Colors.bg,
+        }}
+      />
+      ;
+    </View>;
   }
 
   const handleLoadMoreMessages = () => {
@@ -382,10 +362,9 @@ const ChatScreen = (props) => {
   const renderMessages = ({ item }) => {
     return (
       <Message
+        key={item.id}
         message={item}
         isMyMessage={item.sent_by_current}
-        ownProfile={profileContext}
-        matchedProfile={receiverProfile}
         onShowProfile={() =>
           item.sent_by_current
             ? handleShowProfile(
@@ -426,21 +405,14 @@ const ChatScreen = (props) => {
           <FlatList
             inverted={true}
             data={messagesData?.results}
+            keyExtractor={(message) => message.id}
             renderItem={renderMessages}
             contentContainerStyle={{ flexDirection: 'column' }}
             extraData={conversationReducer}
             onEndReachedThreshold={0.2}
             onEndReached={handleLoadMoreMessages}
           />
-          {loadingMessages && (
-            <ActivityModal
-              loading
-              title="Loading messages"
-              size="small"
-              activityColor="white"
-              titleColor="white"
-            />
-          )}
+          {loadingMessages && <Loader />}
         </View>
       )}
       <ChatTextInput

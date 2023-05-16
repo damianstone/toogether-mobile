@@ -6,7 +6,6 @@ import {
   Image,
   FlatList,
   Text,
-  Linking,
   KeyboardAvoidingView,
 } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
@@ -26,14 +25,20 @@ import GroupMessage from '../../components/GroupChat/GroupMessage';
 import GroupChatHeader from '../../components/GroupChat/GroupChatHeader';
 
 import { ENV } from '../../environment';
+import { getMessageWithLinks } from '../../utils/getMethods';
+import Loader from '../../components/UI/Loader';
 
 const BASE_URL = ENV.API_URL;
 
 API_URL = BASE_URL.replace('http://', '');
 
 const GroupChatScreen = (props) => {
+<<<<<<< HEAD
   const { groupId, totalMembers, currentIsOwnerGroup, fromGroupScreen } = props.route.params;
   const { showActionSheetWithOptions } = useActionSheet();
+=======
+  const { groupId, totalMembers } = props.route.params;
+>>>>>>> feature-chat
   const { profileContext } = useContext(Context);
 
   const [chatMessage, setChatMessage] = useState('');
@@ -49,11 +54,9 @@ const GroupChatScreen = (props) => {
     data: messagesData,
   } = messagesReducer;
 
-  console.log(messagesData);
-
   useEffect(() => {
     dispatch(listGroupMessages(groupId));
-  }, [groupId]);
+  }, []);
 
   useEffect(() => {
     if (groupId) {
@@ -64,6 +67,22 @@ const GroupChatScreen = (props) => {
 
       newChatSocket.onopen = () => {
         console.log('Socket opened');
+      };
+
+      newChatSocket.onmessage = (event) => {
+        const jsonMessage = JSON.parse(event.data);
+        const messageWithLinks = getMessageWithLinks(jsonMessage.message);
+
+        dispatch(
+          addConversationMessage({
+            id: jsonMessage.id,
+            sent_by_current: jsonMessage.sender_id === profileContext.id,
+            sent_at: jsonMessage.sent_at,
+            sender_name: jsonMessage.sender_name,
+            sender_photo: { ...jsonMessage.sender_photo },
+            message: messageWithLinks,
+          })
+        );
       };
 
       newChatSocket.onclose = (e) => {
@@ -78,7 +97,7 @@ const GroupChatScreen = (props) => {
       }
       setChatMessage('');
     };
-  }, [groupId, dispatch]);
+  }, [dispatch]);
 
   useEffect(() => {
     if (errorMessages) {
@@ -95,68 +114,10 @@ const GroupChatScreen = (props) => {
       );
     }
 
-    // Regular expression to detect URLs in chat message
-    const urlRegex = /(https?:\/\/[^\s]+)/gi;
-
-    // Replace URLs with clickable links
-    const messageWithLinks = chatMessage.replace(urlRegex, (url) => {
-      return url;
-    });
-
-    // Open clickable links in browser
-    const onLinkPress = (url) => {
-      Linking.canOpenURL(url).then((supported) => {
-        if (supported) {
-          Linking.openURL(url);
-        }
-      });
-    };
-
     if (chatSocket && chatMessage) {
       chatSocket.send(chatMessage);
-      dispatch(
-        addConversationMessage({
-          id: Math.random() * 10,
-          sent_by_current: true,
-          message: (
-            <Text>
-              {messageWithLinks.split(' ').map((word, i) => {
-                if (urlRegex.test(word)) {
-                  return (
-                    <Text
-                      key={i}
-                      style={{ color: Colors.bgCard }}
-                      onPress={() => onLinkPress(word)}>
-                      {word}{' '}
-                    </Text>
-                  );
-                }
-                return `${word} `;
-              })}
-            </Text>
-          ),
-        })
-      );
       setChatMessage('');
     }
-  };
-
-  const onOpenActionSheet = (profile, chatId) => {
-    // Same interface as https://facebook.github.io/react-native/docs/actionsheetios.html
-    const options = ['View group', 'Delete group', 'Cancel'];
-    const destructiveButtonIndex = [1, 2, 3];
-    const cancelButtonIndex = 4;
-
-    showActionSheetWithOptions(
-      {
-        options,
-        cancelButtonIndex,
-        destructiveButtonIndex,
-      },
-      (buttonIndex) => {
-        return null;
-      }
-    );
   };
 
   const handleLoadMoreMessages = () => {
@@ -166,21 +127,14 @@ const GroupChatScreen = (props) => {
   };
 
   const renderMessages = ({ item }) => {
-    return <GroupMessage isMyMessage={item.sent_by_current} message={item} />;
+    return (
+      <GroupMessage
+        key={item.id}
+        isMyMessage={item.sent_by_current}
+        message={item}
+      />
+    );
   };
-
-  if (loadingMessages) {
-    <ActivityModal
-      loading
-      title="Laoding"
-      size="small"
-      activityColor="white"
-      titleColor="white"
-      activityWrapperStyle={{
-        backgroundColor: Colors.bg,
-      }}
-    />;
-  }
 
   return (
     <KeyboardAvoidingView style={styles.screen} behavior="height">
@@ -193,7 +147,7 @@ const GroupChatScreen = (props) => {
         <View style={styles.noMsgContainer}>
           <Image
             style={styles.noMsgImage}
-            source={require('../../assets/images/no-messages.png')}
+            source={require('../../assets/images/no-group-messages-placeholder.png')}
           />
           <Text style={styles.noMsgText}>
             Start organizing with your friends{' '}
@@ -204,21 +158,13 @@ const GroupChatScreen = (props) => {
           <FlatList
             inverted={true}
             data={messagesData?.results}
+            keyExtractor={(message) => message.id}
             renderItem={renderMessages}
             contentContainerStyle={{ flexDirection: 'column' }}
             onEndReachedThreshold={0.2}
-            extraData={messagesReducer}
             onEndReached={handleLoadMoreMessages}
           />
-          {loadingMessages && (
-            <ActivityModal
-              loading
-              title="Loading messages"
-              size="small"
-              activityColor="white"
-              titleColor="white"
-            />
-          )}
+          {loadingMessages && <Loader />}
         </View>
       )}
       <ChatTextInput

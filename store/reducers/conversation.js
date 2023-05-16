@@ -18,20 +18,13 @@ export const listMyConversationsReducer = (state = {}, action) => {
       return { ...state, loading: true };
 
     case c.LOAD_MORE_CONVERSATIONS_SUCCESS:
-      const newNext = action.payload.next;
-      const oldData = { ...state.data };
-      const newConversations = [...action.payload.results];
-      const newData = {
-        ...state.data,
-        results: [...newConversations, ...oldData.results],
-        next: newNext,
-      };
+      // 0 position in the array is the LAST conversation
       return {
-        ...state,
-        data: newData,
-        loading: false,
+        data: {
+          ...action.payload,
+          results: [...state.data.results, ...action.payload.results],
+        },
       };
-
     case c.LOAD_MORE_CONVERSATIONS_FAIL:
       return { data: state.data, loading: false, error: action.payload };
 
@@ -57,29 +50,24 @@ export const listConversationMessagesReducer = (state = {}, action) => {
       return { ...state, loading: true };
 
     case c.LOAD_MORE_MESSAGES_SUCCESS:
-      const newNext = action.payload.next;
-      const oldData = { ...state.data };
-      const newMessages = [...action.payload.results];
-      const newData2 = {
-        ...state.data,
-        results: [...newMessages, ...oldData.results],
-        next: newNext,
-      };
+      // 0 position in the array is the LAST message
       return {
-        ...state,
-        data: newData2,
-        loading: false,
+        data: {
+          ...action.payload,
+          results: [...state.data.results, ...action.payload.results],
+        },
       };
 
     case c.LOAD_MORE_MESSAGES_FAIL:
       return { data: state.data, loading: false, error: action.payload };
 
     case c.ADD_CONVERSATION_MESSAGE:
-      const newData = { ...state.data };
-      newData.results.unshift(action.payload);
+      // 0 position in the array is the LAST message
       return {
-        ...state,
-        data: newData,
+        data: {
+          ...state.data,
+          results: [action.payload, ...state.data.results],
+        },
       };
     default:
       return state;
