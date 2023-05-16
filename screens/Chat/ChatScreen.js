@@ -6,7 +6,6 @@ import {
   Image,
   FlatList,
   Text,
-  Linking,
   KeyboardAvoidingView,
 } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
@@ -87,7 +86,7 @@ const ChatScreen = (props) => {
   useEffect(() => {
     if (conversationId) {
       const wsUrl = encodeURI(
-        `ws://${API_URL}/ws/chat/${conversationId}/?sender_id=${profileContext.id}`
+        `ws://${API_URL}/chat/${conversationId}/?sender_id=${profileContext.id}&my_group_chat=false`
       );
       const newChatSocket = new WebSocket(wsUrl);
 
