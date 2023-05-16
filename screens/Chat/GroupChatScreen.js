@@ -56,7 +56,7 @@ const GroupChatScreen = (props) => {
   useEffect(() => {
     if (groupId) {
       const wsUrl = encodeURI(
-        `ws://${API_URL}/ws/chat/${groupId}/?sender_id=${profileContext.id}&my_group_chat=true`
+        `ws://${API_URL}/chat/${groupId}/?sender_id=${profileContext.id}&my_group_chat=true`
       );
       const newChatSocket = new WebSocket(wsUrl);
 
