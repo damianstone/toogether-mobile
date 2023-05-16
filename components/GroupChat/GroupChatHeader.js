@@ -14,7 +14,11 @@ import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import HeaderButtom from '../UI/HeaderButton';
 import Colors from '../../constants/Colors';
 
-const GroupChatHeader = ({ navigation, totalMembers }) => {
+const GroupChatHeader = ({ navigation, totalMembers, fromGroupScreen }) => {
+  /*
+  props I need
+  member count 
+  */
   return (
     <View style={styles.headerContainer}>
       <HeaderButtons HeaderButtonComponent={HeaderButtom}>
@@ -23,7 +27,7 @@ const GroupChatHeader = ({ navigation, totalMembers }) => {
             Platform.OS === 'android' ? 'ios-arrow-back' : 'ios-arrow-back'
           }
           title="Back"
-          onPress={() => navigation.navigate('Matches')}
+          onPress={() => navigation.goBack()}
         />
       </HeaderButtons>
       <TouchableOpacity style={styles.profilePictureButton} onPress={() => {}}>

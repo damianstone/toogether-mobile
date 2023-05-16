@@ -40,8 +40,8 @@ const GroupScreen = (props) => {
   const dispatch = useDispatch();
 
   const HEIGHT_ACTION_CONTAINER = isOwnerGroup
-    ? { height: 0.45 * Device.height }
-    : { height: 0.35 * Device.height };
+    ? { height: 0.5 * Device.height }
+    : { height: 0.4 * Device.height };
   const HEIGHT_MEMBER_CARD_CONTAINER = isOwnerGroup
     ? { minHeight: 0.4 * Device.height, maxHeight: 0.6 * Device.height }
     : { minHeight: 0.6 * Device.height, maxHeight: 0.7 * Device.height };
@@ -242,6 +242,20 @@ const GroupScreen = (props) => {
     );
   };
 
+  const handleNavigateToGroupChat = () => {
+    props.navigation.navigate('Match', {
+      screen: 'ChatNavigator',
+      params: {
+        screen: 'GroupChat',
+        params: {
+          groupId: groupContext.id,
+          totalMembers: groupContext.total_members,
+          currentIsOwnerGroup: isOwnerGroup,
+        },
+      },
+    });
+  };
+
   if (loadingDelete || loadingLeave || loadingRemoveMember) {
     return (
       <View style={styles.loadingScreen}>
@@ -304,11 +318,11 @@ const GroupScreen = (props) => {
               backgroundColor={Colors.white}
             />
           )}
-          {/* <ActionButton
-            onPress={() => handleNavigate('Swipe')}
-            text="Group chat"
+          <ActionButton
+            onPress={handleNavigateToGroupChat}
+            text="Group Chat"
             backgroundColor={Colors.blue}
-          /> */}
+          />
           {isOwnerGroup && (
             <ActionButton
               onPress={handleDeleteGroup}
@@ -325,7 +339,7 @@ const GroupScreen = (props) => {
           )}
           {groupContext?.members.length < 1 && (
             <Text style={{ fontSize: 10, color: Colors.placeholder }}>
-              Group incognito until 1 more member joins
+              Group is incognito until 1 or more members join
             </Text>
           )}
         </View>

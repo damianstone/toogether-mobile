@@ -134,7 +134,7 @@ const styles = StyleSheet.create({
 
   senderMessageBG: {
     marginStart: 10,
-    backgroundColor: Colors.blue,
+    backgroundColor: Colors.bgCard,
   },
 
   textMessageContainer: {

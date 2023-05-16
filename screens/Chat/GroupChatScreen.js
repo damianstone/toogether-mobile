@@ -18,7 +18,6 @@ import {
   addConversationMessage,
 } from '../../store/actions/conversation';
 import { checkServerError } from '../../utils/errors';
-import ActivityModal from '../../components/UI/ActivityModal';
 import Colors from '../../constants/Colors';
 import ChatTextInput from '../../components/Chat/ChatTextInput';
 import GroupMessage from '../../components/GroupChat/GroupMessage';
@@ -33,7 +32,9 @@ const BASE_URL = ENV.API_URL;
 API_URL = BASE_URL.replace('http://', '');
 
 const GroupChatScreen = (props) => {
-  const { groupId, totalMembers } = props.route.params;
+  const { groupId, totalMembers, currentIsOwnerGroup, fromGroupScreen } =
+    props.route.params;
+  const { showActionSheetWithOptions } = useActionSheet();
   const { profileContext } = useContext(Context);
 
   const [chatMessage, setChatMessage] = useState('');
@@ -56,7 +57,7 @@ const GroupChatScreen = (props) => {
   useEffect(() => {
     if (groupId) {
       const wsUrl = encodeURI(
-        `ws://${API_URL}/ws/chat/${groupId}/?sender_id=${profileContext.id}&my_group_chat=true`
+        `ws://${API_URL}/chat/${groupId}/?sender_id=${profileContext.id}&my_group_chat=true`
       );
       const newChatSocket = new WebSocket(wsUrl);
 
@@ -136,6 +137,7 @@ const GroupChatScreen = (props) => {
       <GroupChatHeader
         navigation={props.navigation}
         totalMembers={totalMembers}
+        fromGroupScreen={fromGroupScreen}
       />
       {messagesData?.results.length == 0 ? (
         <View style={styles.noMsgContainer}>

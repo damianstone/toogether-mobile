@@ -461,13 +461,6 @@ const GroupNavigator = () => {
           ),
         })}
       />
-      <Stack.Screen
-        name="GroupChat"
-        component={GroupChatScreen}
-        options={{
-          headerShown: false,
-        }}
-      />
     </Stack.Navigator>
   );
 };
