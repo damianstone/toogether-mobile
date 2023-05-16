@@ -33,12 +33,8 @@ const BASE_URL = ENV.API_URL;
 API_URL = BASE_URL.replace('http://', '');
 
 const GroupChatScreen = (props) => {
-<<<<<<< HEAD
   const { groupId, totalMembers, currentIsOwnerGroup, fromGroupScreen } = props.route.params;
   const { showActionSheetWithOptions } = useActionSheet();
-=======
-  const { groupId, totalMembers } = props.route.params;
->>>>>>> feature-chat
   const { profileContext } = useContext(Context);
 
   const [chatMessage, setChatMessage] = useState('');
