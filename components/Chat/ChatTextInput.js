@@ -48,7 +48,8 @@ const ChatTextInput = ({ chatMessage, setChatMessage, handleSendMessage }) => {
 
       <TouchableOpacity
         onPress={() => handleSendMessage()}
-        style={styles.imgContainer}>
+        style={styles.imgContainer}
+      >
         <Image source={sendimg} style={styles.image} />
       </TouchableOpacity>
     </View>

@@ -18,7 +18,6 @@ import {
   addConversationMessage,
 } from '../../store/actions/conversation';
 import { checkServerError } from '../../utils/errors';
-import ActivityModal from '../../components/UI/ActivityModal';
 import Colors from '../../constants/Colors';
 import ChatTextInput from '../../components/Chat/ChatTextInput';
 import GroupMessage from '../../components/GroupChat/GroupMessage';
@@ -57,7 +56,7 @@ const GroupChatScreen = (props) => {
   useEffect(() => {
     if (groupId) {
       const wsUrl = encodeURI(
-        `ws://${API_URL}/ws/chat/${groupId}/?sender_id=${profileContext.id}&my_group_chat=true`
+        `ws://${API_URL}/chat/${groupId}/?sender_id=${profileContext.id}&my_group_chat=true`
       );
       const newChatSocket = new WebSocket(wsUrl);
 

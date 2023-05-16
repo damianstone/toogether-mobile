@@ -40,8 +40,8 @@ const GroupScreen = (props) => {
   const dispatch = useDispatch();
 
   const HEIGHT_ACTION_CONTAINER = isOwnerGroup
-    ? { height: 0.45 * Device.height }
-    : { height: 0.35 * Device.height };
+    ? { height: 0.5 * Device.height }
+    : { height: 0.4 * Device.height };
   const HEIGHT_MEMBER_CARD_CONTAINER = isOwnerGroup
     ? { minHeight: 0.4 * Device.height, maxHeight: 0.6 * Device.height }
     : { minHeight: 0.6 * Device.height, maxHeight: 0.7 * Device.height };
@@ -247,8 +247,8 @@ const GroupScreen = (props) => {
       groupId: groupContext.id,
       totalMembers: groupContext.total_members,
       currentIsOwnerGroup: isOwnerGroup,
-      fromGroupScreen: true,
-    })  }
+    });
+  };
 
   if (loadingDelete || loadingLeave || loadingRemoveMember) {
     return (
@@ -300,8 +300,9 @@ const GroupScreen = (props) => {
           <View style={styles.nameView}>
             {groupContext?.owner && (
               <Text
-                style={styles.name}
-              >{`${groupContext.owner.name}'s group`}</Text>
+                style={
+                  styles.name
+                }>{`${groupContext.owner.name}'s group`}</Text>
             )}
           </View>
         </View>
@@ -312,11 +313,12 @@ const GroupScreen = (props) => {
               backgroundColor={Colors.white}
             />
           )}
-          {/* <ActionButton
-            onPress={() => handleNavigate('Swipe')}
-            text="Group chat"
+          <ActionButton
+            onPress={handleNavigateToGroupChat}
+            text="Group Chat"
             backgroundColor={Colors.blue}
-          /> */}
+            text_Style={{ color: 'black' }}
+          />
           {isOwnerGroup && (
             <ActionButton
               onPress={handleDeleteGroup}
@@ -331,12 +333,6 @@ const GroupScreen = (props) => {
               backgroundColor={Colors.orange}
             />
           )}
-          <ActionButton
-            onPress={handleNavigateToGroupChat}
-            text="Group Chat"
-            backgroundColor={Colors.calypso}
-            text_Style={{color: 'black'}}
-          />
           {groupContext?.members.length < 1 && (
             <Text style={{ fontSize: 10, color: Colors.placeholder }}>
               Group is incognito until 1 or more members join

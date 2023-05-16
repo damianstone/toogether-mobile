@@ -68,7 +68,8 @@ export const getMessageWithLinks = (stringMessage) => {
             <Text
               key={i}
               style={{ color: Colors.bgCard }}
-              onPress={() => onLinkPress(word)}>
+              onPress={() => onLinkPress(word)}
+            >
               {word}{' '}
             </Text>
           );

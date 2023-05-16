@@ -1,25 +1,20 @@
-import React, { useEffect } from 'react';
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
+import React from 'react';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { useSelector } from 'react-redux';
 import Colors from '../../constants/Colors';
-import { getUserProfile } from '../../store/actions/user';
 import { getNameInitials, getImage } from '../../utils/getMethods';
 import Loader from './Loader';
 import FastImage from 'react-native-fast-image';
 
 const Avatar = ({ onPress }) => {
-  const dispatch = useDispatch();
-
   const userProfile = useSelector((state) => state.userGetProfile);
+  const userListPhotos = useSelector((state) => state.userListPhotos);
   const {
     loading: loadingProfile,
     error: errorProfile,
     data: dataProfile,
   } = userProfile;
-
-  useEffect(() => {
-    dispatch(getUserProfile());
-  }, []);
+  const { data: photos } = userListPhotos;
 
   return (
     <TouchableOpacity onPress={onPress} style={styles.imgContainer}>
@@ -29,24 +24,25 @@ const Avatar = ({ onPress }) => {
             <Loader />
           </View>
         ))}
-      {dataProfile?.photos.length > 0 && (
+      {photos?.length > 0 && (
         <View style={styles.avatar_view}>
           <FastImage
             source={{
-              uri: `${getImage(dataProfile.photos[0].image)}`,
+              uri: `${getImage(photos[0].image)}`,
               priority: FastImage.priority.high,
             }}
             style={styles.img}
           />
         </View>
       )}
-      {dataProfile?.photos.length === 0 && (
-        <View style={styles.avatar_view}>
-          <Text style={styles.avatar_initials}>
-            {getNameInitials(dataProfile.name)}
-          </Text>
-        </View>
-      )}
+      {(photos?.length === 0 || photos == undefined) &&
+        dataProfile !== undefined && (
+          <View style={styles.avatar_view}>
+            <Text style={styles.avatar_initials}>
+              {getNameInitials(dataProfile.name)}
+            </Text>
+          </View>
+        )}
     </TouchableOpacity>
   );
 };

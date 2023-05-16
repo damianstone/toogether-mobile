@@ -24,7 +24,8 @@ const PreviewChat = (props) => {
       <View>
         <TouchableOpacity
           onPress={onShowProfile}
-          style={styles.chat_profile_head}>
+          style={styles.chat_profile_head}
+        >
           <ImageBackground
             source={checkPhoto(receiverProfile)}
             imageStyle={styles.img}

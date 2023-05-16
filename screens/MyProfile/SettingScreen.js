@@ -25,6 +25,7 @@ import { check400Error, checkServerError } from '../../utils/errors';
 import AuthButton from '../../components/UI/AuthButton';
 import ActivityModal from '../../components/UI/ActivityModal';
 import Colors from '../../constants/Colors';
+import * as u from '../../constants/requestTypes/user';
 
 const SettingScreen = (props) => {
   const dispatch = useDispatch();
@@ -38,7 +39,6 @@ const SettingScreen = (props) => {
 
   useEffect(() => {
     if (errorDelete) {
-      console.log({ ...errorDelete });
       if (errorDelete?.response?.status === 400) {
         check400Error(errorDelete);
       }
@@ -46,13 +46,13 @@ const SettingScreen = (props) => {
     }
 
     if (dataDeleted) {
+      dispatch({ type: u.USER_DELETE_RESET });
       dispatch(logout());
     }
   }, [errorDelete, dataDeleted]);
 
-  const handleLogout = async () => {
-    await dispatch(logout());
-    props.navigation.navigate('AuthStart');
+  const handleLogout = () => {
+    dispatch(logout());
   };
 
   const handleDeleteUser = () => {
@@ -138,16 +138,18 @@ const SettingScreen = (props) => {
 
   if (loadingDelete) {
     return (
-      <ActivityModal
-        loading={loadingDelete}
-        title="Please wait"
-        size="large"
-        activityColor="white"
-        titleColor="white"
-        activityWrapperStyle={{
-          backgroundColor: Colors.bg,
-        }}
-      />
+      <View style={styles.screen}>
+        <ActivityModal
+          loading
+          title="Deleting your account"
+          size="small"
+          activityColor="white"
+          titleColor="white"
+          activityWrapperStyle={{
+            backgroundColor: 'transparent',
+          }}
+        />
+      </View>
     );
   }
 
@@ -254,6 +256,12 @@ const SettingScreen = (props) => {
 export default SettingScreen;
 
 const styles = StyleSheet.create({
+  screen: {
+    flex: 1,
+    backgroundColor: Colors.bg,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   settingsView: {
     margin: 20,
     paddingHorizontal: 2,

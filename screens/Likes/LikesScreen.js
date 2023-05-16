@@ -9,7 +9,11 @@ import {
   StatusBar,
   Text,
 } from 'react-native';
-import { StackActions, CommonActions, useIsFocused } from '@react-navigation/native';
+import {
+  StackActions,
+  CommonActions,
+  useIsFocused,
+} from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { listLikes, removeLike, like } from '../../store/actions/swipe';
@@ -199,7 +203,8 @@ const LikesScreen = (props) => {
           width: '100%',
           height: '100%',
           textAlign: 'center',
-        }}>
+        }}
+      >
         <View style={{ width: 200, height: 200 }}>
           <Image
             source={require('../../assets/images/no-likes.png')}

@@ -51,12 +51,14 @@ const Message = ({ isMyMessage, message, onShowProfile }) => {
       style={[
         styles.container,
         isMyMessage ? styles.myMessage : styles.senderMessage,
-      ]}>
+      ]}
+    >
       <View
         style={[
           styles.messageContainer,
           isMyMessage ? styles.myMessageBG : styles.senderMessageBG,
-        ]}>
+        ]}
+      >
         <View style={styles.textMessageContainer}>
           <Text style={styles.textMessage}>
             {formatWithLink(message.message)}
@@ -66,7 +68,8 @@ const Message = ({ isMyMessage, message, onShowProfile }) => {
       </View>
       <TouchableOpacity
         style={styles.singleImageContainer}
-        onPress={onShowProfile}>
+        onPress={onShowProfile}
+      >
         <FastImage
           source={
             message?.sender_photo

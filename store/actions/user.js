@@ -90,10 +90,10 @@ export const getUserProfile = (profile_id) => {
       await AsyncStorage.setItem(
         '@userData',
         JSON.stringify({
-          ...userData,
+          id: data.id,
           token: data.token,
-          access_token: data.access,
           has_account: data.has_account,
+          refresh_token: data.refresh_token,
         })
       );
 
@@ -147,8 +147,10 @@ export const createUserProfile = (
       await AsyncStorage.setItem(
         '@userData',
         JSON.stringify({
-          ...userData,
-          has_account: data.has_account, // after crerate has_account is true
+          id: data.id,
+          token: data.token,
+          has_account: data.has_account,
+          refresh_token: data.refresh_token,
         })
       );
 
@@ -217,7 +219,10 @@ export const userDelete = () => {
         headers: config,
       });
 
-      dispatch(logout());
+      dispatch({
+        type: c.USER_DELETE_SUCCESS,
+        payload: data,
+      });
     } catch (error) {
       dispatch({ type: c.USER_DELETE_FAIL, payload: error });
     }
