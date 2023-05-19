@@ -1,18 +1,16 @@
 import React from 'react';
-import {
-  StyleSheet,
-  TouchableOpacity,
-  View,
-  Text,
-} from 'react-native';
+import { StyleSheet, TouchableOpacity, View, Text } from 'react-native';
 import FastImage from 'react-native-fast-image';
 
 import { getImage } from '../../utils/getMethods';
 import Colors from '../../constants/Colors';
 
-const MatchAvatar = (props) => {
-  const { matchedProfile, onShowChat } = props;
-
+const MatchAvatar = ({
+  matchedProfile,
+  matchedProfileHasPhoto,
+  matchedProfilePhoto,
+  onShowChat,
+}) => {
   const isGroup = matchedProfile.is_group_match;
   let groupSize = 0;
   if (isGroup) {
@@ -24,12 +22,10 @@ const MatchAvatar = (props) => {
       <View style={styles.singleImageContainer}>
         <FastImage
           source={
-            matchedProfile.matched_profile.photos
+            matchedProfileHasPhoto
               ? {
-                  uri: `${getImage(
-                    matchedProfile.matched_profile.photos.image
-                  )}`,
-                  priority: FastImage.priority.normal,
+                  uri: `${getImage(matchedProfilePhoto)}`,
+                  priority: FastImage.priority.high,
                 }
               : require('../../assets/images/placeholder-profile.png')
           }
