@@ -9,7 +9,6 @@ import {
   RefreshControl,
   StyleSheet,
 } from 'react-native';
-import { useIsFocused } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
 
 import { Context } from '../../context/ContextProvider';
@@ -66,9 +65,15 @@ const MatchesScreen = (props) => {
   );
   const { data: conversationDeleted } = deleteConversationReducer;
 
+  const reportProfileReducer = useSelector((state) => state.reportProfile);
+  const { data: profileReported } = reportProfileReducer;
+
+  const blockProfileReducer = useSelector((state) => state.blockProfile);
+  const { data: profileBlocked } = blockProfileReducer;
+
   useEffect(() => {
     reload();
-  }, [dispatch, conversationDeleted]);
+  }, [dispatch, conversationDeleted, profileBlocked, profileReported]);
 
   useEffect(() => {
     if (errorListMatches) {
