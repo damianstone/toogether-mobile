@@ -31,10 +31,9 @@ import PreviewGroupChat from '../../components/GroupChat/PreviewGroupChat';
 import * as conv from '../../constants/requestTypes/conversation';
 
 const MatchesScreen = (props) => {
-  const { groupContext, isOwnerGroup } = useContext(Context);
   const dispatch = useDispatch();
+  const { groupContext, isOwnerGroup } = useContext(Context);
   const [refreshing, setRefreshing] = useState(false);
-  const isVisible = useIsFocused();
 
   const getMyGroupChatReducer = useSelector((state) => state.getMyGroupChat);
   const { data: groupChat } = getMyGroupChatReducer;
@@ -55,13 +54,6 @@ const MatchesScreen = (props) => {
     data: conversations,
   } = listConversationsReducer;
 
-  const deleteMatchReducer = useSelector((state) => state.deleteMatch);
-  const {
-    error: errorDeleteMatch,
-    loading: loadingDeleteMatch,
-    data: matchDeleted,
-  } = deleteMatchReducer;
-
   const startedConversation = useSelector((state) => state.startConversation);
   const {
     error: errorStartedConversations,
@@ -69,22 +61,23 @@ const MatchesScreen = (props) => {
     data: dataStartedConversation,
   } = startedConversation;
 
+  const deleteConversationReducer = useSelector(
+    (state) => state.deleteConversation
+  );
+  const { data: conversationDeleted } = deleteConversationReducer;
+
   useEffect(() => {
     reload();
-  }, [isVisible, matchDeleted]);
+  }, [dispatch, conversationDeleted]);
 
   useEffect(() => {
-    if (errorDeleteMatch) {
-      if (errorDeleteMatch?.response?.status === 400) {
-        check400Error(errorDeleteMatch);
-      }
-      checkServerError(errorDeleteMatch);
-    }
-
     if (errorListMatches) {
+      if (errorListMatches?.response?.status === 400) {
+        check400Error(errorListMatches);
+      }
       checkServerError(errorListMatches);
     }
-  }, [errorDeleteMatch, errorListMatches]);
+  }, [errorListMatches]);
 
   useEffect(() => {
     if (errorListConversations) {
@@ -223,12 +216,7 @@ const MatchesScreen = (props) => {
     );
   };
 
-  if (
-    loadingListMatches ||
-    loadingDeleteMatch ||
-    refreshing ||
-    loadingListConversations
-  ) {
+  if (loadingListMatches || refreshing || loadingListConversations) {
     return (
       <SafeAreaView style={styles.safe}>
         <StatusBar style="light" />

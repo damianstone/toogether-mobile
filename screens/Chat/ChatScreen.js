@@ -122,7 +122,7 @@ const ChatScreen = (props) => {
 
   useEffect(() => {
     if (conversationDeleted) {
-      Alert.alert('The conversation has been deleted', 'Press ok to continue', [
+      Alert.alert('The conversation has been deleted', 'Press OK to continue', [
         {
           text: 'Ok',
           onPress: () => {
@@ -131,15 +131,13 @@ const ChatScreen = (props) => {
         },
       ]);
       props.navigation.navigate('Matches');
-      dispatch({ type: c.DELETE_CONVERSATION_RESET });
     }
-  }, [conversationDeleted]);
-
-  useEffect(() => {
     if (errorDeleteConversation) {
       checkServerError(errorDeleteConversation);
     }
-  }, [errorDeleteConversation]);
+
+    dispatch({ type: c.DELETE_CONVERSATION_RESET });
+  }, [conversationDeleted, errorDeleteConversation]);
 
   useEffect(() => {
     if (errorReportProfile) {
