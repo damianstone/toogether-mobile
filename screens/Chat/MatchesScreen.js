@@ -71,11 +71,7 @@ const MatchesScreen = (props) => {
 
   useEffect(() => {
     reload();
-  }, [isVisible]);
-
-  useEffect(() => {
-    reload();
-  }, [matchDeleted]);
+  }, [isVisible, matchDeleted]);
 
   useEffect(() => {
     if (errorDeleteMatch) {

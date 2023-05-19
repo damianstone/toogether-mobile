@@ -51,52 +51,46 @@ const GroupChatScreen = (props) => {
   }, []);
 
   useEffect(() => {
-    if (groupId) {
-      const wsUrl = encodeURI(
-        `ws://${WS_URL}/chat/${groupId}/?sender_id=${profileContext.id}&my_group_chat=true`
-      );
-      const newChatSocket = new WebSocket(wsUrl);
-
-      newChatSocket.onopen = () => {
-        console.log('Socket opened');
-      };
-
-      newChatSocket.onmessage = (event) => {
-        const jsonMessage = JSON.parse(event.data);
-        const messageWithLinks = getMessageWithLinks(jsonMessage.message);
-
-        dispatch(
-          addConversationMessage({
-            id: jsonMessage.id,
-            sent_by_current: jsonMessage.sender_id === profileContext.id,
-            sent_at: jsonMessage.sent_at,
-            sender_name: jsonMessage.sender_name,
-            sender_photo: { ...jsonMessage.sender_photo },
-            message: messageWithLinks,
-          })
-        );
-      };
-
-      newChatSocket.onclose = (e) => {
-        console.log('Socket closed', e);
-      };
-
-      setChatSocket(newChatSocket);
-    }
-    return () => {
-      if (chatSocket) {
-        chatSocket.close();
-      }
-      setChatMessage('');
-    };
-  }, [dispatch]);
-
-  useEffect(() => {
     if (errorMessages) {
       checkServerError(errorMessages);
       props.navigation.navigate('Matches');
     }
   }, [errorMessages]);
+
+  useEffect(() => {
+    const wsUrl = encodeURI(
+      `ws://${WS_URL}/chat/${groupId}/?sender_id=${profileContext.id}&my_group_chat=true`
+    );
+    const newChatSocket = new WebSocket(wsUrl);
+
+    newChatSocket.onopen = () => {
+      console.log('Socket opened');
+    };
+
+    newChatSocket.onmessage = (event) => {
+      const jsonMessage = JSON.parse(event.data);
+      const messageWithLinks = getMessageWithLinks(jsonMessage.message);
+
+      dispatch(
+        addConversationMessage({
+          id: jsonMessage.id,
+          sent_by_current: jsonMessage.sender_id === profileContext.id,
+          sent_at: jsonMessage.sent_at,
+          sender_name: jsonMessage.sender_name,
+          sender_photo: { ...jsonMessage.sender_photo },
+          message: messageWithLinks,
+        })
+      );
+    };
+
+    newChatSocket.onclose = (e) => {
+      console.log('Socket closed', e);
+    };
+
+    setChatSocket(newChatSocket);
+
+    return () => newChatSocket.close();
+  }, []);
 
   const handleSendMessage = () => {
     if (chatMessage.length >= 1000) {
