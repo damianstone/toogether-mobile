@@ -1,16 +1,16 @@
 import React from 'react';
-import { Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { Text, StyleSheet, TouchableOpacity, View } from 'react-native';
 import Colors from '../../constants/Colors';
 
 const MatchCounter = ({ matches }) => {
   return (
-    <TouchableOpacity style={styles.noPhotoContainer}>
+    <View style={styles.noPhotoContainer}>
       {matches?.count == 0 ? (
         <Text style={styles.textCounter}>0</Text>
       ) : (
         <Text style={styles.textCounter}>{matches?.count}</Text>
       )}
-    </TouchableOpacity>
+    </View>
   );
 };
 
@@ -18,10 +18,10 @@ export default MatchCounter;
 
 const styles = StyleSheet.create({
   noPhotoContainer: {
-    width: 50,
-    height: 50,
+    width: 60,
+    height: 60,
     borderRadius: 100,
-    backgroundColor: Colors.orange,
+    backgroundColor: Colors.bgCard,
     justifyContent: 'center',
     alignItems: 'center',
   },

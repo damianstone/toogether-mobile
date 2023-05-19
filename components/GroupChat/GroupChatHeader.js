@@ -9,16 +9,12 @@ import {
   Platform,
 } from 'react-native';
 import { Entypo } from '@expo/vector-icons';
-import { checkPhoto } from '../../utils/checks';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
+
 import HeaderButtom from '../UI/HeaderButton';
 import Colors from '../../constants/Colors';
 
-const GroupChatHeader = ({ navigation, totalMembers, fromGroupScreen }) => {
-  /*
-  props I need
-  member count 
-  */
+const GroupChatHeader = ({ navigation, totalMembers }) => {
   return (
     <View style={styles.headerContainer}>
       <HeaderButtons HeaderButtonComponent={HeaderButtom}>
@@ -42,14 +38,14 @@ const GroupChatHeader = ({ navigation, totalMembers, fromGroupScreen }) => {
           style={styles.profileInfoContainer}
           onPress={() =>
             navigation.navigate('TabNavigator', { screen: 'GroupNavigator' })
-          }
-        >
+          }>
           <Text numberOfLines={1} style={styles.matched_Name}>
             Your Group
           </Text>
           <Text
-            style={styles.groupMemberCounterText}
-          >{`${totalMembers} members`}</Text>
+            style={
+              styles.groupMemberCounterText
+            }>{`${totalMembers} members`}</Text>
         </TouchableOpacity>
       </View>
       <TouchableOpacity style={styles.menuIcon} onPress={() => {}}>
@@ -87,6 +83,10 @@ const styles = StyleSheet.create({
   profilePictureButton: {
     alignSelf: 'flex-start',
     width: '12%',
+    backgroundColor: Colors.bgCard,
+    width: 50,
+    height: 50,
+    borderRadius: 100,
   },
 
   img: {
