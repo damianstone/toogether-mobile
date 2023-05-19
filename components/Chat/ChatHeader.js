@@ -1,4 +1,4 @@
-import React  from 'react';
+import React from 'react';
 import Constants from 'expo-constants';
 import {
   Text,
@@ -34,7 +34,8 @@ const ChatHeader = ({
       </HeaderButtons>
       <TouchableOpacity
         style={styles.profilePictureButton}
-        onPress={onShowProfile}>
+        onPress={onShowProfile}
+      >
         <FastImage
           source={
             receiverProfile?.photo
@@ -50,7 +51,8 @@ const ChatHeader = ({
       <View style={styles.textContainer}>
         <TouchableOpacity
           style={styles.profileInfoContainer}
-          onPress={onShowProfile}>
+          onPress={onShowProfile}
+        >
           <Text numberOfLines={1} style={styles.matched_Name}>
             {receiverProfile?.name}
           </Text>

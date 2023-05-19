@@ -1,10 +1,5 @@
 import React from 'react';
-import {
-  Text,
-  View,
-  StyleSheet,
-  TouchableOpacity,
-} from 'react-native';
+import { Text, View, StyleSheet, TouchableOpacity } from 'react-native';
 import FastImage from 'react-native-fast-image';
 
 import { getImage } from '../../utils/getMethods';
@@ -24,7 +19,8 @@ const PreviewChat = (props) => {
       <View>
         <TouchableOpacity
           onPress={onShowProfile}
-          style={styles.singleImageContainer}>
+          style={styles.singleImageContainer}
+        >
           <FastImage
             source={
               receiverProfile?.photo
