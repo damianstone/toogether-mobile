@@ -1,15 +1,16 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React from 'react';
 import Constants from 'expo-constants';
 import {
   Text,
   View,
-  ImageBackground,
   StyleSheet,
   TouchableOpacity,
   Platform,
 } from 'react-native';
 import { Entypo } from '@expo/vector-icons';
-import { checkPhoto } from '../../utils/checks';
+import FastImage from 'react-native-fast-image';
+
+import { getImage } from '../../utils/getMethods';
 import Colors from '../../constants/Colors';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import HeaderButtom from '../UI/HeaderButton';
@@ -35,10 +36,16 @@ const ChatHeader = ({
         style={styles.profilePictureButton}
         onPress={onShowProfile}
       >
-        <ImageBackground
-          source={checkPhoto(receiverProfile)}
-          imageStyle={styles.img}
-          style={styles.singleImageContainer}
+        <FastImage
+          source={
+            receiverProfile?.photo
+              ? {
+                  uri: `${getImage(receiverProfile.photo?.image)}`,
+                  priority: FastImage.priority.high,
+                }
+              : require('../../assets/images/placeholder-profile.png')
+          }
+          style={styles.img}
         />
       </TouchableOpacity>
       <View style={styles.textContainer}>
@@ -91,6 +98,13 @@ const styles = StyleSheet.create({
   profilePictureButton: {
     alignSelf: 'flex-start',
     width: '12%',
+    width: 50,
+    height: 50,
+    borderRadius: 100,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 8,
+    backgroundColor: Colors.bgCard,
   },
 
   img: {

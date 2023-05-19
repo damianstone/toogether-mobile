@@ -30,10 +30,9 @@ import ChatTextInput from '../../components/Chat/ChatTextInput';
 import * as u from '../../constants/requestTypes/user';
 import * as b from '../../constants/requestTypes/block';
 import * as c from '../../constants/requestTypes/conversation';
-import { ENV } from '../../environment';
 import Loader from '../../components/UI/Loader';
 
-const WS_URL = getWebSocketURL()
+const WS_URL = getWebSocketURL();
 
 const ChatScreen = (props) => {
   const { showActionSheetWithOptions } = useActionSheet();
@@ -76,51 +75,43 @@ const ChatScreen = (props) => {
   } = conversationReducer;
 
   useEffect(() => {
-    if (conversationId) {
-      dispatch(listMessages(conversationId));
-    }
-  }, [conversationId]);
+    dispatch(listMessages(conversationId));
+  }, []);
 
   useEffect(() => {
-    if (conversationId) {
-      const wsUrl = encodeURI(
-        `ws://${WS_URL}/chat/${conversationId}/?sender_id=${profileContext.id}&my_group_chat=false`
-      );
-      const newChatSocket = new WebSocket(wsUrl);
+    const wsUrl = encodeURI(
+      `ws://${WS_URL}/chat/${conversationId}/?sender_id=${profileContext.id}&my_group_chat=false`
+    );
+    const newChatSocket = new WebSocket(wsUrl);
 
-      newChatSocket.onopen = () => {
-        console.log('Socket opened');
-      };
-
-      newChatSocket.onmessage = (event) => {
-        const jsonMessage = JSON.parse(event.data);
-        const messageWithLinks = getMessageWithLinks(jsonMessage.message);
-
-        dispatch(
-          addConversationMessage({
-            id: jsonMessage.id,
-            sent_by_current: jsonMessage.sender_id === profileContext.id,
-            sent_at: jsonMessage.sent_at,
-            sender_name: jsonMessage.sender_name,
-            sender_photo: { ...jsonMessage.sender_photo },
-            message: messageWithLinks,
-          })
-        );
-      };
-
-      newChatSocket.onclose = (e) => {
-        console.log('Socket closed', e);
-      };
-
-      setChatSocket(newChatSocket);
-    }
-    return () => {
-      if (chatSocket) {
-        chatSocket.close();
-      }
-      setChatMessage('');
+    newChatSocket.onopen = () => {
+      console.log('Socket opened');
     };
-  }, [conversationId, dispatch]);
+
+    newChatSocket.onmessage = (event) => {
+      const jsonMessage = JSON.parse(event.data);
+      const messageWithLinks = getMessageWithLinks(jsonMessage.message);
+
+      dispatch(
+        addConversationMessage({
+          id: jsonMessage.id,
+          sent_by_current: jsonMessage.sender_id === profileContext.id,
+          sent_at: jsonMessage.sent_at,
+          sender_name: jsonMessage.sender_name,
+          sender_photo: { ...jsonMessage.sender_photo },
+          message: messageWithLinks,
+        })
+      );
+    };
+
+    newChatSocket.onclose = (e) => {
+      console.log('Socket closed', e);
+    };
+
+    setChatSocket(newChatSocket);
+
+    return () => newChatSocket.close();
+  }, []);
 
   useEffect(() => {
     if (errorMessages) {
@@ -131,7 +122,7 @@ const ChatScreen = (props) => {
 
   useEffect(() => {
     if (conversationDeleted) {
-      Alert.alert('The conversation has been deleted', 'Press ok to continue', [
+      Alert.alert('The conversation has been deleted', 'Press OK to continue', [
         {
           text: 'Ok',
           onPress: () => {
@@ -140,15 +131,13 @@ const ChatScreen = (props) => {
         },
       ]);
       props.navigation.navigate('Matches');
-      dispatch({ type: c.DELETE_CONVERSATION_RESET });
     }
-  }, [conversationDeleted]);
-
-  useEffect(() => {
     if (errorDeleteConversation) {
       checkServerError(errorDeleteConversation);
     }
-  }, [errorDeleteConversation]);
+
+    dispatch({ type: c.DELETE_CONVERSATION_RESET });
+  }, [conversationDeleted, errorDeleteConversation]);
 
   useEffect(() => {
     if (errorReportProfile) {

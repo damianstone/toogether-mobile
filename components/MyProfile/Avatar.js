@@ -1,29 +1,41 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { useSelector } from 'react-redux';
-import Colors from '../../constants/Colors';
-import { getNameInitials, getImage } from '../../utils/getMethods';
-import Loader from './Loader';
+import { useSelector, useDispatch } from 'react-redux';
 import FastImage from 'react-native-fast-image';
 
+import { listUserPhotos } from '../../store/actions/user';
+import { getNameInitials, getImage } from '../../utils/getMethods';
+import Colors from '../../constants/Colors';
+import Loader from '../UI/Loader';
+
 const Avatar = ({ onPress }) => {
+  const dispatch = useDispatch();
+
   const userProfile = useSelector((state) => state.userGetProfile);
   const userListPhotos = useSelector((state) => state.userListPhotos);
-  const {
-    loading: loadingProfile,
-    error: errorProfile,
-    data: dataProfile,
-  } = userProfile;
-  const { data: photos } = userListPhotos;
+
+  const { data: dataProfile, loading: loadingProfile } = userProfile;
+
+  const { data: photos, loading: loadingPhoto } = userListPhotos;
+
+  useEffect(() => {
+    if (!photos) {
+      dispatch(listUserPhotos());
+    }
+  }, []);
+
+  if (loadingProfile || loadingPhoto) {
+    return (
+      <TouchableOpacity onPress={onPress} style={styles.imgContainer}>
+        <View style={styles.error_avatar_view}>
+          <Loader />
+        </View>
+      </TouchableOpacity>
+    );
+  }
 
   return (
     <TouchableOpacity onPress={onPress} style={styles.imgContainer}>
-      {loadingProfile ||
-        (typeof errorProfile != 'undefined' && (
-          <View style={styles.error_avatar_view}>
-            <Loader />
-          </View>
-        ))}
       {photos?.length > 0 && (
         <View style={styles.avatar_view}>
           <FastImage
@@ -35,14 +47,13 @@ const Avatar = ({ onPress }) => {
           />
         </View>
       )}
-      {(photos?.length === 0 || photos == undefined) &&
-        dataProfile !== undefined && (
-          <View style={styles.avatar_view}>
-            <Text style={styles.avatar_initials}>
-              {getNameInitials(dataProfile.name)}
-            </Text>
-          </View>
-        )}
+      {(photos?.length === 0 || !photos) && dataProfile && (
+        <View style={styles.avatar_view}>
+          <Text style={styles.avatar_initials}>
+            {getNameInitials(dataProfile.name)}
+          </Text>
+        </View>
+      )}
     </TouchableOpacity>
   );
 };

@@ -9,7 +9,6 @@ import {
   RefreshControl,
   StyleSheet,
 } from 'react-native';
-import { useIsFocused } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
 
 import { Context } from '../../context/ContextProvider';
@@ -31,10 +30,9 @@ import PreviewGroupChat from '../../components/GroupChat/PreviewGroupChat';
 import * as conv from '../../constants/requestTypes/conversation';
 
 const MatchesScreen = (props) => {
-  const { groupContext, isOwnerGroup } = useContext(Context);
   const dispatch = useDispatch();
+  const { groupContext, isOwnerGroup } = useContext(Context);
   const [refreshing, setRefreshing] = useState(false);
-  const isVisible = useIsFocused();
 
   const getMyGroupChatReducer = useSelector((state) => state.getMyGroupChat);
   const { data: groupChat } = getMyGroupChatReducer;
@@ -55,13 +53,6 @@ const MatchesScreen = (props) => {
     data: conversations,
   } = listConversationsReducer;
 
-  const deleteMatchReducer = useSelector((state) => state.deleteMatch);
-  const {
-    error: errorDeleteMatch,
-    loading: loadingDeleteMatch,
-    data: matchDeleted,
-  } = deleteMatchReducer;
-
   const startedConversation = useSelector((state) => state.startConversation);
   const {
     error: errorStartedConversations,
@@ -69,26 +60,29 @@ const MatchesScreen = (props) => {
     data: dataStartedConversation,
   } = startedConversation;
 
-  useEffect(() => {
-    reload();
-  }, [isVisible]);
+  const deleteConversationReducer = useSelector(
+    (state) => state.deleteConversation
+  );
+  const { data: conversationDeleted } = deleteConversationReducer;
+
+  const reportProfileReducer = useSelector((state) => state.reportProfile);
+  const { data: profileReported } = reportProfileReducer;
+
+  const blockProfileReducer = useSelector((state) => state.blockProfile);
+  const { data: profileBlocked } = blockProfileReducer;
 
   useEffect(() => {
     reload();
-  }, [matchDeleted]);
+  }, [dispatch, conversationDeleted, profileBlocked, profileReported]);
 
   useEffect(() => {
-    if (errorDeleteMatch) {
-      if (errorDeleteMatch?.response?.status === 400) {
-        check400Error(errorDeleteMatch);
-      }
-      checkServerError(errorDeleteMatch);
-    }
-
     if (errorListMatches) {
+      if (errorListMatches?.response?.status === 400) {
+        check400Error(errorListMatches);
+      }
       checkServerError(errorListMatches);
     }
-  }, [errorDeleteMatch, errorListMatches]);
+  }, [errorListMatches]);
 
   useEffect(() => {
     if (errorListConversations) {
@@ -227,12 +221,7 @@ const MatchesScreen = (props) => {
     );
   };
 
-  if (
-    loadingListMatches ||
-    loadingDeleteMatch ||
-    refreshing ||
-    loadingListConversations
-  ) {
+  if (loadingListMatches || refreshing || loadingListConversations) {
     return (
       <SafeAreaView style={styles.safe}>
         <StatusBar style="light" />

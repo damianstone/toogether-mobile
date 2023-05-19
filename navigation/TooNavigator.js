@@ -44,7 +44,7 @@ import GroupChatScreen from '../screens/Chat/GroupChatScreen';
 import MatchesScreen from '../screens/Chat/MatchesScreen';
 import ItsMatchScreenModal from '../screens/ItsMatchModal/ItsMatchScreenModal';
 
-import Avatar from '../components/UI/Avatar';
+import Avatar from '../components/MyProfile/Avatar';
 import HeaderButtom from '../components/UI/HeaderButton';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 
