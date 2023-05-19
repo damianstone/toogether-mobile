@@ -87,6 +87,7 @@ const styles = StyleSheet.create({
   profilePictureButton: {
     alignSelf: 'flex-start',
     width: '12%',
+    backgroundColor: Colors.bgCard,
   },
 
   img: {

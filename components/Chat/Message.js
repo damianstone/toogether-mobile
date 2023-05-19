@@ -79,8 +79,7 @@ const Message = ({ isMyMessage, message, onShowProfile }) => {
                 }
               : require('../../assets/images/placeholder-profile.png')
           }
-          imageStyle={styles.img}
-          style={styles.singleImageContainer}
+          style={styles.img}
         />
       </TouchableOpacity>
     </View>
@@ -158,6 +157,7 @@ const styles = StyleSheet.create({
     width: 35,
     height: 35,
     borderRadius: 100,
+    backgroundColor: Colors.bgCard,
   },
 
   img: {

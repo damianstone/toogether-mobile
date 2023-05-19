@@ -29,11 +29,12 @@ export const getCardName = (name) => {
 
 export const getImage = (backend_image) => {
   let image;
-  if (MODE === 'development') {
-    image = `${API_URL}${backend_image}`;
-  } else {
+  // * FOR TESTING PURPOSES
+  // if (MODE === 'development') {
+  //   image = `${API_URL}${backend_image}`;
+  // } else {
     image = `${backend_image}`;
-  }
+  // }
   return image;
 };
 

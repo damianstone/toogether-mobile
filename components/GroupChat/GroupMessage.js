@@ -179,6 +179,7 @@ const styles = StyleSheet.create({
     width: 35,
     height: 35,
     borderRadius: 100,
+    backgroundColor: Colors.bgCard,
   },
 
   img: {

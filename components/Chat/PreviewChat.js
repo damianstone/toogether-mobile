@@ -2,12 +2,12 @@ import React from 'react';
 import {
   Text,
   View,
-  ImageBackground,
   StyleSheet,
   TouchableOpacity,
 } from 'react-native';
+import FastImage from 'react-native-fast-image';
 
-import { checkPhoto } from '../../utils/checks';
+import { getImage } from '../../utils/getMethods';
 import Colors from '../../constants/Colors';
 
 const PreviewChat = (props) => {
@@ -24,13 +24,17 @@ const PreviewChat = (props) => {
       <View>
         <TouchableOpacity
           onPress={onShowProfile}
-          style={styles.chat_profile_head}
-        >
-          <ImageBackground
-            source={checkPhoto(receiverProfile)}
-            imageStyle={styles.img}
-            style={styles.singleImageContainer}
-            onPress={onShowProfile}
+          style={styles.singleImageContainer}>
+          <FastImage
+            source={
+              receiverProfile?.photo
+                ? {
+                    uri: `${getImage(receiverProfile.photo?.image)}`,
+                    priority: FastImage.priority.high,
+                  }
+                : require('../../assets/images/placeholder-profile.png')
+            }
+            style={styles.img}
           />
         </TouchableOpacity>
         {isGroup && (
@@ -65,6 +69,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginRight: 10,
     backgroundColor: Colors.bgCard,
+    position: 'absolute',
   },
 
   img: {
@@ -95,10 +100,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     justifyContent: 'center',
-  },
-
-  chat_profile_head: {
-    position: 'absolute',
   },
 
   chat_head_container: {

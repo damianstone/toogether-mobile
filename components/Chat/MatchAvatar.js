@@ -1,13 +1,13 @@
 import React from 'react';
 import {
-  ImageBackground,
   StyleSheet,
   TouchableOpacity,
   View,
   Text,
 } from 'react-native';
+import FastImage from 'react-native-fast-image';
 
-import { checkPhoto } from '../../utils/checks';
+import { getImage } from '../../utils/getMethods';
 import Colors from '../../constants/Colors';
 
 const MatchAvatar = (props) => {
@@ -21,11 +21,21 @@ const MatchAvatar = (props) => {
 
   return (
     <TouchableOpacity onPress={onShowChat}>
-      <ImageBackground
-        source={checkPhoto(matchedProfile.matched_profile)}
-        imageStyle={styles.img}
-        style={styles.singleImageContainer}
-      />
+      <View style={styles.singleImageContainer}>
+        <FastImage
+          source={
+            matchedProfile.matched_profile.photos
+              ? {
+                  uri: `${getImage(
+                    matchedProfile.matched_profile.photos.image
+                  )}`,
+                  priority: FastImage.priority.normal,
+                }
+              : require('../../assets/images/placeholder-profile.png')
+          }
+          style={styles.img}
+        />
+      </View>
       {isGroup && (
         <View style={styles.chat_group_size_container}>
           <Text style={styles.chat_group_size_number}>{groupSize}</Text>
@@ -38,8 +48,8 @@ const MatchAvatar = (props) => {
 export default MatchAvatar;
 const styles = StyleSheet.create({
   singleImageContainer: {
-    width: 50,
-    height: 50,
+    width: 60,
+    height: 60,
     borderRadius: 100,
     justifyContent: 'center',
     alignItems: 'center',
