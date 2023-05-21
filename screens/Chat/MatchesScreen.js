@@ -60,6 +60,7 @@ const MatchesScreen = (props) => {
     data: dataStartedConversation,
   } = startedConversation;
 
+  // Dependencies reducers to reload the chats after certain actions
   const deleteConversationReducer = useSelector(
     (state) => state.deleteConversation
   );
@@ -71,9 +72,20 @@ const MatchesScreen = (props) => {
   const blockProfileReducer = useSelector((state) => state.blockProfile);
   const { data: profileBlocked } = blockProfileReducer;
 
+  const conversationReducer = useSelector(
+    (state) => state.listConversationMessages
+  );
+  const { data: messagesData } = conversationReducer;
+
   useEffect(() => {
     reload();
-  }, [dispatch, conversationDeleted, profileBlocked, profileReported]);
+  }, [
+    dispatch,
+    conversationDeleted,
+    profileBlocked,
+    profileReported,
+    messagesData,
+  ]);
 
   useEffect(() => {
     if (errorListMatches) {
