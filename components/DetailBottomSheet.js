@@ -26,7 +26,8 @@ const DetailBottomSheet = (props) => {
     handleClose,
     handleDislike,
     handleLike,
-    openAlert,
+    blockProfileAlert,
+    reportProfileAlert,
   } = props;
 
   const details = [
@@ -109,19 +110,29 @@ const DetailBottomSheet = (props) => {
             onLeft={handleDislike}
             onRight={handleLike}
           />
-          <View style={styles.line} />
         </>
       )}
 
       {/* if  is my profile review, then don't give the option to block my profile */}
       {!isMyProfile && (
-        <View style={styles.reportContainer}>
-          <Button
-            title="Block profile"
-            color={Colors.red}
-            onPress={openAlert}
-          />
-        </View>
+        <>
+          <View style={styles.line} />
+          <View style={styles.reportContainer}>
+            <TouchableOpacity
+              style={styles.blockButton}
+              onPress={blockProfileAlert}
+            >
+              <Text style={styles.blockButtonText}>Block Profile</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.blockButton}
+              onPress={reportProfileAlert}
+            >
+              <Text style={styles.blockButtonText}>Report Profile</Text>
+            </TouchableOpacity>
+          </View>
+        </>
       )}
     </ScrollView>
   );
@@ -190,14 +201,23 @@ const styles = StyleSheet.create({
     fontSize: 15,
   },
   line: {
-    borderBottomColor: Colors.black,
-    borderBottomWidth: 0.5,
+    borderBottomColor: Colors.placeholder,
+    borderBottomWidth: 0.8,
     margin: 10,
   },
   reportContainer: {
-    justifyContent: 'center',
+    flexDirection: 'column',
+    justifyContent: 'space-evenly',
     alignItems: 'center',
     marginBottom: 50,
+  },
+  blockButton: {
+    paddingVertical: 5,
+    paddingHorizontal: 20,
+  },
+  blockButtonText: {
+    color: Colors.red,
+    fontSize: 15,
   },
   redText: {
     color: Colors.red,

@@ -2,7 +2,9 @@ import { Platform } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import * as Location from 'expo-location';
-import * as c from '../../constants/user';
+
+import { logout } from './auth';
+import * as c from '../../constants/requestTypes/user';
 import { ENV } from '../../environment';
 
 const BASE_URL = ENV.API_URL;
@@ -25,7 +27,7 @@ export const userLocation = () => {
       let location = await Location.getCurrentPositionAsync({
         accuracy: Platform.OS === 'ios' ? 3 : Location.Accuracy.High,
       });
-      // If you are getting stuck and not getting location (on Android uncomment this to get default location so that you can continue working)
+
       // let location;
       // if (Platform.OS === 'ios') {
       //   location = await Location.getCurrentPositionAsync({
@@ -34,8 +36,8 @@ export const userLocation = () => {
       // } else {
       //   location = {
       //     coords: {
-      //       latitude: 37.785834,
-      //       longitude: -122.406417,
+      //       latitude: 37.4220936,
+      //       longitude: -122.083922,
       //     },
       //   };
       // }
@@ -50,17 +52,6 @@ export const userLocation = () => {
         },
       });
 
-      await AsyncStorage.setItem(
-        '@userData',
-        JSON.stringify({
-          id: data.id,
-          token: data.token,
-          access_token: data.access,
-          refresh_token: data.refresh,
-          has_account: data.has_account,
-        })
-      );
-
       dispatch({
         type: c.USER_LOCATION_SUCCESS,
         payload: data,
@@ -70,177 +61,6 @@ export const userLocation = () => {
         type: c.USER_LOCATION_FAIL,
         payload: error,
       });
-    }
-  };
-};
-
-// -------------------------------- LOGIN / REGISTER ACTIONS --------------------------------
-
-export const authenticate = (userDataObj) => {
-  return (dispatch) => {
-    dispatch({ type: c.AUTHENTICATE, payload: userDataObj });
-  };
-};
-
-export const userRegister = (email, password, repeated_password) => {
-  return async (dispatch) => {
-    try {
-      dispatch({ type: c.USER_REGISTER_REQUEST });
-
-      const config = {
-        'Content-Type': 'application/json',
-      };
-
-      const { data } = await axios({
-        method: 'POST',
-        url: `${BASE_URL}/api/v1/profiles/`,
-        headers: config,
-        data: {
-          email,
-          password,
-          repeated_password,
-        },
-      });
-
-      await AsyncStorage.setItem(
-        '@userData',
-        JSON.stringify({
-          id: data.id,
-          token: data.token,
-          has_account: data.has_account,
-        })
-      );
-
-      dispatch({
-        type: c.USER_REGISTER_SUCCESS,
-        payload: data,
-      });
-    } catch (error) {
-      dispatch({
-        type: c.USER_REGISTER_FAIL,
-        payload: error,
-      });
-    }
-  };
-};
-
-export const userLogin = (email, password) => {
-  return async (dispatch) => {
-    try {
-      dispatch({ type: c.USER_LOGIN_REQUEST });
-
-      const config = {
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
-      };
-
-      const { data } = await axios({
-        method: 'POST',
-        url: `${BASE_URL}/api/v1/users/login/`,
-        headers: config,
-        data: {
-          email,
-          password,
-        },
-      });
-
-      await AsyncStorage.setItem(
-        '@userData',
-        JSON.stringify({
-          id: data.id,
-          token: data.token,
-          has_account: data.has_account,
-        })
-      );
-
-      dispatch({
-        type: c.USER_LOGIN_SUCCESS,
-        payload: data,
-      });
-    } catch (error) {
-      dispatch({
-        type: c.USER_LOGIN_FAIL,
-        payload: error,
-      });
-    }
-  };
-};
-
-export const logout = () => {
-  return async (dispatch) => {
-    try {
-      await AsyncStorage.removeItem('@userData');
-      dispatch({ type: c.USER_LOGIN_RESET });
-      dispatch({ type: c.USER_LIST_PHOTOS_RESET });
-      dispatch({ type: c.USER_GET_PROFILE_RESET });
-    } catch (e) {
-      console.log(e);
-    }
-  };
-};
-
-export const updateToken = () => {
-  return async (dispatch) => {
-    try {
-      dispatch({ type: c.REFRESH_TOKEN_REQUEST });
-      const userData = JSON.parse(await AsyncStorage.getItem('@userData'));
-
-      const config = {
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
-      };
-
-      const { data } = await axios({
-        method: 'POST',
-        url: `${BASE_URL}/api/v1/token/refresh/`,
-        headers: config,
-        data: {
-          refresh: userData.refresh_token,
-        },
-      });
-
-      await AsyncStorage.setItem(
-        '@userData',
-        JSON.stringify({
-          ...userData,
-          token: data.token,
-          access_token: data.access.token,
-          refresh_token: data.refresh,
-        })
-      );
-      dispatch({ type: c.REFRESH_TOKEN_SUCCESS, payload: data });
-    } catch (error) {
-      logout();
-    }
-  };
-};
-
-export const userDelete = () => {
-  return async (dispatch) => {
-    try {
-      dispatch({ type: c.USER_DELETE_REQUEST });
-      const userData = JSON.parse(await AsyncStorage.getItem('@userData'));
-
-      const config = {
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
-        Authorization: 'Bearer ' + userData.token,
-      };
-
-      const { data } = await axios({
-        method: 'delete',
-        url: `${BASE_URL}/api/v1/profiles/${userData.id}/`,
-        headers: config,
-      });
-
-      await AsyncStorage.removeItem('@userData');
-      dispatch({ type: c.USER_LOGIN_RESET });
-      dispatch({ type: c.USER_LIST_PHOTOS_RESET });
-      dispatch({ type: c.USER_GET_PROFILE_RESET });
-
-      dispatch({ type: c.USER_DELETE_SUCCESS, payload: data });
-    } catch (error) {
-      dispatch({ type: c.USER_DELETE_FAIL, payload: error });
     }
   };
 };
@@ -261,7 +81,6 @@ export const getUserProfile = (profile_id) => {
         Accept: 'application/json',
         Authorization: 'Bearer ' + userData.token,
       };
-
       const { data } = await axios({
         method: 'get',
         url: `${BASE_URL}/api/v1/profiles/${userData.id}/`,
@@ -271,10 +90,10 @@ export const getUserProfile = (profile_id) => {
       await AsyncStorage.setItem(
         '@userData',
         JSON.stringify({
-          ...userData,
+          id: data.id,
           token: data.token,
-          access_token: data.access,
           has_account: data.has_account,
+          refresh_token: data.refresh_token,
         })
       );
 
@@ -328,8 +147,10 @@ export const createUserProfile = (
       await AsyncStorage.setItem(
         '@userData',
         JSON.stringify({
-          ...userData,
-          has_account: data.has_account, // after crerate has_account is true
+          id: data.id,
+          token: data.token,
+          has_account: data.has_account,
+          refresh_token: data.refresh_token,
         })
       );
 
@@ -376,6 +197,34 @@ export const updateUserProfile = (dataObj) => {
         type: c.USER_UPDATE_FAIL,
         payload: error,
       });
+    }
+  };
+};
+
+export const userDelete = () => {
+  return async (dispatch) => {
+    try {
+      dispatch({ type: c.USER_DELETE_REQUEST });
+      const userData = JSON.parse(await AsyncStorage.getItem('@userData'));
+
+      const config = {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+        Authorization: 'Bearer ' + userData.token,
+      };
+
+      const { data } = await axios({
+        method: 'delete',
+        url: `${BASE_URL}/api/v1/profiles/${userData.id}/`,
+        headers: config,
+      });
+
+      dispatch({
+        type: c.USER_DELETE_SUCCESS,
+        payload: data,
+      });
+    } catch (error) {
+      dispatch({ type: c.USER_DELETE_FAIL, payload: error });
     }
   };
 };
@@ -528,6 +377,140 @@ export const listUserPhotos = () => {
     } catch (error) {
       dispatch({
         type: c.USER_LIST_PHOTOS_FAIL,
+        payload: error,
+      });
+    }
+  };
+};
+
+// -------------------------------- REPORT ACTION --------------------------------
+
+export const reportProfile = (id) => {
+  return async (dispatch) => {
+    try {
+      dispatch({ type: c.REPORT_PROFILE_REQUEST });
+
+      const userData = JSON.parse(await AsyncStorage.getItem('@userData'));
+
+      const config = {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+        Authorization: `Bearer ${userData.token}`,
+      };
+
+      const { data } = await axios({
+        method: 'POST',
+        url: `${BASE_URL}/api/v1/profiles/${id}/actions/report-profile/`,
+        headers: config,
+      });
+
+      dispatch({
+        type: c.REPORT_PROFILE_SUCCESS,
+        payload: data,
+      });
+    } catch (error) {
+      dispatch({
+        type: c.REPORT_PROFILE_FAIL,
+        payload: error,
+      });
+    }
+  };
+};
+
+export const sendRecoveryCode = (email) => {
+  return async (dispatch) => {
+    try {
+      dispatch({ type: c.RECOVER_CODE_REQUEST });
+
+      const config = {
+        'Content-Type': 'application/json',
+      };
+
+      const { data } = await axios({
+        method: 'POST',
+        url: `${BASE_URL}/api/v1/users/recovery-code/`,
+        headers: config,
+        data: {
+          email,
+        },
+      });
+
+      dispatch({
+        type: c.RECOVERY_CODE_SUCCESS,
+        payload: data,
+      });
+    } catch (error) {
+      dispatch({
+        type: c.RECOVERY_CODE_FAIL,
+        payload: error,
+      });
+    }
+  };
+};
+
+export const validateCode = (email, code) => {
+  return async (dispatch) => {
+    try {
+      dispatch({ type: c.VALIDATE_CODE_REQUEST });
+
+      const config = {
+        'Content-Type': 'application/json',
+      };
+
+      const { data } = await axios({
+        method: 'POST',
+        url: `${BASE_URL}/api/v1/users/validate-code/`,
+        headers: config,
+        data: {
+          email,
+          code,
+        },
+      });
+
+      dispatch({
+        type: c.VALIDATE_CODE_SUCCESS,
+        payload: data,
+      });
+    } catch (error) {
+      dispatch({
+        type: c.VALIDATE_CODE_FAIL,
+        payload: error,
+      });
+    }
+  };
+};
+
+export const changePassword = (email, password, repeated_password, token) => {
+  return async (dispatch) => {
+    try {
+      dispatch({ type: c.CHANGE_PASSWORD_REQUEST });
+
+      const config = {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+        Authorization: `Bearer ${token}`,
+      };
+
+      const { data } = await axios({
+        method: 'POST',
+        url: `${BASE_URL}/api/v1/profiles/actions/reset-password/`,
+        headers: config,
+        data: {
+          email,
+          password,
+          repeated_password,
+        },
+      });
+
+      dispatch({
+        type: c.CHANGE_PASSWORD_SUCCESS,
+        payload: data,
+      });
+
+      dispatch({ type: c.CHANGE_PASSWORD_RESET });
+    } catch (error) {
+      dispatch({
+        type: c.CHANGE_PASSWORD_FAIL,
         payload: error,
       });
     }

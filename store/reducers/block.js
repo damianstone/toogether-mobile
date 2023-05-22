@@ -1,4 +1,4 @@
-import * as b from '../../constants/block';
+import * as b from '../../constants/requestTypes/block';
 
 export const listBlockedProfilesReducer = (state = {}, action) => {
   switch (action.type) {

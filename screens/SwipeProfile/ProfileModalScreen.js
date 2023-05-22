@@ -3,22 +3,23 @@ import { StyleSheet, View, ImageBackground, Alert } from 'react-native';
 import Swiper from 'react-native-swiper';
 import { useDispatch, useSelector } from 'react-redux';
 import { blockProfile } from '../../store/actions/block';
-import { like } from '../../store/actions/swipe';
+import { like, listSwipe } from '../../store/actions/swipe';
 import { checkServerError, check400Error } from '../../utils/errors';
 import { getImage } from '../../utils/getMethods';
-import * as b from '../../constants/block';
+import * as b from '../../constants/requestTypes/block';
+import * as r from '../../constants/requestTypes/user';
+import ActivityModal from '../../components/UI/ActivityModal';
 
 import DetailBottomSheet from '../../components/DetailBottomSheet';
 import Colors from '../../constants/Colors';
+import { reportProfile } from '../../store/actions/user';
+import FastImage from 'react-native-fast-image';
 
 const ProfileScreen = (props) => {
-  const dispatch = useDispatch();
-  const profile = props.navigation.getParam('profile');
-  const isGroup = props.navigation.getParam('isGroup');
-  const preview = props.navigation.getParam('preview');
-  const isMyProfile = props.navigation.getParam('isMyProfile');
+  const { profile, isGroup, preview, isMyProfile, currentRef } =
+    props.route.params;
 
-  const currentRef = props.navigation.getParam('currentRef');
+  const dispatch = useDispatch();
 
   const blockProfileReducer = useSelector((state) => state.blockProfile);
   const {
@@ -26,6 +27,23 @@ const ProfileScreen = (props) => {
     error: blockError,
     data: blockData,
   } = blockProfileReducer;
+
+  const reportProfileReducer = useSelector((state) => state.reportProfile);
+  const {
+    loading: reportLoading,
+    error: reportError,
+    data: reportData,
+  } = reportProfileReducer;
+
+  // reload function then redirect to swipe screen
+  const reloadAndRedirectToSwipe = async () => {
+    try {
+      await dispatch(listSwipe());
+    } catch (err) {
+      console.log(err);
+    }
+    props.navigation.navigate('Swipe');
+  };
 
   const handleClose = () => {
     props.navigation.goBack();
@@ -52,13 +70,19 @@ const ProfileScreen = (props) => {
     }
   };
 
-  const openAlert = () => {
+  const handleReportProfile = () => {
+    if (profile.id) {
+      dispatch(reportProfile(profile.id));
+    }
+  };
+
+  const blockProfileAlert = () => {
     Alert.alert(
       'Do you want to block this profile?',
       'If you block this profile, none of you will be able to see their profiles',
       [
         {
-          text: 'No',
+          text: 'Cancel',
           style: 'cancel',
         },
         {
@@ -72,13 +96,32 @@ const ProfileScreen = (props) => {
     );
   };
 
+  const reportProfileAlert = () => {
+    Alert.alert(
+      'Are you sure you want to report this profile?',
+      `We will review this profile, and won't tell ${profile.name}`,
+      [
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+        {
+          text: 'Submit',
+          onPress: () => {
+            handleReportProfile();
+          },
+          style: 'destructive',
+        },
+      ]
+    );
+  };
+
   if (blockError) {
     if (blockError?.response?.status === 400) {
       check400Error(blockError);
     } else {
       checkServerError(blockError);
     }
-    checkServerError(blockError);
   }
 
   if (blockData) {
@@ -88,16 +131,48 @@ const ProfileScreen = (props) => {
       [
         {
           text: 'OK',
-          onPress: () => props.navigation.navigate('Swipe'),
+          onPress: () => reloadAndRedirectToSwipe(),
         },
       ]
     );
     dispatch({ type: b.BLOCK_PROFILE_RESET });
   }
 
+  if (reportError) {
+    if (reportError?.response?.status === 400) {
+      check400Error(reportError);
+    } else {
+      checkServerError(reportError);
+    }
+  }
+
+  if (reportData) {
+    Alert.alert(
+      'Profile reported',
+      'The profile will be reviewed and handeled by our dev team shortly.',
+      [
+        {
+          text: 'OK',
+          onPress: () => reloadAndRedirectToSwipe(),
+        },
+      ]
+    );
+    dispatch({ type: r.REPORT_PROFILE_RESET });
+  }
+
   return (
     <View style={{ flex: 1, backgroundColor: Colors.bgCard }}>
       <>
+        <ActivityModal
+          loading={reportLoading || blockLoading}
+          title="Loading"
+          size="small"
+          activityColor="white"
+          titleColor="white"
+          activityWrapperStyle={{
+            backgroundColor: 'transparent',
+          }}
+        />
         <Swiper
           style={styles.wrapper}
           removeClippedSubviews={false}
@@ -129,12 +204,15 @@ const ProfileScreen = (props) => {
         >
           {profile?.photos?.length > 0 ? (
             profile.photos.map((photo) => (
-              <ImageBackground
+              <FastImage
                 key={profile.id}
                 style={styles.image}
                 imageStyle={styles.imageStyle}
-                source={{ uri: `${getImage(photo.image)}` }}
-                resizeMode="cover"
+                source={{
+                  uri: `${getImage(photo.image)}`,
+                  priority: FastImage.priority.high,
+                }}
+                resizeMode={FastImage.resizeMode.cover}
               />
             ))
           ) : (
@@ -151,7 +229,8 @@ const ProfileScreen = (props) => {
           handleClose={handleClose}
           handleLike={() => handleLike(profile.id)}
           handleDislike={() => handleDislike(profile.id)}
-          openAlert={openAlert}
+          blockProfileAlert={blockProfileAlert}
+          reportProfileAlert={reportProfileAlert}
           isMyProfile={isMyProfile}
           isGroup={isGroup}
           preview={preview}

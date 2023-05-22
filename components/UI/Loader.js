@@ -2,9 +2,7 @@ import React from 'react';
 import { View, ActivityIndicator } from 'react-native';
 import Colors from '../../constants/Colors';
 
-const Loader = (props) => {
-  const { size } = props;
-
+const Loader = ({ size }) => {
   return (
     <View
       style={{

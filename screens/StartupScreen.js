@@ -1,35 +1,59 @@
 /* eslint-disable consistent-return */
 import React, { useEffect } from 'react';
-import { ActivityIndicator, StyleSheet, View } from 'react-native';
-import { useDispatch } from 'react-redux';
+import { StyleSheet, View } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { authenticate } from '../store/actions/user';
 import ActivityModal from '../components/UI/ActivityModal';
 import Colors from '../constants/Colors';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  authenticate,
+  setDidTryLogin,
+  refreshToken,
+  logout,
+} from '../store/actions/auth';
 
 const jwt_decode = require('jwt-decode');
 
-const StartupScreen = (props) => {
+const StartupScreen = ({ navigation }) => {
   const dispatch = useDispatch();
-  useEffect(() => {
-    const tryLogin = async () => {
-      // get the user data as a promise
-      const userData = JSON.parse(await AsyncStorage.getItem('@userData'));
 
-      if (userData && userData.has_account) {
-        props.navigation.navigate('Swipe');
-      } else {
-        props.navigation.navigate('AuthStart');
+  const isAuth = useSelector((state) => state.auth.isAuth);
+
+  const checkToken = async () => {
+    const userData = JSON.parse(await AsyncStorage.getItem('@userData'));
+
+    if (userData && userData.has_account) {
+      const currentTime = Date.now();
+
+      if (!userData.token || !userData.refresh_token) {
+        return dispatch(logout());
       }
 
-      // // if there is no user data
-      // if (!userData || !userData.has_account) {
-      //   console.log('NO AUTH');
-      //   props.navigation.navigate('AuthStart');
-      // }
-    };
-    tryLogin();
-  }, []);
+      const token = jwt_decode(userData.token);
+      const refresh = jwt_decode(userData.refresh_token);
+      const isTokenExpired = token.exp < currentTime / 1000;
+      const isRefreshExpired = refresh.exp < currentTime / 1000;
+
+      if (isTokenExpired && !isRefreshExpired) {
+        return dispatch(refreshToken());
+      }
+
+      if (isTokenExpired && isRefreshExpired) {
+        return dispatch(logout());
+      }
+
+      return dispatch(authenticate(true));
+    }
+
+    // if there is no user data in the local storage, then the user is clearly not authenticated
+    dispatch(setDidTryLogin(true));
+    dispatch(authenticate(false));
+    return;
+  };
+
+  useEffect(() => {
+    checkToken();
+  }, [isAuth]);
 
   return (
     <View style={styles.screen}>

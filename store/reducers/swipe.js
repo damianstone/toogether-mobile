@@ -1,4 +1,4 @@
-import * as w from '../../constants/swipe';
+import * as w from '../../constants/requestTypes/swipe';
 
 // -------------------------------- SWIPE CARDS --------------------------------
 export const listSwipeReducer = (state = {}, action) => {
@@ -115,6 +115,24 @@ export const listMatchesReducer = (state = {}, action) => {
     case w.LIST_MATCH_FAIL:
       return { loading: false, error: action.payload };
 
+    case w.LOAD_MORE_MATCH_REQUEST:
+      return { ...state, loading: true };
+    case w.LOAD_MORE_MATCH_SUCCESS:
+      const newNext = action.payload.next;
+      const oldData = { ...state.data };
+      const newConversations = [...action.payload.results];
+      const newData = {
+        ...state.data,
+        results: [...newConversations, ...oldData.results],
+        next: newNext,
+      };
+      return {
+        ...state,
+        data: newData,
+        loading: false,
+      };
+    case w.LOAD_MORE_MATCH_FAIL:
+      return { data: state.data, loading: false, error: action.payload };
     default:
       return state;
   }

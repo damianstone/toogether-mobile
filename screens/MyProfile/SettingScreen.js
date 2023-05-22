@@ -1,8 +1,7 @@
-import React, { useState, useEffect, useReducer, useCallback } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import {
   ScrollView,
   Text,
-  Platform,
   TouchableOpacity,
   View,
   Alert,
@@ -10,7 +9,6 @@ import {
   Share,
   StyleSheet,
 } from 'react-native';
-import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   FontAwesome5,
@@ -19,15 +17,15 @@ import {
   Feather,
   MaterialCommunityIcons,
 } from '@expo/vector-icons';
-import { logout, userDelete } from '../../store/actions/user';
+import { userDelete } from '../../store/actions/user';
+import { logout } from '../../store/actions/auth';
 import { SETTINGS_ACCOUNT_DATA, SETTINGS_APP_DATA } from '../../data/settings';
 import { check400Error, checkServerError } from '../../utils/errors';
 
-import HeaderButtom from '../../components/UI/HeaderButton';
 import AuthButton from '../../components/UI/AuthButton';
 import ActivityModal from '../../components/UI/ActivityModal';
 import Colors from '../../constants/Colors';
-import * as c from '../../constants/user';
+import * as u from '../../constants/requestTypes/user';
 
 const SettingScreen = (props) => {
   const dispatch = useDispatch();
@@ -41,7 +39,6 @@ const SettingScreen = (props) => {
 
   useEffect(() => {
     if (errorDelete) {
-      console.log({ ...errorDelete });
       if (errorDelete?.response?.status === 400) {
         check400Error(errorDelete);
       }
@@ -49,22 +46,13 @@ const SettingScreen = (props) => {
     }
 
     if (dataDeleted) {
-      props.navigation.navigate('AuthStart');
+      dispatch({ type: u.USER_DELETE_RESET });
+      dispatch(logout());
     }
   }, [errorDelete, dataDeleted]);
 
-  const handleLogout = async () => {
-    try {
-      dispatch(logout());
-      props.navigation.navigate('AuthStart');
-    } catch (error) {
-      if (error) {
-        if (error?.response?.status === 400) {
-          check400Error(error);
-        }
-        checkServerError(error);
-      }
-    }
+  const handleLogout = () => {
+    dispatch(logout());
   };
 
   const handleDeleteUser = () => {
@@ -150,16 +138,18 @@ const SettingScreen = (props) => {
 
   if (loadingDelete) {
     return (
-      <ActivityModal
-        loading={loadingDelete}
-        title="Please wait"
-        size="large"
-        activityColor="white"
-        titleColor="white"
-        activityWrapperStyle={{
-          backgroundColor: Colors.bg,
-        }}
-      />
+      <View style={styles.screen}>
+        <ActivityModal
+          loading
+          title="Deleting your account"
+          size="small"
+          activityColor="white"
+          titleColor="white"
+          activityWrapperStyle={{
+            backgroundColor: 'transparent',
+          }}
+        />
+      </View>
     );
   }
 
@@ -263,28 +253,15 @@ const SettingScreen = (props) => {
   );
 };
 
-SettingScreen.navigationOptions = (navData) => {
-  return {
-    headerTitle: 'Settings',
-    headerLeft: () => (
-      <HeaderButtons HeaderButtonComponent={HeaderButtom}>
-        <Item
-          iconName={
-            Platform.OS === 'android' ? 'ios-arrow-back' : 'ios-arrow-back'
-          }
-          onPress={() => {
-            navData.navigation.navigate('MyProfile');
-          }}
-          title="Back arrow"
-        />
-      </HeaderButtons>
-    ),
-  };
-};
-
 export default SettingScreen;
 
 const styles = StyleSheet.create({
+  screen: {
+    flex: 1,
+    backgroundColor: Colors.bg,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   settingsView: {
     margin: 20,
     paddingHorizontal: 2,

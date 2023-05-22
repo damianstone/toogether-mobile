@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import Constants from 'expo-constants';
-import * as w from '../../constants/swipe';
+import * as w from '../../constants/requestTypes/swipe';
 import { ENV } from '../../environment';
 
 const BASE_URL = ENV.API_URL;
@@ -196,6 +196,38 @@ export const listMatches = () => {
     } catch (error) {
       dispatch({
         type: w.LIST_MATCH_FAIL,
+        payload: error,
+      });
+    }
+  };
+};
+
+export const loadMoreMatches = (url) => {
+  return async (dispatch) => {
+    try {
+      dispatch({ type: w.LOAD_MORE_MATCH_REQUEST });
+
+      const userData = JSON.parse(await AsyncStorage.getItem('@userData'));
+
+      const config = {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+        Authorization: 'Bearer ' + userData.token,
+      };
+
+      const { data } = await axios({
+        method: 'get',
+        url: url,
+        headers: config,
+      });
+
+      dispatch({
+        type: w.LOAD_MORE_MATCH_SUCCESS,
+        payload: data,
+      });
+    } catch (error) {
+      dispatch({
+        type: w.LOAD_MORE_MATCH_FAIL,
         payload: error,
       });
     }
