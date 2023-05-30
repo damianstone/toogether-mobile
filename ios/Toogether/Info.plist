@@ -55,12 +55,12 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Allow $(PRODUCT_NAME) to use your location</string>
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>Allow $(PRODUCT_NAME) to use your location</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>Allow $(PRODUCT_NAME) to use your location</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Our app requires access to your location to provide personalized recommendations based on your geographic position. For example, to recommend profiles around you</string>
 <key>NSPhotoLibraryUsageDescription</key>
 <string>Give $(PRODUCT_NAME) permission to save photos</string>
 <key>NSCameraUsageDescription</key>
