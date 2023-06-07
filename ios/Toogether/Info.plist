@@ -62,10 +62,10 @@
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Our app requires access to your location to provide personalized recommendations based on your geographic position. For example, to recommend you profiles around you</string>
 <key>NSPhotoLibraryUsageDescription</key>
-<string>Give $(PRODUCT_NAME) permission to save photos</string>
+<string>$(PRODUCT_NAME) requires access to your photo library in order to allow you to upload photos and create your profile. You can add or remove photos from the app at any time</string>
 <key>NSCameraUsageDescription</key>
-<string>Give $(PRODUCT_NAME) permission to access your camera</string>
+<string>Allow $(PRODUCT_NAME) to access your device camera. This will enable you to capture photos and videos within the app, as well as enable features like video calling</string>
 <key>NSMicrophoneUsageDescription</key>
-<string>Give $(PRODUCT_NAME) permission to use your microphone</string>
+<string>Allow $(PRODUCT_NAME) to use your device microphone. This permission is necessary to enable voice messaging, record audio for video chats, and create audio notes</string>
 </dict>
 </plist>
