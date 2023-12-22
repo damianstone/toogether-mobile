@@ -12,13 +12,14 @@ An app where users can create a group with their friends, match with other group
 - ⚛️  React Native bare workflow https://docs.expo.dev/bare/overview/
 - 🔥 Redux & Redux thunk
 - 📍 Geolocation
+- 🧭 React Navigation V7
 
 ## Features
 ### 👀 Basic
 - Login and registration with auth token
 - Create profile
 - Report profiles
-- Block profiles
+- Block / unblock profiles
 - Password recovery with email verification
 
 ### 👤 Your profile
