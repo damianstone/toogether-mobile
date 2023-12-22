@@ -2,11 +2,64 @@
   <img src="https://user-images.githubusercontent.com/63305840/150650911-a3aba1cc-c2dd-4ced-9d60-0bd5ea1cfc8e.png" width="300" />
 </p>
 
-# Toogether App
+## What's Toogerher app?
+An app where users can create a group with their friends, match with other groups and hang out
+<br>
+<br>
+**This is just the frontend of the app, if you're looking for the backend: https://github.com/toogether-app/toogether-backend**
 
-Mobile app build with React Native Expo, Redux and Axios
+## Technologies
+- ⚛️  React Native bare workflow https://docs.expo.dev/bare/overview/
+- 🔥 Redux & Redux thunk
+- 📍 Geolocation
 
-## Initialization
+## Features
+### 👀 Basic
+- Login and registration with auth token
+- Create profile
+- Report profiles
+- Block profiles
+- Password recovery with email verification
+
+### 👤 Your profile
+- Update your personal information
+- Add photos
+
+### 💃 Swipe single and group profiles
+- Support single and group profiles
+- Like
+- Unlike
+- Undo
+
+### 🕺🏼 Create a group profile with your friends
+- Create a groups
+- Invite friends using unique link
+- If admin (creator of the group): remove and add members
+- If not admin, join to group using the link and leave 
+
+### 💬 Group chat
+- Group chat generated autmatically when joining our creating a group
+- For know the chat just support text messages
+
+### 💬 Matches and chats
+- Chat with your matches
+- Delete matches
+- Report and block profiles
+
+### 🔗 Matchmaking algorithm
+List based on
+- Your location
+- Age
+- Gender
+- Preferences
+- Group sizes
+- More above in this documentation!
+
+mailto: damianstonedev@gmail.com
+
+<img width="3000" alt="toogether" src="https://github.com/toogether-app/toogether-mobile/assets/63305840/37fee8cf-a60a-477d-baa5-49581bbc33c3">
+
+# Initialization
 
 ### Install the requirements
 The following command allows you to install all the requirements using the exact same versions specified in the `package.json`
