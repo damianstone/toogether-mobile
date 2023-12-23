@@ -6,7 +6,7 @@
 An app where users can create a group with their friends, match with other groups and hang out
 <br>
 <br>
-**This is just the frontend of the app, if you're looking for the backend: https://github.com/toogether-app/toogether-backend**
+**This is just the frontend of the app, if you're looking for the backend: https://github.com/damianstone/toogether-backend**
 
 ## Technologies
 - ⚛️  React Native bare workflow https://docs.expo.dev/bare/overview/
