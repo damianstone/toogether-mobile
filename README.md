@@ -14,6 +14,8 @@ An app where users can create a group with their friends, match with other group
 - 📍 Geolocation
 - 🧭 React Navigation V7
 
+<img src="https://github.com/damianstone/toogether-mobile/assets/63305840/4085a6f7-9ffc-469d-88ef-11c54e82149a" width="3000" />
+
 ## Features
 ### 👀 Basic
 - Login and registration with auth token
@@ -57,8 +59,6 @@ List based on
 - More above in this documentation!
 
 mailto: damianstonedev@gmail.com
-
-<img width="3000" alt="toogether" src="https://github.com/toogether-app/toogether-mobile/assets/63305840/37fee8cf-a60a-477d-baa5-49581bbc33c3">
 
 # Initialization
 
