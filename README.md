@@ -2,7 +2,7 @@
   <img src="https://user-images.githubusercontent.com/63305840/150650911-a3aba1cc-c2dd-4ced-9d60-0bd5ea1cfc8e.png" width="300" />
 </p>
 
-## What's Toogerher app?
+## What's Toogether app?
 An app where users can create a group with their friends, match with other groups and hang out
 <br>
 <br>
@@ -13,10 +13,15 @@ An app where users can create a group with their friends, match with other group
 - 🔥 Redux & Redux thunk
 - 📍 Geolocation
 - 🧭 React Navigation V7
+- 🧹 ESlint + Prettier
+- ⚡ Fast Image https://github.com/DylanVann/react-native-fast-image
+- 👉 Picker Native Select https://github.com/lawnstarter/react-native-picker-select
+- ↪️ React Native Deck Swiper https://github.com/alexbrillant/react-native-deck-swiper
+- 🎈+ Many other expo integrations!
 
 <img src="https://github.com/damianstone/toogether-mobile/assets/63305840/4085a6f7-9ffc-469d-88ef-11c54e82149a" width="3000" />
 
-## Features
+# Features
 ### 👀 Basic
 - Login and registration with auth token
 - Create profile
@@ -41,8 +46,8 @@ An app where users can create a group with their friends, match with other group
 - If not admin, join to group using the link and leave 
 
 ### 💬 Group chat
-- Group chat generated autmatically when joining our creating a group
-- For know the chat just support text messages
+- Group chat generated automatically when joining or creating a group
+- For now the chat just support text messages
 
 ### 💬 Matches and chats
 - Chat with your matches
@@ -56,7 +61,7 @@ List based on
 - Gender
 - Preferences
 - Group sizes
-- More above in this documentation!
+- More of the algorithm in the backend!
 
 mailto: damianstonedev@gmail.com
 
@@ -101,7 +106,10 @@ For Android
 npm run android
 ```
 
-### Style standards
+# Deployment
+For both you can use the github action pipeline! 🚀
+
+# Style standards
 
 To keep the code in a standard style we use `Prettier + Eslint`
 
@@ -118,7 +126,7 @@ To check errors in the code style, run the following command:
 npm run lint:fix
 ```
 
-## Pull Requests
+# Pull Requests
 
 Before any merge to develop or rocket, it will be necessary to make a Pull Request and a code review.
 
@@ -132,43 +140,8 @@ Basic PR structure:
 3.  Create the pull request (PR) manually by selecting the correct `feature-branch` you are working on and clicking on the "New pull request" button
 4.  Notify the team about your PR through our communication channel: Discord
 
-# Deployment
 
-### Deploy to expo
-```bash
-expo publish --release-channel develop
-expo publish --release-channel rocket
-```
-
-### Deploy to the App Store and Test Flight
-Deployments can only be done once the new features or fixes are well tested.
-
-Before make sure you have installed globally `EAS-CLI `
-For this, you can run 
-
-```bash
-npm install -g eas-cli
-```
-
-To build the app we can use the following command specifying the channel (env variables) we want to use
-
-```bash
-eas build -p ios --profile rocket
-```
-
-Finally we can make the deployment to the App Store using the build url generated in expo
-Here you can find the url: https://expo.dev/
-
-```bash
-eas submit --platform ios --url url-of-the-buil-in-expo
-```
-
-### Deploy to Google Play Store
-Information and steps need to be added
-
-# General project structure
-
-### Conventions
+# Conventions
 The conventions or general rules for the structure of this project are the following:
 - Folders or files that do not export objects or components, in lower case
 - Folders or files that export objects or components in capital letters
@@ -176,31 +149,4 @@ The conventions or general rules for the structure of this project are the follo
 - To save states or information coming from the backend we use redux and the `Flux Architecture`
 - `State` and `props` must be destructured before used
 - More conventions and patters can be found looking the code
-
-### Folders
-The project is organized into several folders, each serving a specific purpose. This section provides an overview of each folder and its contents.
-
-#### assets
-The assets folder stores all the non-code resources used in the project, such as fonts, icons, and images.
-
-#### components
-The components folder contains all the React Native components used in the project. The UI subfolder contains smaller components that make up the user interface, such as text elements, avatars, inputs, etc.
-
-#### constants
-The constants folder contains all the constant values used in the app, including color codes, constant names for reducers and actions, and values from the backend responses.
-
-#### data
-The data folder stores JavaScript and JSON objects that are used to make certain components or screens dynamic.
-
-##### navigation
-The navigation folder contains the navigation structure for the transitions between screens using React Navigation 4x.
-
-##### screens
-The screens folder stores all the components (screens) of each section of the app. These components contain most of the logic for each screen and should make use of other components as much as possible for code readability. The calls to the backend must also be made within the screens.
-
-#### store
-This folder contains the implementation of the state management using Redux.
-
-#### utils
-The utils folder contains utility functions used throughout the project. These functions perform common tasks and are designed to be reused.
 
